@@ -154,7 +154,7 @@ milestone *ARGS:
 
 # stop a run cleanly — coding agents first, then the workflow — from the pids the trace recorded: just kill <adw_id>
 kill ADW_ID:
-    @for row in $(sqlite3 {{db}} "select pid||'|'||kind from processes where adw_id='{{ADW_ID}}' and ended_at is null order by case kind when 'agent' then 0 else 1 end, id desc;"); do pid=$${row%%|*}; kill -0 $$pid 2>/dev/null && { echo "TERM $$pid ($${row##*|})"; kill -TERM -- -$$pid 2>/dev/null || kill -TERM $$pid; }; done; sleep 5; \
-    for pid in $(sqlite3 {{db}} "select pid from processes where adw_id='{{ADW_ID}}' and ended_at is null;"); do kill -0 $$pid 2>/dev/null && { echo "KILL $$pid"; kill -KILL $$pid; }; done; \
+    @sqlite3 {{db}} "select pid from processes where adw_id='{{ADW_ID}}' and ended_at is null order by case kind when 'agent' then 0 else 1 end, id desc;" | while read pid; do if kill -0 "$pid" 2>/dev/null; then echo "TERM $pid"; kill -TERM -- "-$pid" 2>/dev/null || kill -TERM "$pid"; fi; done; sleep 5; \
+    sqlite3 {{db}} "select pid from processes where adw_id='{{ADW_ID}}' and ended_at is null;" | while read pid; do if kill -0 "$pid" 2>/dev/null; then echo "KILL $pid"; kill -KILL "$pid"; fi; done; \
     sqlite3 {{db}} "update processes set ended_at=datetime('now') where adw_id='{{ADW_ID}}' and ended_at is null; update sessions set status='fail', ended_at=coalesce(ended_at, datetime('now')) where adw_id='{{ADW_ID}}' and status='running';"; \
     echo "stopped {{ADW_ID}}"
