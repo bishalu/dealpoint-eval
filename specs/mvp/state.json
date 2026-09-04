@@ -269,9 +269,10 @@
     },
     "m4": {
       "adw_ids": [
-        "83177d21"
+        "83177d21",
+        "f0eb3bd2"
       ],
-      "attempts": 0,
+      "attempts": 1,
       "blocker": "",
       "commits": [],
       "ended_at": "",
@@ -281,11 +282,11 @@
       "metrics": {},
       "models": {},
       "started_at": "2026-09-04T19:46:50.874+00:00",
-      "status": "pending",
+      "status": "running",
       "versions": {}
     }
   },
-  "next_action": "run m4 (re-sized by operator; fresh session)",
+  "next_action": "m4 running in session f0eb3bd2 (attempt 1)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -302,5 +303,5 @@
     ],
     "realized_usd": 0.5454
   },
-  "updated_at": "2026-09-04T20:25:37.195+00:00"
+  "updated_at": "2026-09-04T20:31:34.264+00:00"
 }
