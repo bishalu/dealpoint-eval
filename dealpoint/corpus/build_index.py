@@ -22,6 +22,7 @@ import time
 from collections.abc import Sequence
 
 from dealpoint.config import (
+    ARM_C_RETRIEVER,
     CHUNK_REPORT_PATH,
     COUNTERFACTUAL_JSONL_PATH,
     DATASET_VERSION_TXT_PATH,
@@ -35,7 +36,7 @@ from dealpoint.config import (
 )
 from dealpoint.corpus.chunks import Chunk, chunk_document, chunk_version
 from dealpoint.corpus.document import load_document
-from dealpoint.corpus.retrievers import index_version
+from dealpoint.corpus.retrievers import arm_c_index_version, index_version
 from dealpoint.data.sections import PARSER_VERSION
 
 
@@ -170,9 +171,16 @@ def build_index(force: bool = False) -> None:
     elapsed = time.time() - t0
 
     idx_version = index_version(collection=QDRANT_COLLECTION)
+    # M3 freeze: arm C (dealpoint/config.py::ARM_C_RETRIEVER) owns
+    # index_version.txt from M3 on -- arm C's identity is what every
+    # experiment stamps, not the physical dense index's own identity (that
+    # one lives under the unchanged `index_version` key in versions.json
+    # below, since arms A/B still run over the same plain-dense index this
+    # build produces).
+    arm_c_idx_version = arm_c_index_version()
     INDEX_VERSION_TXT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(INDEX_VERSION_TXT_PATH, "w", encoding="utf-8") as fh:
-        fh.write(idx_version + "\n")
+        fh.write(arm_c_idx_version + "\n")
 
     dataset_version = ""
     if DATASET_VERSION_TXT_PATH.exists():
@@ -186,6 +194,8 @@ def build_index(force: bool = False) -> None:
         "dataset_version": dataset_version,
         "chunk_version": chunk_version(),
         "index_version": idx_version,
+        "arm_c_retriever": ARM_C_RETRIEVER,
+        "arm_c_index_version": arm_c_idx_version,
         "embedding_model": EMBEDDING_MODEL,
         "n_documents": len(document_ids),
         "n_chunks": len(all_chunks),

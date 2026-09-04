@@ -130,6 +130,14 @@ budget SWEEP:
 gate-m2:
     uv run pytest -m "gate_m2 and not needs_network and not needs_model" -q
 
+# run the LLM-free retrieval tournament over the dev set: just tournament [--limit 10]
+tournament *ARGS:
+    uv run python -m dealpoint.eval.tournament "$@"
+
+# milestone 3 acceptance gates only, offline
+gate-m3:
+    uv run pytest -m "gate_m3 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

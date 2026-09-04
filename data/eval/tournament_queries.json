@@ -1,0 +1,101 @@
+{
+  "note": "Hand-written frozen alternate queries for the M3 multi-query fusion candidate. Never generated at run time; never LLM-generated (brief §4).",
+  "queries": {
+    "q01": {
+      "canonical": "merger consideration per share cash stock conversion of company common stock",
+      "variants": [
+        "type of consideration merger consideration article conversion of shares",
+        "each share of company common stock shall be converted into the right to receive",
+        "cash consideration stock consideration mixed election merger consideration"
+      ]
+    },
+    "q02": {
+      "canonical": "no solicitation breach by representatives deemed breach by the company",
+      "variants": [
+        "no-shop covenant representatives deemed to be a breach",
+        "company shall be responsible for any breach by its representatives",
+        "strict liability standard versus reasonable best efforts representatives breach"
+      ]
+    },
+    "q03": {
+      "canonical": "change of recommendation notice period parent match negotiate business days",
+      "variants": [
+        "matching rights notice period change of recommendation superior proposal",
+        "parent shall have a period of business days to propose revisions",
+        "business days versus calendar days matching period negotiate in good faith"
+      ]
+    },
+    "q04": {
+      "canonical": "conduct of business prior to closing ordinary course consistent with past practice efforts",
+      "variants": [
+        "interim operating covenant ordinary course of business consistent with past practice",
+        "company shall conduct its business in the ordinary course pending closing",
+        "commercially reasonable efforts versus flat covenant conduct of business"
+      ]
+    },
+    "q05": {
+      "canonical": "definition of knowledge of the company actual knowledge after due inquiry",
+      "variants": [
+        "knowledge definition actual knowledge of specified officers",
+        "company shall be deemed to have knowledge of a fact",
+        "actual knowledge versus constructive knowledge after reasonable inquiry"
+      ]
+    },
+    "q06": {
+      "canonical": "material adverse effect definition would reasonably be expected to have",
+      "variants": [
+        "MAE definition material adverse effect on the business financial condition",
+        "any event that would reasonably be expected to result in a material adverse effect",
+        "material adverse effect carve-outs exceptions to the definition"
+      ]
+    },
+    "q07": {
+      "canonical": "superior proposal definition assets of the company percentage consolidated",
+      "variants": [
+        "superior proposal definition all or substantially all of the assets",
+        "acquisition proposal for a specified percentage of consolidated assets",
+        "superior proposal threshold percentage of assets or equity"
+      ]
+    },
+    "q08": {
+      "canonical": "intervening event definition not known to the board reasonably foreseeable as of the date",
+      "variants": [
+        "intervening event definition unknown to the board of directors as of signing",
+        "event or circumstance not known and not reasonably foreseeable prior to the date",
+        "known but consequences unknown intervening event definition"
+      ]
+    },
+    "q09": {
+      "canonical": "termination fee tail acquisition proposal publicly disclosed made known within twelve months",
+      "variants": [
+        "tail period termination fee acquisition proposal publicly announced",
+        "company enters into a definitive agreement within twelve months after termination",
+        "acquisition proposal publicly disclosed versus privately made known tail fee"
+      ]
+    },
+    "q10": {
+      "canonical": "board determines in good faith failure to take action would be inconsistent with fiduciary duties unsolicited proposal",
+      "variants": [
+        "fiduciary out board determination inconsistent with fiduciary duties",
+        "board of directors determines in good faith after consultation with outside counsel",
+        "reasonably likely to be inconsistent with fiduciary duties standard no-shop"
+      ]
+    },
+    "q11": {
+      "canonical": "material adverse effect carve-out stockholder litigation arising from the merger agreement",
+      "variants": [
+        "MAE definition exceptions stockholder litigation related to this agreement",
+        "any proceeding arising from or relating to this agreement or the transactions",
+        "carve-out for lawsuits brought by stockholders in connection with the merger"
+      ]
+    },
+    "q12": {
+      "canonical": "interim operating covenants except as required by COVID-19 pandemic measures",
+      "variants": [
+        "negative covenant carve-out pandemic measures COVID-19 response",
+        "actions taken in response to the coronavirus or applicable law or guidance",
+        "except as required by applicable law order or COVID-19 measures"
+      ]
+    }
+  }
+}

@@ -1,4 +1,13 @@
 {
+  "arm_c_index_version": "8ae2fc1e24e9",
+  "arm_c_retriever": {
+    "fetch_k": 20,
+    "kind": "hybrid_rrf",
+    "multi_query": false,
+    "name": "hybrid_rrf",
+    "rerank_model": null,
+    "rrf_k": 60
+  },
   "chunk_version": "8e5e8ba56765",
   "dataset_version": "81ed82cd7552",
   "embedding_model": "BAAI/bge-small-en-v1.5",

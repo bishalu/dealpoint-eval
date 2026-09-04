@@ -26,6 +26,12 @@ PINNED_PRICES_DATE = "2026-09-04"
 # reproduces `usd` exactly on every M1 ledger row for this model.
 PINNED_PRICES: dict[str, dict[str, float]] = {
     "anthropic/claude-haiku-4.5": {"prompt": 1e-6, "completion": 5e-6},
+    # z-ai/glm-5.3-flash: the M3+ cheap workhorse for dev-loop/smoke/exploratory
+    # metered calls (engineer's instruction, 2026-09-04). Verified live against
+    # https://openrouter.ai/api/v1/models on 2026-09-04 (426 models, basis=="live"):
+    # prompt $0.000000075/token, completion $0.00000025/token; supports tools,
+    # tool_choice, response_format, structured_outputs.
+    "z-ai/glm-5.3-flash": {"prompt": 7.5e-08, "completion": 2.5e-07},
 }
 
 # Sweep definitions: shape only, no measured cost. `estimate()` fills the

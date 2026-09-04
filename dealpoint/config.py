@@ -157,3 +157,40 @@ M1_M2_MAX_USD = 1.00  # absolute per-milestone limit (2x guide) -- enforced
 # ratio used by dealpoint.eval.spend's "ledger:tokens x price" estimate basis
 # when the ledger carries no case_id to compute a true per-case mean from.
 EST_CALLS_PER_CASE = 4
+
+# --- Milestone 3: retrieval tournament -------------------------------------
+RERANK_MODEL = "Xenova/ms-marco-MiniLM-L-6-v2"  # fastembed cross-encoder, 88 MB, CPU
+RRF_K = 60  # standard reciprocal-rank-fusion constant
+HYBRID_FETCH_K = 20  # per-leg depth before fusion (brief §2.3: "hybrid top-20")
+RERANK_FETCH_K = 20  # candidates re-scored by the cross-encoder
+TOURNAMENT_K = 10  # ranked-list depth the metrics are computed over
+TOURNAMENT_QUERIES_PATH = EVAL_DIR / "tournament_queries.json"
+TOURNAMENT_JSON_PATH = REPORTS_DIR / "tournament.json"
+TOURNAMENT_MD_PATH = REPORTS_DIR / "tournament.md"
+TOURNAMENT_MILESTONE_TAG = "m3"
+
+# The cheap workhorse for every dev-loop/smoke/exploratory metered call from M3 on
+# (engineer's instruction, 2026-09-04). Verified on OpenRouter 2026-09-04:
+# prompt $0.075/M, completion $0.25/M; supports tools, tool_choice, response_format,
+# structured_outputs. M3 itself is LLM-free.
+WORKHORSE_MODEL = "z-ai/glm-5.3-flash"
+
+# Arm C, frozen by the M3 tournament (dealpoint/eval/tournament.py), full dev
+# set (58 cases), git_sha7=2afdce5. Winner by the tournament's rule (highest
+# hit\u00405 on canonical queries; ties -> MRR canonical, then hit\u00405 on maud,
+# then lower wall-clock, then name): `hybrid_rrf`, canonical hit\u00405=0.9138 vs
+# dense hit\u00405=0.8103 (margin +0.1034); it also beat `hybrid_rrf_rerank`
+# (same 0.9138 hit\u00405) on MRR (0.7319 vs 0.7271). See data/reports/
+# tournament.json for the full run. NOTE (brief-vs-measurement, reported not
+# resolved): the brief names arm C `agent-hybrid-rerank`, but the tournament
+# winner is hybrid RRF *without* rerank -- the measurement wins over the
+# label, per the milestone spec's explicit instruction not to hand-pick a
+# hybrid+rerank config to make the name true.
+ARM_C_RETRIEVER: dict = {
+    "fetch_k": HYBRID_FETCH_K,
+    "kind": "hybrid_rrf",
+    "multi_query": False,
+    "name": "hybrid_rrf",
+    "rerank_model": None,
+    "rrf_k": RRF_K,
+}

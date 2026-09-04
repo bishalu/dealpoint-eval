@@ -243,6 +243,9 @@ def run_eval_set(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m dealpoint.eval.run")
     parser.add_argument("--set", required=True, choices=["dev", "test", "counterfactual"])
+    # Arms C/D (dealpoint.config.ARM_C_RETRIEVER, frozen by the M3 tournament)
+    # are not wired into this runner yet -- that is M4's job, not this
+    # milestone's; do not add "C"/"D" here without doing that wiring.
     parser.add_argument("--arm", required=True, choices=["A", "B"])
     parser.add_argument("--model", required=True)
     parser.add_argument("--limit", type=int, default=None)

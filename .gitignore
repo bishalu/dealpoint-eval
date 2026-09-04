@@ -31,6 +31,10 @@ data/index/
 
 # dealpoint (M2 eval harness)
 !data/reports/braintrust_runs.json
+
+# dealpoint (M3 retrieval tournament)
+!data/reports/tournament.json
+!data/reports/tournament.md
 __pycache__/
 .pytest_cache/
 .ruff_cache/
