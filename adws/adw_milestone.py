@@ -149,6 +149,13 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
             milestones.save_state(state)
             if not sc.ok:
                 escalate = f"spend guard: {sc.reason}"
+            # The product runner enforces the per-milestone absolute at sweep time; the factory
+            # tells it the bound and the baseline through the environment every agent inherits.
+            if ms.absolute_usd is not None:
+                os.environ["DEALPOINT_MILESTONE_ID"] = ms.id
+                os.environ["DEALPOINT_MILESTONE_ABSOLUTE_USD"] = f"{ms.absolute_usd:.2f}"
+                os.environ["DEALPOINT_MILESTONE_SPEND_START_USD"] = f"{sc.realized_usd:.4f}"
+                ph.log(runner_bound=f"{ms.id} absolute ${ms.absolute_usd:.2f} from baseline ${sc.realized_usd:.4f}")
 
     try:
         if not escalate:
