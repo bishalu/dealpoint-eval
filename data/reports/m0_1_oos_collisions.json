@@ -1,0 +1,942 @@
+{
+  "collision_window": 400,
+  "collisions": [
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos00",
+      "question_text": "What percentage of the Target's employees have executed invention-assignment agreements?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos01",
+      "question_text": "What is the Target's current cyber-insurance deductible?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos02",
+      "question_text": "Which ERP system will the combined company use after closing?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos03",
+      "question_text": "What annualized cost synergies are expected during the first twelve months after closing?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos04",
+      "question_text": "What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": true,
+      "matched_offsets": {
+        "accrued": [
+          31539,
+          32863,
+          78880,
+          86435,
+          109009,
+          119193,
+          145038,
+          149721,
+          304852
+        ],
+        "vacation": [
+          141085,
+          300893,
+          302337,
+          304826
+        ]
+      },
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": true,
+      "matched_offsets": {
+        "accrued": [
+          31191,
+          57640,
+          63506,
+          63740,
+          99443,
+          126066,
+          233198,
+          322770
+        ],
+        "vacation": [
+          232931,
+          233160,
+          319360
+        ]
+      },
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos05",
+      "question_text": "What is the Target's accrued employee PTO liability as of signing?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos06",
+      "question_text": "What is the weighted-average remaining term of the Target's office leases?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos07",
+      "question_text": "What is the expected post-closing retention-bonus pool for non-executive employees?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos08",
+      "question_text": "What percentage of the Target's source code has been reviewed for open-source license compliance?"
+    },
+    {
+      "agreement_id": "contract_103",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_128",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_14",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_144",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_31",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_32",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_39",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_4",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_6",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_67",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_7",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_75",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_77",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_8",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    },
+    {
+      "agreement_id": "contract_99",
+      "collides": false,
+      "question_id": "oos09",
+      "question_text": "Which jurisdiction governs the Target's ten largest customer contracts?"
+    }
+  ],
+  "substitutions": []
+}

@@ -23,8 +23,30 @@ N_MAIN_ROWS = 20_623  # union of all 3 CSVs, data_type == "main"
 MIN_FRAGMENT_CHARS = 20
 FUZZY_CUTOFF = 90
 MIN_FRAGMENT_COVER = 0.50
-MIN_PARSER_COVERAGE = 0.80
-MAX_SECTION_CHARS = 20_000
+MIN_STRUCTURAL_COVERAGE = 0.80
+
+# Fraction of body characters above which a single section is "giant" and
+# therefore excluded from eligibility and from gold_span_section_rate
+# (specs/milestones/m0_1.md §A.3).
+GIANT_SECTION_FRACTION = 0.40
+
+# A dense run of heading-like matches (table of contents, defined-terms
+# index, exhibit list, ...) is only treated as TOC-like if it *starts*
+# within this fraction of the document. Measured during M0.1 recon: contracts
+# routinely have several such runs in sequence before the real numbering
+# starts, and 8% comfortably covers all of them without eating real body
+# text in the (rare) short-front-matter contracts (see plan §0.2/§2.3).
+TOC_SCAN_FRACTION = 0.08
+
+# Section numbering is accepted as "advancing" if it increases by up to this
+# many steps in one hop, not just by exactly 1. Measured during M0.1 recon:
+# strict +1 loses materially more real headings (~4,000 plausible forward
+# skips across the corpus, 77 contracts with >20 skips) than a small window
+# lets through as false positives, while still rejecting genuine
+# cross-references, which are almost never a small forward skip that also
+# matches the article number (see plan §0.4).
+SECTION_ADVANCE_WINDOW = 3
+
 N_AGREEMENTS = 20
 N_DEV = 5
 N_TEST = 15
@@ -60,3 +82,15 @@ COUNTERFACTUAL_JSONL_PATH = EVAL_DIR / "counterfactual.jsonl"
 AGREEMENT_NAMES_PATH = DATA_DIR / "agreement_names.json"
 
 REPORTS_DIR = DATA_DIR / "reports"
+PARSER_REPORT_PATH = REPORTS_DIR / "m0_1_parser_report.json"
+OOS_COLLISIONS_REPORT_PATH = REPORTS_DIR / "m0_1_oos_collisions.json"
+PARSER_VERSION_TXT_PATH = REPORTS_DIR / "parser_version.txt"
+DATASET_VERSION_TXT_PATH = REPORTS_DIR / "dataset_version.txt"
+
+# Eligible-agreement floor asserted by the gate_m0 test; the target ("~120")
+# is reported, not gated (specs/milestones/m0_1.md §A.6).
+MIN_ELIGIBLE_COUNT = 100
+
+# Sliding-window size (canonical chars) for the out-of-scope collision check
+# (specs/milestones/m0_1.md Problem B).
+OOS_COLLISION_WINDOW = 400

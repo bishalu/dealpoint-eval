@@ -2,8 +2,14 @@ import csv
 
 import pytest
 
-from dealpoint.config import CSV_PATHS
-from dealpoint.data.questions import OUT_OF_SCOPE_QUESTIONS, QUESTION_SPEC
+from dealpoint.config import CSV_PATHS, OOS_COLLISION_WINDOW
+from dealpoint.data.questions import (
+    OUT_OF_SCOPE_QUESTION_SPEC,
+    OUT_OF_SCOPE_QUESTIONS,
+    OUT_OF_SCOPE_SPARES,
+    QUESTION_SPEC,
+    question_collides,
+)
 
 csv.field_size_limit(10**9)
 
@@ -30,6 +36,65 @@ def test_q10_has_two_spaces_verbatim():
 
 def test_out_of_scope_questions_count():
     assert len(OUT_OF_SCOPE_QUESTIONS) == 10
+
+
+def test_out_of_scope_questions_match_spec_fixed_list_verbatim():
+    # specs/milestones/m0_1.md Problem B, questions 1-10, verbatim.
+    expected = (
+        (
+            "What percentage of the Target's employees have executed invention-assignment "
+            "agreements?"
+        ),
+        "What is the Target's current cyber-insurance deductible?",
+        "Which ERP system will the combined company use after closing?",
+        (
+            "What annualized cost synergies are expected during the first twelve months "
+            "after closing?"
+        ),
+        (
+            "What percentage of the Target's revenue comes from customer contracts "
+            "containing change-of-control termination rights?"
+        ),
+        "What is the Target's accrued employee PTO liability as of signing?",
+        "What is the weighted-average remaining term of the Target's office leases?",
+        (
+            "What is the expected post-closing retention-bonus pool for non-executive "
+            "employees?"
+        ),
+        (
+            "What percentage of the Target's source code has been reviewed for "
+            "open-source license compliance?"
+        ),
+        "Which jurisdiction governs the Target's ten largest customer contracts?",
+    )
+    assert OUT_OF_SCOPE_QUESTIONS == expected
+
+
+def test_every_out_of_scope_question_has_at_least_one_key_term():
+    for q in OUT_OF_SCOPE_QUESTION_SPEC:
+        assert len(q.key_terms) >= 1
+    for q in OUT_OF_SCOPE_SPARES:
+        assert len(q.key_terms) >= 1
+
+
+def test_out_of_scope_ids_are_unique():
+    ids = [q.id for q in (*OUT_OF_SCOPE_QUESTION_SPEC, *OUT_OF_SCOPE_SPARES)]
+    assert len(ids) == len(set(ids))
+
+
+def test_question_collides_requires_word_boundaries():
+    # "pto" as a bare substring must not match inside "Lipton"/"raptor"/etc.
+    canonical = "Lipton and raptor and Hampton and laptops and symptoms, no real match here."
+    assert not question_collides(canonical, ("pto",), OOS_COLLISION_WINDOW)
+    canonical_real = "The employee accrued PTO liability is material to this deal."
+    assert question_collides(canonical_real, ("pto",), OOS_COLLISION_WINDOW)
+
+
+def test_question_collides_requires_all_terms_within_window():
+    canonical = "cyber " + ("x" * 500) + " deductible"
+    assert not question_collides(canonical, ("cyber", "deductible"), 400)
+    canonical_close = "cyber " + ("x" * 50) + " deductible"
+    assert question_collides(canonical_close, ("cyber", "deductible"), 400)
 
 
 @pytest.mark.gate_m0

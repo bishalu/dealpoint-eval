@@ -7,6 +7,7 @@ guarded by a test that checks every string against the real CSV data.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 
@@ -260,17 +261,183 @@ QUESTION_SPEC: tuple[QuestionSpec, ...] = (
 
 QUESTION_BY_ID: dict[str, QuestionSpec] = {q.id: q for q in QUESTION_SPEC}
 
-# 10 hand-written questions no merger agreement answers; used to build the
-# out-of-scope counterfactual cases (expected gold_answer = "ABSTAIN").
-OUT_OF_SCOPE_QUESTIONS: tuple[str, ...] = (
-    "What is the target company's carbon offset purchasing policy?",
-    "What percentage of the target's board must be composed of veterans?",
-    "Does the agreement specify a mandatory retirement age for the CEO?",
-    "What is the agreed-upon mascot for the combined company?",
-    "Does the agreement require the acquirer to maintain a specific dog-friendly office policy?",
-    "What cryptocurrency, if any, may be used to pay the termination fee?",
-    "Does the agreement specify the target's preferred coffee supplier?",
-    "What is the maximum number of parking spaces guaranteed to employees post-closing?",
-    "Does the agreement require annual company-wide karaoke events?",
-    "What is the agreed font for all post-closing corporate stationery?",
+
+@dataclass(frozen=True)
+class OutOfScopeQuestion:
+    """A question no merger agreement answers, with hand-written collision-check terms.
+
+    `key_terms` is used by the deterministic collision check in `cases.py`:
+    an agreement's canonical text "collides" with this question if every
+    term in `key_terms` appears (word-boundary, case-insensitive) within a
+    single `OOS_COLLISION_WINDOW`-char window (specs/milestones/m0_1.md
+    Problem B).
+    """
+
+    id: str  # "oos00".."oos09", or "oos_spare_*"
+    text: str  # verbatim from specs/milestones/m0_1.md Problem B
+    key_terms: tuple[str, ...]
+
+
+# 10 hand-written questions no merger agreement answers (specs/milestones/
+# m0_1.md Problem B); used to build the out-of-scope counterfactual cases
+# (expected gold_answer = "ABSTAIN"). Key-term lists are measured to have
+# zero (or, for #6/oos05, low and false-positive-only) collisions across all
+# 152 MAUD contracts -- see the M0.1 plan §0.5 for the measured counts.
+OUT_OF_SCOPE_QUESTION_SPEC: tuple[OutOfScopeQuestion, ...] = (
+    OutOfScopeQuestion(
+        id="oos00",
+        text=(
+            "What percentage of the Target's employees have executed invention-assignment "
+            "agreements?"
+        ),
+        key_terms=("invention", "assignment", "percentage"),
+    ),
+    OutOfScopeQuestion(
+        id="oos01",
+        text="What is the Target's current cyber-insurance deductible?",
+        key_terms=("cyber", "deductible"),
+    ),
+    OutOfScopeQuestion(
+        id="oos02",
+        text="Which ERP system will the combined company use after closing?",
+        key_terms=("erp",),
+    ),
+    OutOfScopeQuestion(
+        id="oos03",
+        text=(
+            "What annualized cost synergies are expected during the first twelve months "
+            "after closing?"
+        ),
+        key_terms=("synergies", "annualized"),
+    ),
+    OutOfScopeQuestion(
+        id="oos04",
+        text=(
+            "What percentage of the Target's revenue comes from customer contracts "
+            "containing change-of-control termination rights?"
+        ),
+        key_terms=("change of control", "customer contracts", "percentage"),
+    ),
+    OutOfScopeQuestion(
+        id="oos05",
+        text="What is the Target's accrued employee PTO liability as of signing?",
+        key_terms=("accrued", "vacation"),
+    ),
+    OutOfScopeQuestion(
+        id="oos06",
+        text="What is the weighted-average remaining term of the Target's office leases?",
+        key_terms=("weighted average", "leases"),
+    ),
+    OutOfScopeQuestion(
+        id="oos07",
+        text=(
+            "What is the expected post-closing retention-bonus pool for non-executive "
+            "employees?"
+        ),
+        key_terms=("retention", "bonus", "pool"),
+    ),
+    OutOfScopeQuestion(
+        id="oos08",
+        text=(
+            "What percentage of the Target's source code has been reviewed for "
+            "open-source license compliance?"
+        ),
+        key_terms=("open source", "percentage"),
+    ),
+    OutOfScopeQuestion(
+        id="oos09",
+        text="Which jurisdiction governs the Target's ten largest customer contracts?",
+        key_terms=("governed by the laws", "customer contracts"),
+    ),
 )
+
+# Spares, tried in order if a question collides on every selected test
+# agreement (specs/milestones/m0_1.md Problem B). Measured: none of the 10
+# collide on every agreement, so these are expected to sit idle.
+OUT_OF_SCOPE_SPARES: tuple[OutOfScopeQuestion, ...] = (
+    OutOfScopeQuestion(
+        id="oos_spare_a",
+        text=(
+            "What is the Target's average customer contract renewal rate over the last "
+            "three fiscal years?"
+        ),
+        key_terms=("renewal rate",),
+    ),
+    OutOfScopeQuestion(
+        id="oos_spare_b",
+        text="How many of the Target's patents expire within five years of closing?",
+        key_terms=("patents", "expire"),
+    ),
+    OutOfScopeQuestion(
+        id="oos_spare_c",
+        text=(
+            "What is the Target's headcount attrition rate for the twelve months before "
+            "signing?"
+        ),
+        key_terms=("attrition",),
+    ),
+)
+
+OUT_OF_SCOPE_QUESTION_BY_ID: dict[str, OutOfScopeQuestion] = {
+    q.id: q for q in (*OUT_OF_SCOPE_QUESTION_SPEC, *OUT_OF_SCOPE_SPARES)
+}
+
+# Name exporting just the question texts, in order, for callers that only
+# need the strings (cases.py, tests).
+OUT_OF_SCOPE_QUESTIONS: tuple[str, ...] = tuple(q.text for q in OUT_OF_SCOPE_QUESTION_SPEC)
+
+
+def _term_offsets(canonical: str, term: str) -> list[int]:
+    """Word-boundary, case-insensitive match start offsets for `term` in `canonical`.
+
+    Word boundaries are mandatory (specs/milestones/m0_1.md Problem B, plan
+    section 0.5): a bare substring match for "pto" collides on 41/152
+    contracts via "Lipton", "raptor", "Hampton", "laptops", "symptoms"; the
+    same check with \\b anchors collides on 1.
+    """
+    pattern = re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE)
+    return [m.start() for m in pattern.finditer(canonical)]
+
+
+def term_match_offsets(canonical: str, key_terms: tuple[str, ...]) -> dict[str, list[int]]:
+    """All word-boundary match offsets per term, for the collision report's diagnostic detail."""
+    return {term: _term_offsets(canonical, term) for term in key_terms}
+
+
+def question_collides(canonical: str, key_terms: tuple[str, ...], window: int) -> bool:
+    """True iff some `window`-char span of `canonical` contains every term in `key_terms`.
+
+    Implementation: collect all term match offsets, merge into one sorted
+    list tagged by which term matched, then slide a window over them and
+    report a hit as soon as every distinct term has an occurrence inside the
+    current window (specs/milestones/m0_1.md Problem B: "if an agreement's
+    text plausibly establishes the asked fact (all key terms co-occur within
+    400 characters), do not use that pairing").
+    """
+    if not key_terms:
+        return False
+    tagged: list[tuple[int, int]] = []  # (offset, term_index)
+    for term_idx, term in enumerate(key_terms):
+        for offset in _term_offsets(canonical, term):
+            tagged.append((offset, term_idx))
+    if len(tagged) < len(key_terms):
+        return False
+    tagged.sort()
+    n_terms = len(key_terms)
+    left = 0
+    counts = [0] * n_terms
+    distinct = 0
+    for right in range(len(tagged)):
+        right_term = tagged[right][1]
+        if counts[right_term] == 0:
+            distinct += 1
+        counts[right_term] += 1
+        while tagged[right][0] - tagged[left][0] >= window:
+            left_term = tagged[left][1]
+            counts[left_term] -= 1
+            if counts[left_term] == 0:
+                distinct -= 1
+            left += 1
+        if distinct == n_terms:
+            return True
+    return False

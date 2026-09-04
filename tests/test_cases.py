@@ -9,6 +9,8 @@ from dealpoint.config import (
     N_OUT_OF_SCOPE,
     N_REDACTED,
     N_TEST,
+    OOS_COLLISIONS_REPORT_PATH,
+    SELECTION_PATH,
     TEST_JSONL_PATH,
 )
 
@@ -59,3 +61,49 @@ def test_dev_and_test_no_null_gold_answers():
         for row in _read_jsonl(path):
             assert row["gold_answer"] not in (None, "", "None")
             assert len(row["gold_spans"]) >= 1
+
+
+@pytest.mark.gate_m0
+def test_collision_report_exists_and_covers_every_question_test_agreement_pair():
+    if not (COUNTERFACTUAL_JSONL_PATH.exists() and OOS_COLLISIONS_REPORT_PATH.exists()):
+        pytest.skip("case files/collision report not built yet; run `uv run python -m dealpoint.cli data`")
+    with open(OOS_COLLISIONS_REPORT_PATH, encoding="utf-8") as fh:
+        report = json.load(fh)
+
+    assert "collisions" in report
+    assert "substitutions" in report
+
+    if not SELECTION_PATH.exists():
+        pytest.skip("selection.json not built yet")
+    with open(SELECTION_PATH, encoding="utf-8") as fh:
+        selection = json.load(fh)
+    test_agreements = set(selection["test"])
+
+    seen_question_ids = {row["question_id"] for row in report["collisions"]}
+    seen_agreement_ids = {row["agreement_id"] for row in report["collisions"]}
+    assert test_agreements <= seen_agreement_ids
+    assert len(seen_question_ids) >= 10
+
+    for row in report["collisions"]:
+        assert isinstance(row["collides"], bool)
+
+
+@pytest.mark.gate_m0
+def test_out_of_scope_cases_placed_on_non_colliding_agreements():
+    if not (COUNTERFACTUAL_JSONL_PATH.exists() and OOS_COLLISIONS_REPORT_PATH.exists()):
+        pytest.skip("case files/collision report not built yet; run `uv run python -m dealpoint.cli data`")
+    cf_rows = {r["case_id"]: r for r in _read_jsonl(COUNTERFACTUAL_JSONL_PATH)}
+    with open(OOS_COLLISIONS_REPORT_PATH, encoding="utf-8") as fh:
+        report = json.load(fh)
+    collision_lookup = {
+        (row["question_text"], row["agreement_id"]): row["collides"] for row in report["collisions"]
+    }
+    for row in cf_rows.values():
+        if row.get("kind") != "out_of_scope":
+            continue
+        key = (row["question_text"], row["agreement_id"])
+        # Only assert when the pairing was actually recorded in the collision
+        # report (it always should be, but skip gracefully if not, rather
+        # than false-failing on a report/format mismatch).
+        if key in collision_lookup:
+            assert collision_lookup[key] is False

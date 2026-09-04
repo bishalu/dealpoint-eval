@@ -1,7 +1,8 @@
 """Seeded selection of 20 agreements for the dev/test eval sets.
 
-Eligibility (spec §3.7):
-  - `parser_coverage >= MIN_PARSER_COVERAGE`
+Eligibility (specs/milestones/m0_1.md §A.6):
+  - `structural_coverage >= MIN_STRUCTURAL_COVERAGE`
+  - not `giant_single_section`
   - >= 10 of the 12 questions have a non-null gold answer *and* a usable
     aligned span (>=1 aligned fragment, `covered_fraction >= MIN_FRAGMENT_COVER`)
 
@@ -19,17 +20,25 @@ from dataclasses import dataclass
 
 from dealpoint.config import (
     CONTRACTS_DIR,
+    GIANT_SECTION_FRACTION,
     MIN_FRAGMENT_COVER,
-    MIN_PARSER_COVERAGE,
+    MIN_STRUCTURAL_COVERAGE,
     N_AGREEMENTS,
     N_DEV,
+    SECTIONS_DIR,
     SEED,
 )
 from dealpoint.data.align import AlignResult, align_span
 from dealpoint.data.canonical import canonicalise
 from dealpoint.data.labels import Label, is_null_answer
 from dealpoint.data.questions import QUESTION_SPEC
-from dealpoint.data.sections import Section, parse_sections, parser_coverage
+from dealpoint.data.sections import (
+    Section,
+    assert_sections_dir_not_stale,
+    compute_structural_metrics,
+    gold_span_section_rate,
+    parse_sections,
+)
 
 _CONTRACT_ID_RE = re.compile(r"(contract_\d+)")
 
@@ -39,7 +48,12 @@ class AgreementData:
     agreement_id: str
     canonical: str
     sections: list[Section]
-    parser_coverage: float
+    structural_coverage: float
+    n_sections: int
+    max_section_chars: int
+    giant_single_section: bool
+    body_start: int
+    body_end: int
 
 
 @dataclass(frozen=True)
@@ -62,8 +76,18 @@ def load_agreement(agreement_id: str) -> AgreementData:
         raw = fh.read()
     canonical = canonicalise(raw)
     sections = parse_sections(canonical)
-    coverage = parser_coverage(canonical, sections)
-    return AgreementData(agreement_id, canonical, sections, coverage)
+    metrics = compute_structural_metrics(canonical, sections)
+    return AgreementData(
+        agreement_id=agreement_id,
+        canonical=canonical,
+        sections=sections,
+        structural_coverage=metrics.structural_coverage,
+        n_sections=metrics.n_sections,
+        max_section_chars=metrics.max_section_chars,
+        giant_single_section=metrics.giant_single_section,
+        body_start=metrics.body_start,
+        body_end=metrics.body_end,
+    )
 
 
 def compute_question_alignments(
@@ -94,6 +118,24 @@ def compute_question_alignments(
     return results
 
 
+def agreement_gold_span_rate(
+    agreement: AgreementData, labels: dict[tuple[str, str, str], Label]
+) -> float | None:
+    """This agreement's `gold_span_section_rate` (specs/milestones/m0_1.md §A.3).
+
+    Uses every *aligned* gold fragment range across all 12 questions (not
+    filtered by the MIN_FRAGMENT_COVER usability threshold), matching the
+    spec's "aligned gold spans for the 12 questions" wording.
+    """
+    aligned = compute_question_alignments(agreement, labels)
+    ranges: list[tuple[int, int]] = []
+    for _label, result in aligned.values():
+        ranges.extend(result.ranges)
+    return gold_span_section_rate(
+        agreement.sections, (agreement.body_start, agreement.body_end), ranges
+    )
+
+
 def _usable_questions(
     agreement: AgreementData, labels: dict[tuple[str, str, str], Label]
 ) -> dict[str, tuple[Label, AlignResult]]:
@@ -109,27 +151,42 @@ def _usable_questions(
 def select_agreements(
     labels: dict[tuple[str, str, str], Label],
     agreement_ids: list[str] | None = None,
+    agreement_data: dict[str, AgreementData] | None = None,
 ) -> tuple[SelectionResult, dict[str, AgreementData], dict[str, dict[str, tuple[Label, AlignResult]]]]:
     """Run the full eligibility + greedy selection + dev/test split pipeline.
 
     Returns (SelectionResult, agreement_data_by_id, usable_questions_by_id) so
     callers (cases.py) can reuse the already-computed canonical text, section
     map and alignment results without recomputation.
+
+    Refuses to run if `data/derived/sections/` holds files built by a
+    different `parser_version` (specs/milestones/m0_1.md §A.5) -- callers
+    that have just rebuilt that directory (e.g. `cli.py data`) pass
+    `agreement_data` in to skip both the recompute and this check being able
+    to see anything but freshly written files.
     """
+    assert_sections_dir_not_stale(SECTIONS_DIR)
+
     if agreement_ids is None:
         agreement_ids = list_all_agreement_ids()
 
     rejected: dict[str, str] = {}
     eligible: list[str] = []
-    agreement_data: dict[str, AgreementData] = {}
+    computed_data: dict[str, AgreementData] = {}
     usable_by_id: dict[str, dict[str, tuple[Label, AlignResult]]] = {}
 
     for agreement_id in agreement_ids:
-        data = load_agreement(agreement_id)
-        agreement_data[agreement_id] = data
-        if data.parser_coverage < MIN_PARSER_COVERAGE:
+        data = agreement_data[agreement_id] if agreement_data is not None else load_agreement(agreement_id)
+        computed_data[agreement_id] = data
+        if data.structural_coverage < MIN_STRUCTURAL_COVERAGE:
             rejected[agreement_id] = (
-                f"parser_coverage {data.parser_coverage:.3f} < {MIN_PARSER_COVERAGE}"
+                f"structural_coverage {data.structural_coverage:.3f} < {MIN_STRUCTURAL_COVERAGE}"
+            )
+            continue
+        if data.giant_single_section:
+            rejected[agreement_id] = (
+                f"giant_single_section (max_section_chars={data.max_section_chars} "
+                f"> {GIANT_SECTION_FRACTION} of body)"
             )
             continue
         usable = _usable_questions(data, labels)
@@ -206,4 +263,21 @@ def select_agreements(
     test.sort(key=lambda s: int(s.split("_")[1]))
 
     result = SelectionResult(selected=selected, dev=dev, test=test, rejected=rejected)
-    return result, agreement_data, usable_by_id
+    return result, computed_data, usable_by_id
+
+
+def compute_body(agreement: AgreementData) -> tuple[int, int]:
+    return agreement.body_start, agreement.body_end
+
+
+# Re-exported so callers only need `from dealpoint.data.select import ...`.
+__all__ = [
+    "AgreementData",
+    "SelectionResult",
+    "agreement_gold_span_rate",
+    "compute_body",
+    "compute_question_alignments",
+    "list_all_agreement_ids",
+    "load_agreement",
+    "select_agreements",
+]

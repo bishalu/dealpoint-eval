@@ -18,6 +18,10 @@ data/raw/
 data/derived/
 data/reports/*
 !data/reports/.gitkeep
+!data/reports/m0_1_parser_report.json
+!data/reports/m0_1_oos_collisions.json
+!data/reports/parser_version.txt
+!data/reports/dataset_version.txt
 __pycache__/
 .pytest_cache/
 .ruff_cache/

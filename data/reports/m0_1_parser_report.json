@@ -1,0 +1,1455 @@
+{
+  "corpus_gold_span_hits": 2970,
+  "corpus_gold_span_miss_breakdown": {
+    "after_signature_block": 284,
+    "before_body_start": 89,
+    "giant_section": 27,
+    "unrecognised_gap": 104
+  },
+  "corpus_gold_span_section_rate": 0.8549222797927462,
+  "corpus_gold_span_total": 3474,
+  "dev": [
+    "contract_0",
+    "contract_1",
+    "contract_3",
+    "contract_5",
+    "contract_46"
+  ],
+  "eligible_count": 139,
+  "eligible_ids": [
+    "contract_0",
+    "contract_1",
+    "contract_3",
+    "contract_4",
+    "contract_5",
+    "contract_6",
+    "contract_7",
+    "contract_8",
+    "contract_9",
+    "contract_10",
+    "contract_11",
+    "contract_12",
+    "contract_13",
+    "contract_14",
+    "contract_15",
+    "contract_16",
+    "contract_17",
+    "contract_18",
+    "contract_19",
+    "contract_20",
+    "contract_21",
+    "contract_22",
+    "contract_23",
+    "contract_25",
+    "contract_26",
+    "contract_27",
+    "contract_28",
+    "contract_29",
+    "contract_31",
+    "contract_32",
+    "contract_34",
+    "contract_35",
+    "contract_36",
+    "contract_37",
+    "contract_38",
+    "contract_39",
+    "contract_40",
+    "contract_41",
+    "contract_42",
+    "contract_43",
+    "contract_44",
+    "contract_45",
+    "contract_46",
+    "contract_47",
+    "contract_48",
+    "contract_49",
+    "contract_50",
+    "contract_52",
+    "contract_53",
+    "contract_54",
+    "contract_55",
+    "contract_56",
+    "contract_57",
+    "contract_58",
+    "contract_59",
+    "contract_61",
+    "contract_62",
+    "contract_63",
+    "contract_64",
+    "contract_65",
+    "contract_66",
+    "contract_67",
+    "contract_69",
+    "contract_70",
+    "contract_72",
+    "contract_73",
+    "contract_74",
+    "contract_75",
+    "contract_76",
+    "contract_77",
+    "contract_78",
+    "contract_80",
+    "contract_81",
+    "contract_82",
+    "contract_83",
+    "contract_84",
+    "contract_85",
+    "contract_86",
+    "contract_87",
+    "contract_89",
+    "contract_90",
+    "contract_91",
+    "contract_92",
+    "contract_93",
+    "contract_94",
+    "contract_95",
+    "contract_96",
+    "contract_97",
+    "contract_98",
+    "contract_99",
+    "contract_100",
+    "contract_101",
+    "contract_102",
+    "contract_103",
+    "contract_104",
+    "contract_105",
+    "contract_107",
+    "contract_108",
+    "contract_109",
+    "contract_110",
+    "contract_111",
+    "contract_113",
+    "contract_114",
+    "contract_115",
+    "contract_116",
+    "contract_117",
+    "contract_118",
+    "contract_119",
+    "contract_120",
+    "contract_121",
+    "contract_122",
+    "contract_123",
+    "contract_124",
+    "contract_125",
+    "contract_126",
+    "contract_127",
+    "contract_128",
+    "contract_129",
+    "contract_130",
+    "contract_131",
+    "contract_132",
+    "contract_133",
+    "contract_134",
+    "contract_135",
+    "contract_136",
+    "contract_137",
+    "contract_138",
+    "contract_139",
+    "contract_140",
+    "contract_141",
+    "contract_142",
+    "contract_143",
+    "contract_144",
+    "contract_145",
+    "contract_146",
+    "contract_147",
+    "contract_148",
+    "contract_150",
+    "contract_151"
+  ],
+  "giant_section_failures": [
+    "contract_60",
+    "contract_71",
+    "contract_106",
+    "contract_112"
+  ],
+  "giant_section_fraction_threshold": 0.4,
+  "gold_span_section_rate_ceiling": 0.8926309729418538,
+  "min_structural_coverage_threshold": 0.8,
+  "n_agreements": 152,
+  "parser_version": "29cc01eda19b",
+  "per_agreement": {
+    "contract_0": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 31471,
+      "n_sections": 61,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9942392165334486
+    },
+    "contract_1": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9310344827586207,
+      "max_section_chars": 43174,
+      "n_sections": 96,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9946854968838359
+    },
+    "contract_10": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 53556,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9926563102532996
+    },
+    "contract_100": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 123985,
+      "n_sections": 43,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_101": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 47639,
+      "n_sections": 78,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_102": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 24131,
+      "n_sections": 109,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9848659198568728
+    },
+    "contract_103": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9523809523809523,
+      "max_section_chars": 50939,
+      "n_sections": 73,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_104": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 70398,
+      "n_sections": 68,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_105": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 63795,
+      "n_sections": 114,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_106": {
+      "giant_single_section": true,
+      "gold_span_section_rate": 0.9,
+      "max_section_chars": 105962,
+      "n_sections": 33,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9947536131966807
+    },
+    "contract_107": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 35390,
+      "n_sections": 85,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_108": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 87570,
+      "n_sections": 53,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9677772833320043
+    },
+    "contract_109": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 56769,
+      "n_sections": 108,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_11": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 31180,
+      "n_sections": 82,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_110": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 45189,
+      "n_sections": 80,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_111": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 46690,
+      "n_sections": 84,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_112": {
+      "giant_single_section": true,
+      "gold_span_section_rate": 0.84,
+      "max_section_chars": 143653,
+      "n_sections": 31,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_113": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9615384615384616,
+      "max_section_chars": 42542,
+      "n_sections": 98,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9932422427692409
+    },
+    "contract_114": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7619047619047619,
+      "max_section_chars": 92050,
+      "n_sections": 50,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_115": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 34318,
+      "n_sections": 93,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_116": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9047619047619048,
+      "max_section_chars": 78234,
+      "n_sections": 30,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_117": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6,
+      "max_section_chars": 88985,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_118": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 41708,
+      "n_sections": 88,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9967771126081203
+    },
+    "contract_119": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 22299,
+      "n_sections": 96,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_12": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9615384615384616,
+      "max_section_chars": 39740,
+      "n_sections": 82,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_120": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 65458,
+      "n_sections": 86,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_121": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 48190,
+      "n_sections": 108,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_122": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 56740,
+      "n_sections": 91,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_123": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8947368421052632,
+      "max_section_chars": 44888,
+      "n_sections": 79,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_124": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9411764705882353,
+      "max_section_chars": 33789,
+      "n_sections": 103,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9909385217907938
+    },
+    "contract_125": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8333333333333334,
+      "max_section_chars": 27119,
+      "n_sections": 86,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9945399604881444
+    },
+    "contract_126": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7391304347826086,
+      "max_section_chars": 117784,
+      "n_sections": 56,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9879917019069656
+    },
+    "contract_127": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 32999,
+      "n_sections": 80,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9892858742219104
+    },
+    "contract_128": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 71489,
+      "n_sections": 72,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_129": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 23065,
+      "n_sections": 104,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_13": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 32651,
+      "n_sections": 77,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_130": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 52641,
+      "n_sections": 73,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9904087942287874
+    },
+    "contract_131": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 23771,
+      "n_sections": 102,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_132": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9696969696969697,
+      "max_section_chars": 67334,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_133": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 30921,
+      "n_sections": 99,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_134": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8333333333333334,
+      "max_section_chars": 35327,
+      "n_sections": 95,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9606897595665216
+    },
+    "contract_135": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 29100,
+      "n_sections": 103,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.991313552253654
+    },
+    "contract_136": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6764705882352942,
+      "max_section_chars": 19146,
+      "n_sections": 78,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9907939952975221
+    },
+    "contract_137": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 44108,
+      "n_sections": 77,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_138": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 27142,
+      "n_sections": 97,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_139": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 36316,
+      "n_sections": 85,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_14": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9285714285714286,
+      "max_section_chars": 32716,
+      "n_sections": 97,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_140": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9583333333333334,
+      "max_section_chars": 59750,
+      "n_sections": 61,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9895109695488619
+    },
+    "contract_141": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9444444444444444,
+      "max_section_chars": 19659,
+      "n_sections": 89,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9953619180341446
+    },
+    "contract_142": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.5925925925925926,
+      "max_section_chars": 17922,
+      "n_sections": 82,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9920454381327902
+    },
+    "contract_143": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.5882352941176471,
+      "max_section_chars": 72783,
+      "n_sections": 79,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9969482582101699
+    },
+    "contract_144": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 61032,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_145": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 47286,
+      "n_sections": 104,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_146": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7777777777777778,
+      "max_section_chars": 32370,
+      "n_sections": 70,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_147": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 72416,
+      "n_sections": 93,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9936945173270699
+    },
+    "contract_148": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 67930,
+      "n_sections": 58,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_149": {
+      "giant_single_section": false,
+      "gold_span_section_rate": null,
+      "max_section_chars": 67930,
+      "n_sections": 58,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_15": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8181818181818182,
+      "max_section_chars": 37063,
+      "n_sections": 102,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9991468971242915
+    },
+    "contract_150": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 58725,
+      "n_sections": 96,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_151": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.96,
+      "max_section_chars": 56323,
+      "n_sections": 87,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_16": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7368421052631579,
+      "max_section_chars": 29462,
+      "n_sections": 71,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.967646762248705
+    },
+    "contract_17": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 45744,
+      "n_sections": 111,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_18": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 45132,
+      "n_sections": 53,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_19": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 57359,
+      "n_sections": 91,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9846038876433836
+    },
+    "contract_2": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8571428571428571,
+      "max_section_chars": 19702,
+      "n_sections": 90,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_20": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6785714285714286,
+      "max_section_chars": 30049,
+      "n_sections": 105,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_21": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 23307,
+      "n_sections": 92,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_22": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.3,
+      "max_section_chars": 33426,
+      "n_sections": 91,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_23": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9047619047619048,
+      "max_section_chars": 50616,
+      "n_sections": 107,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_24": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.15,
+      "max_section_chars": 30773,
+      "n_sections": 1,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.08825444168805656
+    },
+    "contract_25": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 99334,
+      "n_sections": 46,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_26": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 64625,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_27": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 50188,
+      "n_sections": 114,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_28": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.875,
+      "max_section_chars": 43393,
+      "n_sections": 79,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9870977989834084
+    },
+    "contract_29": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9375,
+      "max_section_chars": 35240,
+      "n_sections": 78,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_3": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8518518518518519,
+      "max_section_chars": 29445,
+      "n_sections": 95,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_30": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.0,
+      "max_section_chars": 9836,
+      "n_sections": 1,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.05061936154554765
+    },
+    "contract_31": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6923076923076923,
+      "max_section_chars": 110922,
+      "n_sections": 83,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_32": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.5789473684210527,
+      "max_section_chars": 20002,
+      "n_sections": 87,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_33": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.018518518518518517,
+      "max_section_chars": 23686,
+      "n_sections": 3,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.09039834374221481
+    },
+    "contract_34": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 50119,
+      "n_sections": 74,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_35": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 50744,
+      "n_sections": 72,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9947330142642643
+    },
+    "contract_36": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6666666666666666,
+      "max_section_chars": 69685,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_37": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9130434782608695,
+      "max_section_chars": 32682,
+      "n_sections": 99,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9932170855765315
+    },
+    "contract_38": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6153846153846154,
+      "max_section_chars": 20699,
+      "n_sections": 80,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_39": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 24345,
+      "n_sections": 143,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9958222404259677
+    },
+    "contract_4": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 49580,
+      "n_sections": 83,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9957689562097691
+    },
+    "contract_40": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9444444444444444,
+      "max_section_chars": 57527,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_41": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6,
+      "max_section_chars": 56590,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_42": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 67533,
+      "n_sections": 72,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_43": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6153846153846154,
+      "max_section_chars": 13413,
+      "n_sections": 76,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_44": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8571428571428571,
+      "max_section_chars": 22229,
+      "n_sections": 112,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_45": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9444444444444444,
+      "max_section_chars": 52305,
+      "n_sections": 88,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_46": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8947368421052632,
+      "max_section_chars": 66118,
+      "n_sections": 99,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9978122928307605
+    },
+    "contract_47": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 54792,
+      "n_sections": 37,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_48": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 43992,
+      "n_sections": 99,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_49": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 32909,
+      "n_sections": 90,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_5": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 55723,
+      "n_sections": 104,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_50": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 30852,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_51": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.1111111111111111,
+      "max_section_chars": 31989,
+      "n_sections": 1,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.09123916875352961
+    },
+    "contract_52": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 25711,
+      "n_sections": 99,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9899777050198029
+    },
+    "contract_53": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9090909090909091,
+      "max_section_chars": 25687,
+      "n_sections": 37,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_54": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9523809523809523,
+      "max_section_chars": 65785,
+      "n_sections": 83,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9961957524360042
+    },
+    "contract_55": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 18182,
+      "n_sections": 87,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_56": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9444444444444444,
+      "max_section_chars": 48257,
+      "n_sections": 107,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_57": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 25730,
+      "n_sections": 95,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_58": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9523809523809523,
+      "max_section_chars": 32231,
+      "n_sections": 91,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9947782034497977
+    },
+    "contract_59": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 22751,
+      "n_sections": 89,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9903658897753687
+    },
+    "contract_6": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.5333333333333333,
+      "max_section_chars": 73372,
+      "n_sections": 41,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.854836888508332
+    },
+    "contract_60": {
+      "giant_single_section": true,
+      "gold_span_section_rate": 0.45,
+      "max_section_chars": 138096,
+      "n_sections": 52,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9907951700354501
+    },
+    "contract_61": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 59028,
+      "n_sections": 73,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9920198189807291
+    },
+    "contract_62": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6470588235294118,
+      "max_section_chars": 13225,
+      "n_sections": 87,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_63": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9565217391304348,
+      "max_section_chars": 37653,
+      "n_sections": 86,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_64": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7619047619047619,
+      "max_section_chars": 36498,
+      "n_sections": 68,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_65": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.8888888888888888,
+      "max_section_chars": 30313,
+      "n_sections": 91,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_66": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9130434782608695,
+      "max_section_chars": 51803,
+      "n_sections": 67,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9840157449928607
+    },
+    "contract_67": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 38032,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_68": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.11538461538461539,
+      "max_section_chars": 37439,
+      "n_sections": 1,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.09566726119597492
+    },
+    "contract_69": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9473684210526315,
+      "max_section_chars": 50203,
+      "n_sections": 94,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_7": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 63223,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9947030232362377
+    },
+    "contract_70": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9047619047619048,
+      "max_section_chars": 33220,
+      "n_sections": 82,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9884612479226469
+    },
+    "contract_71": {
+      "giant_single_section": true,
+      "gold_span_section_rate": 0.5,
+      "max_section_chars": 191006,
+      "n_sections": 25,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_72": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9032258064516129,
+      "max_section_chars": 20136,
+      "n_sections": 89,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.987737582299751
+    },
+    "contract_73": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 87400,
+      "n_sections": 123,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_74": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 40199,
+      "n_sections": 86,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9905174985503069
+    },
+    "contract_75": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 42261,
+      "n_sections": 83,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_76": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 47222,
+      "n_sections": 98,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_77": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 30467,
+      "n_sections": 93,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_78": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.5294117647058824,
+      "max_section_chars": 37641,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_79": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.1111111111111111,
+      "max_section_chars": 32150,
+      "n_sections": 1,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.09568794123599653
+    },
+    "contract_8": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.4375,
+      "max_section_chars": 24247,
+      "n_sections": 95,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_80": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9411764705882353,
+      "max_section_chars": 39624,
+      "n_sections": 77,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_81": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 46713,
+      "n_sections": 105,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_82": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.391304347826087,
+      "max_section_chars": 21351,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_83": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 42645,
+      "n_sections": 92,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9962456853398682
+    },
+    "contract_84": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6666666666666666,
+      "max_section_chars": 171441,
+      "n_sections": 67,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9977484566033168
+    },
+    "contract_85": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 36008,
+      "n_sections": 96,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9992147025546358
+    },
+    "contract_86": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7,
+      "max_section_chars": 29887,
+      "n_sections": 72,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_87": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 24514,
+      "n_sections": 135,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9979773179483166
+    },
+    "contract_88": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.25,
+      "max_section_chars": 22596,
+      "n_sections": 25,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_89": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.6086956521739131,
+      "max_section_chars": 53950,
+      "n_sections": 72,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_9": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9545454545454546,
+      "max_section_chars": 37409,
+      "n_sections": 97,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9826750058530386
+    },
+    "contract_90": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 50151,
+      "n_sections": 62,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_91": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 108064,
+      "n_sections": 44,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_92": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.7037037037037037,
+      "max_section_chars": 68514,
+      "n_sections": 92,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9937194067053122
+    },
+    "contract_93": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 92752,
+      "n_sections": 75,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9914173674243577
+    },
+    "contract_94": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 99014,
+      "n_sections": 67,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9934298933090431
+    },
+    "contract_95": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.47368421052631576,
+      "max_section_chars": 17071,
+      "n_sections": 62,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_96": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 30401,
+      "n_sections": 88,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9904056720744634
+    },
+    "contract_97": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 1.0,
+      "max_section_chars": 37040,
+      "n_sections": 87,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_98": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9565217391304348,
+      "max_section_chars": 77433,
+      "n_sections": 51,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 1.0
+    },
+    "contract_99": {
+      "giant_single_section": false,
+      "gold_span_section_rate": 0.9767441860465116,
+      "max_section_chars": 71378,
+      "n_sections": 81,
+      "parser_version": "29cc01eda19b",
+      "structural_coverage": 0.9841268992939944
+    }
+  },
+  "rejection_reason_counts": {
+    "eligible": 119,
+    "giant_single_section": 4,
+    "only": 3,
+    "structural_coverage": 6
+  },
+  "selected": [
+    "contract_0",
+    "contract_1",
+    "contract_3",
+    "contract_4",
+    "contract_5",
+    "contract_6",
+    "contract_7",
+    "contract_8",
+    "contract_14",
+    "contract_31",
+    "contract_32",
+    "contract_39",
+    "contract_46",
+    "contract_67",
+    "contract_75",
+    "contract_77",
+    "contract_99",
+    "contract_103",
+    "contract_128",
+    "contract_144"
+  ],
+  "structural_coverage_distribution": {
+    "histogram": {
+      "0.0-0.1": 6,
+      "0.1-0.2": 0,
+      "0.2-0.3": 0,
+      "0.3-0.4": 0,
+      "0.4-0.5": 0,
+      "0.5-0.6": 0,
+      "0.6-0.7": 0,
+      "0.7-0.8": 0,
+      "0.8-0.9": 1,
+      "0.9-1.0": 145
+    },
+    "max": 1.0,
+    "median": 1.0,
+    "min": 0.05061936154554765,
+    "p10": 0.9870977989834084,
+    "p25": 0.9937194067053122,
+    "p75": 1.0,
+    "p90": 1.0
+  },
+  "test": [
+    "contract_4",
+    "contract_6",
+    "contract_7",
+    "contract_8",
+    "contract_14",
+    "contract_31",
+    "contract_32",
+    "contract_39",
+    "contract_67",
+    "contract_75",
+    "contract_77",
+    "contract_99",
+    "contract_103",
+    "contract_128",
+    "contract_144"
+  ]
+}
