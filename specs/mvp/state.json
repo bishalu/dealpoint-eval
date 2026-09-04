@@ -10,11 +10,14 @@
       ],
       "attempts": 3,
       "blocker": "",
-      "commits": [],
-      "ended_at": "2026-09-04T05:43:03.191+00:00",
+      "commits": [
+        "2d73b4b",
+        "c9814fb"
+      ],
+      "ended_at": "2026-09-04T06:37:17.484+00:00",
       "exclusions": [],
       "id": "m0_1",
-      "last_failure": "Reviewer escalation resolved by the operator; the spec is amended (specs/milestones/m0_1.md, Definition of done, gold_span_section_rate is now REPORT-ONLY). Corrective task:\n1. Remove every numeric threshold on corpus gold_span_section_rate from the tests \u2014 tests/test_reports.py (the `rate >= 0.80` assertion) and tests/test_sections.py (the `rate >= 0.80` assertion) \u2014 and replace each with: the field is present, is a float in [0,1], and equals a fresh recomputation from the derived sections + alignment files (tolerance 1e-9). Do not add any floor.\n2. Ensure data/reports/m0_1_parser_report.json carries the miss breakdown by cause (before_body_start, unrecognised_gap, giant_section, after_signature_block \u2014 counts) and `gold_span_section_rate_ceiling` (hits + in-body misses) / total, so the reader sees why the rate is what it is. Regenerate with `uv run python -m dealpoint.cli data`; run it twice; no committed byte may change on the second run.\n3. Nothing else changes: keep the parser, the selection, the case files and the OOS set exactly as built.\nDone means: gate_m0, the offline suite, ruff and pyright green; the reviewer finds every DoD item met against the amended spec.",
+      "last_failure": "",
       "metrics": {
         "case_counts": {
           "counterfactual": 40,
@@ -30,25 +33,42 @@
           "corpus_gold_span_total": 3474,
           "eligible_count": 139,
           "giant_section_fraction_threshold": 0.4,
+          "gold_span_section_rate_ceiling": 0.8926309729418538,
           "min_structural_coverage_threshold": 0.8,
           "n_agreements": 152,
-          "parser_version": "4855f93beb05"
+          "parser_version": "29cc01eda19b"
         }
       },
       "models": {
         "builder": "pi-claude-code-provider/sonnet",
+        "documenter": "pi-claude-code-provider/haiku",
         "planner": "pi-claude-code-provider/opus",
         "reviewer": "pi-claude-code-provider/opus"
       },
       "started_at": "2026-09-04T02:59:00.410+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "dataset_version": "81ed82cd7552",
-        "parser_version": "4855f93beb05"
+        "parser_version": "29cc01eda19b"
       }
+    },
+    "m1": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m1",
+      "last_failure": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "",
+      "status": "pending",
+      "versions": {}
     }
   },
-  "next_action": "m0_1 running in session a534bc40 (attempt 3)",
+  "next_action": "run m1",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -56,5 +76,5 @@
     "estimates": [],
     "realized_usd": 0.0
   },
-  "updated_at": "2026-09-04T05:47:03.181+00:00"
+  "updated_at": "2026-09-04T06:37:17.485+00:00"
 }
