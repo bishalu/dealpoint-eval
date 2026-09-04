@@ -1,0 +1,33 @@
+{
+  "brief_path": "specs/grilled-product-brief.md",
+  "brief_sha": "a622d596d6b7",
+  "current_milestone": "m0_1",
+  "milestones": {
+    "m0_1": {
+      "adw_ids": [
+        "389d54f5"
+      ],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m0_1",
+      "last_failure": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "2026-09-04T02:59:00.410+00:00",
+      "status": "pending",
+      "versions": {}
+    }
+  },
+  "next_action": "paused by operator before M0.1 planning finished \u2014 resume with `just mvp`",
+  "parent_run_id": "b2e38d8b",
+  "pending_human_input": [],
+  "spend": {
+    "cap_usd": null,
+    "estimates": [],
+    "realized_usd": 0.0
+  },
+  "updated_at": "2026-09-04T03:01:30.029+00:00"
+}

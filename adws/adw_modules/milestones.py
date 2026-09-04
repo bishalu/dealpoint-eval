@@ -14,6 +14,8 @@ factory; an agent never gets to decide what the next milestone is.
 from __future__ import annotations
 
 import json
+import os
+import signal
 import subprocess
 from pathlib import Path
 from typing import Optional
@@ -173,14 +175,40 @@ def launch_child(run, launch: ChildLaunch) -> int:
     log_path = Path(launch.log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("ab") as log:
+        # Its own process group, so that when THIS process is stopped the whole
+        # subtree — the milestone ADW and the coding agent under it — goes with
+        # it. Otherwise `kill <parent>` orphans a builder mid-edit.
         proc = subprocess.Popen(launch.argv, cwd=run.repo_root, env=operator_env(),
-                                stdout=log, stderr=subprocess.STDOUT)
+                                stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         run.tracer.process_start(run.adw_id, "adw", launch.label, proc.pid,
                                  " ".join(launch.argv))
         try:
             return proc.wait()
+        except BaseException:
+            _terminate_group(proc)
+            raise
         finally:
             run.tracer.process_end(run.adw_id, proc.pid)
+
+
+def _terminate_group(proc: subprocess.Popen, grace_seconds: float = 10.0) -> None:
+    """SIGTERM the child's process group, then SIGKILL whatever ignored it."""
+    try:
+        os.killpg(proc.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    try:
+        proc.wait(timeout=grace_seconds)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+
+
+def interrupted(returncode: int) -> bool:
+    """A child that died of a signal was stopped, not defeated — never correct it."""
+    return returncode < 0 or returncode in (130, 137, 143) or returncode >= 128
 
 
 def current_short_sha() -> str:

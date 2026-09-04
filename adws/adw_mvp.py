@@ -116,6 +116,16 @@ def main(config: str, adw_id: str | None, only: str, max_corrections: int) -> in
             rc = milestones.launch_child(run, ChildLaunch(argv=argv, log_path=str(log_path), label=name))
             state = milestones.load_state()
             rec = milestones.record(state, ms.id)
+            if milestones.interrupted(rc):
+                # Killed, not failed: leave nothing that a resume would mistake for a defect.
+                rec.status = "pending"
+                rec.last_failure = ""
+                state.next_action = (f"{ms.id} was interrupted (session {child} exit {rc}) — "
+                                     f"resume with `just mvp`")
+                milestones.save_state(state)
+                ph.log(exit=rc, status="interrupted")
+                outcome = milestones.EXIT_ESCALATE
+                break
             if rc != milestones.EXIT_PASSED and rec.status not in ("failed", "blocked"):
                 # The child died before its record phase — say so, in the checkpoint.
                 rec.status = "failed"
@@ -126,7 +136,7 @@ def main(config: str, adw_id: str | None, only: str, max_corrections: int) -> in
             ph.log(exit=rc, status=rec.status, blocker=rec.blocker or "-",
                    commits=", ".join(rec.commits) or "-")
 
-        if rc == milestones.EXIT_ESCALATE:
+        if outcome == milestones.EXIT_ESCALATE or rc == milestones.EXIT_ESCALATE:
             outcome = milestones.EXIT_ESCALATE
             break
         # 0 → the loop picks the next milestone; 1 → the same milestone comes back as a correction.
