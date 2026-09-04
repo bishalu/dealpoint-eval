@@ -136,3 +136,24 @@ MILESTONE_TAG = "m1"
 DEFAULT_MODEL = "anthropic/claude-haiku-4.5"
 M1_SMOKE_CASE_IDS = ("contract_0__q01", "contract_0__q06")  # direct + defined-term
 M1_SMOKE_MAX_USD = 0.15
+
+# --- Milestone 2: eval harness (scorers, spend accounting, Braintrust) -----
+MIN_GOLD_OVERLAP_CHARS = 50
+EVAL_MILESTONE_TAG = "m2"
+
+# 3 dev cases: a direct question, a defined-term question with non-null
+# required_evidence, and a gold-"No" question (exercises "correct No is not
+# an abstention" on a real metered run, not only in a unit test). All three
+# are present in dev.jsonl (verified in the M2 plan).
+M2_SMOKE_CASE_IDS = ("contract_0__q01", "contract_0__q06", "contract_0__q12")
+M2_SMOKE_MAX_USD = 0.10  # 3 cases at the measured ~$0.026/case, with slack
+# specs/milestones/m2.md "Budget scaling": the $0.50 figure is the allocation
+# guide (target, reported) -- the enforced limit is double that, per the
+# spec's explicit "Absolute per-milestone limit: double the guide" clause.
+M1_M2_TARGET_USD = 0.50  # the M1+M2 allocation guide -- reported, not gated
+M1_M2_MAX_USD = 1.00  # absolute per-milestone limit (2x guide) -- enforced
+
+# Measured from M1's ledger (68 calls over its smoke runs): the calls/case
+# ratio used by dealpoint.eval.spend's "ledger:tokens x price" estimate basis
+# when the ledger carries no case_id to compute a true per-case mean from.
+EST_CALLS_PER_CASE = 4

@@ -28,6 +28,9 @@ data/reports/*
 !data/reports/versions.json
 !data/reports/chunk_report.json
 data/index/
+
+# dealpoint (M2 eval harness)
+!data/reports/braintrust_runs.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/

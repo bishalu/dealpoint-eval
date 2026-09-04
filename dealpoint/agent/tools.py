@@ -10,7 +10,9 @@ string — the agent needs to be able to tell "absent" from "broken".
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import TypeVar
 
 from dealpoint.config import MAX_TOOL_RESULT_CHARS, RETRIEVER_DEFAULT_K
 from dealpoint.corpus.chunks import Chunk
@@ -18,6 +20,28 @@ from dealpoint.corpus.document import Document
 from dealpoint.corpus.document import defined_term as _defined_term
 from dealpoint.corpus.document import get_section as _get_section
 from dealpoint.corpus.retrievers import Retriever
+
+_F = TypeVar("_F", bound=Callable)
+
+
+def _traced(**span_kwargs) -> Callable[[_F], _F]:
+    """`@braintrust.traced(...)` when braintrust is importable, else a no-op
+    decorator returning the function unchanged (spec §5, deliverable 3).
+
+    Imported lazily so the offline suite and pyright stay clean when
+    braintrust is absent, and so this decorator never changes tool output
+    regardless of whether the optional dependency is installed.
+    """
+    try:
+        import braintrust
+
+        return braintrust.traced(**span_kwargs)
+    except ImportError:
+
+        def _identity(fn: _F) -> _F:
+            return fn
+
+        return _identity
 
 
 @dataclass(frozen=True)
@@ -37,6 +61,7 @@ def _render_block(section_ref: str, start: int, end: int, text: str) -> str:
     return f"{header} {body}{suffix}"
 
 
+@_traced()
 def search_agreement(
     doc: Document, retriever: Retriever, query: str, k: int = RETRIEVER_DEFAULT_K
 ) -> ToolResult:
@@ -52,6 +77,7 @@ def search_agreement(
     )
 
 
+@_traced()
 def get_section(doc: Document, section_ref: str) -> ToolResult:
     """Follow a cross-reference (e.g. "as set forth in Section 6.3(b)")."""
     section = _get_section(doc, section_ref)
@@ -62,6 +88,7 @@ def get_section(doc: Document, section_ref: str) -> ToolResult:
     return ToolResult(text=block, char_ranges=[(section.start, section.end)])
 
 
+@_traced()
 def lookup_defined_term(doc: Document, term: str) -> ToolResult:
     """Return the `"Term" means ...` block for `term`, fuzzy on casing/quotes/prefix."""
     dt = _defined_term(doc, term)

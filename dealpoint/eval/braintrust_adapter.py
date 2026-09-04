@@ -1,0 +1,281 @@
+"""Braintrust adapter: `braintrust.Eval()` replaying already-computed result
+rows (spec §5).
+
+`braintrust` is imported lazily inside every function, never at module top
+level, so pyright and the offline test suite stay clean when the package or
+its API key is absent -- the same rule this codebase already applies to
+`openai`/`qdrant`.
+
+Exactly six scores are logged per case (`SCORE_NAMES`) -- the free tier
+meters scores, and the milestone spec caps this deliberately. Everything
+else computed by `dealpoint.eval.scorers.score_case` goes into per-case
+metadata instead.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+from datetime import UTC, datetime
+from pathlib import Path
+
+from dealpoint.config import REPORTS_DIR, VERSIONS_JSON_PATH
+from dealpoint.eval.cases import slugify_model
+
+PROJECT = "dealpoint-eval"
+
+# Exactly six scores per case (spec §5 / deliverable 3). `skill_adherence`
+# returns None until M4 but must already be in this list from M2 onward.
+SCORE_NAMES: tuple[str, ...] = (
+    "grounded_accuracy",
+    "answer_correct",
+    "citation_gold_overlap",
+    "citation_verbatim",
+    "abstain_correct",
+    "skill_adherence",
+)
+
+METADATA_KEYS: tuple[str, ...] = (
+    "arm",
+    "model",
+    "index_version",
+    "skill_version",
+    "git_sha",
+    "case_set",
+)
+
+BRAINTRUST_RUNS_PATH = REPORTS_DIR / "braintrust_runs.json"
+
+
+def experiment_name(arm: str, model: str, index_version: str, git_sha7: str) -> str:
+    return f"{arm}-{slugify_model(model)}-{index_version}-{git_sha7}"
+
+
+def _skill_version() -> str | None:
+    """`skill_version` from `data/reports/versions.json` when present, else `None`.
+
+    Skill logic is M4 work; the key is None until then (spec §5).
+    """
+    if not VERSIONS_JSON_PATH.exists():
+        return None
+    try:
+        payload = json.loads(VERSIONS_JSON_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    return payload.get("skill_version")
+
+
+def experiment_metadata(
+    arm: str, model: str, index_version: str, skill_version: str | None, git_sha: str, case_set: str
+) -> dict:
+    return {
+        "arm": arm,
+        "model": model,
+        "index_version": index_version,
+        "skill_version": skill_version,
+        "git_sha": git_sha,
+        "case_set": case_set,
+    }
+
+
+def load_braintrust_key() -> str | None:
+    """`BRAINTRUST_API_KEY`: env, then `.env.braintrust`, then `.braintrust.json`."""
+    key = os.environ.get("BRAINTRUST_API_KEY")
+    if key:
+        return key
+
+    from dealpoint.config import REPO_ROOT
+
+    env_path = REPO_ROOT / ".env.braintrust"
+    if env_path.exists():
+        from dotenv import dotenv_values
+
+        key = dotenv_values(str(env_path)).get("BRAINTRUST_API_KEY")
+        if key:
+            return key
+
+    json_path = REPO_ROOT / ".braintrust.json"
+    if json_path.exists():
+        try:
+            payload = json.loads(json_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+        key = payload.get("BRAINTRUST_API_KEY")
+        if key:
+            return key
+
+    return None
+
+
+def braintrust_available() -> bool:
+    """True iff `braintrust` is importable AND a key is loadable."""
+    if load_braintrust_key() is None:
+        return False
+    try:
+        import braintrust  # noqa: F401
+    except ImportError:
+        return False
+    return True
+
+
+def _make_scorer(name: str):
+    """A Braintrust scorer function reading `name` out of the stored `output["scores"]`."""
+
+    def scorer(input, output, expected=None, metadata=None):
+        return (output or {}).get("scores", {}).get(name)
+
+    scorer.__name__ = name
+    return scorer
+
+
+def _row_to_eval_case(row: dict) -> dict:
+    """One persisted result row -> a Braintrust `EvalCase`-shaped dict.
+
+    Braintrust's `task` only receives the case's `input`, so the full scores
+    dict travels there (as `input["scores"]`) and `_replay_task` hands it
+    straight back as `output` -- a pure replay, never a model call. Every
+    score not in `SCORE_NAMES` goes into `metadata` instead of `scores`, per
+    the six-score budget (spec §5).
+    """
+    scores = row.get("scores", {})
+    extra_metadata = {k: v for k, v in scores.items() if k not in SCORE_NAMES}
+    extra_metadata.update(
+        {
+            "case_id": row["case_id"],
+            "question_id": row.get("question_id"),
+            "usd": row.get("usd"),
+            "chunk_version": row.get("chunk_version"),
+        }
+    )
+    return {
+        "input": {"scores": scores, "finding": row.get("finding"), "record": row.get("record")},
+        "expected": None,
+        "metadata": extra_metadata,
+    }
+
+
+def _replay_task(input):
+    """The `task` Braintrust calls per case: a pure replay, never a model call.
+
+    The scores are already computed and stored in `input` (see
+    `_row_to_eval_case`); this just hands it back as `output` so the scorer
+    functions (`_make_scorer`) can read from it.
+    """
+    return input
+
+
+def run_eval(
+    rows: list[dict],
+    *,
+    arm: str,
+    model: str,
+    case_set: str,
+    no_send_logs: bool = True,
+    project: str = PROJECT,
+) -> dict:
+    """Replay already-computed result `rows` through `braintrust.Eval()`.
+
+    Never re-invokes the agent: the `task` returns each row's stored output
+    verbatim, and the six scorers just read fields out of it. On a
+    successful, actually-sent run (`no_send_logs=False`), appends a record
+    to `data/reports/braintrust_runs.json`.
+    """
+    import braintrust
+
+    if not rows:
+        raise ValueError("run_eval requires at least one result row")
+
+    index_version = rows[0].get("index_version") or "unknown"
+    git_sha7 = rows[0].get("git_sha7") or "nogit"
+    skill_version = _skill_version()
+
+    exp_name = experiment_name(arm, model, index_version, git_sha7)
+    metadata = experiment_metadata(arm, model, index_version, skill_version, git_sha7, case_set)
+
+    eval_cases = [_row_to_eval_case(row) for row in rows]
+    scorers = [_make_scorer(name) for name in SCORE_NAMES]
+
+    result = braintrust.Eval(
+        name=project,
+        data=eval_cases,  # type: ignore[arg-type]
+        task=_replay_task,
+        scores=scorers,
+        experiment_name=exp_name,
+        metadata=metadata,
+        no_send_logs=no_send_logs,
+    )
+
+    if not no_send_logs:
+        summary = getattr(result, "summary", None)
+        url = getattr(summary, "experiment_url", None) if summary is not None else None
+        _record_braintrust_run(
+            {
+                "experiment_name": exp_name,
+                "project": project,
+                "case_set": case_set,
+                "arm": arm,
+                "model": model,
+                "index_version": index_version,
+                "git_sha": git_sha7,
+                "n_cases": len(rows),
+                "ts": datetime.now(UTC).isoformat(),
+                "url": url,
+            }
+        )
+
+    return {"experiment_name": exp_name, "metadata": metadata, "result": result}
+
+
+def _record_braintrust_run(entry: dict, path: Path = BRAINTRUST_RUNS_PATH) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    existing: list[dict] = []
+    if path.exists():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            existing = []
+    existing.append(entry)
+    path.write_text(json.dumps(existing, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def push_datasets(sets: tuple[str, ...] = ("dev", "test", "counterfactual"), version: str = "v1") -> dict:
+    """Push the three case sets as Braintrust datasets `maud-dealpoint-{set}-{version}`.
+
+    Network, unmetered (a dataset push, not a scored eval). Idempotent
+    enough to re-run: `init_dataset` + `insert` upserts by row content.
+    """
+    import braintrust
+
+    from dealpoint.eval.cases import load_case_set
+
+    pushed = {}
+    for set_name in sets:
+        rows = load_case_set(set_name)
+        dataset = braintrust.init_dataset(project=PROJECT, name=f"maud-dealpoint-{set_name}-{version}")
+        for row in rows:
+            dataset.insert(input=row["case_id"], expected=row.get("gold_answer"), metadata=row)
+        dataset.flush()
+        pushed[set_name] = len(rows)
+    return pushed
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(prog="python -m dealpoint.eval.braintrust_adapter")
+    parser.add_argument("--push-datasets", action="store_true")
+    args = parser.parse_args(argv)
+
+    if args.push_datasets:
+        result = push_datasets()
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+
+    parser.print_help()
+    return 1
+
+
+if __name__ == "__main__":
+    import sys
+
+    sys.exit(main())

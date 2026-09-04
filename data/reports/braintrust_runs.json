@@ -1,0 +1,26 @@
+[
+  {
+    "arm": "B",
+    "case_set": "dev",
+    "experiment_name": "B-anthropic_claude-haiku-4.5-e2b4a2b97561-c96758b",
+    "git_sha": "c96758b",
+    "index_version": "e2b4a2b97561",
+    "model": "anthropic/claude-haiku-4.5",
+    "n_cases": 3,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-04T14:49:03.524834+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-anthropic_claude-haiku-4.5-e2b4a2b97561-c96758b"
+  },
+  {
+    "arm": "B",
+    "case_set": "dev",
+    "experiment_name": "B-anthropic_claude-haiku-4.5-e2b4a2b97561-a357949",
+    "git_sha": "a357949",
+    "index_version": "e2b4a2b97561",
+    "model": "anthropic/claude-haiku-4.5",
+    "n_cases": 3,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-04T15:23:21.638165+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-anthropic_claude-haiku-4.5-e2b4a2b97561-a357949"
+  }
+]

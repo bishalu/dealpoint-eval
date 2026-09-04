@@ -114,6 +114,22 @@ gate-m1:
 agent *ARGS:
     uv run python -m dealpoint.agent.run "$@"
 
+# score one arm x model over a case set: just eval B anthropic/claude-haiku-4.5 dev --limit 5
+eval ARM MODEL SET *ARGS:
+    uv run python -m dealpoint.eval.run --arm {{ARM}} --model {{MODEL}} --set {{SET}} "$@"
+
+# 3 dev cases, Haiku, arm B, offline scoring; --send publishes those same rows to Braintrust
+smoke *ARGS:
+    uv run python -m dealpoint.eval.smoke "$@"
+
+# print the JSON cost estimate for a sweep: just budget four_arm
+budget SWEEP:
+    uv run python -m dealpoint.eval.budget {{SWEEP}}
+
+# milestone 2 acceptance gates only, offline (excludes the metered smoke)
+gate-m2:
+    uv run pytest -m "gate_m2 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

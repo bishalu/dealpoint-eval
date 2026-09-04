@@ -84,6 +84,25 @@ class ChatResult:
     usd_missing: bool = False
 
 
+def _maybe_wrap_openai(client):
+    """Apply `braintrust.wrap_openai` when braintrust is importable and a key is
+    loadable; otherwise return `client` unchanged.
+
+    Imported lazily so the offline suite and pyright stay clean when
+    braintrust is absent (same rule this codebase applies to `openai`).
+    """
+    try:
+        from dealpoint.eval.braintrust_adapter import braintrust_available
+
+        if not braintrust_available():
+            return client
+        import braintrust
+
+        return braintrust.wrap_openai(client)
+    except ImportError:
+        return client
+
+
 def build_system_message(static_prefix: str) -> dict:
     """System message with `cache_control` on the last (only) static content block.
 
@@ -113,6 +132,7 @@ def _append_ledger_row(
     cached_tokens: int,
     cache_write_tokens: int,
     usd_missing: bool,
+    context: dict | None = None,
 ) -> None:
     ledger_path.parent.mkdir(parents=True, exist_ok=True)
     row = {
@@ -128,6 +148,8 @@ def _append_ledger_row(
     }
     if usd_missing:
         row["usd_missing"] = True
+    if context:
+        row.update(context)
     with open(ledger_path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, sort_keys=True, ensure_ascii=False))
         fh.write("\n")
@@ -152,10 +174,20 @@ class OpenRouterClient:
         # No internal retry: retry policy (3x with backoff, API errors only) is
         # owned by the agent loop (dealpoint.agent.loop), which is what the
         # execution record's failure_reason must reflect.
-        self._client = openai.OpenAI(api_key=key, base_url=base_url, max_retries=0)
+        raw_client = openai.OpenAI(api_key=key, base_url=base_url, max_retries=0)
+        # `wrap_openai` (brief §2.7, spec deliverable 3) when braintrust is
+        # importable AND a key is loadable -- otherwise the plain client, so
+        # offline behaviour (incl. this constructor's own contract) never
+        # changes based on an optional dependency being installed.
+        self._client = _maybe_wrap_openai(raw_client)
         self._openai = openai
         self._milestone_tag = milestone_tag
         self._ledger_path = ledger_path
+        # Merged into every ledger row this client writes (dealpoint.eval.run
+        # sets this per case: {"arm": ..., "case_id": ..., "case_set": ...}),
+        # so cost can later be attributed to (arm, model, case) without
+        # rewriting the rows M1 already wrote (spec §3.2).
+        self.context: dict[str, str] = {}
 
     def chat(
         self,
@@ -207,6 +239,7 @@ class OpenRouterClient:
             cached_tokens=cached_tokens,
             cache_write_tokens=cache_write_tokens,
             usd_missing=usd_missing,
+            context=self.context,
         )
 
         tool_calls: list[ToolCallRequest] = []

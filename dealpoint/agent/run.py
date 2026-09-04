@@ -11,57 +11,10 @@ import argparse
 import json
 import sys
 
-from dealpoint.config import (
-    COUNTERFACTUAL_JSONL_PATH,
-    DEFAULT_MODEL,
-    DEV_JSONL_PATH,
-    TEST_JSONL_PATH,
-)
-from dealpoint.data.questions import OUT_OF_SCOPE_QUESTION_BY_ID, QUESTION_BY_ID, QuestionSpec
-
-
-def _find_case(case_id: str) -> dict:
-    for path in (DEV_JSONL_PATH, TEST_JSONL_PATH, COUNTERFACTUAL_JSONL_PATH):
-        if not path.exists():
-            continue
-        with open(path, encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if not line:
-                    continue
-                row = json.loads(line)
-                if row.get("case_id") == case_id:
-                    return row
-    raise KeyError(f"case_id {case_id!r} not found in dev/test/counterfactual JSONL")
-
-
-def _resolve_document_id(case: dict) -> str:
-    """The document a case is asked against: the redacted variant itself for a
-    redacted counterfactual case, otherwise the base agreement.
-    """
-    if case.get("kind") == "redacted":
-        return case["case_id"]
-    return case["agreement_id"]
-
-
-def _resolve_question(case: dict) -> QuestionSpec:
-    question_id = case["question_id"]
-    if question_id in QUESTION_BY_ID:
-        return QUESTION_BY_ID[question_id]
-    # out-of-scope counterfactual case: no fixed option list.
-    oos = OUT_OF_SCOPE_QUESTION_BY_ID.get(question_id)
-    text = case.get("question_text") or (oos.text if oos else question_id)
-    return QuestionSpec(
-        id=question_id,
-        maud_question=text,
-        text_type="out-of-scope",
-        category="out-of-scope",
-        gloss=text,
-        options=(),
-        canonical_query=text,
-        reasoning_type="out-of-scope",
-        required_evidence=None,
-    )
+from dealpoint.config import DEFAULT_MODEL
+from dealpoint.eval.cases import find_case as _find_case
+from dealpoint.eval.cases import resolve_document_id as _resolve_document_id
+from dealpoint.eval.cases import resolve_question as _resolve_question
 
 
 def _build_client(fake: bool):

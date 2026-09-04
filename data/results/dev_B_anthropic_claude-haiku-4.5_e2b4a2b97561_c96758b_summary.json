@@ -1,0 +1,106 @@
+{
+  "arm": "B",
+  "chunk_version": "8e5e8ba56765",
+  "ended_at": "2026-09-04T14:46:56.907056+00:00",
+  "est_basis": "ledger:measured(arm,model)",
+  "est_usd": 0.085007,
+  "git_sha7": "c96758b",
+  "index_version": "e2b4a2b97561",
+  "majority_baseline": {
+    "overall": 1.0,
+    "q01": 1.0,
+    "q06": 1.0,
+    "q12": 1.0
+  },
+  "model": "anthropic/claude-haiku-4.5",
+  "n_cases": 3,
+  "realized_usd": 0.085007,
+  "scores": {
+    "abstain_correct": {
+      "mean": 1.0,
+      "n": 3
+    },
+    "abstain_recall": {
+      "mean": null,
+      "n": 0
+    },
+    "answer_correct": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "cap_hit": {
+      "mean": 0.6666666666666666,
+      "n": 3
+    },
+    "citation_gold_overlap": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "citation_verbatim": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "execution_failed": {
+      "mean": 0.0,
+      "n": 3
+    },
+    "fabrication": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "false_abstain": {
+      "mean": 0.0,
+      "n": 3
+    },
+    "gold_first_rank": {
+      "mean": null,
+      "n": 0
+    },
+    "gold_seen": {
+      "mean": 0.6666666666666666,
+      "n": 3
+    },
+    "grounded_accuracy": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "input_tokens": {
+      "mean": 24924.0,
+      "n": 3
+    },
+    "output_tokens": {
+      "mean": 682.3333333333334,
+      "n": 3
+    },
+    "redacted_fabrication": {
+      "mean": null,
+      "n": 0
+    },
+    "required_evidence_met": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "skill_adherence": {
+      "mean": null,
+      "n": 0
+    },
+    "tool_calls": {
+      "mean": 5.666666666666667,
+      "n": 3
+    },
+    "usd": {
+      "mean": 0.028335666666666665,
+      "n": 3
+    },
+    "wall_ms": {
+      "mean": 9634.666666666666,
+      "n": 3
+    }
+  },
+  "set": "dev",
+  "started_at": "2026-09-04T14:46:27.997751+00:00",
+  "status_counts": {
+    "ANSWERED": 1,
+    "CAP_HIT": 2
+  }
+}
