@@ -1,0 +1,57 @@
+[project]
+name = "dealpoint"
+version = "0.1.0"
+description = "Deal-Point Eval — M&A deal-point review agent evaluation harness"
+requires-python = ">=3.12"
+dependencies = [
+    "rapidfuzz>=3.9",
+    "pydantic>=2.7",
+    "python-dotenv>=1.0",
+    "pytest>=8.0",
+]
+
+[project.optional-dependencies]
+agent = ["openai", "braintrust"]
+retrieval = ["qdrant-client[fastembed]", "bm25s"]
+api = ["fastapi", "uvicorn"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "pyright>=1.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dealpoint"]
+
+[tool.pytest.ini_options]
+# Only collect this project's own tests; adws/ has its own ad hoc
+# "*_test.py" scripts that are not pytest suites and must not be collected.
+testpaths = ["tests"]
+markers = [
+    "gate_m0: milestone 0 gate",
+    "gate_m1: milestone 1 gate",
+    "gate_m2: milestone 2 gate",
+    "gate_m3: milestone 3 gate",
+    "gate_m4: milestone 4 gate",
+    "gate_m5: milestone 5 gate",
+    "gate_m6: milestone 6 gate",
+    "gate_m7: milestone 7 gate",
+    "needs_network: requires internet access",
+    "needs_model: spends money against OPENROUTER_API_KEY",
+]
+
+[tool.ruff]
+line-length = 100
+# adws/ and .claude/ are protected, pre-existing SSSF factory code outside
+# this build's scope (see specs/7c299aa0_maud-data-foundation.md); M0 must
+# not be blamed for their pre-existing lint state.
+extend-exclude = ["adws", ".claude"]
+
+[tool.pyright]
+include = ["dealpoint", "tests"]
+typeCheckingMode = "basic"

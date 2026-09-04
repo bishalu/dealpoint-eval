@@ -87,3 +87,17 @@ procs ADW_ID:
 # boot the trace UI, http://localhost:4601 (api on :4600)
 obs:
     cd .claude/skills/sssf/apps/visualizer && bun install && (SSSF_DB={{justfile_directory()}}/{{db}} bun run server/index.ts &) && bunx vite
+
+# ── dealpoint (M0 data foundation) ─────────────────────────────────────────
+
+# rebuild the MAUD data foundation: canonical texts, sections, alignment, cases
+data:
+    uv run python -m dealpoint.cli data
+
+# full offline test suite (no network, no model spend)
+test:
+    uv run pytest -m "not needs_network and not needs_model" -q
+
+# milestone 0 acceptance gates only, offline
+gate-m0:
+    uv run pytest -m "gate_m0 and not needs_network and not needs_model" -q

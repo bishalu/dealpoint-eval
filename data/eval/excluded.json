@@ -1,0 +1,67 @@
+[
+  {
+    "agreement_id": "contract_19",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_29",
+    "question_id": "q02",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_29",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_3",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_39",
+    "question_id": "q03",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_39",
+    "question_id": "q08",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_4",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_5",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_54",
+    "question_id": "q08",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_7",
+    "question_id": "q02",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_7",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  },
+  {
+    "agreement_id": "contract_77",
+    "question_id": "q08",
+    "reason": "no label row"
+  },
+  {
+    "agreement_id": "contract_85",
+    "question_id": "q10",
+    "reason": "null gold answer"
+  }
+]
