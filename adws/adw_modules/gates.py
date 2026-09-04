@@ -92,6 +92,25 @@ def verdict_consistent(envelope: EnvelopeBase, run) -> GateReport:
     report.check("rejection names a problem", approved or bool(blocking or unmet),
                  "verdict is supported" if approved or blocking or unmet
                  else "approved=false but no blocking item or unmet requirement was given")
+
+    # The machine-readable disposition must agree with the human-readable verdict,
+    # and each non-PASS disposition must carry the one thing its consumer needs.
+    disposition = getattr(envelope, "disposition", "") or ""
+    if disposition:
+        report.check("disposition vs approved", (disposition == "PASS") == approved,
+                     f"{disposition} agrees with approved={approved}"
+                     if (disposition == "PASS") == approved
+                     else f"disposition {disposition} contradicts approved={approved}")
+    if disposition == "REVISE":
+        task = (getattr(envelope, "corrective_task", "") or "").strip()
+        report.check("REVISE carries a corrective task", bool(task),
+                     f"{len(task)} chars" if task
+                     else "disposition REVISE but corrective_task is empty — the builder would have to guess")
+    if disposition == "ESCALATE":
+        why = (getattr(envelope, "escalation_reason", "") or "").strip()
+        report.check("ESCALATE names the decision", bool(why),
+                     f"{len(why)} chars" if why
+                     else "disposition ESCALATE but escalation_reason is empty — a human would have to guess")
     return report
 
 

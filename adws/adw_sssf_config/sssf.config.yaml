@@ -34,6 +34,12 @@ defaults:
     - adws/adw_modules/
     - adws/adw_sssf_config/
     - adws/adw_*.py
+    # The product's requirements and the orchestration checkpoint are the
+    # factory's inputs and record — no agent edits them. Plans still land in
+    # specs/ because the planner names its own `specs/<adw_id>_*.md` pattern.
+    - specs/grilled-product-brief.md
+    - specs/milestones/
+    - specs/mvp/
   data_dir: adws/adw_data          # runtime home: {data_dir}/sessions/{adw_id}/{agent_name}/
 
 observability:
@@ -51,8 +57,8 @@ agents:
       user: adws/adw_data/prompt_engineering/planner/user.md
     harness_engineering:
       - adws/adw_data/harness_engineering/subagents.ts    # registers the four subagent_* tools below
-    writes:                        # the plan is the only thing it may leave in the repo
-      - specs/
+    writes:                        # the plan is the only thing it may leave in the repo —
+      - "specs/????????_*.md"      # its own <adw_id>_<slug>.md; never the brief or the milestone specs
     tools:                         # full recon + write for plan.md; no edit — the planner never touches repo files
       - read
       - grep
@@ -139,9 +145,9 @@ agents:
       user: adws/adw_data/prompt_engineering/documenter/user.md
     writes:                        # documentation only — "document only" is a rule now,
       - app_docs/                  # not a line in a prompt the model may drift from.
-      - docs/                      # Markdown anywhere, because docs live next to the
-      - "**/*.md"                  # code they describe as often as in a docs folder.
-      - "*.md"
+      - docs/                      # milestone records live in docs/milestones/.
+      - "*.md"                     # root-level markdown (README). No `**/*.md`: a
+                                   # cross-directory glob would unlock protected specs.
     tools:                         # reads the diff and the code; writes/edits documentation only
       - read
       - grep

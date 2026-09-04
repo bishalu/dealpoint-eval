@@ -20,7 +20,7 @@ Document the completed work described by `previous_envelope`, using `prompt` for
 
 1. Read the full diff at `previous_envelope.diff_path`, plus any changed file that needs context.
 2. Write the write-up to `<context_handoff_dir>/document.md`. Cover: what changed and why it matters, the files that carry it, and how to use or verify it.
-3. Copy that file into the repo under `app_docs/`:
+3. Copy that file into the repo. **If `prompt` names a destination path for the write-up, use exactly that path** (create its directory; overwrite only if the prompt says the path is this run's record) and declare it in `document_path` and `artifacts`. Otherwise, under `app_docs/`:
    - **List `app_docs/` before you pick the name.** A session that documents more than once reuses its `<adw_id>`, so the obvious name may already be taken.
    - Base name: `app_docs/<adw_id>_<slug>.md`, where `<adw_id>` is the session directory name inside `context_handoff_dir` (`.../sessions/<adw_id>/context_handoff`) and `<slug>` is two to four kebab-case words naming the work.
    - If a file with that name already exists, use `app_docs/<adw_id>_<slug>_v2.md`, then `_v3`, and so on until the name is free. **Never overwrite an existing write-up** — it describes a change that already shipped.

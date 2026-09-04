@@ -36,9 +36,12 @@ Respond with ONLY valid JSON matching `ReviewOutput` — no prose before or afte
     { "requirement": "<the ask, in the requester's words>", "met": true, "evidence": "src/server.ts:42 — handler registered" }
   ],
   "blocking": ["<what must change before this can be approved>"],
+  "disposition": "PASS | REVISE | ESCALATE",
+  "corrective_task": "<REVISE only: one bounded task a builder executes as-is — what, where, how verified>",
+  "escalation_reason": "<ESCALATE only: the single decision a human must make>",
   "artifacts": ["<context_handoff_dir>/review.md"],
   "notes_for_next_agent": "<what the builder must fix, or how to verify if approved>"
 }
 ```
 
-`status` is `success` when the review itself completed — it is not the verdict. The verdict is `approved`, and it is true only when `findings` has no unmet entry and `blocking` is empty.
+`status` is `success` when the review itself completed — it is not the verdict. The verdict is `approved`, and it is true only when `findings` has no unmet entry and `blocking` is empty. `disposition` restates the verdict for code: `PASS` iff approved; otherwise `REVISE` with a `corrective_task`, or `ESCALATE` with an `escalation_reason`.

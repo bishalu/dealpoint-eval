@@ -101,3 +101,17 @@ test:
 # milestone 0 acceptance gates only, offline
 gate-m0:
     uv run pytest -m "gate_m0 and not needs_network and not needs_model" -q
+
+# ── mvp orchestration (project-level autonomous loop) ──────────────────────
+
+# where the autonomous run stands; launches nothing
+mvp-status:
+    uv run adws/adw_mvp.py --dry-run
+
+# the core eval MVP loop, M0.1 → M6, resumable from specs/mvp/state.json: just mvp [--only m1]
+mvp *ARGS:
+    uv run adws/adw_mvp.py --config {{config}} "$@"
+
+# one milestone in its own session: just milestone --milestone m1
+milestone *ARGS:
+    uv run adws/adw_milestone.py --config {{config}} "$@"

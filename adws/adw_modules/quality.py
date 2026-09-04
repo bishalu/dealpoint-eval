@@ -140,7 +140,7 @@ def test(run) -> QualityCheckResult:
     return _run(QualityCheckSpec(
         name="test",
         area="backend",
-        operation="build",
+        operation="test",
         argv=["uv", "run", "pytest", "-m", "not needs_network and not needs_model", "-q"],
         timeout_seconds=600,
     ), run)
@@ -172,6 +172,38 @@ def build(run) -> QualityCheckResult:
         operation="build",
         argv=_placeholder("build"),       # e.g. ["bun", "build", "src/index.ts", "--outdir", str(output_dir)]
     ), run)
+
+
+def gate(run, marker: str, include_model: bool = False) -> QualityCheckResult:
+    """A milestone's acceptance gate: the pytest tests carrying its marker.
+
+    `needs_model` tests spend money, so they only join the gate when the
+    milestone declares it and the caller confirmed a key is present. Network
+    tests never join: the gate must be reproducible offline.
+    """
+    expr = f"{marker} and not needs_network" + ("" if include_model else " and not needs_model")
+    return _run(QualityCheckSpec(
+        name=f"gate:{marker}",
+        area="backend",
+        operation="gate",
+        argv=["uv", "run", "pytest", "-m", expr, "-q"],
+        timeout_seconds=3600,
+    ), run)
+
+
+def run_milestone_checks(run, marker: str, include_model: bool = False) -> QualityResult:
+    """Everything a milestone must satisfy, in one pass: suite, lint, types, gate.
+
+    One result so the builder sees every failure at once; the same ordering
+    contract as run_quality — a red block fails the RUN, never the phase.
+    """
+    checks = [test(run), lint(run), typecheck(run), gate(run, marker, include_model)]
+    failures = [
+        f"{check.name}: `{check.command}` exited {check.returncode}\n{check.output_tail}".rstrip()
+        for check in checks if not check.passed
+    ]
+    return QualityResult(passed=not failures, checks=checks, failures=failures,
+                         artifacts=[check.output_artifact for check in checks])
 
 
 def run_tests(run) -> QualityResult:

@@ -112,12 +112,31 @@ class ReviewFinding(BaseModel):
     evidence: str = ""              # where it lives, or what is missing
 
 
+Disposition = Literal["PASS", "REVISE", "ESCALATE", ""]
+
+
 class ReviewOutput(EnvelopeBase):
-    """Confirmation that what was built is what was asked for — not a test run."""
+    """Confirmation that what was built is what was asked for — not a test run.
+
+    `disposition` is the machine-readable verdict an orchestrator branches on:
+    PASS lands the work, REVISE spawns one bounded corrective cycle from
+    `corrective_task`, ESCALATE stops the outer loop and hands a human the one
+    decision in `escalation_reason`. It defaults to empty so chains written
+    before it existed keep working — `resolved_disposition()` derives it from
+    `approved` in that case.
+    """
 
     approved: bool = False
     findings: list[ReviewFinding] = Field(default_factory=list)
     blocking: list[str] = Field(default_factory=list)   # what must change before approval
+    disposition: Disposition = ""
+    corrective_task: str = ""       # REVISE: one bounded task a builder can run as-is
+    escalation_reason: str = ""     # ESCALATE: the single decision a human must make
+
+    def resolved_disposition(self) -> str:
+        if self.disposition:
+            return self.disposition
+        return "PASS" if self.approved else "REVISE"
 
 
 class DocumentOutput(EnvelopeBase):
@@ -131,7 +150,7 @@ class DocumentOutput(EnvelopeBase):
 # ── Deterministic quality blocks ─────────────────────────────────────────────
 
 QualityArea = Literal["frontend", "backend"]
-QualityOperation = Literal["lint", "typecheck", "build"]
+QualityOperation = Literal["lint", "typecheck", "build", "test", "gate"]
 
 
 class QualityCheckSpec(BaseModel):
@@ -445,3 +464,78 @@ class PiResult(BaseModel):
     # visualizer's context bar measures against `context_window`.
     context_tokens: int = 0
     context_window: int = 0         # 0 when the registry declares no ceiling
+
+
+# ── Milestone orchestration (project-level MVP loop) ─────────────────────────
+
+MilestoneStatus = Literal["pending", "running", "passed", "failed", "blocked"]
+
+
+class MilestoneSpec(BaseModel):
+    """One bounded milestone the factory can run end to end. Static registry entry."""
+
+    id: str                         # "m0_1", "m1", ... — the state key and the log prefix
+    title: str
+    spec_path: str                  # specs/milestones/<id>.md — the bounded specification
+    gate_marker: str                # pytest marker whose tests are this milestone's acceptance gate
+    needs_model: bool = False       # include `needs_model` tests in the gate when a key is present
+    spend_gate: bool = False        # run the OpenRouter spend guard before the build phase
+    budget_argv: list[str] = Field(default_factory=list)   # prints JSON {calls, est_usd, ...}
+
+
+class MilestoneRecord(BaseModel):
+    """What happened to one milestone across every attempt. Lives in state.json."""
+
+    id: str
+    status: MilestoneStatus = "pending"
+    adw_ids: list[str] = Field(default_factory=list)        # every session that worked it, in order
+    attempts: int = 0                                       # runs so far: 1 + corrective cycles
+    commits: list[str] = Field(default_factory=list)
+    metrics: dict[str, Any] = Field(default_factory=dict)
+    versions: dict[str, str] = Field(default_factory=dict)  # index_version, skill_version, ...
+    exclusions: list[str] = Field(default_factory=list)
+    models: dict[str, str] = Field(default_factory=dict)    # phase owner -> model that ran it
+    blocker: str = ""
+    last_failure: str = ""          # what the last attempt died on — the next correction's spec
+    started_at: str = ""
+    ended_at: str = ""
+
+
+class SpendRecord(BaseModel):
+    cap_usd: Optional[float] = None
+    realized_usd: float = 0.0
+    estimates: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class SpendCheck(BaseModel):
+    """The spend guard's verdict, with the numbers it was decided on."""
+
+    ok: bool
+    reason: str
+    cap_usd: Optional[float] = None
+    realized_usd: float = 0.0
+    estimate_usd: float = 0.0
+    calls: int = 0
+
+
+class MVPState(BaseModel):
+    """The compact orchestration checkpoint: enough for a fresh session to answer
+    'where are we, what ran, what next' without opening the trace db."""
+
+    parent_run_id: str = ""
+    brief_path: str = "specs/grilled-product-brief.md"
+    brief_sha: str = ""
+    current_milestone: str = ""
+    next_action: str = ""
+    milestones: dict[str, MilestoneRecord] = Field(default_factory=dict)
+    spend: SpendRecord = Field(default_factory=SpendRecord)
+    pending_human_input: list[str] = Field(default_factory=list)
+    updated_at: str = ""
+
+
+class ChildLaunch(BaseModel):
+    """Everything milestones.launch_child() needs to run one milestone ADW as a subprocess."""
+
+    argv: list[str]
+    log_path: str
+    label: str                      # what the processes table calls it
