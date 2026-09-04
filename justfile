@@ -102,6 +102,18 @@ test:
 gate-m0:
     uv run pytest -m "gate_m0 and not needs_network and not needs_model" -q
 
+# build the dense retrieval index (20 selected + 30 redacted documents)
+index:
+    uv run python -m dealpoint.corpus.build_index
+
+# milestone 1 acceptance gates only, offline (excludes the metered smoke)
+gate-m1:
+    uv run pytest -m "gate_m1 and not needs_network and not needs_model" -q
+
+# run the agent CLI: just agent --case contract_0__q01 --arm B --model anthropic/claude-haiku-4.5
+agent *ARGS:
+    uv run python -m dealpoint.agent.run "$@"
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

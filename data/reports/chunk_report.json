@@ -1,0 +1,15 @@
+{
+  "chars_per_token_ratio_mean": 4.845026404213299,
+  "chunk_chars": {
+    "mean": 1506.074,
+    "median": 1894.0,
+    "p90": 1899
+  },
+  "chunk_tokens": {
+    "mean": 311.636,
+    "median": 372.5,
+    "p90": 414
+  },
+  "n_sampled_chunks": 500,
+  "n_total_chunks": 12312
+}

@@ -94,3 +94,45 @@ MIN_ELIGIBLE_COUNT = 100
 # Sliding-window size (canonical chars) for the out-of-scope collision check
 # (specs/milestones/m0_1.md Problem B).
 OOS_COLLISION_WINDOW = 400
+
+# --- Milestone 1: chunking, index, agent ----------------------------------
+INDEX_DIR = DATA_DIR / "index"
+RESULTS_DIR = DATA_DIR / "results"
+SPEND_LEDGER_PATH = RESULTS_DIR / "spend_ledger.jsonl"
+INDEX_VERSION_TXT_PATH = REPORTS_DIR / "index_version.txt"
+VERSIONS_JSON_PATH = REPORTS_DIR / "versions.json"
+CHUNK_REPORT_PATH = REPORTS_DIR / "chunk_report.json"
+
+# Chunking. The brief (§3.4) specifies "~400 tokens / 50 overlap". Tokens are
+# not a framework-free unit, so the parameters are stored in CHARS at the
+# corpus's measured chars/token ratio (see data/reports/chunk_report.json);
+# the ratio is measured once with the bge tokenizer and recorded, never guessed.
+# Measured chars_per_token_ratio_mean = 4.796 (data/reports/chunk_report.json,
+# produced by dealpoint/corpus/build_index.py's _chunk_report over the bge
+# tokenizer) -- the params below are retuned to that measured ratio, not the
+# earlier ~4.0 assumption.
+CHUNK_TARGET_CHARS = 1900  # ~400 tokens at the measured 4.796 chars/token
+CHUNK_OVERLAP_CHARS = 240  # ~50 tokens at the measured 4.796 chars/token
+CHUNK_ALGO_VERSION = "1"  # bump to invalidate chunk_version deliberately
+
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+QDRANT_COLLECTION = "dealpoint_chunks"
+RETRIEVER_DEFAULT_K = 5
+
+MAX_TOOL_CALLS = 8  # brief §1.3 hard cap -> CAP_HIT
+MAX_TOOL_RESULT_CHARS = 1500  # per tool result, section_ref preserved
+MAX_TOKENS_TOOL_TURN = 300
+MAX_TOKENS_FINAL = 600
+MAX_DEFINITION_CHARS = 6000  # ceiling on a returned defined-term block
+LLM_TEMPERATURE = 0
+API_MAX_RETRIES = 3  # API errors -> 3 retries w/ backoff
+SCHEMA_MAX_RETRIES = 1  # schema-invalid -> exactly one retry
+RATIONALE_MAX_WORDS = 80
+EVIDENCE_MAX_ITEMS = 3
+
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+MILESTONE_TAG = "m1"
+
+DEFAULT_MODEL = "anthropic/claude-haiku-4.5"
+M1_SMOKE_CASE_IDS = ("contract_0__q01", "contract_0__q06")  # direct + defined-term
+M1_SMOKE_MAX_USD = 0.15

@@ -22,6 +22,12 @@ data/reports/*
 !data/reports/m0_1_oos_collisions.json
 !data/reports/parser_version.txt
 !data/reports/dataset_version.txt
+
+# dealpoint (M1 agent foundation)
+!data/reports/index_version.txt
+!data/reports/versions.json
+!data/reports/chunk_report.json
+data/index/
 __pycache__/
 .pytest_cache/
 .ruff_cache/

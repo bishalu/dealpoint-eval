@@ -1,0 +1,9 @@
+{
+  "chunk_version": "8e5e8ba56765",
+  "dataset_version": "81ed82cd7552",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "index_version": "e2b4a2b97561",
+  "n_chunks": 12312,
+  "n_documents": 50,
+  "parser_version": "29cc01eda19b"
+}
