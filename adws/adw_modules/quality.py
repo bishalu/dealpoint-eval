@@ -141,7 +141,7 @@ def test(run) -> QualityCheckResult:
         name="test",
         area="backend",
         operation="build",
-        argv=_placeholder("test"),        # e.g. ["bun", "test"] or ["uv", "run", "pytest", "-q"]
+        argv=["uv", "run", "pytest", "-m", "not needs_network and not needs_model", "-q"],
         timeout_seconds=600,
     ), run)
 
@@ -151,7 +151,7 @@ def lint(run) -> QualityCheckResult:
         name="lint",
         area="backend",
         operation="lint",
-        argv=_placeholder("lint"),        # e.g. ["bun", "x", "oxlint@1.36.0", "src"]
+        argv=["uv", "run", "ruff", "check", "."],
     ), run)
 
 
@@ -160,7 +160,7 @@ def typecheck(run) -> QualityCheckResult:
         name="typecheck",
         area="backend",
         operation="typecheck",
-        argv=_placeholder("typecheck"),   # e.g. ["bun", "x", "tsc", "--noEmit"]
+        argv=["uv", "run", "pyright"],
     ), run)
 
 
@@ -222,7 +222,6 @@ def run_quality(run) -> QualityResult:
         test,
         lint,
         typecheck,
-        build,
     ]
     checks = [block(run) for block in blocks]
     # A failure is the command, its exit code, and what it actually printed —

@@ -1,6 +1,12 @@
 #!/usr/bin/env -S uv run
 # /// script
-# dependencies = ["pydantic", "python-dotenv", "pyyaml", "rich"]
+# dependencies = [
+#     "braintrust>=0.37.0",
+#     "pydantic",
+#     "python-dotenv",
+#     "pyyaml",
+#     "rich",
+# ]
 # ///
 """ADW Simple SDLC — plan, build, test, review, document, committing as it goes.
 

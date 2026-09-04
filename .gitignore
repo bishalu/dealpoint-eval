@@ -5,3 +5,19 @@ adws/adw_data/sssf.db*
 .env
 __pycache__/
 *.pyc
+# Added by Braintrust Wizard
+.env.braintrust
+.braintrust.json
+
+# sssf visualizer deps (operator tooling, not project code)
+.claude/skills/sssf/apps/visualizer/node_modules/
+
+# dealpoint (M0 data foundation)
+.venv/
+data/raw/
+data/derived/
+data/reports/*
+!data/reports/.gitkeep
+__pycache__/
+.pytest_cache/
+.ruff_cache/

@@ -1,6 +1,12 @@
 #!/usr/bin/env -S uv run
 # /// script
-# dependencies = ["pydantic", "python-dotenv", "pyyaml", "rich"]
+# dependencies = [
+#     "braintrust>=0.37.0",
+#     "pydantic",
+#     "python-dotenv",
+#     "pyyaml",
+#     "rich",
+# ]
 # ///
 """ADW Document — write up the work that was just done, from the diff.
 

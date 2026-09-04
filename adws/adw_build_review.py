@@ -1,6 +1,12 @@
 #!/usr/bin/env -S uv run
 # /// script
-# dependencies = ["pydantic", "python-dotenv", "pyyaml", "rich"]
+# dependencies = [
+#     "braintrust>=0.37.0",
+#     "pydantic",
+#     "python-dotenv",
+#     "pyyaml",
+#     "rich",
+# ]
 # ///
 """ADW Build Review — implement, then confirm it is what was asked for.
 

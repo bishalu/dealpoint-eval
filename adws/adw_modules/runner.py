@@ -9,11 +9,14 @@ require a parsed envelope + green gates, enforced inside ph.call).
 from __future__ import annotations
 
 import json
+import sys
 import time
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from pathlib import Path
 
-from . import agents, git_helper
+import braintrust
+
+from . import agents, braintrust_tracing, git_helper
 from .console import Console
 from .data_types import AgentCall, EnvelopeBase, EventRecord, Phase, PhaseParams
 from .utils import ensure_dir, now_iso
@@ -56,6 +59,24 @@ class Run:
         self._agent_map_path = self.session_dir / "agent_map.json"
         self.agent_map: dict = (json.loads(self._agent_map_path.read_text())
                                 if self._agent_map_path.exists() else {})
+        # Entered, not just started, so every span below it nests without being
+        # handed a parent. Closed by _end_trace, on both the success and the
+        # blown-phase path.
+        self._trace = ExitStack()
+        self.span = self._trace.enter_context(braintrust_tracing.logger().start_span(
+            name=Path(sys.argv[0]).stem, type="task",
+            metadata={"adw_id": adw_id, "engineer": engineer}))
+
+    def _end_trace(self, ok: bool) -> None:
+        """Close the root span and ship it. Idempotent: finish() and the phase
+        teardown both reach it, and a failing run travels through both."""
+        if self.span is None:
+            return
+        self.span.log(output={"status": "success" if ok else "fail"},
+                      metrics={"tokens": self.tokens, "cost": self.cost})
+        self.span = None
+        self._trace.close()
+        braintrust_tracing.flush()
 
     # ── agent map (adw_id -> per-agent coding-agent session ids) ────────────
     def save_agent_map(self, agent: str, entry: dict) -> None:
@@ -84,7 +105,10 @@ class Run:
         self.console.phase_started(phase)
         clock = time.monotonic()
         try:
-            yield PhaseHandle(self, phase)
+            with braintrust.start_span(name=params.name, type="task",
+                                       metadata={"kind": params.kind, "owner": params.owner,
+                                                 "description": params.description}):
+                yield PhaseHandle(self, phase)
         except BaseException as error:
             phase.status = "fail"                      # success must be earned
             phase.error = str(error)[:1000]
@@ -100,6 +124,7 @@ class Run:
             self.console.phase_ended(phase, time.monotonic() - clock)
             self.console.session_finished(False, self.tokens, self.cost,
                                           self.cfg.observability.db)
+            self._end_trace(ok=False)
             raise
         else:
             phase.status = "success"
@@ -139,4 +164,5 @@ class Run:
             self.console.note(f"not accepted: {note}")
         self.tracer.session_finish(self.adw_id, ok=ok)
         self.console.session_finished(ok, self.tokens, self.cost, self.cfg.observability.db)
+        self._end_trace(ok)
         return 0 if ok else 1

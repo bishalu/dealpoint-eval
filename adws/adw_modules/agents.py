@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
+import braintrust
 import yaml
 
 from . import agent_pi, permissions, prompts
@@ -102,6 +103,11 @@ def execute(run, phase: Phase, call: AgentCall) -> EnvelopeBase:
                                           "tools": agent.tools,  # None = all tools
                                           "harness_engineering": agent.harness_engineering}))
     run.console.agent_started(agent.name, agent.model, session_id)
+    # The phase span is already current, and an agent phase is one agent — so
+    # who ran it belongs there rather than on a span of its own.
+    braintrust.current_span().log(metadata={"agent": agent.name, "model": agent.model,
+                                            "purpose": agent.purpose,
+                                            "session_id": session_id})
 
     # Parse retries and gate corrections re-enter the SAME pi session, so the
     # last send is the one whose context occupancy is current — while spend is
@@ -124,13 +130,22 @@ def execute(run, phase: Phase, call: AgentCall) -> EnvelopeBase:
             extensions=agent.harness_engineering,
             cwd=str(run.repo_root),
         )
-        result = agent_pi.run(
-            request,
-            on_event=_event_forwarder(run, phase, agent.name),
-            on_spawn=lambda pid: run.tracer.process_start(
-                run.adw_id, "agent", agent.name, pid,
-                f"{agent.coding_agent} {agent.name} {agent.model}"),
-            on_exit=lambda pid: run.tracer.process_end(run.adw_id, pid))
+        # One span per send, so a phase that retried shows what each attempt was
+        # asked and what it cost — the sqlite trace only keeps the phase total.
+        with braintrust.start_span(
+                name=agent.name, type="llm",
+                input=[{"role": "system", "content": system_text},
+                       {"role": "user", "content": prompt_text}],
+                metadata={"model": agent.model, "thinking": agent.thinking,
+                          "session_id": session_id}) as span:
+            result = agent_pi.run(
+                request,
+                on_event=_event_forwarder(run, phase, agent.name),
+                on_spawn=lambda pid: run.tracer.process_start(
+                    run.adw_id, "agent", agent.name, pid,
+                    f"{agent.coding_agent} {agent.name} {agent.model}"),
+                on_exit=lambda pid: run.tracer.process_end(run.adw_id, pid))
+            span.log(output=result.text, metrics=_metrics(result.usage))
         run.add_usage(result.tokens, result.cost)
         spent.merge(result.usage)
         latest = result
@@ -217,6 +232,17 @@ def execute(run, phase: Phase, call: AgentCall) -> EnvelopeBase:
 
 
 # ── internals ────────────────────────────────────────────────────────────────
+
+def _metrics(usage: UsageBreakdown) -> dict:
+    """pi's usage under braintrust's metric names. `input` excludes cache reads,
+    which the prompt total has to put back."""
+    return {"prompt_tokens": usage.input_tokens + usage.cache_read_tokens,
+            "prompt_cached_tokens": usage.cache_read_tokens,
+            "completion_tokens": usage.output_tokens,
+            "completion_reasoning_tokens": usage.reasoning_tokens,
+            "tokens": usage.total_tokens,
+            "cost": usage.total_cost}
+
 
 def _as_report(result) -> GateReport:
     """Accept a GateReport, or a legacy gate that returned a violations list."""

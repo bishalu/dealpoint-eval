@@ -14,6 +14,7 @@ export default defineConfig({
   },
   server: {
     port: 4601,
+    allowedHosts: [".exe.xyz"],
     proxy: {
       "/api": {
         target: `http://localhost:${API_PORT}`,
