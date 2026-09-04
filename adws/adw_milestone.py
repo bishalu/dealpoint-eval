@@ -114,6 +114,7 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
     checks = None
     review = None
     build = None
+    agent_failure = ""          # an agent that declared its own failure, or blew its gates
 
     with run.phase(PhaseParams(name="request", kind="engineer", owner=run.engineer,
                                description="Record which milestone this session works, under which "
@@ -149,41 +150,48 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
             if not sc.ok:
                 escalate = f"spend guard: {sc.reason}"
 
-    if not escalate:
-        with run.phase(PhaseParams(name="build" if not correction else f"build_c{rec.attempts}",
-                                   kind="agent", owner="builder",
-                                   description="Implement the milestone spec, or close the recorded "
-                                               "failure of the previous attempt")) as ph:
-            build = ph.call(AgentCall(output_type=BuildOutput, prompt=prompt, previous=plan,
-                                      gates=[gates.diff_matches_claims]))
+    try:
+        if not escalate:
+            with run.phase(PhaseParams(name="build" if not correction else f"build_c{rec.attempts}",
+                                       kind="agent", owner="builder",
+                                       description="Implement the milestone spec, or close the recorded "
+                                                   "failure of the previous attempt")) as ph:
+                build = ph.call(AgentCall(output_type=BuildOutput, prompt=prompt, previous=plan,
+                                          gates=[gates.diff_matches_claims]))
 
-        checks, build = verify("", build)
+            checks, build = verify("", build)
 
-        if checks is not None and checks.passed:
-            for i in range(1, MAX_REVISION_LOOPS + 1):
-                with run.phase(PhaseParams(name=f"review_{i}", kind="agent", owner="reviewer",
-                                           description="Rule on every definition-of-done item against the "
-                                                       "spec, the brief and the recorded evidence")) as ph:
-                    _write_evidence(run, ms, rec, parent, checks, None, evidence_path)
-                    review = ph.call(AgentCall(output_type=ReviewOutput,
-                                               prompt=milestone_prompts.review_prompt(ms, str(evidence_path)),
-                                               previous=build,
-                                               gates=[gates.artifacts_exist, gates.verdict_consistent]))
-                disposition = review.resolved_disposition()
-                if disposition in ("PASS", "ESCALATE") or i == MAX_REVISION_LOOPS:
-                    break
-                with run.phase(PhaseParams(name=f"revise_{i}", kind="agent", owner="builder", retries=1,
-                                           description="Execute the reviewer's one bounded corrective task")) as ph:
-                    build = ph.call(AgentCall(output_type=BuildOutput,
-                                              prompt=milestone_prompts.revise_prompt(ms, review),
-                                              previous=review, gates=[gates.diff_matches_claims]))
-                checks, build = verify(f"r{i}_", build)
-                if not checks.passed:
-                    break
-            if review is not None and review.resolved_disposition() == "ESCALATE":
-                escalate = f"reviewer: {review.escalation_reason or '; '.join(review.blocking)}"
+            if checks is not None and checks.passed:
+                for i in range(1, MAX_REVISION_LOOPS + 1):
+                    with run.phase(PhaseParams(name=f"review_{i}", kind="agent", owner="reviewer",
+                                               description="Rule on every definition-of-done item against the "
+                                                           "spec, the brief and the recorded evidence")) as ph:
+                        _write_evidence(run, ms, rec, parent, checks, None, evidence_path)
+                        review = ph.call(AgentCall(output_type=ReviewOutput,
+                                                   prompt=milestone_prompts.review_prompt(ms, str(evidence_path)),
+                                                   previous=build,
+                                                   gates=[gates.artifacts_exist, gates.verdict_consistent]))
+                    disposition = review.resolved_disposition()
+                    if disposition in ("PASS", "ESCALATE") or i == MAX_REVISION_LOOPS:
+                        break
+                    with run.phase(PhaseParams(name=f"revise_{i}", kind="agent", owner="builder", retries=1,
+                                               description="Execute the reviewer's one bounded corrective task")) as ph:
+                        build = ph.call(AgentCall(output_type=BuildOutput,
+                                                  prompt=milestone_prompts.revise_prompt(ms, review),
+                                                  previous=review, gates=[gates.diff_matches_claims]))
+                    checks, build = verify(f"r{i}_", build)
+                    if not checks.passed:
+                        break
+                if review is not None and review.resolved_disposition() == "ESCALATE":
+                    escalate = f"reviewer: {review.escalation_reason or '; '.join(review.blocking)}"
+    except (RuntimeError, agents.GateFailure) as error:
+        # The phase already recorded itself as failed; keep going so the checkpoint
+        # carries the agent's OWN words (a builder's "status=fail" summary, a gate's
+        # violations) rather than a generic "exited before recording".
+        agent_failure = str(error)[:1500]
+        run.console.note(f"milestone stops at a failed agent phase: {agent_failure[:200]}")
 
-    verified = (not escalate and checks is not None and checks.passed
+    verified = (not escalate and not agent_failure and checks is not None and checks.passed
                 and review is not None and review.resolved_disposition() == "PASS")
 
     if verified:
@@ -240,7 +248,8 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
             state.next_action = f"HUMAN DECISION for {ms.id}: {escalate}"
         else:
             rec_now.status = "failed"
-            rec_now.last_failure = milestone_prompts.failure_text(checks, review)
+            rec_now.last_failure = (agent_failure + "\n\n" if agent_failure else "") \
+                + milestone_prompts.failure_text(checks, review)
             state.next_action = f"corrective cycle for {ms.id} in session {run.adw_id}"
         state.current_milestone = ms.id
         milestones.save_state(state)
@@ -253,7 +262,8 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
             commit(ph, None, f"{ms.id}: passed — orchestration state @ {git_helper.short_sha('HEAD')}")
 
     rc = run.finish(accepted=verified,
-                    reason=escalate or "checks or review never came back clean within the bounded loops")
+                    reason=escalate or agent_failure
+                    or "checks or review never came back clean within the bounded loops")
     return milestones.EXIT_ESCALATE if escalate else rc
 
 
