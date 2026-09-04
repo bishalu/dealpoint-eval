@@ -126,7 +126,7 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
 
     plan = None
     if not correction:
-        with run.phase(PhaseParams(name="plan", kind="agent", owner="planner",
+        with run.phase(PhaseParams(name="plan", kind="agent", owner="planner", retries=1,
                                    description="Turn the milestone spec into a plan the builder can "
                                                "execute without deciding product questions")) as ph:
             plan = ph.call(AgentCall(output_type=PlanOutput, prompt=prompt,

@@ -481,6 +481,7 @@ class MilestoneSpec(BaseModel):
     needs_model: bool = False       # include `needs_model` tests in the gate when a key is present
     spend_gate: bool = False        # run the OpenRouter spend guard before the build phase
     budget_argv: list[str] = Field(default_factory=list)   # prints JSON {calls, est_usd, ...}
+    absolute_usd: Optional[float] = None    # this milestone's absolute new spend (2x its allocation guide)
 
 
 class MilestoneRecord(BaseModel):
