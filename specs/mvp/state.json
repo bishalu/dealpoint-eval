@@ -194,19 +194,96 @@
       ],
       "attempts": 1,
       "blocker": "",
-      "commits": [],
-      "ended_at": "",
+      "commits": [
+        "2afdce5",
+        "43be470",
+        "8b3339e"
+      ],
+      "ended_at": "2026-09-04T19:46:48.053+00:00",
       "exclusions": [],
       "id": "m3",
       "last_failure": "",
+      "metrics": {
+        "case_counts": {
+          "counterfactual": 40,
+          "dev": 58,
+          "test": 167
+        },
+        "chunk_report": {
+          "chars_per_token_ratio_mean": 4.845026404213299,
+          "n_sampled_chunks": 500,
+          "n_total_chunks": 12312
+        },
+        "m0_1_oos_collisions": {
+          "collision_window": 400
+        },
+        "m0_1_parser_report": {
+          "corpus_gold_span_hits": 2970,
+          "corpus_gold_span_section_rate": 0.8549222797927462,
+          "corpus_gold_span_total": 3474,
+          "eligible_count": 139,
+          "giant_section_fraction_threshold": 0.4,
+          "gold_span_section_rate_ceiling": 0.8926309729418538,
+          "min_structural_coverage_threshold": 0.8,
+          "n_agreements": 152,
+          "parser_version": "29cc01eda19b"
+        },
+        "tournament": {
+          "fetch_k": 20,
+          "k": 10,
+          "rerank_model": "Xenova/ms-marco-MiniLM-L-6-v2",
+          "rrf_k": 60,
+          "schema_version": 1,
+          "total_wall_seconds": 774.955
+        },
+        "versions": {
+          "arm_c_index_version": "8ae2fc1e24e9",
+          "chunk_version": "8e5e8ba56765",
+          "dataset_version": "81ed82cd7552",
+          "embedding_model": "BAAI/bge-small-en-v1.5",
+          "index_version": "e2b4a2b97561",
+          "n_chunks": 12312,
+          "n_documents": 50,
+          "parser_version": "29cc01eda19b"
+        }
+      },
+      "models": {
+        "builder": "pi-claude-code-provider/sonnet",
+        "documenter": "pi-claude-code-provider/haiku",
+        "planner": "pi-claude-code-provider/opus",
+        "reviewer": "pi-claude-code-provider/opus"
+      },
+      "started_at": "2026-09-04T16:37:17.245+00:00",
+      "status": "passed",
+      "versions": {
+        "arm_c_index_version": "8ae2fc1e24e9",
+        "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
+        "chunk_version": "8e5e8ba56765",
+        "dataset_version": "81ed82cd7552",
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "index_version": "e2b4a2b97561",
+        "n_chunks": "12312",
+        "n_documents": "50",
+        "parser_version": "29cc01eda19b"
+      }
+    },
+    "m4": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m4",
+      "last_failure": "",
       "metrics": {},
       "models": {},
-      "started_at": "2026-09-04T16:37:17.245+00:00",
-      "status": "running",
+      "started_at": "",
+      "status": "pending",
       "versions": {}
     }
   },
-  "next_action": "m3 running in session ef045a70 (attempt 1)",
+  "next_action": "run m4",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -214,5 +291,5 @@
     "estimates": [],
     "realized_usd": 0.0
   },
-  "updated_at": "2026-09-04T16:37:17.245+00:00"
+  "updated_at": "2026-09-04T19:46:48.053+00:00"
 }
