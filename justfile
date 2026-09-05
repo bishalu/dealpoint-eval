@@ -138,6 +138,24 @@ tournament *ARGS:
 gate-m3:
     uv run pytest -m "gate_m3 and not needs_network and not needs_model" -q
 
+# ── dealpoint (M4 four-arm experiment) ──────────────────────────────────────
+
+# regenerate the frozen discriminative subset: data/eval/test_subset_v1.json
+subset:
+    uv run python -m dealpoint.eval.subset
+
+# run the M4 metered sweeps in spec order (dev smoke, caching probe, GLM headline, Haiku replication)
+sweep-m4 *ARGS:
+    uv run python -m dealpoint.eval.four_arm_sweep "$@"
+
+# regenerate data/reports/four_arm.json + four_arm.md + README Results section
+report:
+    uv run python -m dealpoint.eval.report
+
+# milestone 4 acceptance gates only, offline
+gate-m4:
+    uv run pytest -m "gate_m4 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

@@ -141,7 +141,11 @@ def test_run_eval_replays_rows_without_reinvoking_the_agent():
                 "citation_gold_overlap": True,
                 "citation_verbatim": True,
                 "abstain_correct": True,
-                "skill_adherence": None,
+                # M4: skill_adherence is now a real deterministic score for
+                # every arm (spec deliverable 2) -- this replay test only
+                # needs a plausible stored value, since run_eval never
+                # recomputes it, just replays the stored row.
+                "skill_adherence": 0.75,
                 "gold_seen": True,
                 "tool_calls": 2,
             },

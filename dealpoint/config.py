@@ -194,3 +194,40 @@ ARM_C_RETRIEVER: dict = {
     "rerank_model": None,
     "rrf_k": RRF_K,
 }
+
+# --- Milestone 4: four-arm experiment on the frozen test set --------------
+FOUR_ARM_MILESTONE_TAG = "m4"
+M4_TARGET_USD = 1.50   # the M4 allocation guide -- reported, not gated
+M4_MAX_USD = 3.00      # absolute per-milestone limit (2x guide) -- enforced
+M4_ENVELOPE_USD = 4.00 # the whole unattended M1-M6 OpenRouter envelope
+
+SKILL_DIR = REPO_ROOT / "skills" / "ma-deal-point-review"
+SKILL_PLAYBOOKS_DIR = SKILL_DIR / "playbooks"
+
+# Arm B's own retriever config (plain dense, same shape as arm C's config
+# dict so "arm differs by exactly one key" is checkable -- spec deliverable 3).
+DENSE_RETRIEVER: dict = {
+    "kind": "dense",
+    "name": "dense",
+    "fetch_k": RETRIEVER_DEFAULT_K,
+    "rerank_model": None,
+    "multi_query": False,
+    "rrf_k": RRF_K,
+}
+
+# The four arms, brief §2.2. Exactly three keys per arm so "differs from its
+# predecessor by exactly one config key" is mechanically checkable: A->B
+# differs in `loop`, B->C in `retriever`, C->D in `skill`.
+ARMS: dict[str, dict] = {
+    "A": {"loop": "pipeline", "retriever": DENSE_RETRIEVER, "skill": False},
+    "B": {"loop": "agent", "retriever": DENSE_RETRIEVER, "skill": False},
+    "C": {"loop": "agent", "retriever": ARM_C_RETRIEVER, "skill": False},
+    "D": {"loop": "agent", "retriever": ARM_C_RETRIEVER, "skill": True},
+}
+ARM_ORDER: tuple[str, ...] = ("A", "B", "C", "D")
+
+TEST_SUBSET_V1_PATH = EVAL_DIR / "test_subset_v1.json"
+FOUR_ARM_JSON_PATH = REPORTS_DIR / "four_arm.json"
+FOUR_ARM_MD_PATH = REPORTS_DIR / "four_arm.md"
+README_PATH = REPO_ROOT / "README.md"
+

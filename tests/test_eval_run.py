@@ -23,7 +23,7 @@ def _read_jsonl(path):
     return rows
 
 
-@pytest.mark.parametrize("arm", ["A", "B"])
+@pytest.mark.parametrize("arm", ["A", "B", "C", "D"])
 def test_fake_runner_produces_result_rows_with_every_score(tmp_path, arm, dataset_available):
     if not dataset_available:
         pytest.skip("dataset not present")

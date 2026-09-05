@@ -1,0 +1,26 @@
+{
+  "any_cached": false,
+  "cached_tokens_observed": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "cost_per_call_usd_after": 0.003092,
+  "cost_per_call_usd_before": 0.001914,
+  "decision": "Not padded. The spec explicitly forbids padding a prompt to reach a cacheable minimum.",
+  "finding": "The static prefix (system prompt + question spec + tool schemas) measures ~511-609 tokens across the 12 questions, well below Anthropic's 2048-token minimum cacheable prefix for the Haiku class. cached_tokens was 0 on every call in this probe (and on all 96 pre-existing ledger rows), consistent with the prefix being below the provider's minimum -- not a request-shape bug. The request shape is already correct (dealpoint.llm.client.build_system_message sends the system message as a content-block list with cache_control: {'type': 'ephemeral'}), so no block-placement fix was needed or applied.",
+  "measured_static_prefix_tokens_range": "511-609 (approx, chars/4.8 across the 12 questions)",
+  "model": "anthropic/claude-haiku-4.5",
+  "n_calls_in_probe": 13,
+  "provider_minimum_cacheable_tokens": 2048
+}

@@ -339,7 +339,11 @@ def test_score_case_has_every_key():
     record = _record(status="ANSWERED")
     scores = score_case(case, finding, record, None)
     assert set(scores.keys()) == set(SCORE_FIELD_NAMES)
-    assert scores["skill_adherence"] is None
+    # M4: skill_adherence is now a real deterministic score for every arm
+    # (spec deliverable 2), computed from an applicable/satisfied rule set
+    # over the trajectory -- never None when at least one rule applies
+    # (rule 1, ">= 1 search_agreement step", is always applicable).
+    assert scores["skill_adherence"] is not None
 
 
 # --- majority_baseline matches a fresh recount from data/eval -----------

@@ -66,16 +66,25 @@ def run_agent(
     question,
     model: str,
     index_version: str | None = None,
+    *,
+    arm: str = "B",
+    skill_block: str | None = None,
 ) -> tuple[Finding | None, ExecutionRecord]:
     """Run the bounded agent loop for one (document, question) case.
 
     `case` is the case-JSONL row (only `case_id` is used here); `question`
-    is a `dealpoint.data.questions.QuestionSpec`.
+    is a `dealpoint.data.questions.QuestionSpec`. `arm` is stamped into the
+    execution record (default `"B"` preserves pre-M4 behaviour). `skill_block`
+    (arm D only, composed by the caller -- never by this module's imports
+    from `prompts.py`, which stays skill-free) is appended to the static
+    prefix when given.
     """
     wall_start = time.monotonic()
     case_id = case.get("case_id", "")
 
     static_prefix = system_prompt() + "\n\n" + question_spec_block(question)
+    if skill_block:
+        static_prefix += "\n\n" + skill_block
     messages: list[dict] = [
         build_system_message(static_prefix),
         {
@@ -115,7 +124,7 @@ def run_agent(
             tool_calls=tool_call_count,
             wall_start=wall_start,
             model=model,
-            arm=ARM,
+            arm=arm,
             case_id=case_id,
             index_version=index_version,
         )
@@ -230,7 +239,7 @@ def run_agent(
         tool_calls=tool_call_count,
         wall_start=wall_start,
         model=model,
-        arm=ARM,
+        arm=arm,
         case_id=case_id,
         index_version=index_version,
     )

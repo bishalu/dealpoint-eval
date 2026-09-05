@@ -272,21 +272,78 @@
         "83177d21",
         "f0eb3bd2"
       ],
-      "attempts": 1,
+      "attempts": 2,
       "blocker": "",
-      "commits": [],
-      "ended_at": "",
+      "commits": [
+        "1fd5b81"
+      ],
+      "ended_at": "2026-09-04T20:54:34.409+00:00",
       "exclusions": [],
       "id": "m4",
-      "last_failure": "",
-      "metrics": {},
-      "models": {},
+      "last_failure": "The previous attempt stopped at the factory's pre-build spend gate because the M2-era `budget four_arm` estimate ($3.09, old Haiku-only 32x4 design) exceeded M4's $3.00 absolute. That gate is now advisory; the plan in this session (specs/f0eb3bd2_*.md / context_handoff/plan.md) stands. Proceed with the full M4 spec as amended, including the new runner-side milestone spend guard and the updated `budget four_arm` model. Sweeps must respect: GLM headline 4 arms x 32 (~$0.20); Haiku arms A/D sized by the estimator to <= $1.00; total M4 new spend <= $3.00 absolute, target $1.50.",
+      "metrics": {
+        "case_counts": {
+          "counterfactual": 40,
+          "dev": 58,
+          "test": 167
+        },
+        "chunk_report": {
+          "chars_per_token_ratio_mean": 4.845026404213299,
+          "n_sampled_chunks": 500,
+          "n_total_chunks": 12312
+        },
+        "m0_1_oos_collisions": {
+          "collision_window": 400
+        },
+        "m0_1_parser_report": {
+          "corpus_gold_span_hits": 2970,
+          "corpus_gold_span_section_rate": 0.8549222797927462,
+          "corpus_gold_span_total": 3474,
+          "eligible_count": 139,
+          "giant_section_fraction_threshold": 0.4,
+          "gold_span_section_rate_ceiling": 0.8926309729418538,
+          "min_structural_coverage_threshold": 0.8,
+          "n_agreements": 152,
+          "parser_version": "29cc01eda19b"
+        },
+        "tournament": {
+          "fetch_k": 20,
+          "k": 10,
+          "rerank_model": "Xenova/ms-marco-MiniLM-L-6-v2",
+          "rrf_k": 60,
+          "schema_version": 1,
+          "total_wall_seconds": 774.955
+        },
+        "versions": {
+          "arm_c_index_version": "8ae2fc1e24e9",
+          "chunk_version": "8e5e8ba56765",
+          "dataset_version": "81ed82cd7552",
+          "embedding_model": "BAAI/bge-small-en-v1.5",
+          "index_version": "e2b4a2b97561",
+          "n_chunks": 12312,
+          "n_documents": 50,
+          "parser_version": "29cc01eda19b"
+        }
+      },
+      "models": {
+        "planner": "pi-claude-code-provider/opus"
+      },
       "started_at": "2026-09-04T19:46:50.874+00:00",
       "status": "running",
-      "versions": {}
+      "versions": {
+        "arm_c_index_version": "8ae2fc1e24e9",
+        "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
+        "chunk_version": "8e5e8ba56765",
+        "dataset_version": "81ed82cd7552",
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "index_version": "e2b4a2b97561",
+        "n_chunks": "12312",
+        "n_documents": "50",
+        "parser_version": "29cc01eda19b"
+      }
     }
   },
-  "next_action": "m4 running in session f0eb3bd2 (attempt 1)",
+  "next_action": "m4 running in session f0eb3bd2 (attempt 2)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -299,9 +356,25 @@
         "milestone": "m4",
         "ok": true,
         "session": "83177d21"
+      },
+      {
+        "at": "2026-09-04T20:54:34.404+00:00",
+        "calls": 512,
+        "est_usd": 3.088341,
+        "milestone": "m4",
+        "ok": false,
+        "session": "f0eb3bd2"
+      },
+      {
+        "at": "2026-09-04T20:56:46.895+00:00",
+        "calls": 512,
+        "est_usd": 3.088341,
+        "milestone": "m4",
+        "ok": true,
+        "session": "f0eb3bd2"
       }
     ],
     "realized_usd": 0.5454
   },
-  "updated_at": "2026-09-04T20:31:34.264+00:00"
+  "updated_at": "2026-09-04T20:56:46.895+00:00"
 }

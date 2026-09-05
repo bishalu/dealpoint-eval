@@ -1,0 +1,17 @@
+{
+  "n_legs": 2,
+  "legs": [
+    {
+      "arm": "C",
+      "model": "z-ai/glm-5.3-flash",
+      "n_cases": 3,
+      "realized_usd": 0.006494
+    },
+    {
+      "arm": "D",
+      "model": "z-ai/glm-5.3-flash",
+      "n_cases": 3,
+      "realized_usd": 0.006441
+    }
+  ]
+}

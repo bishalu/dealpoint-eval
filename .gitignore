@@ -35,6 +35,13 @@ data/index/
 # dealpoint (M3 retrieval tournament)
 !data/reports/tournament.json
 !data/reports/tournament.md
+
+# dealpoint (M4 four-arm experiment)
+!data/reports/four_arm.json
+!data/reports/four_arm.md
+!data/reports/four_arm_manifest.json
+!data/reports/caching_probe.json
+!data/reports/dev_smoke_m4.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/

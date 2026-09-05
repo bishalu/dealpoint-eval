@@ -22,5 +22,77 @@
     "project": "dealpoint-eval",
     "ts": "2026-09-04T15:23:21.638165+00:00",
     "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-anthropic_claude-haiku-4.5-e2b4a2b97561-a357949"
+  },
+  {
+    "arm": "A",
+    "case_set": "m4_headline_glm_full",
+    "experiment_name": "A-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "z-ai/glm-5.3-flash",
+    "n_cases": 32,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:14.484311+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361"
+  },
+  {
+    "arm": "B",
+    "case_set": "m4_headline_glm_full",
+    "experiment_name": "B-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "z-ai/glm-5.3-flash",
+    "n_cases": 32,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:17.627199+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361"
+  },
+  {
+    "arm": "C",
+    "case_set": "m4_headline_glm_full",
+    "experiment_name": "C-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "z-ai/glm-5.3-flash",
+    "n_cases": 32,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:20.329559+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/C-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361"
+  },
+  {
+    "arm": "D",
+    "case_set": "m4_headline_glm_full",
+    "experiment_name": "D-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "z-ai/glm-5.3-flash",
+    "n_cases": 32,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:26.374574+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/D-z-ai_glm-5.3-flash-e2b4a2b97561-4d2e361"
+  },
+  {
+    "arm": "A",
+    "case_set": "m4_replication_haiku_tranche_1",
+    "experiment_name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "anthropic/claude-haiku-4.5",
+    "n_cases": 18,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:29.192227+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-anthropic_claude-haiku-4.5-e2b4a2b97561-4d2e361"
+  },
+  {
+    "arm": "D",
+    "case_set": "m4_replication_haiku_tranche_1",
+    "experiment_name": "D-anthropic_claude-haiku-4.5-e2b4a2b97561-4d2e361",
+    "git_sha": "4d2e361",
+    "index_version": "e2b4a2b97561",
+    "model": "anthropic/claude-haiku-4.5",
+    "n_cases": 18,
+    "project": "dealpoint-eval",
+    "ts": "2026-09-05T00:40:31.445527+00:00",
+    "url": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/D-anthropic_claude-haiku-4.5-e2b4a2b97561-4d2e361"
   }
 ]

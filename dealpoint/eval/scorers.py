@@ -260,14 +260,33 @@ def wall_ms(
 
 
 def skill_adherence(
-    case: dict, finding: Finding | None, record: ExecutionRecord, canonical_text: str
-) -> None:
-    """Skill-following score. M4 work — always `None` until then.
+    case: dict,
+    finding: Finding | None,
+    record: ExecutionRecord,
+    canonical_text: str,
+    doc: Document | None = None,
+) -> float | None:
+    """Skill-following score: satisfied / applicable over the Appendix-B rules.
 
-    Kept here (returning `None`) so the Braintrust score list can carry all
-    six score names from M2 onward (spec §5 / deliverable 3).
+    Computed for ALL arms (spec deliverable 2), delegating to
+    `dealpoint.eval.skill_adherence.evaluate`. `None` when no rule is
+    applicable to this case's execution.
     """
-    return
+    from dealpoint.eval.skill_adherence import evaluate as _evaluate_skill_rules
+
+    return _evaluate_skill_rules(case, finding, record, doc)["score"]
+
+
+def skill_adherence_detail(
+    case: dict, finding: Finding | None, record: ExecutionRecord, doc: Document | None = None
+) -> dict:
+    """The full per-rule breakdown (`n_applicable`, `n_satisfied`, `rules`) --
+
+    metadata, not a Braintrust score (spec §3: "a separate `skill_rules` key").
+    """
+    from dealpoint.eval.skill_adherence import evaluate as _evaluate_skill_rules
+
+    return _evaluate_skill_rules(case, finding, record, doc)
 
 
 SCORE_FIELD_NAMES: tuple[str, ...] = (
@@ -315,7 +334,7 @@ def score_case(
         "output_tokens": output_tokens(case, finding, record, canonical_text),
         "usd": usd(case, finding, record, canonical_text),
         "wall_ms": wall_ms(case, finding, record, canonical_text),
-        "skill_adherence": skill_adherence(case, finding, record, canonical_text),
+        "skill_adherence": skill_adherence(case, finding, record, canonical_text, doc=doc),
     }
 
 

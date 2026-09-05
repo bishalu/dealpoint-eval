@@ -189,6 +189,8 @@ def build_index(force: bool = False) -> None:
     if PARSER_VERSION_TXT_PATH.exists():
         parser_version_on_disk = PARSER_VERSION_TXT_PATH.read_text(encoding="utf-8").strip()
 
+    from dealpoint.agent.skill import skill_version as _skill_version
+
     versions_payload = {
         "parser_version": parser_version_on_disk,
         "dataset_version": dataset_version,
@@ -199,6 +201,7 @@ def build_index(force: bool = False) -> None:
         "embedding_model": EMBEDDING_MODEL,
         "n_documents": len(document_ids),
         "n_chunks": len(all_chunks),
+        "skill_version": _skill_version(),
     }
     with open(VERSIONS_JSON_PATH, "w", encoding="utf-8") as fh:
         json.dump(versions_payload, fh, sort_keys=True, ensure_ascii=False, indent=2)

@@ -40,16 +40,28 @@ def _build_client(fake: bool):
     return OpenRouterClient()
 
 
-def _build_retriever():
+def _build_retriever(arm: str):
     from dealpoint.corpus.retrievers import LazyRetriever
 
+    if arm in ("C", "D"):
+        from dealpoint.config import ARM_C_RETRIEVER
+        from dealpoint.corpus.retrievers import (
+            BM25Retriever,
+            DenseRetriever,
+            RetrieverConfig,
+            build_retriever,
+        )
+
+        return build_retriever(
+            RetrieverConfig(**ARM_C_RETRIEVER), dense=DenseRetriever(), sparse=BM25Retriever()
+        )
     return LazyRetriever()
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m dealpoint.agent.run")
     parser.add_argument("--case", required=True, help="case_id, e.g. contract_0__q01")
-    parser.add_argument("--arm", required=True, choices=["A", "B"])
+    parser.add_argument("--arm", required=True, choices=["A", "B", "C", "D"])
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--fake", action="store_true", help="use FakeClient (no network, no key)")
     args = parser.parse_args(argv)
@@ -61,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     doc = load_document(document_id)
     question = _resolve_question(case)
     client = _build_client(args.fake)
-    retriever = _build_retriever()
+    retriever = _build_retriever(args.arm)
 
     if args.arm == "A":
         from dealpoint.agent.pipeline import run_pipeline
@@ -69,8 +81,16 @@ def main(argv: list[str] | None = None) -> int:
         finding, record = run_pipeline(case, doc, retriever, client, question, args.model)
     else:
         from dealpoint.agent.loop import run_agent
+        from dealpoint.config import ARMS
 
-        finding, record = run_agent(case, doc, retriever, client, question, args.model)
+        skill_blk = None
+        if ARMS[args.arm]["skill"]:
+            from dealpoint.agent.skill import skill_block as _skill_block
+
+            skill_blk = _skill_block(question.id)
+        finding, record = run_agent(
+            case, doc, retriever, client, question, args.model, arm=args.arm, skill_block=skill_blk
+        )
 
     payload = {
         "finding": finding.model_dump() if finding is not None else None,
