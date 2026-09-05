@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m6",
+  "current_milestone": "m7a",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -789,8 +789,10 @@
       }
     },
     "m7a": {
-      "adw_ids": [],
-      "attempts": 0,
+      "adw_ids": [
+        "488479df"
+      ],
+      "attempts": 1,
       "blocker": "",
       "commits": [],
       "ended_at": "",
@@ -801,12 +803,12 @@
       "last_failure_class": "",
       "metrics": {},
       "models": {},
-      "started_at": "",
-      "status": "pending",
+      "started_at": "2026-09-05T22:31:20.706+00:00",
+      "status": "running",
       "versions": {}
     }
   },
-  "next_action": "run m7a",
+  "next_action": "m7a running in session 488479df (attempt 1)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -895,5 +897,5 @@
     ],
     "realized_usd": 2.8713
   },
-  "updated_at": "2026-09-05T22:31:16.109+00:00"
+  "updated_at": "2026-09-05T22:31:20.706+00:00"
 }
