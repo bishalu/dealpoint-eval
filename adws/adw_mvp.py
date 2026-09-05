@@ -113,6 +113,14 @@ def main(config: str, adw_id: str | None, only: str, max_corrections: int) -> in
             outcome = milestones.EXIT_ESCALATE
             break
 
+        problem = milestones.preflight()
+        if problem:
+            state.next_action = f"HUMAN ACTION before {ms.id}: {problem}"
+            milestones.save_state(state)
+            run.console.note(f"pre-flight failed: {problem}")
+            outcome = milestones.EXIT_ESCALATE
+            break
+
         child = rec.adw_ids[-1] if correction else utils.new_id(8)
         name = f"{ms.id}_{'fix' if correction else 'run'}{rec.attempts + 1}"
         with run.phase(PhaseParams(name=name, kind="code", owner="factory",

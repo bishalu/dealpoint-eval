@@ -222,3 +222,30 @@ def interrupted(returncode: int) -> bool:
 
 def current_short_sha() -> str:
     return git_helper.short_sha("HEAD")
+
+
+def preflight() -> str:
+    """Is the coding-agent provider usable right now? Empty string = yes, else the reason.
+
+    The subscription provider silently drops out of pi's catalog when `claude` is not
+    authenticated, and a milestone launched into that state burns its attempts on
+    'Unknown provider'. Two cheap checks, both deterministic: the CLI's own auth
+    status, and pi's catalog listing the provider the roster names.
+    """
+    try:
+        auth = subprocess.run(["claude", "auth", "status"], capture_output=True, text=True,
+                              timeout=30, env=operator_env())
+        data = json.loads(auth.stdout[auth.stdout.find("{"):]) if "{" in auth.stdout else {}
+        if not data.get("loggedIn"):
+            return "claude is not logged in — run `claude login`, then `just mvp` to resume"
+    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+        return f"could not read `claude auth status` ({error}) — check the claude CLI, then resume"
+    try:
+        listing = subprocess.run(["pi", "--list-models"], capture_output=True, text=True,
+                                 timeout=90, env=operator_env())
+        if "pi-claude-code-provider" not in listing.stdout:
+            return ("pi does not list the pi-claude-code-provider — the extension failed to load "
+                    "(usually auth); run `claude login` and `pi --list-models`, then resume")
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return f"`pi --list-models` failed ({error}) — check pi, then resume"
+    return ""

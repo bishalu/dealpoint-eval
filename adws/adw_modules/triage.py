@@ -25,6 +25,11 @@ from pathlib import Path
 from .data_types import Triage
 
 PATTERNS: list[tuple[str, str, str]] = [
+    (r"Unknown provider|not logged in|not authenticated|authentication|invalid api key|"
+     r"credentials|please run .*login|OAuth|token expired",
+     "infra:provider_auth",
+     "the coding-agent provider is not registered or not authenticated — run `claude login` "
+     "(or renew the provider's credentials), confirm with `claude auth status`, then resume"),
     (r"request exceeded \d+ms|timed out|ETIMEDOUT|idle timeout|deadline",
      "infra:provider_timeout",
      "fresh agent session (smaller context per turn); raise pi `retry.provider.timeoutMs` / "
