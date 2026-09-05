@@ -1,33 +1,41 @@
 # dealpoint-eval
 
-Can an AI agent read a 90,000-token merger agreement and tell you, with a citation, whether the deal has a go-shop? And when it says yes, is the clause it quotes the one an M&A lawyer would have pointed at?
+When two public companies merge, the deal lives in a merger agreement: a 200-page contract that says what happens if a better offer shows up, what counts as a material adverse change, how long the buyer has to match a rival bid, and a few hundred other things. Lawyers call these terms deal points, and reading them out of a fresh agreement is slow, expert work.
 
-This repo is a working answer to a narrower question I care about more: what does it take to *know* whether such an agent works, rather than to feel that it does. The ground truth here is unusually good. MAUD (Atticus Project, CC BY 4.0) has expert lawyers answering 92 deal-point questions across 152 public merger agreements, and it records the exact passage they relied on. So every run can be checked three ways at once, deterministically: the answer, the clause, and whether the agent's quote is really in the document. No LLM judge is needed to score correctness. I still built a judge panel, but it sits in a clearly separate tier, and the report measures how much it agrees with the numbers that don't need it.
+This repo asks whether an AI agent can do that reading, and, more to the point, how you would know if it could.
 
-Everything below was produced for about three dollars of API credit, by a small software factory that I mostly watched.
+## Why this dataset makes the question answerable
 
-## The one number, and the ones around it
+Most AI evaluations of legal work rely on another AI to grade the answers. This one mostly doesn't have to. MAUD, from the Atticus Project, is a public dataset in which experienced M&A lawyers answered 92 standard deal-point questions for 152 real merger agreements from SEC filings, and recorded the exact passage each answer came from. So for every question the agent answers, three things can be checked mechanically:
 
-Grounded accuracy: the agent gave the expert's answer *and* quoted a passage overlapping the expert's clause. A right answer with a wrong citation scores zero, because in a law firm that is the failure that gets you fired.
+1. Did it pick the answer the lawyers picked?
+2. Did it cite the passage the lawyers relied on?
+3. Is the text it quoted really in the document, word for word?
 
-Around it: citation verbatim, fabrication, abstention on cases where the evidence was surgically removed from the document, whether the agent bothered to look up the defined term the question turns on, tool calls, cap hits, cost, latency. All plain Python over expert labels.
+A right answer with a wrong citation scores zero here. In practice that is the failure that matters most: a lawyer who can't show you the clause can't be trusted with the deal.
 
-Then the second tier. Three model judges from families outside the candidate slate score a blinded subset on a five-level rubric that was frozen before any judging happened. They agree with each other at κ ≈ 0.78. They agree with the objective numbers at ρ ≈ 0.3 to 0.5. That gap is the interesting part, and it is exactly why judges are secondary here.
+## What the agent does
 
-## Four arms, one variable each
+Give it one real agreement (roughly 90,000 tokens, far too long to read in one go) and one of twelve deal-point questions. It has three tools: search the agreement, open a numbered section, and look up a defined term such as "Material Adverse Effect". It gets at most eight tool calls, then it must either answer with quotes or say the provision isn't there.
 
-| arm | what changes |
+Twelve questions were chosen to cover different kinds of reasoning: a direct lookup (what form does the consideration take?), a number (how many business days does the buyer get to match a rival bid?), a defined term (does "Knowledge" include what someone should have known?), a cross-reference, and a carve-out buried in a definition.
+
+## What gets compared
+
+Four versions of the system, each differing from the last by exactly one thing:
+
+| version | what it is |
 |---|---|
-| A | one retrieve-then-answer call. The RAG everyone builds first. |
-| B | a three-tool agent loop: search the agreement, open a section, look up a defined term. 8 calls max. |
-| C | same agent, with the retriever that won a tournament on the dev set |
-| D | same agent, plus a written review procedure it has to follow |
+| A | one search, one answer. The simplest thing that could work. |
+| B | the three-tool agent |
+| C | the same agent with a better search engine underneath, chosen in a tournament |
+| D | the same agent following a written review procedure, the way a senior associate would brief a junior |
 
-Then a fifth experiment holds D fixed and swaps only the model.
+A separate experiment keeps version D fixed and swaps only the language model, from expensive to very cheap, to see what quality actually costs.
 
-The finding I did not expect: the single-call pipeline is competitive with the agent on the cases it answers. What the agent buys is coverage, and it pays for it by hitting the tool cap on a third of cases. The written procedure did not raise accuracy, but it halved the cap hits. Agency isn't free, and a skill document is a leash before it is a brain.
+Alongside the mechanical checks there is a panel of three model judges scoring a blinded sample on a fixed rubric. They are kept in a separate tier on purpose: the report measures how well they agree with each other and with the mechanical results, rather than treating their scores as truth. A form for human scoring of the same sample is included, so the judges themselves can be calibrated.
 
-## Results
+## Latest numbers
 
 <!-- BEGIN RESULTS -->
 **v2 after harness repair.** Results below are from a **budget-scaled** 32-case frozen discriminative subset of MAUD's test set (18 cases at `anthropic/claude-haiku-4.5`), not the brief's full 167-case design; the task here is document -> (answer, citation) while MAUD's published task is span -> answer, so scores are **not comparable** to MAUD leaderboard numbers, and every metric below is **objective** (deterministic Python over expert labels) -- M4 has no model judging.
@@ -73,60 +81,58 @@ Overall EXECUTION_FAILED rate by arm: A=25.0%, B=0.0%, C=0.0%, D=15.6%. Overall 
 - At z-ai/glm-5.3-flash, arm D does NOT improve grounded_accuracy over arm C (66.7% -> 64.7%, delta -2.0%). See adherence, fabrication, abstention, trajectory and efficiency deltas below instead.
 <!-- END RESULTS -->
 
-`just report` regenerates every number above from local result files. The 32-case test subset deliberately prefers questions where the majority answer is wrong, so the majority baseline reads 0% by construction. Read directions, not decimals: most percentages rest on 10 to 20 scored cases.
+`just report` regenerates this section from the result files. The test subset deliberately favours questions where the most common answer is wrong, so the majority baseline reads 0% by construction. The sample is small, deliberately, because the whole evaluation ran on a few dollars of API credit: read the direction of a difference, not its second decimal. Full tables with every metric are in `data/reports/`.
 
-## How the benchmark was made
+## How the benchmark was assembled
 
-MAUD ships the expert spans as text, not as offsets into the agreements, and the text is not verbatim. Page markers, joined excerpts, curly quotes. So the pipeline downloads the 152 agreements, normalises each into one canonical text (every offset in the project points into that text), parses section headings, and fuzzy-aligns each expert span back into place. Alignment holds on over 97% of spans; the misses are reported per question rather than smoothed over.
+MAUD provides the lawyers' passages as text, not as positions inside the agreements. The pipeline downloads the 152 agreements, turns each into one canonical text, finds the section headings, and locates every expert passage inside its document with fuzzy matching, since the published excerpts differ from the originals in quotes, page markers, and joins. Coverage is reported per question.
 
-Twenty agreements were selected by a seeded rule from the 139 the parser handles well. Twelve questions were chosen for reasoning diversity: direct lookups, numeric terms, defined-term dependencies, cross-references, carve-outs. Five agreements make the dev set (58 cases), fifteen the frozen test set (167 cases). Forty counterfactual cases test abstention: thirty where the expert's clause was deleted from the document, ten plausible diligence questions ("what is the target's cyber-insurance deductible?") that no merger agreement answers.
+From the 139 agreements the parser handles well, a seeded rule selects 20: five for development (58 cases) and fifteen for the frozen test set (167 cases). Forty more cases test whether the agent knows when to say no: thirty where the lawyers' clause was deleted from the document, and ten plausible diligence questions no merger agreement answers, such as the target's cyber-insurance deductible.
 
-Retrieval is Qdrant in local mode, `bge-small` embeddings, BM25, fused by reciprocal rank. The tournament also tried a cross-encoder reranker and multi-query fusion. Hybrid fusion won at the same latency as dense alone. The reranker bought nothing for 13 times the time, which I found satisfying. `data/reports/tournament.md` has the table.
+Search runs locally on Qdrant with small open embeddings and BM25 keyword matching, combined by rank. A reranker and a multi-query variant were tried in the tournament and did not earn their latency.
 
 ## How it was built
 
-A grilling session turned a one-page idea into `specs/grilled-product-brief.md`, and that brief has been the law since. A software factory under `adws/` built each milestone from it. An Opus planner writes a plan. A Sonnet builder implements it. Code, not an agent, runs the suite, ruff, pyright, and the milestone's own tests. An Opus reviewer rules on every definition-of-done item with a machine-readable verdict, and a documenter writes the milestone record from the diff and the evidence. An outer loop carries the project milestone by milestone and only stops for a human on a real decision.
+A requirements brief, `specs/grilled-product-brief.md`, was written first and has been the authority since. A small software factory under `adws/` then built the project milestone by milestone: a planning model writes a plan, a coding model implements it, deterministic checks run the tests, and a reviewing model rules on every acceptance item before a documenter writes up the milestone in `docs/milestones/`. An outer loop moves from one milestone to the next and stops for a person only when there is a real decision to make.
 
-It was not smooth. The reviewer sent work back on most milestones. One escalation ended with my spec being corrected rather than a threshold being tuned to a measured number, which is the right way round. The first four-arm sweep was mostly execution failures in my harness, not model quality; the report keeps that run as v1 and shows the failure rates before and after the repair. `docs/milestones/` tells the whole story milestone by milestone.
+Traces of the factory's own runs are in Braintrust under `sssf-dealpoint`; the evaluation experiments are under `dealpoint-eval`. The local result files in `data/results/` and the reports in `data/reports/` are the permanent record.
 
-Factory traces go to Braintrust under `sssf-dealpoint`, evaluation experiments under `dealpoint-eval`. The local JSONL in `data/results/` and the reports in `data/reports/` are the permanent record.
-
-## Run it
+## Try it
 
 You need `uv` and an `OPENROUTER_API_KEY` in `.env`.
 
 ```
-just data          # download MAUD, align spans, select agreements, build case sets
-just test          # offline suite, no network, no spend
+just data          # download MAUD, align the expert passages, build the case sets
+just test          # offline test suite, no network, no spend
 just index         # chunk and embed the selected agreements
-just tournament    # LLM-free retrieval tournament on dev
+just tournament    # retrieval tournament on the dev set, no model calls
 just eval D z-ai/glm-5.3-flash test --limit 5
 just report
 ```
 
-`just data` twice changes no committed byte, and a test asserts it. Any metered run refuses to start if the projected spend would cross `MAX_OPENROUTER_SPEND_USD`.
+Running `just data` twice changes no committed file, and a test checks that. Any run that costs money refuses to start if it would push spending past `MAX_OPENROUTER_SPEND_USD`.
 
-## Where to look
+## Where to look next
 
-- `docs/milestones/` for what each milestone set out to do, what shipped, and what it cost
-- `data/reports/four_arm.md` for the arm comparison with scored counts next to every percentage
-- `data/reports/judges.md` for the judge panel and its agreement statistics
-- `data/eval/calibration/` for the blinded human calibration form
-- `specs/grilled-product-brief.md` for the requirements, still authoritative
+- `docs/milestones/` explains what each milestone set out to do and what it delivered
+- `data/reports/four_arm.md` has the full comparison of the four versions
+- `data/reports/tournament.md` has the search-engine tournament
+- `data/reports/judges.md` has the judge panel and its agreement statistics
+- `specs/grilled-product-brief.md` is the requirements document
 
-## What this is not
+## Scope
 
-Not comparable to the MAUD leaderboard: MAUD hands the model the relevant span, this task makes it find the span in a 90,000-token document. Not a product. Not a large-n study. It is a small, honest, reproducible evaluation of an agent against expert ground truth, and a record of how much of the apparent signal was really harness bugs.
+This task is harder than the published MAUD benchmark, which gives the model the relevant passage; here the model has to find it in the whole agreement, so scores are not comparable to MAUD leaderboard numbers. This is an evaluation project, not a product: there is no interface beyond the command line, and the sample sizes are those of a few-dollar budget.
 
 ## Layout
 
 ```
 dealpoint/      parser, alignment, corpus, agent loop, tools, scorers, reports
 data/eval/      committed case sets and the frozen test subset
-data/results/   canonical result rows and the spend ledger
+data/results/   result rows and the spend ledger
 data/reports/   generated reports and version stamps
 docs/           milestone records
-skills/         the review procedure the agent follows in arm D
+skills/         the review procedure the agent follows in version D
 specs/          the brief and the milestone specs
 adws/           the software factory
 ```
