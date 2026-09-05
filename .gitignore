@@ -49,6 +49,12 @@ data/index/
 !data/reports/four_arm_manifest_v1.json
 !data/reports/m4_1_probes.json
 !data/reports/m4_1_estimate_before_v2.json
+
+# dealpoint (M5 judges)
+!data/reports/judges.json
+!data/reports/judges.md
+!data/reports/judge_slate.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+.claude/skills/sssf/apps/visualizer/dist/
