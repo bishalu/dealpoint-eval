@@ -261,3 +261,18 @@ FOUR_ARM_MANIFEST_V1_PATH = REPORTS_DIR / "four_arm_manifest_v1.json"
 
 M4_1_PROBES_JSON_PATH = REPORTS_DIR / "m4_1_probes.json"
 
+# --- Milestone 5: calibrated multi-judge evaluation ------------------------
+JUDGES_MILESTONE_TAG = "m5"
+M5_TARGET_USD = 0.60   # the M5 allocation guide -- reported, not gated
+M5_MAX_USD = 1.20      # absolute per-milestone limit (2x guide) -- enforced
+
+RUBRICS_PATH = REPO_ROOT / "eval" / "judges" / "rubrics.md"
+JUDGED_SUBSET_PATH = EVAL_DIR / "judged_subset.json"
+JUDGE_SCORES_PATH = EVAL_DIR / "judge_scores.jsonl"
+CALIBRATION_DIR = EVAL_DIR / "calibration"
+JUDGES_JSON_PATH = REPORTS_DIR / "judges.json"
+JUDGES_MD_PATH = REPORTS_DIR / "judges.md"
+JUDGE_SLATE_PATH = REPORTS_DIR / "judge_slate.json"
+JUDGE_MAX_RETRIEVED_CHARS = 600
+JUDGE_MAX_TOKENS = 400
+

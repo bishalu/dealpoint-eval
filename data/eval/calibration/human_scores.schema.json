@@ -1,0 +1,10 @@
+{
+  "evidence": 1,
+  "notes": "<string>",
+  "packet_id": "<12-hex>",
+  "professional": 1,
+  "reasoning": 1,
+  "scored_at": "<ISO-8601>",
+  "scorer": "<string>",
+  "trajectory": 1
+}

@@ -244,13 +244,23 @@ class OpenRouterClient:
         response_format: dict | None = None,
         max_tokens: int = 300,
         temperature: float = 0,
+        extra_body: dict | None = None,
     ) -> ChatResult:
+        # extra_body (added M5, spec deliverable 3): merged on top of the
+        # mandatory usage.include flag -- lets a caller (the M5 judge runner)
+        # send provider-specific fields such as reasoning.enabled=False
+        # (reasoning-model judges otherwise spend their whole max_tokens
+        # budget on hidden reasoning tokens and never emit the JSON body)
+        # without changing any other call site's behaviour.
+        merged_extra_body: dict = {"usage": {"include": True}}
+        if extra_body:
+            merged_extra_body.update(extra_body)
         kwargs: dict = {
             "model": model,
             "messages": messages,
             "max_tokens": max_tokens,
             "temperature": temperature,
-            "extra_body": {"usage": {"include": True}},
+            "extra_body": merged_extra_body,
         }
         if tools:
             kwargs["tools"] = tools
@@ -352,6 +362,7 @@ class FakeClient:
         response_format: dict | None = None,
         max_tokens: int = 300,
         temperature: float = 0,
+        extra_body: dict | None = None,
     ) -> ChatResult:
         self.calls.append(
             {
@@ -361,6 +372,7 @@ class FakeClient:
                 "response_format": response_format,
                 "max_tokens": max_tokens,
                 "temperature": temperature,
+                "extra_body": extra_body,
             }
         )
         if self._cursor >= len(self._script):

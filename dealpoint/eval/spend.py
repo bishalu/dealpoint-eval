@@ -55,11 +55,23 @@ SWEEP_DEFS: dict[str, dict] = {
             {"arms": ["A", "D"], "models": ["anthropic/claude-haiku-4.5"], "n_cases": 18},
         ],
     },
+    # M5 (spec deliverable 3, engineer's "Judge trio" instruction): the judge
+    # panel prices 54 traces (18 judged-subset cases x 3 variants) x 3 named
+    # judge models, one call per (trace, judge) pair -- NOT agent-case calls,
+    # so pricing directly from token shape x live/pinned price (the
+    # `tokens_per_call` leg shape) rather than any ledger branch, which is
+    # agent-case shaped and would return nonsense for a judge call. The
+    # 8000-in/300-out shape is the sweep file's conservative (upper-bound)
+    # assumption; the milestone report records the measured mean alongside it.
     "judges": {
         "arms": [],
-        "models": ["anthropic/claude-haiku-4.5"],
-        "n_cases": 24,
-        "calls_per_case": 3,  # 24 traces x 3 judges, one call per trace
+        "models": [
+            "mistralai/mistral-small-3.2-24b-instruct",
+            "nvidia/nemotron-3-super-120b-a12b",
+            "bytedance-seed/seed-2.0-mini",
+        ],
+        "n_cases": 54,  # traces (18 judged-subset cases x 3 variants)
+        "tokens_per_call": {"input": 8000, "output": 300},
     },
     "pareto": {
         "arms": ["D"],
@@ -304,10 +316,40 @@ def per_case_usd(
 
 def _estimate_leg(leg: dict, ledger_path: Path) -> tuple[float, int, int, set[str]]:
     """Sum `per_case_usd` over one leg's arms x models x n_cases. Shared by
-    both the flat sweep shape and the multi-`legs` shape."""
+    both the flat sweep shape and the multi-`legs` shape.
+
+    A leg carrying `tokens_per_call` (spec deliverable, M5's judge shape) is
+    priced directly from `fetch_prices()` for EACH of its `models` -- `n_cases`
+    traces x each model x the fixed token shape -- bypassing the ledger
+    branches entirely (they are agent-case shaped and would return nonsense
+    for a per-trace judge call with no prior ledger history). This is the
+    only leg shape where >1 `models` entries are summed independently rather
+    than the single-model x n_models_multiplier scaling `pareto` uses.
+    """
     arms = leg["arms"] or [""]
     models = leg["models"]
     n_cases_per_combo = leg["n_cases"]
+
+    tokens_per_call = leg.get("tokens_per_call")
+    if tokens_per_call is not None:
+        prices, price_basis = fetch_prices()
+        total_est = 0.0
+        total_calls = 0
+        total_cases = 0
+        bases: set[str] = set()
+        for model in models:
+            if model not in prices:
+                raise KeyError(f"no pricing available for judge model {model!r}")
+            per_call = (
+                tokens_per_call["input"] * prices[model]["prompt"]
+                + tokens_per_call["output"] * prices[model]["completion"]
+            )
+            total_est += per_call * n_cases_per_combo
+            total_calls += n_cases_per_combo
+            total_cases += n_cases_per_combo
+            bases.add(f"tokens_per_call x {price_basis}")
+        return total_est, total_calls, total_cases, bases
+
     calls_per_case = leg.get("calls_per_case", EST_CALLS_PER_CASE)
     # `pareto` prices 3 models but only one concrete model id is known this
     # early (the other two are M6's slate); scale the known model's per-case
@@ -317,7 +359,7 @@ def _estimate_leg(leg: dict, ledger_path: Path) -> tuple[float, int, int, set[st
     total_est = 0.0
     total_calls = 0
     total_cases = 0
-    bases: set[str] = set()
+    bases = set()
 
     for model in models:
         for arm in arms:

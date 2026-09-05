@@ -1,0 +1,421 @@
+{
+  "blinding_limitations": [
+    "The packet blinds arm and model identity (the spec's requirement) but cannot blind the SHAPE of the trajectory: arm A is a single-shot pipeline with no tool calls, arm D is an agent loop, so a knowledgeable reader can often infer which family of system produced a trace from trajectory length and tool-call pattern alone.",
+    "An empty `options` list hints that a case is an out-of-scope probe, even though the exact question_id and category are never shown."
+  ],
+  "brief_differences": [
+    {
+      "difference": "Brief section 2.5 specifies 40 stratified cases, 6 variants, 240 traces, 720 judge calls, 30 hand-scored traces, est. $15-40. This milestone runs 18 cases, 3 variants, 54 traces, 162 calls at a small fraction of that cost. Every judged number here is budget-scaled and is never presented as the brief's benchmark.",
+      "id": 1,
+      "topic": "scale"
+    },
+    {
+      "difference": "Brief section 2.5 gives 'e.g. GPT + Grok + Qwen' as the example judge trio while also requiring families not in the candidate-agent slate. The M6 candidate slate now contains OpenAI, xAI and Alibaba/Qwen, so the brief's own illustrative example would violate the brief's own rule. The engineer's trio (Mistral, NVIDIA, ByteDance; spare Amazon) satisfies the rule; the brief's rule is honoured, its illustrative example is not, because the candidate slate changed after the brief was written.",
+      "id": 2,
+      "topic": "judge_families"
+    },
+    {
+      "difference": "Brief section 2.5 mandates 30 hand-scored traces (~5 per variant); this milestone's spec sets 'whatever is judged, target >= 12'. 54 packets are produced, and form.md names a deterministic suggested minimum of 12. The gap between 12 and the brief's 30 is a reported difference, carried in this milestone's pending human input.",
+      "id": 3,
+      "topic": "human_calibration_count"
+    },
+    {
+      "difference": "Brief Appendix C fixes the judge's JSON as {reasoning:int, evidence:int, trajectory:int, professional:int, notes:str}. Those exact key names are used, with no renaming and no extra model-supplied keys.",
+      "id": 4,
+      "topic": "output_keys"
+    }
+  ],
+  "budget_scaled": true,
+  "caveats": [
+    "Judge scores are secondary and model-judged; they are never presented as objective truth.",
+    "Budget-scaled: 18 cases x 3 variants x 3 judges, not the brief's 40 x 6 x 3.",
+    "Human calibration is pending until data/eval/calibration/human_scores.jsonl carries scores; no judge-human agreement figure exists yet."
+  ],
+  "correlation_with_grounded_accuracy": {
+    "evidence": {
+      "caveat": "n < 30 (25); correlation is under-powered.",
+      "n": 25,
+      "pearson": 0.4811252243246882,
+      "spearman": 0.46522129178056904
+    },
+    "professional": {
+      "caveat": "n < 30 (25); correlation is under-powered.",
+      "n": 25,
+      "pearson": 0.3700064349504775,
+      "spearman": 0.3499711969715185
+    },
+    "reasoning": {
+      "caveat": "n < 30 (25); correlation is under-powered.",
+      "n": 25,
+      "pearson": 0.35634832254989923,
+      "spearman": 0.3293661808456066
+    },
+    "trajectory": {
+      "caveat": "n < 30 (25); correlation is under-powered.",
+      "n": 25,
+      "pearson": -0.05947886892886085,
+      "spearman": -0.03025472797321851
+    }
+  },
+  "decisions": [
+    {
+      "decision": "Judged subset is 18 cases (test_subset_v1 tranche_1), not the spec's 12-case default.",
+      "id": "D1",
+      "reason": "The spec's default is 12 cases (1 per question). The same spec's latitude floor requires 'every question keeps >= 1 case and counterfactuals stay in'. A 12-case, one-per-question set drops every counterfactual, so it cannot satisfy the floor. tranche_1 (12 test cases + 4 redacted + 2 out-of-scope = 18) is the smallest set that satisfies both; the 6 extra cases cost ~$0.05."
+    },
+    {
+      "decision": "Three variants judged (A@Haiku, D@Haiku, D@GLM), not the spec's two.",
+      "id": "D2",
+      "reason": "Spec deliverable 4 names arm A@Haiku and arm D@Haiku. The engineer's 'Judge trio' instruction separately says 'judge the default and GLM in M5'. Both are satisfied by judging A@Haiku, D@Haiku, D@GLM: 18 cases x 3 variants = 54 traces, 54 x 3 judges = 162 calls. This costs ~$0.045 more and gives M6 a judged data point for a model it reuses rather than re-runs."
+    },
+    {
+      "decision": "Agreement statistics (Spearman, quadratic-weighted kappa, Pearson) are pure Python, not scipy.",
+      "id": "D3",
+      "reason": "scipy is not installed on this CPU-only VM (~3.5 GB free disk) and must not be added; the brief's architecture table also keeps scorers framework-free."
+    },
+    {
+      "decision": "M5 targets a realised spend well under its $0.60 guide.",
+      "id": "D4",
+      "reason": "Only a small fraction of the whole $4.00 M1-M6 envelope remained by the time M5 ran; sizing M5's judging (162 calls at the measured per-call cost) leaves headroom for M6, which is recorded under `spend.envelope_headroom_after_m5` below."
+    },
+    {
+      "decision": "Mean-of-judges is rounded to the nearest integer for kappa only, not for Spearman.",
+      "id": "D5",
+      "reason": "Weighted Cohen's kappa is defined on integer ratings; the mean of three judges is not one. Spearman rho uses the raw mean; kappa uses round() of it (Python's round-half-to-even)."
+    }
+  ],
+  "generated_at": "2026-09-05T16:46:45.291996+00:00",
+  "git_sha7": "e65f3e7",
+  "human_calibration": "pending",
+  "human_calibration_errors": [],
+  "judged_subset": {
+    "n_cases": 18,
+    "n_judge_calls": 162,
+    "n_traces": 54,
+    "path": "data/eval/judged_subset.json",
+    "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.",
+    "seed": 42,
+    "subset_hash": "5918ef10a7e6",
+    "variants": [
+      {
+        "arm": "A",
+        "model": "anthropic/claude-haiku-4.5",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
+        "variant_id": "A@haiku"
+      },
+      {
+        "arm": "D",
+        "model": "anthropic/claude-haiku-4.5",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
+        "variant_id": "D@haiku"
+      },
+      {
+        "arm": "D",
+        "model": "z-ai/glm-5.3-flash",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_D_D_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl",
+        "variant_id": "D@glm"
+      }
+    ]
+  },
+  "judges": [
+    {
+      "completion_usd_per_token": 4e-07,
+      "family": "ByteDance",
+      "model": "bytedance-seed/seed-2.0-mini",
+      "n_failed": 0,
+      "n_scored": 54,
+      "price_basis": "live",
+      "prompt_usd_per_token": 1e-07,
+      "substituted_for": null
+    },
+    {
+      "completion_usd_per_token": 2e-07,
+      "family": "Mistral",
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "n_failed": 0,
+      "n_scored": 54,
+      "price_basis": "live",
+      "prompt_usd_per_token": 7.5e-08,
+      "substituted_for": null
+    },
+    {
+      "completion_usd_per_token": 4e-07,
+      "family": "NVIDIA",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "n_failed": 0,
+      "n_scored": 54,
+      "price_basis": "live",
+      "prompt_usd_per_token": 8.5e-08,
+      "substituted_for": null
+    }
+  ],
+  "n_judge_rows": 162,
+  "n_judge_rows_failed": 0,
+  "n_judge_rows_ok": 162,
+  "pairwise_judge_agreement": {
+    "evidence": [
+      {
+        "exact_agreement": 0.5925925925925926,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
+        "mean_abs_diff": 0.6296296296296297,
+        "n": 54,
+        "qwk": 0.7906976744186047,
+        "spearman": 0.8197810493475168
+      },
+      {
+        "exact_agreement": 0.6296296296296297,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.6666666666666666,
+        "n": 54,
+        "qwk": 0.7678132678132679,
+        "spearman": 0.8398467686071499
+      },
+      {
+        "exact_agreement": 0.8518518518518519,
+        "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.2962962962962963,
+        "n": 54,
+        "qwk": 0.8875203767433436,
+        "spearman": 0.8893170632536234
+      }
+    ],
+    "professional": [
+      {
+        "exact_agreement": 0.48148148148148145,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
+        "mean_abs_diff": 0.5555555555555556,
+        "n": 54,
+        "qwk": 0.8837042354630295,
+        "spearman": 0.8027876511143648
+      },
+      {
+        "exact_agreement": 0.5370370370370371,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.6851851851851852,
+        "n": 54,
+        "qwk": 0.7423117709437963,
+        "spearman": 0.6564435491861086
+      },
+      {
+        "exact_agreement": 0.7037037037037037,
+        "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.5,
+        "n": 54,
+        "qwk": 0.8263399693721286,
+        "spearman": 0.8298082332145268
+      }
+    ],
+    "reasoning": [
+      {
+        "exact_agreement": 0.5925925925925926,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
+        "mean_abs_diff": 0.5,
+        "n": 54,
+        "qwk": 0.8878410239137757,
+        "spearman": 0.7962077367905136
+      },
+      {
+        "exact_agreement": 0.7222222222222222,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.5555555555555556,
+        "n": 54,
+        "qwk": 0.7588516746411483,
+        "spearman": 0.7000192382526974
+      },
+      {
+        "exact_agreement": 0.7222222222222222,
+        "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.3888888888888889,
+        "n": 54,
+        "qwk": 0.901160966426106,
+        "spearman": 0.8889264715086157
+      }
+    ],
+    "trajectory": [
+      {
+        "exact_agreement": 0.3333333333333333,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
+        "mean_abs_diff": 0.6666666666666666,
+        "n": 54,
+        "qwk": 0.5216535433070866,
+        "spearman": 0.6246765176800336
+      },
+      {
+        "exact_agreement": 0.5925925925925926,
+        "judge_a": "bytedance-seed/seed-2.0-mini",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.5185185185185185,
+        "n": 54,
+        "qwk": 0.6333333333333333,
+        "spearman": 0.6735137894187514
+      },
+      {
+        "exact_agreement": 0.42592592592592593,
+        "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
+        "judge_b": "nvidia/nemotron-3-super-120b-a12b",
+        "mean_abs_diff": 0.6296296296296297,
+        "n": 54,
+        "qwk": 0.5833333333333333,
+        "spearman": 0.8371537183777864
+      }
+    ]
+  },
+  "pending_human_input": "score data/eval/calibration/form.md",
+  "per_dimension": {
+    "evidence": {
+      "by_judge": {
+        "bytedance-seed/seed-2.0-mini": {
+          "mean": 2.4444444444444446,
+          "n": 54
+        },
+        "mistralai/mistral-small-3.2-24b-instruct": {
+          "mean": 2.740740740740741,
+          "n": 54
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "mean": 2.962962962962963,
+          "n": 54
+        }
+      },
+      "by_variant": {
+        "A@haiku": {
+          "mean": 2.9259259259259256,
+          "n": 18
+        },
+        "D@glm": {
+          "mean": 2.5555555555555554,
+          "n": 18
+        },
+        "D@haiku": {
+          "mean": 2.6666666666666665,
+          "n": 18
+        }
+      },
+      "mean_of_judges": 2.716049382716049,
+      "n": 54
+    },
+    "professional": {
+      "by_judge": {
+        "bytedance-seed/seed-2.0-mini": {
+          "mean": 2.888888888888889,
+          "n": 54
+        },
+        "mistralai/mistral-small-3.2-24b-instruct": {
+          "mean": 3.2962962962962963,
+          "n": 54
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "mean": 2.9444444444444446,
+          "n": 54
+        }
+      },
+      "by_variant": {
+        "A@haiku": {
+          "mean": 3.907407407407407,
+          "n": 18
+        },
+        "D@glm": {
+          "mean": 2.6296296296296298,
+          "n": 18
+        },
+        "D@haiku": {
+          "mean": 2.592592592592593,
+          "n": 18
+        }
+      },
+      "mean_of_judges": 3.04320987654321,
+      "n": 54
+    },
+    "reasoning": {
+      "by_judge": {
+        "bytedance-seed/seed-2.0-mini": {
+          "mean": 3.0555555555555554,
+          "n": 54
+        },
+        "mistralai/mistral-small-3.2-24b-instruct": {
+          "mean": 3.185185185185185,
+          "n": 54
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "mean": 2.9444444444444446,
+          "n": 54
+        }
+      },
+      "by_variant": {
+        "A@haiku": {
+          "mean": 3.814814814814815,
+          "n": 18
+        },
+        "D@glm": {
+          "mean": 2.7037037037037037,
+          "n": 18
+        },
+        "D@haiku": {
+          "mean": 2.6666666666666665,
+          "n": 18
+        }
+      },
+      "mean_of_judges": 3.0617283950617287,
+      "n": 54
+    },
+    "trajectory": {
+      "by_judge": {
+        "bytedance-seed/seed-2.0-mini": {
+          "mean": 3.3703703703703702,
+          "n": 54
+        },
+        "mistralai/mistral-small-3.2-24b-instruct": {
+          "mean": 3.5185185185185186,
+          "n": 54
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "mean": 3.0,
+          "n": 54
+        }
+      },
+      "by_variant": {
+        "A@haiku": {
+          "mean": 3.6481481481481484,
+          "n": 18
+        },
+        "D@glm": {
+          "mean": 3.1296296296296298,
+          "n": 18
+        },
+        "D@haiku": {
+          "mean": 3.111111111111111,
+          "n": 18
+        }
+      },
+      "mean_of_judges": 3.2962962962962963,
+      "n": 54
+    }
+  },
+  "rubric_version": "cfda9f8cc401",
+  "spend": {
+    "absolute_usd": 1.2,
+    "assumed_input_tokens_per_call": 8000,
+    "envelope_headroom_after_m5": 1.128715,
+    "envelope_realized_usd": 2.871285,
+    "envelope_usd": 4.0,
+    "est_basis": "tokens_per_call x live",
+    "est_usd": 0.12852,
+    "measured_input_tokens_per_call": 4102.6,
+    "realized_usd": 0.110038,
+    "target_usd": 0.6
+  },
+  "stats_notes": [
+    "Weighted Cohen's kappa is defined on integer ratings; the mean of three judges is not one. Spearman rho uses the raw mean-of-judges; kappa uses round() of it (D5).",
+    "A statistic of null means 'not computable' (degenerate input) and is always paired with its n; it is never coerced to 0 or 1."
+  ]
+}

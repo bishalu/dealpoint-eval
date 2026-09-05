@@ -238,6 +238,131 @@ def _record_braintrust_run(entry: dict, path: Path = BRAINTRUST_RUNS_PATH) -> No
     path.write_text(json.dumps(existing, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+# --- M5: judged-subset Braintrust path (spec deliverable 6) ----------------
+
+# The four M5 judge-aggregate scores, kept strictly separate from the M2
+# six-score budget (`SCORE_NAMES`, never touched by this section).
+JUDGE_SCORE_NAMES: tuple[str, ...] = (
+    "judge_reasoning",
+    "judge_evidence",
+    "judge_trajectory",
+    "judge_professional",
+)
+
+_JUDGE_DIMENSIONS: tuple[str, ...] = ("reasoning", "evidence", "trajectory", "professional")
+
+
+def _normalise_1_5_to_0_1(value: float | None) -> float | None:
+    """Map a 1-5 mean-of-judges score to Braintrust's conventional 0-1 range."""
+    if value is None:
+        return None
+    return (value - 1) / 4
+
+
+def _judge_scorer(dim: str):
+    def scorer(input, output, expected=None, metadata=None):
+        return (output or {}).get("judge_scores_0_1", {}).get(dim)
+
+    scorer.__name__ = f"judge_{dim}"
+    return scorer
+
+
+def _row_to_judge_eval_case(row: dict) -> dict:
+    """One judged-subset row -> a Braintrust `EvalCase`-shaped dict.
+
+    `row` carries the mean-of-judges per dimension (1-5, `dimension_means`)
+    and, separately, each judge's own per-dimension score (`per_judge_scores`,
+    `{judge_model: {dim: value_or_None}}`) -- the latter goes ONLY into
+    per-case metadata, never into the four logged scores (spec: "per-judge
+    scores in metadata").
+    """
+    dimension_means = row.get("dimension_means") or {}
+    judge_scores_0_1 = {dim: _normalise_1_5_to_0_1(dimension_means.get(dim)) for dim in _JUDGE_DIMENSIONS}
+    metadata = {
+        "packet_id": row.get("packet_id"),
+        "case_id": row.get("case_id"),
+        "question_id": row.get("question_id"),
+        "rubric_version": row.get("rubric_version"),
+        "status": row.get("status"),
+        "grounded_accuracy": row.get("grounded_accuracy"),
+        "dimension_means_1_5": dimension_means,
+        "per_judge_scores": row.get("per_judge_scores") or {},
+    }
+    return {
+        "input": {"judge_scores_0_1": judge_scores_0_1},
+        "expected": None,
+        "metadata": metadata,
+    }
+
+
+def _replay_judge_task(input):
+    return input
+
+
+def run_judge_eval(
+    rows: list[dict],
+    *,
+    arm: str,
+    model: str,
+    case_set: str,
+    no_send_logs: bool = True,
+    project: str = PROJECT,
+) -> dict:
+    """Replay already-computed M5 judge-aggregate `rows` through `braintrust.Eval()`,
+    one experiment per judged variant (spec deliverable 6).
+
+    Never re-invokes a judge model: each row's `dimension_means` (1-5,
+    mean-of-judges) is normalised to 0-1 and logged as the four
+    `JUDGE_SCORE_NAMES` scores; each judge's own score is metadata-only.
+    Offline-safe: gated on `braintrust_available()` by the caller, default
+    `no_send_logs=True`; only a real send (`no_send_logs=False`) appends to
+    `data/reports/braintrust_runs.json`.
+    """
+    import braintrust
+
+    if not rows:
+        raise ValueError("run_judge_eval requires at least one row")
+
+    index_version = rows[0].get("index_version") or "unknown"
+    git_sha7 = rows[0].get("git_sha7") or "nogit"
+
+    exp_name = f"judged-{experiment_name(arm, model, index_version, git_sha7)}"
+    metadata = experiment_metadata(arm, model, index_version, _skill_version(), git_sha7, case_set)
+
+    eval_cases = [_row_to_judge_eval_case(row) for row in rows]
+    scorers = [_judge_scorer(dim) for dim in _JUDGE_DIMENSIONS]
+
+    result = braintrust.Eval(
+        name=project,
+        data=eval_cases,  # type: ignore[arg-type]
+        task=_replay_judge_task,
+        scores=scorers,
+        experiment_name=exp_name,
+        metadata=metadata,
+        no_send_logs=no_send_logs,
+    )
+
+    if not no_send_logs:
+        summary = getattr(result, "summary", None)
+        url = getattr(summary, "experiment_url", None) if summary is not None else None
+        _record_braintrust_run(
+            {
+                "experiment_name": exp_name,
+                "project": project,
+                "case_set": case_set,
+                "arm": arm,
+                "model": model,
+                "index_version": index_version,
+                "git_sha": git_sha7,
+                "n_cases": len(rows),
+                "ts": datetime.now(UTC).isoformat(),
+                "url": url,
+            }
+        )
+
+    return {"experiment_name": exp_name, "metadata": metadata, "result": result}
+
+
 def push_datasets(sets: tuple[str, ...] = ("dev", "test", "counterfactual"), version: str = "v1") -> dict:
     """Push the three case sets as Braintrust datasets `maud-dealpoint-{set}-{version}`.
 

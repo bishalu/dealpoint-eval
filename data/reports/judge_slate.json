@@ -1,0 +1,34 @@
+{
+  "judges": [
+    {
+      "completion_usd_per_token": 2e-07,
+      "family": "Mistral",
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "ok": true,
+      "prompt_usd_per_token": 7.5e-08,
+      "smoke_input_tokens": 1350,
+      "smoke_output_tokens": 53
+    },
+    {
+      "completion_usd_per_token": 4e-07,
+      "family": "NVIDIA",
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "ok": true,
+      "prompt_usd_per_token": 8.5e-08,
+      "smoke_input_tokens": 1361,
+      "smoke_output_tokens": 72
+    },
+    {
+      "completion_usd_per_token": 4e-07,
+      "family": "ByteDance",
+      "model": "bytedance-seed/seed-2.0-mini",
+      "ok": true,
+      "prompt_usd_per_token": 1e-07,
+      "smoke_input_tokens": 1403,
+      "smoke_output_tokens": 71
+    }
+  ],
+  "price_basis": "live",
+  "substitutions": [],
+  "verified_at": "2026-09-05T16:36:52.559425+00:00"
+}

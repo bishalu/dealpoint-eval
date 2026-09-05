@@ -1,0 +1,326 @@
+{
+  "00ffcebe096a": {
+    "arm": "D",
+    "case_id": "contract_39__redacted_q05",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "071c4f13acd4": {
+    "arm": "D",
+    "case_id": "contract_75__redacted_q07",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "0bf940c02f6c": {
+    "arm": "A",
+    "case_id": "contract_75__oos09",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "0c56ba2cfcf2": {
+    "arm": "A",
+    "case_id": "contract_32__q03",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "0f0ddb6b0896": {
+    "arm": "A",
+    "case_id": "contract_144__q05",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "22be30e3e55e": {
+    "arm": "D",
+    "case_id": "contract_103__redacted_q08",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "236a1f0caee7": {
+    "arm": "D",
+    "case_id": "contract_75__oos09",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "257db09a639b": {
+    "arm": "D",
+    "case_id": "contract_144__q05",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "2c1307dce765": {
+    "arm": "D",
+    "case_id": "contract_144__q09",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "308fa879e656": {
+    "arm": "D",
+    "case_id": "contract_39__redacted_q05",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "31aa8adabacf": {
+    "arm": "D",
+    "case_id": "contract_144__q05",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "31d53875b618": {
+    "arm": "D",
+    "case_id": "contract_32__q04",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "32ed6171807c": {
+    "arm": "A",
+    "case_id": "contract_39__redacted_q05",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "32fc075d8413": {
+    "arm": "A",
+    "case_id": "contract_99__redacted_q06",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "330047ab7a30": {
+    "arm": "D",
+    "case_id": "contract_32__q08",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "33a2905a8e72": {
+    "arm": "D",
+    "case_id": "contract_14__q02",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "3ad7312556b5": {
+    "arm": "D",
+    "case_id": "contract_7__q07",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "3f1932caac19": {
+    "arm": "A",
+    "case_id": "contract_4__q12",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "40ea3e574ac0": {
+    "arm": "D",
+    "case_id": "contract_99__q11",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "44075dea21a9": {
+    "arm": "A",
+    "case_id": "contract_14__oos04",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "5ef28b4ac41d": {
+    "arm": "A",
+    "case_id": "contract_32__q08",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "6ad320ffb2ca": {
+    "arm": "D",
+    "case_id": "contract_103__redacted_q08",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "704c050588ea": {
+    "arm": "D",
+    "case_id": "contract_14__q02",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "72ffbea8d61a": {
+    "arm": "D",
+    "case_id": "contract_7__q07",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "77ae2e060d8d": {
+    "arm": "A",
+    "case_id": "contract_7__q07",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "790521a3adab": {
+    "arm": "A",
+    "case_id": "contract_99__q11",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "7a0914ee3695": {
+    "arm": "D",
+    "case_id": "contract_32__q03",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "808a4e97cb87": {
+    "arm": "D",
+    "case_id": "contract_144__q09",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "8db2df62e04d": {
+    "arm": "D",
+    "case_id": "contract_32__q08",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "8f2dedcaf0d0": {
+    "arm": "D",
+    "case_id": "contract_4__q12",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "8fbaa5ae4134": {
+    "arm": "D",
+    "case_id": "contract_32__q06",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "9535fb643ead": {
+    "arm": "D",
+    "case_id": "contract_75__oos09",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "95c91f882ce7": {
+    "arm": "A",
+    "case_id": "contract_32__q06",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "a3ca53bd2ef6": {
+    "arm": "D",
+    "case_id": "contract_14__oos04",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "ac5b5e9686ca": {
+    "arm": "D",
+    "case_id": "contract_14__oos04",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "ae4328958de3": {
+    "arm": "D",
+    "case_id": "contract_103__q10",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "aff954956d71": {
+    "arm": "D",
+    "case_id": "contract_99__redacted_q06",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "b36644f0d8db": {
+    "arm": "D",
+    "case_id": "contract_99__redacted_q06",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "b57ebc1a725b": {
+    "arm": "A",
+    "case_id": "contract_75__redacted_q07",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "bb7a04d97925": {
+    "arm": "D",
+    "case_id": "contract_32__q03",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "c782bc3279b4": {
+    "arm": "A",
+    "case_id": "contract_39__q01",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "ca69a6dab336": {
+    "arm": "D",
+    "case_id": "contract_32__q04",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "ced644da8ee5": {
+    "arm": "A",
+    "case_id": "contract_32__q04",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "cf0ed8627e8a": {
+    "arm": "A",
+    "case_id": "contract_144__q09",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "d24a45439e7a": {
+    "arm": "D",
+    "case_id": "contract_32__q06",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "d713a9e6da74": {
+    "arm": "D",
+    "case_id": "contract_103__q10",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "d82ee9756df9": {
+    "arm": "D",
+    "case_id": "contract_4__q12",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "db26af4231f1": {
+    "arm": "D",
+    "case_id": "contract_75__redacted_q07",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "e6da07dca0c4": {
+    "arm": "A",
+    "case_id": "contract_14__q02",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "ea3c64c7fa8d": {
+    "arm": "D",
+    "case_id": "contract_99__q11",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  },
+  "ea525a3882b2": {
+    "arm": "A",
+    "case_id": "contract_103__redacted_q08",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "ecb9cf505b55": {
+    "arm": "D",
+    "case_id": "contract_39__q01",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "D@haiku"
+  },
+  "eefa2f4737ed": {
+    "arm": "A",
+    "case_id": "contract_103__q10",
+    "model": "anthropic/claude-haiku-4.5",
+    "variant_id": "A@haiku"
+  },
+  "f7208523e7c0": {
+    "arm": "D",
+    "case_id": "contract_39__q01",
+    "model": "z-ai/glm-5.3-flash",
+    "variant_id": "D@glm"
+  }
+}

@@ -164,6 +164,20 @@ report:
 gate-m4:
     uv run pytest -m "gate_m4 and not needs_network and not needs_model" -q
 
+# ── dealpoint (M5 calibrated multi-judge evaluation) ────────────────────────
+
+# M5: verify the judge slate, then judge the frozen judged subset (METERED)
+judge *ARGS:
+    uv run python -m dealpoint.eval.judge_run "$@"
+
+# M5: rebuild the calibration package and data/reports/judges.json (offline, no model calls)
+calibration:
+    uv run python -m dealpoint.eval.calibration
+
+# milestone 5 acceptance gates only, offline
+gate-m5:
+    uv run pytest -m "gate_m5 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

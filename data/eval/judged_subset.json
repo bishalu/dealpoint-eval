@@ -1,0 +1,92 @@
+{
+  "case_ids": [
+    "contract_39__redacted_q05",
+    "contract_99__redacted_q06",
+    "contract_144__q05",
+    "contract_99__q11",
+    "contract_75__oos09",
+    "contract_14__oos04",
+    "contract_14__q02",
+    "contract_32__q04",
+    "contract_32__q06",
+    "contract_32__q08",
+    "contract_7__q07",
+    "contract_75__redacted_q07",
+    "contract_103__redacted_q08",
+    "contract_103__q10",
+    "contract_32__q03",
+    "contract_144__q09",
+    "contract_39__q01",
+    "contract_4__q12"
+  ],
+  "dataset_version": "81ed82cd7552",
+  "disagreement_class": {
+    "contract_103__q10": 1,
+    "contract_103__redacted_q08": 0,
+    "contract_144__q05": 0,
+    "contract_144__q09": 1,
+    "contract_14__oos04": 0,
+    "contract_14__q02": 0,
+    "contract_32__q03": 1,
+    "contract_32__q04": 0,
+    "contract_32__q06": 0,
+    "contract_32__q08": 0,
+    "contract_39__q01": 1,
+    "contract_39__redacted_q05": 0,
+    "contract_4__q12": 1,
+    "contract_75__oos09": 0,
+    "contract_75__redacted_q07": 0,
+    "contract_7__q07": 0,
+    "contract_99__q11": 0,
+    "contract_99__redacted_q06": 0
+  },
+  "n_cases": 18,
+  "n_judge_calls": 162,
+  "n_traces": 54,
+  "rank": {
+    "contract_103__q10": 13,
+    "contract_103__redacted_q08": 12,
+    "contract_144__q05": 2,
+    "contract_144__q09": 15,
+    "contract_14__oos04": 5,
+    "contract_14__q02": 6,
+    "contract_32__q03": 14,
+    "contract_32__q04": 7,
+    "contract_32__q06": 8,
+    "contract_32__q08": 9,
+    "contract_39__q01": 16,
+    "contract_39__redacted_q05": 0,
+    "contract_4__q12": 17,
+    "contract_75__oos09": 4,
+    "contract_75__redacted_q07": 11,
+    "contract_7__q07": 10,
+    "contract_99__q11": 3,
+    "contract_99__redacted_q06": 1
+  },
+  "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.",
+  "seed": 42,
+  "source_subset": "test_subset_v1",
+  "source_tranche": 1,
+  "subset_hash": "5918ef10a7e6",
+  "variants": [
+    {
+      "arm": "A",
+      "model": "anthropic/claude-haiku-4.5",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
+      "variant_id": "A@haiku"
+    },
+    {
+      "arm": "D",
+      "model": "anthropic/claude-haiku-4.5",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
+      "variant_id": "D@haiku"
+    },
+    {
+      "arm": "D",
+      "model": "z-ai/glm-5.3-flash",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_D_D_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl",
+      "variant_id": "D@glm"
+    }
+  ],
+  "version": "v1"
+}
