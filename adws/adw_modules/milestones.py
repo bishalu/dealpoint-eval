@@ -64,6 +64,8 @@ SEQUENCE: list[MilestoneSpec] = [
 EXIT_PASSED = 0
 EXIT_DEFECT = 1          # bounded loops exhausted on an ordinary defect — correctable
 EXIT_ESCALATE = 3        # a human decision is required — the loop stops cleanly
+EXIT_INFRA = 4           # the infrastructure failed, not the work — retry fresh, don't count it
+MAX_INFRA_RETRIES = 3    # per milestone, across the whole loop, before a human is asked
 
 
 def spec(milestone_id: str) -> MilestoneSpec:

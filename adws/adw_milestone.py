@@ -40,7 +40,7 @@ import sys
 from pathlib import Path
 
 from adw_modules import (agents, changes, gates, git_helper, milestone_prompts,
-                         milestones, quality, session, spend)
+                         milestones, quality, session, spend, triage)
 from adw_modules.data_types import (AgentCall, BuildOutput, ChangeCapture,
                                     DocumentOutput, PhaseParams, PlanOutput,
                                     ReviewOutput)
@@ -122,6 +122,7 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
     review = None
     build = None
     agent_failure = ""          # an agent that declared its own failure, or blew its gates
+    tri = None                  # triage verdict for an agent failure, when there is one
 
     with run.phase(PhaseParams(name="request", kind="engineer", owner=run.engineer,
                                description="Record which milestone this session works, under which "
@@ -132,17 +133,29 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
                baseline=git_helper.short_sha(baseline))
 
     plan = None
-    if not correction:
-        with run.phase(PhaseParams(name="plan", kind="agent", owner="planner", retries=1,
-                                   description="Turn the milestone spec into a plan the builder can "
-                                               "execute without deciding product questions")) as ph:
-            plan = ph.call(AgentCall(output_type=PlanOutput, prompt=prompt,
-                                     gates=[gates.artifacts_exist, gates.files_non_empty]))
-        with run.phase(PhaseParams(name="commit_plan", kind="code", owner="git",
-                                   description="Put the plan on record before any code exists to blur it")) as ph:
-            commit(ph, plan, f"{ms.id}: plan — {plan.summary}")
+    needs_plan = not correction or not (run.context_handoff_dir / "plan.md").exists()
+    if correction and needs_plan:
+        run.console.note("corrective cycle without a plan on disk — planning first")
+        run.forget_agent("planner")
+    if needs_plan:
+        try:
+            with run.phase(PhaseParams(name="plan" if not correction else f"plan_c{rec.attempts}",
+                                       kind="agent", owner="planner", retries=1,
+                                       description="Turn the milestone spec into a plan the builder can "
+                                                   "execute without deciding product questions")) as ph:
+                plan = ph.call(AgentCall(output_type=PlanOutput, prompt=prompt,
+                                         gates=[gates.artifacts_exist, gates.files_non_empty]))
+            with run.phase(PhaseParams(name="commit_plan" if not correction else f"commit_plan_c{rec.attempts}",
+                                       kind="code", owner="git",
+                                       description="Put the plan on record before any code exists to blur it")) as ph:
+                commit(ph, plan, f"{ms.id}: plan — {plan.summary}")
+        except (RuntimeError, agents.GateFailure) as error:
+            agent_failure = str(error)[:1500]
+            tri = triage.classify(run, "planner", agent_failure)
+            run.console.note(f"planning failed — triage: {tri.cls} — {tri.evidence[:220]}")
+            escalate = ""      # decided below with the rest of the outcome
 
-    if ms.spend_gate:
+    if ms.spend_gate and not agent_failure:
         with run.phase(PhaseParams(name="spend_gate", kind="code", owner="budget",
                                    description="Project this milestone's OpenRouter spend against the "
                                                "operator's cap before any metered sweep starts")) as ph:
@@ -204,6 +217,9 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
         # violations) rather than a generic "exited before recording".
         agent_failure = str(error)[:1500]
         run.console.note(f"milestone stops at a failed agent phase: {agent_failure[:200]}")
+        failed_agent = run.phases[-1].params.owner if run.phases else "builder"
+        tri = triage.classify(run, failed_agent, agent_failure)
+        run.console.note(f"triage: {tri.cls} — {tri.evidence[:220]}")
 
     verified = (not escalate and not agent_failure and checks is not None and checks.passed
                 and review is not None and review.resolved_disposition() == "PASS")
@@ -262,9 +278,18 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
             state.next_action = f"HUMAN DECISION for {ms.id}: {escalate}"
         else:
             rec_now.status = "failed"
-            rec_now.last_failure = (agent_failure + "\n\n" if agent_failure else "") \
-                + milestone_prompts.failure_text(checks, review)
-            state.next_action = f"corrective cycle for {ms.id} in session {run.adw_id}"
+            rec_now.last_failure_class = tri.cls if tri else "product"
+            if tri and tri.infra:
+                rec_now.infra_retries += 1
+                rec_now.last_failure = (f"[{tri.cls}] {tri.evidence}\nRemedy: {tri.remedy}\n"
+                                        f"This was an infrastructure failure, not a defect in the work; "
+                                        f"resume the milestone from the plan and whatever landed on disk.")
+                state.next_action = (f"infra retry {rec_now.infra_retries}/{milestones.MAX_INFRA_RETRIES} "
+                                     f"for {ms.id}: {tri.cls}")
+            else:
+                rec_now.last_failure = (agent_failure + "\n\n" if agent_failure else "") \
+                    + milestone_prompts.failure_text(checks, review)
+                state.next_action = f"corrective cycle for {ms.id} in session {run.adw_id}"
         state.current_milestone = ms.id
         milestones.save_state(state)
         ph.log(status=rec_now.status, next=state.next_action)
@@ -278,7 +303,11 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
     rc = run.finish(accepted=verified,
                     reason=escalate or agent_failure
                     or "checks or review never came back clean within the bounded loops")
-    return milestones.EXIT_ESCALATE if escalate else rc
+    if escalate:
+        return milestones.EXIT_ESCALATE
+    if not verified and tri is not None and tri.infra:
+        return milestones.EXIT_INFRA
+    return rc
 
 
 def _write_evidence(run, ms, rec, parent, checks, review, path: Path) -> None:

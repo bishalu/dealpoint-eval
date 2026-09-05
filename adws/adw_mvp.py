@@ -93,7 +93,17 @@ def main(config: str, adw_id: str | None, only: str, max_corrections: int) -> in
             break
         correction = rec.status == "failed" and bool(rec.adw_ids)
         launched[ms.id] = launched.get(ms.id, 0) + 1
-        if launched[ms.id] > max_corrections + 1 or (correction and rec.attempts > max_corrections):
+        product_attempts = rec.attempts - rec.infra_retries
+        if rec.infra_retries > milestones.MAX_INFRA_RETRIES:
+            rec.status = "blocked"
+            rec.blocker = (f"{ms.id}: {rec.infra_retries} infrastructure failures "
+                           f"({rec.last_failure_class}); last: {rec.last_failure[:400]}")
+            state.next_action = f"HUMAN DECISION for {ms.id}: infrastructure keeps failing — {rec.blocker}"
+            milestones.save_state(state)
+            outcome = milestones.EXIT_ESCALATE
+            break
+        if launched[ms.id] > max_corrections + milestones.MAX_INFRA_RETRIES + 1 \
+                or (correction and product_attempts > max_corrections):
             rec.status = "blocked"
             rec.blocker = (f"{ms.id} did not pass after {rec.attempts} attempt(s) "
                            f"({max_corrections} corrective cycle(s) allowed); last failure: "
@@ -139,6 +149,9 @@ def main(config: str, adw_id: str | None, only: str, max_corrections: int) -> in
         if outcome == milestones.EXIT_ESCALATE or rc == milestones.EXIT_ESCALATE:
             outcome = milestones.EXIT_ESCALATE
             break
+        if rc == milestones.EXIT_INFRA:
+            run.console.note(f"{ms.id}: infrastructure failure ({rec.last_failure_class}) — "
+                             f"retrying with fresh sessions, not counted as a correction")
         # 0 → the loop picks the next milestone; 1 → the same milestone comes back as a correction.
 
     state = milestones.load_state()

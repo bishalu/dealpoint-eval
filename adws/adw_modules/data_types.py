@@ -498,6 +498,8 @@ class MilestoneRecord(BaseModel):
     models: dict[str, str] = Field(default_factory=dict)    # phase owner -> model that ran it
     blocker: str = ""
     last_failure: str = ""          # what the last attempt died on — the next correction's spec
+    last_failure_class: str = ""    # triage: "product" | "infra:<kind>"
+    infra_retries: int = 0          # attempts lost to infrastructure, not counted as corrections
     started_at: str = ""
     ended_at: str = ""
 
@@ -540,3 +542,14 @@ class ChildLaunch(BaseModel):
     argv: list[str]
     log_path: str
     label: str                      # what the processes table calls it
+
+
+class Triage(BaseModel):
+    """Why a phase died, decided by code from the evidence — and what to do about it."""
+
+    cls: str                        # "product" | "infra:provider_timeout" | "infra:context_overflow" | ...
+    infra: bool
+    agent: str
+    evidence: str
+    remedy: str
+    error_counts: dict[str, int] = Field(default_factory=dict)
