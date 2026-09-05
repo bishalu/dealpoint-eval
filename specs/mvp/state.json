@@ -275,13 +275,29 @@
       "attempts": 2,
       "blocker": "",
       "commits": [
-        "1fd5b81"
+        "1fd5b81",
+        "d9badf6",
+        "d905e0d"
       ],
-      "ended_at": "2026-09-04T20:54:34.409+00:00",
+      "ended_at": "2026-09-05T03:04:44.768+00:00",
       "exclusions": [],
       "id": "m4",
-      "last_failure": "The previous attempt stopped at the factory's pre-build spend gate because the M2-era `budget four_arm` estimate ($3.09, old Haiku-only 32x4 design) exceeded M4's $3.00 absolute. That gate is now advisory; the plan in this session (specs/f0eb3bd2_*.md / context_handoff/plan.md) stands. Proceed with the full M4 spec as amended, including the new runner-side milestone spend guard and the updated `budget four_arm` model. Sweeps must respect: GLM headline 4 arms x 32 (~$0.20); Haiku arms A/D sized by the estimator to <= $1.00; total M4 new spend <= $3.00 absolute, target $1.50.",
+      "last_failure": "",
       "metrics": {
+        "caching_probe": {
+          "cost_per_call_usd_after": 0.003092,
+          "cost_per_call_usd_before": 0.001914,
+          "decision": "Not padded. The spec explicitly forbids padding a prompt to reach a cacheable minimum.",
+          "finding": "The static prefix (system prompt + question spec + tool schemas) measures ~511-609 tokens across the 12 questions, well below Anthropic's 2048-token minimum cacheable prefix for the Haiku class. cached_tokens was 0 on every call in this probe (and on all 96 pre-existing ledger rows), consistent with the prefix being below the provider's minimum -- not a request-shape bug. The request shape is already correct (dealpoint.llm.client.build_system_message sends the system message as a content-block list with cache_control: {'type': 'ephemeral'}), so no block-placement fix was needed or applied.",
+          "measured_static_prefix_tokens_range": "511-609 (approx, chars/4.8 across the 12 questions)",
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls_in_probe": 13,
+          "provider_minimum_cacheable_tokens": 2048
+        },
+        "caching_probe_raw": {
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls": 13
+        },
         "case_counts": {
           "counterfactual": 40,
           "dev": 58,
@@ -291,6 +307,12 @@
           "chars_per_token_ratio_mean": 4.845026404213299,
           "n_sampled_chunks": 500,
           "n_total_chunks": 12312
+        },
+        "dev_smoke_m4": {
+          "n_legs": 2
+        },
+        "four_arm": {
+          "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark."
         },
         "m0_1_oos_collisions": {
           "collision_window": 400
@@ -322,14 +344,18 @@
           "index_version": "e2b4a2b97561",
           "n_chunks": 12312,
           "n_documents": 50,
-          "parser_version": "29cc01eda19b"
+          "parser_version": "29cc01eda19b",
+          "skill_version": "f8d255cc169b"
         }
       },
       "models": {
-        "planner": "pi-claude-code-provider/opus"
+        "builder": "pi-claude-code-provider/sonnet",
+        "documenter": "pi-claude-code-provider/haiku",
+        "planner": "pi-claude-code-provider/opus",
+        "reviewer": "pi-claude-code-provider/opus"
       },
       "started_at": "2026-09-04T19:46:50.874+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -339,11 +365,27 @@
         "index_version": "e2b4a2b97561",
         "n_chunks": "12312",
         "n_documents": "50",
-        "parser_version": "29cc01eda19b"
+        "parser_version": "29cc01eda19b",
+        "skill_version": "f8d255cc169b"
       }
+    },
+    "m5": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m5",
+      "last_failure": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "",
+      "status": "pending",
+      "versions": {}
     }
   },
-  "next_action": "m4 running in session f0eb3bd2 (attempt 2)",
+  "next_action": "run m5",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -376,5 +418,5 @@
     ],
     "realized_usd": 0.5454
   },
-  "updated_at": "2026-09-04T20:56:46.895+00:00"
+  "updated_at": "2026-09-05T03:04:44.768+00:00"
 }
