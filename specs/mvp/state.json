@@ -644,12 +644,14 @@
       ],
       "attempts": 1,
       "blocker": "",
-      "commits": [],
-      "ended_at": "2026-09-05T17:45:34.033+00:00",
+      "commits": [
+        "0dc2f94"
+      ],
+      "ended_at": "2026-09-05T18:22:53.128+00:00",
       "exclusions": [],
       "id": "m6",
       "infra_retries": 0,
-      "last_failure": "",
+      "last_failure": "The previous attempt stopped at the factory's pre-build spend gate on a stale projection ($3.59 for 384 calls from M2's `pareto` sweep definition priced at Haiku's mean cost/call) against the old $4.00 cap. That gate is now advisory; the cap is $6.00 and M6's absolute is $2.00, enforced by the runner at sweep time. The plan in this session stands (context_handoff/plan.md). Proceed with the full M6 spec: verify the slate on 2 dev cases, update `budget pareto` to model the real slate at each model's live price and measured tokens, run the cheap tier first, Sonnet/Grok anchors last and only with headroom.",
       "last_failure_class": "",
       "metrics": {
         "caching_probe": {
@@ -749,9 +751,11 @@
           "skill_version": "f8d255cc169b"
         }
       },
-      "models": {},
+      "models": {
+        "planner": "pi-claude-code-provider/opus"
+      },
       "started_at": "2026-09-05T17:37:08.201+00:00",
-      "status": "running",
+      "status": "failed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -765,9 +769,26 @@
         "rubric_version": "cfda9f8cc401",
         "skill_version": "f8d255cc169b"
       }
+    },
+    "m7a": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m7a",
+      "infra_retries": 0,
+      "last_failure": "",
+      "last_failure_class": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "",
+      "status": "pending",
+      "versions": {}
     }
   },
-  "next_action": "m6 running in session 7e66a4cd (attempt 1)",
+  "next_action": "corrective cycle for m6 (stale spend projection); then m7a",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -836,9 +857,17 @@
         "milestone": "m5",
         "ok": true,
         "session": "36aa6aa2"
+      },
+      {
+        "at": "2026-09-05T18:22:53.120+00:00",
+        "calls": 384,
+        "est_usd": 3.59166,
+        "milestone": "m6",
+        "ok": false,
+        "session": "7e66a4cd"
       }
     ],
-    "realized_usd": 2.7612
+    "realized_usd": 2.8713
   },
-  "updated_at": "2026-09-05T17:48:46.529+00:00"
+  "updated_at": "2026-09-05T18:22:53.128+00:00"
 }

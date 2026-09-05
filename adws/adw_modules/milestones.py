@@ -57,7 +57,13 @@ SEQUENCE: list[MilestoneSpec] = [
     MilestoneSpec(id="m6", title="Model cost/quality Pareto experiment",
                   spec_path="specs/milestones/m6.md", gate_marker="gate_m6", needs_model=True,
                   spend_gate=True,
-                  budget_argv=["uv", "run", "python", "-m", "dealpoint.eval.budget", "pareto"]),
+                  budget_argv=["uv", "run", "python", "-m", "dealpoint.eval.budget", "pareto"],
+                  absolute_usd=2.00),
+    MilestoneSpec(id="m7a", title="Framework roles: LlamaIndex RAG lab, DeepEval cross-check, Braintrust sync",
+                  spec_path="specs/milestones/m7a.md", gate_marker="gate_m7", needs_model=True,
+                  spend_gate=True,
+                  budget_argv=["uv", "run", "python", "-m", "dealpoint.eval.budget", "m7a"],
+                  absolute_usd=2.50),
 ]
 
 # Exit codes shared by both ADWs, so the parent can branch without parsing prose.
