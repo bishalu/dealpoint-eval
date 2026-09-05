@@ -111,6 +111,14 @@ Include the role diagram: custom Python = benchmark truth; LlamaIndex = RAG lab/
 independent agent-eval cross-check; Braintrust = traces/experiments/comparison; local reports/Git =
 permanent evidence.
 
+## README results block (engineer's instruction, 2026-09-05)
+`regenerate_readme` writes the block between the README markers. Change what it writes: per model, a
+table of arms with `grounded_accuracy` shown as "x% (k of n scored)", plus the one-line majority-baseline
+note. Nothing else in the README block: no execution-failure, cap-hit, or v1-vs-v2 tables and no
+per-arm verdict sentences. Those diagnostics stay, complete and honest, in `data/reports/four_arm.md`
+and `four_arm.json`, which the README links to. Update `tests/test_readme_results.py` to the new block
+shape. The README is an introduction for readers who do not know the project; the reports are the record.
+
 ## Definition of done (`gate_m7`; add the marker)
 - [ ] Optional dependency groups installed within the disk guard; `framework_versions` recorded.
 - [ ] `li_rag_eval.json`: per-retriever LI hit_rate/mrr vs `obj/` hit@k/mrr on all dev cases,
