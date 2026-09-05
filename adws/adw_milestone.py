@@ -73,6 +73,13 @@ def main(milestone_id: str, parent: str = "", config: str = "adws/adw_sssf_confi
     milestones.save_state(state)
 
     include_model = ms.needs_model and bool(os.environ.get("OPENROUTER_API_KEY"))
+    if correction:
+        # Fresh context for the agents that do the work; the previous attempt's plan,
+        # evidence and failure are on disk and named in the prompt. (M5 attempt 3's builder
+        # resumed at 247k tokens of context and timed out on every turn.)
+        forgotten = [name for name in ("builder", "reviewer", "documenter") if run.forget_agent(name)]
+        if forgotten:
+            run.console.note(f"corrective cycle: fresh sessions for {', '.join(forgotten)}")
     spec_text = Path(ms.spec_path).read_text()
     prompt = milestone_prompts.build_prompt(ms, spec_text,
                                            correction=rec.last_failure if correction else "")

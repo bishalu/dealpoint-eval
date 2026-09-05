@@ -26,10 +26,13 @@ def build_prompt(spec: MilestoneSpec, spec_text: str, correction: str = "") -> s
             f"this work. Where the spec and the brief differ on a product decision, the brief wins "
             f"and the difference is reported, not resolved silently.\n")
     if correction:
-        head += (f"\nThis is a CORRECTIVE cycle in the same session. The previous attempt at this "
-                 f"milestone failed; the recorded failure is reproduced below and is your spec, "
-                 f"alongside the unchanged milestone spec. Fix the recorded failure fully — do not "
-                 f"widen scope, do not re-plan.\n\n--- recorded failure ---\n{correction}\n")
+        head += (f"\nThis is a CORRECTIVE cycle. The previous attempt at this milestone failed; the "
+                 f"recorded failure is reproduced below and is your spec, alongside the unchanged "
+                 f"milestone spec. The plan from the first attempt is at "
+                 f"`<context_handoff_dir>/plan.md` (read it first; a copy is under `specs/`), and "
+                 f"work already landed in the working tree is yours to keep or fix. Fix the recorded "
+                 f"failure fully — do not widen scope, do not re-plan.\n\n"
+                 f"--- recorded failure ---\n{correction}\n")
     return head + f"\n--- {spec.spec_path} ---\n{spec_text}\n"
 
 

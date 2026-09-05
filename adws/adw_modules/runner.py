@@ -83,6 +83,21 @@ class Run:
         self.agent_map[agent] = entry
         self._agent_map_path.write_text(json.dumps(self.agent_map, indent=2))
 
+    def forget_agent(self, agent: str) -> bool:
+        """Drop an agent's recorded session so its next call starts a FRESH context window.
+
+        Resuming is the default and usually right — gate corrections and JSON retries
+        need the context that produced the near-miss. A corrective *cycle* is different:
+        the previous attempt's whole conversation rides along, and past ~200k tokens the
+        provider's per-turn latency crosses its idle timeout. The plan, the evidence and
+        the recorded failure live on disk, so the new session loses nothing it needs.
+        """
+        if agent not in self.agent_map:
+            return False
+        del self.agent_map[agent]
+        self._agent_map_path.write_text(json.dumps(self.agent_map, indent=2))
+        return True
+
     # ── usage (run totals mirror what the tracer accumulates in sqlite) ─────
     def add_usage(self, tokens: int, cost: float) -> None:
         self.tokens += tokens
