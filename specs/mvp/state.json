@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m4",
+  "current_milestone": "m4_1",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -369,8 +369,27 @@
         "skill_version": "f8d255cc169b"
       }
     },
+    "m4_1": {
+      "adw_ids": [
+        "6dba4606"
+      ],
+      "attempts": 1,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m4_1",
+      "last_failure": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "2026-09-05T03:09:21.782+00:00",
+      "status": "running",
+      "versions": {}
+    },
     "m5": {
-      "adw_ids": [],
+      "adw_ids": [
+        "0bbff173"
+      ],
       "attempts": 0,
       "blocker": "",
       "commits": [],
@@ -380,12 +399,12 @@
       "last_failure": "",
       "metrics": {},
       "models": {},
-      "started_at": "",
+      "started_at": "2026-09-05T03:04:47.365+00:00",
       "status": "pending",
       "versions": {}
     }
   },
-  "next_action": "run m5",
+  "next_action": "m4_1 running in session 6dba4606 (attempt 1)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -418,5 +437,5 @@
     ],
     "realized_usd": 0.5454
   },
-  "updated_at": "2026-09-05T03:04:44.768+00:00"
+  "updated_at": "2026-09-05T03:09:21.782+00:00"
 }
