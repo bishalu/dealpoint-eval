@@ -3,37 +3,37 @@
 These are **model-judged secondary scores, budget-scaled**, and are never presented as objective truth. Human calibration is **pending** unless stated otherwise below.
 
 `rubric_version`: `cfda9f8cc401`  
-`git_sha7`: `bf48436`
+`git_sha7`: `75e2d39`
 
 ## Judged subset
 
-18 cases x 3 variants = 54 traces; 162 judge calls. subset_hash=`5918ef10a7e6`.
+18 cases x 6 variants = 108 traces; 324 judge calls. subset_hash=`5918ef10a7e6`.
 
 ## Judges
 
 | model | family | n_scored | n_failed | substituted_for |
 |---|---|---|---|---|
-| bytedance-seed/seed-2.0-mini | ByteDance | 54 | 0 | None |
-| mistralai/mistral-small-3.2-24b-instruct | Mistral | 54 | 0 | None |
-| nvidia/nemotron-3-super-120b-a12b | NVIDIA | 54 | 0 | None |
+| bytedance-seed/seed-2.0-mini | ByteDance | 108 | 0 | None |
+| mistralai/mistral-small-3.2-24b-instruct | Mistral | 108 | 0 | None |
+| nvidia/nemotron-3-super-120b-a12b | NVIDIA | 108 | 0 | None |
 
 ## Per-dimension aggregates (mean of judges)
 
 | dimension | mean | n |
 |---|---|---|
-| reasoning | 3.0617283950617287 | 54 |
-| evidence | 2.716049382716049 | 54 |
-| trajectory | 3.2962962962962963 | 54 |
-| professional | 3.04320987654321 | 54 |
+| reasoning | 2.9012345679012346 | 108 |
+| evidence | 2.611111111111111 | 108 |
+| trajectory | 3.2376543209876547 | 108 |
+| professional | 2.9043209876543212 | 108 |
 
 ## Correlation with grounded_accuracy
 
 | dimension | pearson | spearman | n | caveat |
 |---|---|---|---|---|
-| reasoning | 0.35634832254989923 | 0.3293661808456066 | 25 | n < 30 (25); correlation is under-powered. |
-| evidence | 0.4811252243246882 | 0.46522129178056904 | 25 | n < 30 (25); correlation is under-powered. |
-| trajectory | -0.05947886892886085 | -0.03025472797321851 | 25 | n < 30 (25); correlation is under-powered. |
-| professional | 0.3700064349504775 | 0.3499711969715185 | 25 | n < 30 (25); correlation is under-powered. |
+| reasoning | 0.31518222734965157 | 0.2838445400671935 | 48 |  |
+| evidence | 0.4968275423500662 | 0.42040715868343176 | 48 |  |
+| trajectory | 0.015921225599434503 | -0.019874319670401073 | 48 |  |
+| professional | 0.378998976113394 | 0.3563293874919645 | 48 |  |
 
 ## Human calibration
 
@@ -46,6 +46,7 @@ These are **model-judged secondary scores, budget-scaled**, and are never presen
 - **D3**: Agreement statistics (Spearman, quadratic-weighted kappa, Pearson) are pure Python, not scipy. -- scipy is not installed on this CPU-only VM (~3.5 GB free disk) and must not be added; the brief's architecture table also keeps scorers framework-free.
 - **D4**: M5 targets a realised spend well under its $0.60 guide. -- Only a small fraction of the whole $4.00 M1-M6 envelope remained by the time M5 ran; sizing M5's judging (162 calls at the measured per-call cost) leaves headroom for M6, which is recorded under `spend.envelope_headroom_after_m5` below.
 - **D5**: Mean-of-judges is rounded to the nearest integer for kappa only, not for Spearman. -- Weighted Cohen's kappa is defined on integer ratings; the mean of three judges is not one. Spearman rho uses the raw mean; kappa uses round() of it (Python's round-half-to-even).
+- **D6**: M6 extended the judged subset from 3 variants (54 traces, 162 calls) to 3 + k variants, one per completed Pareto sweep model. -- M6 spec deliverable 3 requires the M5 harness to judge arm D at every completed Pareto model on the same 18-case judged subset, so results are comparable to the three M5 variants. The 18-case universe, its ranking and its subset_hash are unchanged (fixed before any M6 run); only `variants` grows, in pareto_manifest.json order.
 
 ## Brief-vs-spec differences
 
@@ -65,12 +66,14 @@ These are **model-judged secondary scores, budget-scaled**, and are never presen
 {
   "absolute_usd": 1.2,
   "assumed_input_tokens_per_call": 8000,
-  "envelope_headroom_after_m5": 1.128715,
-  "envelope_realized_usd": 2.871285,
+  "envelope_headroom_after_m5": 0.38606,
+  "envelope_headroom_after_m6": 0.38606,
+  "envelope_realized_usd": 3.61394,
   "envelope_usd": 4.0,
   "est_basis": "tokens_per_call x live",
   "est_usd": 0.12852,
-  "measured_input_tokens_per_call": 4102.6,
+  "m6_realized_usd": 0.742655,
+  "measured_input_tokens_per_call": 4510.9,
   "realized_usd": 0.110038,
   "target_usd": 0.6
 }

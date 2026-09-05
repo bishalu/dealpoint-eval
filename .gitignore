@@ -54,6 +54,13 @@ data/index/
 !data/reports/judges.json
 !data/reports/judges.md
 !data/reports/judge_slate.json
+
+# dealpoint (M6 model cost/quality Pareto experiment)
+!data/reports/pareto.json
+!data/reports/pareto.md
+!data/reports/pareto.svg
+!data/reports/pareto_slate.json
+!data/reports/pareto_manifest.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/

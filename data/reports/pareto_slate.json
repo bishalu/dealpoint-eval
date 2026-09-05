@@ -1,0 +1,195 @@
+{
+  "candidates": [
+    {
+      "available": true,
+      "completion_usd_per_token": 1.6772e-07,
+      "excluded": false,
+      "failure_details": [],
+      "failure_rate": 0.0,
+      "family": "DeepSeek",
+      "model": "deepseek/deepseek-v4-flash",
+      "n_cases": 2,
+      "n_execution_failed": 0,
+      "n_tool_calls": 13,
+      "n_valid_finding": 1,
+      "n_with_tool_call": 2,
+      "ok": true,
+      "probe_realized_usd": 0.00337,
+      "probed": true,
+      "prompt_usd_per_token": 8.386e-08,
+      "rank": 1,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "role": "open-weight"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 1.3e-07,
+      "excluded": false,
+      "failure_details": [],
+      "failure_rate": 0.0,
+      "family": "Alibaba",
+      "model": "qwen/qwen3.7-flash",
+      "n_cases": 2,
+      "n_execution_failed": 0,
+      "n_tool_calls": 9,
+      "n_valid_finding": 1,
+      "n_with_tool_call": 2,
+      "ok": true,
+      "probe_realized_usd": 0.001798,
+      "probed": true,
+      "prompt_usd_per_token": 3e-08,
+      "rank": 2,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "role": "cheapest credible"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 1.5e-06,
+      "excluded": false,
+      "failure_details": [],
+      "failure_rate": 0.0,
+      "family": "Google",
+      "model": "google/gemini-3.1-flash-lite",
+      "n_cases": 2,
+      "n_execution_failed": 0,
+      "n_tool_calls": 6,
+      "n_valid_finding": 2,
+      "n_with_tool_call": 2,
+      "ok": true,
+      "probe_realized_usd": 0.010879,
+      "probed": true,
+      "prompt_usd_per_token": 2.5e-07,
+      "rank": 3,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7.jsonl",
+      "role": "cross-family flash"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 1.2e-06,
+      "excluded": false,
+      "failure_details": [],
+      "failure_rate": 0.0,
+      "family": "OpenAI",
+      "model": "openai/gpt-5.6-luna-pro",
+      "n_cases": 2,
+      "n_execution_failed": 0,
+      "n_tool_calls": 3,
+      "n_valid_finding": 2,
+      "n_with_tool_call": 2,
+      "ok": true,
+      "probe_realized_usd": 0.012514,
+      "probed": true,
+      "prompt_usd_per_token": 2e-07,
+      "rank": 4,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_openai_gpt-5.6-luna-pro_D_openai_gpt-5.6-luna-pro_e2b4a2b97561_3fcdae7.jsonl",
+      "role": "strong cheap OpenAI"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 6.96e-07,
+      "excluded": false,
+      "failure_details": [],
+      "failure_rate": 0.0,
+      "family": "Meta",
+      "model": "meta-llama/llama-4-maverick",
+      "n_cases": 2,
+      "n_execution_failed": 0,
+      "n_tool_calls": 4,
+      "n_valid_finding": 2,
+      "n_with_tool_call": 2,
+      "ok": true,
+      "probe_realized_usd": 0.005341,
+      "probed": true,
+      "prompt_usd_per_token": 2e-07,
+      "rank": 5,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_meta-llama_llama-4-maverick_D_meta-llama_llama-4-maverick_e2b4a2b97561_3fcdae7.jsonl",
+      "role": "open-weight, large ctx"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 2.8e-07,
+      "family": "Xiaomi",
+      "model": "xiaomi/mimo-v2.5",
+      "probed": false,
+      "prompt_usd_per_token": 1.4e-07,
+      "rank": 6,
+      "role": "breadth of cheap tier (stretch)"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 1.08e-06,
+      "family": "MiniMax",
+      "model": "minimax/minimax-m2.5",
+      "probed": false,
+      "prompt_usd_per_token": 2.7e-07,
+      "rank": 7,
+      "role": "breadth of cheap tier (stretch)"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 2.25e-06,
+      "family": "Moonshot",
+      "model": "moonshotai/kimi-k2.5",
+      "probed": false,
+      "prompt_usd_per_token": 4.5e-07,
+      "rank": 8,
+      "role": "breadth of cheap tier (stretch)"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 1e-05,
+      "family": "Anthropic",
+      "model": "anthropic/claude-sonnet-5",
+      "probed": false,
+      "prompt_usd_per_token": 2e-06,
+      "rank": 9,
+      "role": "stronger same-family ceiling (anchor, last, headroom only)"
+    },
+    {
+      "available": true,
+      "completion_usd_per_token": 2.5e-06,
+      "family": "xAI",
+      "model": "x-ai/grok-4.3",
+      "probed": false,
+      "prompt_usd_per_token": 1.25e-06,
+      "rank": 10,
+      "role": "second ceiling anchor (last, headroom only)"
+    }
+  ],
+  "git_sha7": "3fcdae7",
+  "not_run": [
+    {
+      "model": "anthropic/claude-opus-5",
+      "reason": "not run (budget) -- spec deliverable 1 names Opus as out of budget for this milestone; at $5/M in, $25/M out it would cost more alone than this milestone's entire remaining envelope."
+    }
+  ],
+  "price_basis": "live",
+  "probe_case_ids": [
+    "contract_0__q01",
+    "contract_0__q06"
+  ],
+  "probe_n_cases": 2,
+  "probe_spend_usd": 0.033902,
+  "reused": [
+    {
+      "family": "Anthropic",
+      "model": "anthropic/claude-haiku-4.5",
+      "reuse": true,
+      "role": "default (already run in M4/M4.1; reused, not re-run)"
+    },
+    {
+      "family": "Zhipu",
+      "model": "z-ai/glm-5.3-flash",
+      "reuse": true,
+      "role": "cheap workhorse (mandatory candidate; reused from M4.1's replication leg)"
+    }
+  ],
+  "survivors": [
+    "deepseek/deepseek-v4-flash",
+    "qwen/qwen3.7-flash",
+    "google/gemini-3.1-flash-lite",
+    "openai/gpt-5.6-luna-pro",
+    "meta-llama/llama-4-maverick"
+  ],
+  "verified_at": "2026-09-05T19:56:47.172737+00:00"
+}

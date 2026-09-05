@@ -16,7 +16,12 @@ from pathlib import Path
 
 from dotenv import dotenv_values
 
-from dealpoint.config import EST_CALLS_PER_CASE, RESULTS_DIR, SPEND_LEDGER_PATH
+from dealpoint.config import (
+    EST_CALLS_PER_CASE,
+    PARETO_PROBE_N_CASES,
+    RESULTS_DIR,
+    SPEND_LEDGER_PATH,
+)
 
 CAP_ENV = "MAX_OPENROUTER_SPEND_USD"
 LEDGER_PATH = SPEND_LEDGER_PATH
@@ -33,6 +38,53 @@ PINNED_PRICES: dict[str, dict[str, float]] = {
     # tool_choice, response_format, structured_outputs.
     "z-ai/glm-5.3-flash": {"prompt": 7.5e-08, "completion": 2.5e-07},
 }
+
+# M6 (spec deliverable 1, "Cheap workhorse model"/"Slate and judges"
+# instructions): the five new Pareto candidates, ranked, verified live on
+# OpenRouter 2026-09-05 (tools + response_format/structured_outputs
+# supported). Haiku and z-ai/glm-5.3-flash are REUSED from M4/M4.1, never
+# re-run, so they are NOT in this list. This is the single source of truth
+# for "which new models does the pareto sweep price" -- `dealpoint.eval.
+# pareto_slate.PARETO_NEW_MODELS` imports this tuple directly rather than
+# keeping its own copy, so the estimate and the actual sweep can never drift
+# apart (spec DoD: "one list, never two that can drift").
+# Rows 3-7 of specs/milestones/openrouter_sweep_2026-09-04.md's ranked slate
+# (rows 1-2, Haiku and GLM, are REUSED from M4/M4.1, never re-run/re-priced
+# here). Kept in the sweep file's ranked order -- the cheap tier as a whole
+# runs before the two ceiling anchors (rows 11-12); see PARETO_ANCHOR_MODELS.
+PARETO_NEW_MODELS: tuple[str, ...] = (
+    "deepseek/deepseek-v4-flash",
+    "qwen/qwen3.7-flash",
+    "google/gemini-3.1-flash-lite",
+    "openai/gpt-5.6-luna-pro",
+    "meta-llama/llama-4-maverick",
+)
+
+# Stretch candidates (rows 8-10 of the sweep file): considered in this order
+# only while the M6 stop-floor holds after the core five; not priced into
+# the pre-build estimate below (their cost is added at sweep time, per
+# model, from the measured per-case cost of the models that already ran).
+PARETO_STRETCH_MODELS: tuple[str, ...] = (
+    "xiaomi/mimo-v2.5",
+    "minimax/minimax-m2.5",
+    "moonshotai/kimi-k2.5",
+)
+
+# Ceiling anchors (rows 11-12): run last, on the 18-case judged subset only,
+# and only if the remaining envelope covers them (spec deliverable 1).
+PARETO_ANCHOR_MODELS: tuple[str, ...] = (
+    "anthropic/claude-sonnet-5",
+    "x-ai/grok-4.3",
+)
+
+# The three named M5 judge-trio models (engineer's "Judge trio" instruction).
+# Shared by the `judges` and `pareto` sweep shapes below so both price the
+# same panel from one list.
+JUDGE_TRIO_MODELS: tuple[str, ...] = (
+    "mistralai/mistral-small-3.2-24b-instruct",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "bytedance-seed/seed-2.0-mini",
+)
 
 # Sweep definitions: shape only, no measured cost. `estimate()` fills the
 # cost basis in priority order (spec §3.4). One module-level table so M4-M6
@@ -65,19 +117,32 @@ SWEEP_DEFS: dict[str, dict] = {
     # assumption; the milestone report records the measured mean alongside it.
     "judges": {
         "arms": [],
-        "models": [
-            "mistralai/mistral-small-3.2-24b-instruct",
-            "nvidia/nemotron-3-super-120b-a12b",
-            "bytedance-seed/seed-2.0-mini",
-        ],
+        "models": list(JUDGE_TRIO_MODELS),
         "n_cases": 54,  # traces (18 judged-subset cases x 3 variants)
         "tokens_per_call": {"input": 8000, "output": 300},
     },
+    # M6 (spec deliverables 1/2/3; corrective-cycle fix): the placeholder
+    # 3-models-at-Haiku shape above was priced at the wrong model entirely --
+    # Haiku and GLM are REUSED from M4/M4.1 (spec deliverable 1, never
+    # re-run), and the actual new candidates are 15-45x cheaper per case.
+    # Three legs modelling the real run: (1) a 2-dev-case tool-calling probe
+    # per new candidate, (2) the arm-D sweep on the frozen 32-case subset per
+    # new candidate, (3) judging -- 18 judged-subset traces per new variant,
+    # x3 judges, at the M5-measured judge call shape (NOT an agent-case
+    # shape; see dealpoint.eval.pareto_slate.PARETO_NEW_MODELS, the single
+    # source of truth this leg's `models` list mirrors so the two can never
+    # drift apart).
     "pareto": {
-        "arms": ["D"],
-        "models": ["anthropic/claude-haiku-4.5"],
-        "n_cases": 32,
-        "n_models": 3,
+        "legs": [
+            {"arms": ["D"], "models": list(PARETO_NEW_MODELS), "n_cases": PARETO_PROBE_N_CASES},
+            {"arms": ["D"], "models": list(PARETO_NEW_MODELS), "n_cases": 32},
+            {
+                "arms": [],
+                "models": list(JUDGE_TRIO_MODELS),
+                "n_cases": 18 * len(PARETO_NEW_MODELS),
+                "tokens_per_call": {"input": 3400, "output": 120},
+            },
+        ],
     },
 }
 

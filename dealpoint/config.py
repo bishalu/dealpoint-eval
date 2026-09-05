@@ -276,3 +276,18 @@ JUDGE_SLATE_PATH = REPORTS_DIR / "judge_slate.json"
 JUDGE_MAX_RETRIEVED_CHARS = 600
 JUDGE_MAX_TOKENS = 400
 
+# --- Milestone 6: model cost/quality Pareto -------------------------------
+PARETO_MILESTONE_TAG = "m6"
+M6_TARGET_USD = 1.00     # the M6 allocation guide -- reported, not gated
+M6_ENVELOPE_USD = 4.00   # the whole unattended M1-M6 envelope -- never exceeded
+# The runner's own stop-floor: no NEW model is started once the projected
+# total ledger would cross this. Leaves headroom of the envelope untouched
+# for a re-run of the judging pass or a report regeneration.
+M6_STOP_USD = 3.90
+PARETO_JSON_PATH = REPORTS_DIR / "pareto.json"
+PARETO_MD_PATH = REPORTS_DIR / "pareto.md"
+PARETO_SVG_PATH = REPORTS_DIR / "pareto.svg"
+PARETO_SLATE_PATH = REPORTS_DIR / "pareto_slate.json"
+PARETO_MANIFEST_PATH = REPORTS_DIR / "pareto_manifest.json"
+PARETO_PROBE_N_CASES = 2
+

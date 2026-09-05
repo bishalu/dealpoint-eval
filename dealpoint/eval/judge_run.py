@@ -165,6 +165,34 @@ def _load_jsonl(path) -> list[dict]:
     return rows
 
 
+def measured_judge_call_usd() -> tuple[float, str]:
+    """Mean `usd` over every ledger row carrying a `judge` field (M6 spec
+    deliverable 3): the actual measured cost of one (packet, judge) call,
+    falling back to the `SWEEP_DEFS["judges"]` `tokens_per_call` x live/pinned
+    price shape when no such rows exist yet (e.g. before M5 ever ran).
+    """
+    from dealpoint.config import SPEND_LEDGER_PATH
+    from dealpoint.eval.spend import SWEEP_DEFS, fetch_prices, read_ledger
+
+    rows = [r for r in read_ledger(SPEND_LEDGER_PATH) if r.get("judge")]
+    if rows:
+        mean = sum(float(r.get("usd", 0.0) or 0.0) for r in rows) / len(rows)
+        return mean, f"measured over {len(rows)} judge ledger rows"
+
+    shape = SWEEP_DEFS["judges"]["tokens_per_call"]
+    models = SWEEP_DEFS["judges"]["models"]
+    prices, price_basis = fetch_prices()
+    per_call = []
+    for model in models:
+        price = prices.get(model)
+        if price is None:
+            continue
+        per_call.append(shape["input"] * price["prompt"] + shape["output"] * price["completion"])
+    if not per_call:
+        return 0.0, f"no pricing available ({price_basis})"
+    return sum(per_call) / len(per_call), f"tokens_per_call x {price_basis} (no judge ledger rows yet)"
+
+
 def _already_scored(path) -> set[tuple[str, str]]:
     done = set()
     for row in _load_jsonl(path):
@@ -234,19 +262,27 @@ def _load_jsonl_path(path: str) -> list[dict]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    import argparse
+
     from dealpoint.eval.judge_slate import verify_slate
     from dealpoint.eval.run import _assert_within_milestone_absolute
-    from dealpoint.eval.spend import assert_within_cap, estimate, realized_usd
+    from dealpoint.eval.spend import assert_within_cap, realized_usd
     from dealpoint.llm.client import OpenRouterClient
+
+    parser = argparse.ArgumentParser(prog="python -m dealpoint.eval.judge_run")
+    parser.add_argument("--milestone-tag", default=JUDGES_MILESTONE_TAG)
+    args = parser.parse_args(argv)
 
     assert_rubric_frozen()
 
-    est = estimate("judges")
-    assert_within_cap(est["est_usd"])
-    _assert_within_milestone_absolute(est["est_usd"])
+    client = OpenRouterClient(milestone_tag=args.milestone_tag)
 
-    client = OpenRouterClient(milestone_tag=JUDGES_MILESTONE_TAG)
+    # M6 operator instruction, 2026-09-05: the judge-slate smoke calls are not
+    # case runs and must carry purpose=probe -- cleared to {} before the real
+    # judging calls, which set their own per-call context below.
+    client.context = {"purpose": "probe", "probe_model": "judge-slate"}
     slate = verify_slate(client)
+    client.context = {}
     from dealpoint.eval.judge_slate import write_judge_slate
 
     write_judge_slate(slate)
@@ -254,30 +290,40 @@ def main(argv: list[str] | None = None) -> int:
     packets = build_all_packets()
     already = _already_scored(JUDGE_SCORES_PATH)
 
+    # M6 spec deliverable 3: sized to the work actually pending, not the
+    # static 54-trace shape (now wrong in both directions once M6 adds
+    # variants) -- n_pending pairs x the M5-measured mean $/judge-call.
+    pending = [
+        (item, judge)
+        for item in packets
+        for judge in slate["judges"]
+        if (item["packet"]["packet_id"], judge["model"]) not in already
+    ]
+    judge_call_usd, _basis = measured_judge_call_usd()
+    est_usd = len(pending) * judge_call_usd
+    assert_within_cap(est_usd)
+    _assert_within_milestone_absolute(est_usd)
+
     before = realized_usd()
     n_calls = 0
-    for item in packets:
-        for judge in slate["judges"]:
-            key = (item["packet"]["packet_id"], judge["model"])
-            if key in already:
-                continue
-            client.context = {
-                "case_id": item["packet"]["packet_id"],
-                "variant": item["variant_id"],
-                "judge": judge["model"],
-            }
-            row = judge_one(
-                client,
-                item["packet_text"],
-                judge_model=judge["model"],
-                judge_family=judge["family"],
-                packet_id=item["packet"]["packet_id"],
-                variant_id=item["variant_id"],
-                case_id=item["case_id"],
-                question_id=item["question_id"],
-            )
-            _append_row(JUDGE_SCORES_PATH, row)
-            n_calls += 1
+    for item, judge in pending:
+        client.context = {
+            "case_id": item["packet"]["packet_id"],
+            "variant": item["variant_id"],
+            "judge": judge["model"],
+        }
+        row = judge_one(
+            client,
+            item["packet_text"],
+            judge_model=judge["model"],
+            judge_family=judge["family"],
+            packet_id=item["packet"]["packet_id"],
+            variant_id=item["variant_id"],
+            case_id=item["case_id"],
+            question_id=item["question_id"],
+        )
+        _append_row(JUDGE_SCORES_PATH, row)
+        n_calls += 1
     after = realized_usd()
 
     print(json.dumps({"n_calls": n_calls, "realized_usd": round(after - before, 6)}))

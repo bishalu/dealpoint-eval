@@ -244,6 +244,59 @@ JUDGED_VARIANT_LEGS: tuple[tuple[str, str, str], ...] = (
     ("D@glm", "D", "z-ai/glm-5.3-flash"),
 )
 
+# M6: extends JUDGED_SUBSET_RULE_TEXT's point 5 -- one variant appended per
+# completed Pareto model, read from data/reports/pareto_manifest.json (new
+# sweeps only, in manifest order). The short name is the model id's last
+# path segment (e.g. "deepseek/deepseek-v4-flash" -> "deepseek-v4-flash").
+JUDGED_SUBSET_M6_ADDENDUM = (
+    "5. M6 (model cost/quality Pareto experiment) appended one variant per completed Pareto "
+    "sweep model, read from data/reports/pareto_manifest.json in manifest order, "
+    "variant_id = f'D@{short}' where short is the model id's last path segment. "
+    "The 18-case list, its ranking and its subset_hash were fixed BEFORE any M6 run and are "
+    "unchanged by this addendum; no case was chosen from any model's output."
+)
+
+
+def _short_model_name(model: str) -> str:
+    return model.rsplit("/", 1)[-1]
+
+
+def _pareto_variants(manifest_path=None) -> list[dict]:
+    """One {variant_id, arm, model, results_path} per completed (non-reused)
+    Pareto sweep entry in `data/reports/pareto_manifest.json`, in manifest
+    order, skipping any entry with no `results_path` on disk (stopped /
+    skipped legs).
+    """
+    import json as _json
+
+    from dealpoint.config import PARETO_MANIFEST_PATH
+
+    manifest_path = manifest_path or PARETO_MANIFEST_PATH
+    if not manifest_path.exists():
+        return []
+    try:
+        entries = _json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (_json.JSONDecodeError, OSError):
+        return []
+
+    out: list[dict] = []
+    for entry in entries:
+        if entry.get("reused"):
+            continue
+        results_path = entry.get("results_path")
+        if not results_path:
+            continue
+        model = entry["model"]
+        out.append(
+            {
+                "variant_id": f"D@{_short_model_name(model)}",
+                "arm": entry.get("arm", "D"),
+                "model": model,
+                "results_path": results_path,
+            }
+        )
+    return out
+
 
 def _read_results_jsonl(path: str) -> dict[str, dict]:
     rows: dict[str, dict] = {}
@@ -308,6 +361,9 @@ def generate_judged_subset(seed: int = SEED, manifest_path=None) -> dict:
         {"variant_id": vid, "arm": arm, "model": model, "results_path": variant_paths[vid]}
         for vid, arm, model in JUDGED_VARIANT_LEGS
     ]
+    # M6: one variant per completed Pareto sweep model, in pareto_manifest.json
+    # order -- appended after the three M5 legs, never replacing them.
+    variants.extend(_pareto_variants())
 
     subset_hash = hashlib.sha256(
         json.dumps(ranked, sort_keys=False).encode("utf-8")
@@ -315,6 +371,11 @@ def generate_judged_subset(seed: int = SEED, manifest_path=None) -> dict:
 
     n_cases = len(ranked)
     n_traces = n_cases * len(variants)
+
+    version = "v2" if len(variants) > len(JUDGED_VARIANT_LEGS) else "v1"
+    rule_text = JUDGED_SUBSET_RULE_TEXT
+    if version == "v2":
+        rule_text = JUDGED_SUBSET_RULE_TEXT + "\n" + JUDGED_SUBSET_M6_ADDENDUM
 
     return {
         "case_ids": ranked,
@@ -325,12 +386,12 @@ def generate_judged_subset(seed: int = SEED, manifest_path=None) -> dict:
         "n_traces": n_traces,
         "n_judge_calls": n_traces * 3,
         "seed": seed,
-        "rule": JUDGED_SUBSET_RULE_TEXT,
+        "rule": rule_text,
         "subset_hash": subset_hash,
         "source_subset": "test_subset_v1",
         "source_tranche": 1,
         "dataset_version": _dataset_version(),
-        "version": "v1",
+        "version": version,
     }
 
 

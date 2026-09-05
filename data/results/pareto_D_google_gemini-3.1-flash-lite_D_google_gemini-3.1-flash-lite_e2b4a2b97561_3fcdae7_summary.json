@@ -1,0 +1,116 @@
+{
+  "arm": "D",
+  "chunk_version": "8e5e8ba56765",
+  "ended_at": "2026-09-05T20:24:49.125856+00:00",
+  "est_basis": "ledger:measured(arm,model)",
+  "est_usd": 0.235727,
+  "git_sha7": "3fcdae7",
+  "index_version": "e2b4a2b97561",
+  "majority_baseline": {
+    "overall": 0.0,
+    "q01": 0.0,
+    "q02": 0.0,
+    "q03": 0.0,
+    "q04": 0.0,
+    "q05": 0.0,
+    "q06": 0.0,
+    "q07": 0.0,
+    "q08": 0.0,
+    "q09": 0.0,
+    "q10": 0.0,
+    "q11": 0.0,
+    "q12": 0.0
+  },
+  "model": "google/gemini-3.1-flash-lite",
+  "n_cases": 32,
+  "realized_usd": 0.176955,
+  "scores": {
+    "abstain_correct": {
+      "mean": 0.78125,
+      "n": 32
+    },
+    "abstain_recall": {
+      "mean": 0.375,
+      "n": 8
+    },
+    "answer_correct": {
+      "mean": 0.75,
+      "n": 20
+    },
+    "cap_hit": {
+      "mean": 0.21875,
+      "n": 32
+    },
+    "citation_gold_overlap": {
+      "mean": 0.6666666666666666,
+      "n": 21
+    },
+    "citation_verbatim": {
+      "mean": 0.9,
+      "n": 20
+    },
+    "execution_failed": {
+      "mean": 0.0,
+      "n": 32
+    },
+    "fabrication": {
+      "mean": 0.1,
+      "n": 20
+    },
+    "false_abstain": {
+      "mean": 0.08333333333333333,
+      "n": 24
+    },
+    "gold_first_rank": {
+      "mean": 2.125,
+      "n": 16
+    },
+    "gold_seen": {
+      "mean": 0.9166666666666666,
+      "n": 24
+    },
+    "grounded_accuracy": {
+      "mean": 0.631578947368421,
+      "n": 19
+    },
+    "input_tokens": {
+      "mean": 25945.65625,
+      "n": 32
+    },
+    "output_tokens": {
+      "mean": 382.1875,
+      "n": 32
+    },
+    "redacted_fabrication": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "required_evidence_met": {
+      "mean": 1.0,
+      "n": 14
+    },
+    "skill_adherence": {
+      "mean": 0.6518601190476191,
+      "n": 32
+    },
+    "tool_calls": {
+      "mean": 4.46875,
+      "n": 32
+    },
+    "usd": {
+      "mean": 0.00552984921875,
+      "n": 32
+    },
+    "wall_ms": {
+      "mean": 13404.625,
+      "n": 32
+    }
+  },
+  "set": "pareto_D_google_gemini-3.1-flash-lite",
+  "started_at": "2026-09-05T20:17:39.955835+00:00",
+  "status_counts": {
+    "ABSTAINED": 5,
+    "ANSWERED": 20,
+    "CAP_HIT": 7
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "arm": "D",
+  "chunk_version": "8e5e8ba56765",
+  "ended_at": "2026-09-05T19:53:48.409473+00:00",
+  "est_basis": "ledger:measured(arm,model)",
+  "est_usd": 0.00337,
+  "git_sha7": "3fcdae7",
+  "index_version": "e2b4a2b97561",
+  "majority_baseline": {
+    "overall": 1.0,
+    "q01": 1.0,
+    "q06": 1.0
+  },
+  "model": "deepseek/deepseek-v4-flash",
+  "n_cases": 2,
+  "realized_usd": 0.00337,
+  "scores": {
+    "abstain_correct": {
+      "mean": 1.0,
+      "n": 2
+    },
+    "abstain_recall": {
+      "mean": null,
+      "n": 0
+    },
+    "answer_correct": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "cap_hit": {
+      "mean": 0.5,
+      "n": 2
+    },
+    "citation_gold_overlap": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "citation_verbatim": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "execution_failed": {
+      "mean": 0.0,
+      "n": 2
+    },
+    "fabrication": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "false_abstain": {
+      "mean": 0.0,
+      "n": 2
+    },
+    "gold_first_rank": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "gold_seen": {
+      "mean": 1.0,
+      "n": 2
+    },
+    "grounded_accuracy": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "input_tokens": {
+      "mean": 26187.0,
+      "n": 2
+    },
+    "output_tokens": {
+      "mean": 1424.0,
+      "n": 2
+    },
+    "redacted_fabrication": {
+      "mean": null,
+      "n": 0
+    },
+    "required_evidence_met": {
+      "mean": 1.0,
+      "n": 1
+    },
+    "skill_adherence": {
+      "mean": 0.6666666666666666,
+      "n": 2
+    },
+    "tool_calls": {
+      "mean": 6.5,
+      "n": 2
+    },
+    "usd": {
+      "mean": 0.001684965464,
+      "n": 2
+    },
+    "wall_ms": {
+      "mean": 18057.5,
+      "n": 2
+    }
+  },
+  "set": "pareto_probe_deepseek_deepseek-v4-flash",
+  "started_at": "2026-09-05T19:53:12.277657+00:00",
+  "status_counts": {
+    "ANSWERED": 1,
+    "CAP_HIT": 1
+  }
+}

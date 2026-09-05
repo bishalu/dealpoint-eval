@@ -174,8 +174,8 @@ def render_form_md(package: dict) -> str:
     lines.append("```")
     lines.append("")
     lines.append(
-        "## Suggested minimum set (12 packets, deterministic: first 4 by subset rank per "
-        "variant)"
+        f"## Suggested minimum set ({len(package['suggested_minimum'])} packets, deterministic: "
+        "first 4 by subset rank per variant)"
     )
     lines.append("")
     lines.append(
@@ -311,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
 
     by_tag = realized_by_tag()
     m5_realized = by_tag.get("m5", 0.0)
+    m6_realized = by_tag.get("m6", 0.0)
     total_realized = realized_usd()
     judges_est = estimate("judges")
     spend_block = {
@@ -319,8 +320,10 @@ def main(argv: list[str] | None = None) -> int:
         "envelope_usd": 4.00,
         "est_usd": judges_est.get("est_usd"),
         "realized_usd": m5_realized,
+        "m6_realized_usd": m6_realized,
         "envelope_realized_usd": total_realized,
         "envelope_headroom_after_m5": round(4.00 - total_realized, 6),
+        "envelope_headroom_after_m6": round(4.00 - total_realized, 6),
         "est_basis": judges_est.get("basis"),
         "assumed_input_tokens_per_call": 8000,
         "measured_input_tokens_per_call": (

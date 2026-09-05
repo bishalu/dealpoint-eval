@@ -4,15 +4,30 @@ Every packet below is byte-identical in content to what the judge models were sh
 
 ## Table of contents
 
+- [00dcf6ba3b86](#00dcf6ba3b86)
 - [00ffcebe096a](#00ffcebe096a)
+- [0179fcfde7d8](#0179fcfde7d8)
+- [019a97bf7129](#019a97bf7129)
+- [01ac22924b80](#01ac22924b80)
+- [01de6203baeb](#01de6203baeb)
+- [0370079fdb90](#0370079fdb90)
 - [071c4f13acd4](#071c4f13acd4)
+- [0939c5133331](#0939c5133331)
+- [096c93b7fd78](#096c93b7fd78)
+- [0bb71d7e4a73](#0bb71d7e4a73)
 - [0bf940c02f6c](#0bf940c02f6c)
 - [0c56ba2cfcf2](#0c56ba2cfcf2)
 - [0f0ddb6b0896](#0f0ddb6b0896)
+- [0f73effee9aa](#0f73effee9aa)
+- [20854b65189a](#20854b65189a)
+- [219d406fe171](#219d406fe171)
 - [22be30e3e55e](#22be30e3e55e)
 - [236a1f0caee7](#236a1f0caee7)
+- [244901d12f76](#244901d12f76)
 - [257db09a639b](#257db09a639b)
+- [277ca05c77e2](#277ca05c77e2)
 - [2c1307dce765](#2c1307dce765)
+- [2c8bbf68f5ab](#2c8bbf68f5ab)
 - [308fa879e656](#308fa879e656)
 - [31aa8adabacf](#31aa8adabacf)
 - [31d53875b618](#31d53875b618)
@@ -20,30 +35,61 @@ Every packet below is byte-identical in content to what the judge models were sh
 - [32fc075d8413](#32fc075d8413)
 - [330047ab7a30](#330047ab7a30)
 - [33a2905a8e72](#33a2905a8e72)
+- [395a5a84db01](#395a5a84db01)
+- [398be705a6ca](#398be705a6ca)
 - [3ad7312556b5](#3ad7312556b5)
+- [3b3241d33194](#3b3241d33194)
+- [3c2f5a208002](#3c2f5a208002)
 - [3f1932caac19](#3f1932caac19)
+- [3f3999fe9738](#3f3999fe9738)
 - [40ea3e574ac0](#40ea3e574ac0)
 - [44075dea21a9](#44075dea21a9)
+- [4677d6bffa6f](#4677d6bffa6f)
+- [467a807c6d9f](#467a807c6d9f)
+- [4d3e9974918d](#4d3e9974918d)
+- [57652b548046](#57652b548046)
+- [5b65980d9ad6](#5b65980d9ad6)
 - [5ef28b4ac41d](#5ef28b4ac41d)
 - [6ad320ffb2ca](#6ad320ffb2ca)
+- [6c917de1e740](#6c917de1e740)
 - [704c050588ea](#704c050588ea)
 - [72ffbea8d61a](#72ffbea8d61a)
 - [77ae2e060d8d](#77ae2e060d8d)
 - [790521a3adab](#790521a3adab)
 - [7a0914ee3695](#7a0914ee3695)
+- [7e0d928a44af](#7e0d928a44af)
+- [7e9616bd0780](#7e9616bd0780)
 - [808a4e97cb87](#808a4e97cb87)
+- [82cf6f17bd8b](#82cf6f17bd8b)
+- [877f36deab78](#877f36deab78)
+- [8ac2e203f4f3](#8ac2e203f4f3)
 - [8db2df62e04d](#8db2df62e04d)
 - [8f2dedcaf0d0](#8f2dedcaf0d0)
 - [8fbaa5ae4134](#8fbaa5ae4134)
+- [900b6a983149](#900b6a983149)
+- [9163c425ca88](#9163c425ca88)
+- [9199abf474ca](#9199abf474ca)
 - [9535fb643ead](#9535fb643ead)
+- [95c75c5bc1d8](#95c75c5bc1d8)
 - [95c91f882ce7](#95c91f882ce7)
+- [9ac16ad9b93e](#9ac16ad9b93e)
+- [9c61c248b3bb](#9c61c248b3bb)
+- [9cdf994eba15](#9cdf994eba15)
 - [a3ca53bd2ef6](#a3ca53bd2ef6)
 - [ac5b5e9686ca](#ac5b5e9686ca)
 - [ae4328958de3](#ae4328958de3)
+- [aff73090bd9b](#aff73090bd9b)
 - [aff954956d71](#aff954956d71)
 - [b36644f0d8db](#b36644f0d8db)
 - [b57ebc1a725b](#b57ebc1a725b)
+- [b5946568a23b](#b5946568a23b)
+- [b82f23b94fe0](#b82f23b94fe0)
+- [b8dca4c22077](#b8dca4c22077)
+- [b93457685f21](#b93457685f21)
 - [bb7a04d97925](#bb7a04d97925)
+- [bcb8fd6634ee](#bcb8fd6634ee)
+- [bdad5a71be5b](#bdad5a71be5b)
+- [bfe8e4f1b6b8](#bfe8e4f1b6b8)
 - [c782bc3279b4](#c782bc3279b4)
 - [ca69a6dab336](#ca69a6dab336)
 - [ced644da8ee5](#ced644da8ee5)
@@ -51,13 +97,139 @@ Every packet below is byte-identical in content to what the judge models were sh
 - [d24a45439e7a](#d24a45439e7a)
 - [d713a9e6da74](#d713a9e6da74)
 - [d82ee9756df9](#d82ee9756df9)
+- [dab5815482ae](#dab5815482ae)
 - [db26af4231f1](#db26af4231f1)
+- [e09718eaec33](#e09718eaec33)
+- [e2cf18975d55](#e2cf18975d55)
 - [e6da07dca0c4](#e6da07dca0c4)
+- [e9a11bb3de12](#e9a11bb3de12)
 - [ea3c64c7fa8d](#ea3c64c7fa8d)
 - [ea525a3882b2](#ea525a3882b2)
 - [ecb9cf505b55](#ecb9cf505b55)
 - [eefa2f4737ed](#eefa2f4737ed)
+- [f1d688c4a4a0](#f1d688c4a4a0)
+- [f5ca12b6f461](#f5ca12b6f461)
 - [f7208523e7c0](#f7208523e7c0)
+- [f731e2de1256](#f731e2de1256)
+- [f7dd155277cb](#f7dd155277cb)
+
+## 00dcf6ba3b86
+
+## Question
+
+Does the negative interim operating covenant carve out actions required by COVID-19/pandemic measures?
+
+## Options
+
+- No
+- Yes
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 10, 'query': 'negative interim operating covenant'}`
+
+section refs: 9.10, 4.12, 4.17, 1.1, 4.8, ARTICLE 6, 4.17, 2.1, 5.4, 8.1
+
+> Section 9.10 Severability. If any term, provision, covenant or restriction of this Agreement is held by a court of competent jurisdiction or other Governmental Authority to be invalid, void or unenforceable, the remainder of the terms, provisions, covenants and restrictions of this Agreement shall remain in full force and effect and shall in no way be affected, impaired or invalidated so long as the economic or legal substance of the transactions contemplated by this Agreement is not affected in any manner materially adverse to any party. Upon such a determination, the parties hereto agree to 
+
+> e FCC Rules with respect to each Governmental Authorization to which any such lease relates, and, to the Knowledge of the Company, there are no facts or circumstances that would reasonably be likely (whether with or without notice, lapse of time or the occurrence of any other event) to preclude the renewal or extension of any such lease in the ordinary course of business. As of the date hereof, none of the Company or its Subsidiaries has, nor to the Knowledge of the Company has any other party to any such lease, claimed that any party to any such lease is in breach or default under such lease,
+
+> position or title; whether classified as exempt or non-exempt for wage and hour purposes; whether paid on a salary, hourly or commission basis and the employee's actual annual base salary or other rates of compensation; bonus potential; average scheduled hours per week; date of hire; business location; status (i.e., active or inactive and if inactive, the type of leave and estimated duration); any visa or work permit status and the date of expiration, if applicable; and the total amount of bonus, retention, severance and other amounts to be paid to such employee at the Closing Date or otherwis
+
+> o prevent or materially delay the Company from consummating the Merger; provided that in no event shall any effect to the extent arising out of or relating to any of the following (alone or in combination) be taken into account in determining whether a Company Material Adverse Effect has occurred: (i) changes in the Company's stock price or trading volume, or any change in the credit rating of the Company or any of its Subsidiaries (provided that the exception in this clause (i) shall not prevent or otherwise affect a determination that any effect underlying such failures has resulted in, or c
+
+> Section 4.08 Financial Statements; Internal Controls. (a) The audited consolidated financial statements and unaudited consolidated interim financial statements of the Company included in the Company SEC Documents (i) complied as to form, as of their respective filing dates with the SEC, in all material respects with the applicable accounting requirements and the published rules and regulations of the SEC with respect thereto, (ii) were prepared in accordance with GAAP applied on a consistent basis during the periods involved (except, in the case of unaudited financial statements, for the absen
+
+> ARTICLE 6 COVENANTS 
+
+> s or operating units within any site of employment or facility of the Company or any Subsidiary in the past three years. During the 90 day period preceding the date hereof, no employee has suffered an "employment loss" as defined in the WARN Act with respect to the Company or any Subsidiary. (g) The Company and its Subsidiaries have complied with all Applicable Laws in all material respects, and have made commercially reasonable efforts to comply with all applicable guidance published by a Governmental Authority, concerning workplace and employee health and safety practices related to the coro
+
+> this Agreement is terminated pursuant to Section 8.01(i) (due to a Debt Financing Failure); and (ii) $8,800,000 if this Agreement is terminated pursuant to (A) Section 8.01(f) or Section 8.01(i) (other than due to a Debt Financing Failure) or (B) Section 8.01(b) (at a time when the Company had the right to terminate pursuant to (x) Section 8.01(i) (other than due to a Debt Financing Failure) or (y) Section 8.01(f) and the Company notified Parent of such right before the End Date)). 10 ________________ "Permissible Redacted Terms" means any terms which, individually or in the aggregate, would n
+
+> Section 5.04 Non-contravention. The execution, delivery and performance by Parent and Merger Sub of this Agreement and the consummation by Parent and Merger Sub of the transactions contemplated by this Agreement do not and will not (with or without notice or lapse of time, or both) (a) result in any violation or breach of any provision of the certificate of incorporation or bylaws (or similar governing documents) of Parent or the certificate of incorporation or bylaws of Merger Sub, (b) assuming compliance with the matters referred to in Section 5.03, result in a violation or breach of any pro
+
+> ently enjoining, restraining or otherwise prohibiting the consummation of the transactions contemplated by this Agreement (notwithstanding any approval of this Agreement by the stockholders of the Company); provided, however, that the party seeking to terminate this Agreement shall have complied with its obligations under Section 6.12; (d) by either Parent or the Company, upon written notice to the other party, if the Stockholder Meeting shall have been duly convened and held and completed and the Stockholder Approval has not been obtained by reason of the failure to obtain the required vote u
+
+### Step 2: `search_agreement`
+
+args: `{'k': 10, 'query': 'conduct of business interim'}`
+
+section refs: 4.8, 6.1, 6.1, ARTICLE 7, 6.1, 2.1, 4.8, 6.4, 4.22, 8.1
+
+> Section 4.08 Financial Statements; Internal Controls. (a) The audited consolidated financial statements and unaudited consolidated interim financial statements of the Company included in the Company SEC Documents (i) complied as to form, as of their respective filing dates with the SEC, in all material respects with the applicable accounting requirements and the published rules and regulations of the SEC with respect thereto, (ii) were prepared in accordance with GAAP applied on a consistent basis during the periods involved (except, in the case of unaudited financial statements, for the absen
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+> nt, repurchase, prepay, terminate or refinance any Indebtedness arising under the Existing Credit Agreement; (m) make, change or revoke any material Tax election, change any annual Tax accounting period, file any material amended Tax Return or file any material Tax Return in a manner inconsistent with past practice, enter into any "closing agreement" within the meaning of Section 7121 of the Code (or similar provision of state, local or non-U.S. law) in respect of any material Tax, settle any material Tax Proceeding, surrender any right to claim a material Tax refund, offset or other reduction
+
+>  by Rule 14d-9(f) under the Exchange Act. For the avoidance of doubt, nothing herein shall restrict Parent or the Debt Financing Sources or their respective Affiliates from making customary announcements and communications in connection with the arrangement of the Debt Financing; provided, that Parent shall provide the Company and its counsel with a reasonable opportunity to review and comment on such announcements or communications and shall consider the Company's comments in good faith. 72 ________________ Section 6.15 Further Assurances. At and after the Effective Time, the officers and dir
+
+>  line of business; (q) fail to maintain in all material respects any Insurance Policies; (r) other than in the ordinary course of business or as contemplated by this Agreement (i) amend, modify, renew or terminate, or grant any release or waiver under, any Material Contract (excluding the expiration of any Material Contract in accordance with its terms) or enter into any new Contract that would have been a Material Contract if in existence on the date of this Agreement, or (ii) renew or enter into any Contract with an Affiliate of the Company; 57 ________________ (s) voluntarily terminate, ame
+
+> t relate to (A) any action, effect, change, event, circumstance, occurrence or state of facts relating to Parent, Merger Sub or any of their respective Affiliates, (B) changes in the market price or trading volume of the securities of the Company in and of themselves or (C) the fact that the Company meets, exceeds or fails to meet in any quantifiable respect, any internal or analyst's projections, guidance, budgets, expectations, forecasts or estimates for any period (provided that clauses (B) and (C) shall not prevent or otherwise affect a determination that the underlying cause of any such e
+
+> (ii) all such information is accumulated and communicated to the Company's management as appropriate to allow timely decisions regarding required disclosure and to make the certifications of the principal executive officer and principal financial officer of the Company required under the Exchange Act and Sections 302 and 906 of the Sarbanes-Oxley Act with respect to such reports. 30 ________________ (d) Neither the Company nor any of its Subsidiaries is a party to, is subject to, or has any commitment to become a party to or subject to, any off balance sheet partnership or any similar Contract
+
+> d notice of the Stockholder Meeting to be mailed to the Company's stockholders. As promptly as reasonably practicable following the mailing of the Proxy Statement to the Company's stockholders, the Company shall in accordance with Applicable Law and the Company's governing documents, convene and hold the Stockholder Meeting for the purpose of considering and taking action upon the matters requiring Stockholder Approval; provided that notwithstanding anything else to the contrary herein, the Company may postpone or adjourn the Stockholder Meeting (i) with the consent of Parent, (ii) for the abs
+
+> Section 4.22 Privacy and Data Security. (a) The Company and its Subsidiaries comply and have at all times complied in all material respects with all Privacy Obligations. The Company and its Subsidiaries have adopted and published a privacy notice and policy at https://www.alaskacommunications.com/Privacy that accurately describes their privacy practices. The Company and its Subsidiaries maintain commercially reasonable privacy and data security policies, processes, and controls, and an appropriate privacy program. The Company and its Subsidiaries have obtained all necessary consents, required 
+
+> ently enjoining, restraining or otherwise prohibiting the consummation of the transactions contemplated by this Agreement (notwithstanding any approval of this Agreement by the stockholders of the Company); provided, however, that the party seeking to terminate this Agreement shall have complied with its obligations under Section 6.12; (d) by either Parent or the Company, upon written notice to the other party, if the Stockholder Meeting shall have been duly convened and held and completed and the Stockholder Approval has not been obtained by reason of the failure to obtain the required vote u
+
+### Step 3: `lookup_defined_term`
+
+args: `{'term': 'COVID-19 Measures'}`
+
+section refs: 1.1
+
+> "COVID-19 Measures" means any action or inaction to address the coronavirus (COVID-19) or comply with any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, travel restrictions, shut down, closure, sequester, safety or similar law, directive, guideline or recommendation promulgated by the Centers for Disease Control and Prevention, the World Health Organization or any state or local Governmental Authority having jurisdiction over the Company, its Subsidiaries or its operations, in each case, in connection with or in response to the coronavirus (COVID-19). 
+
+### Step 4: `get_section`
+
+args: `{'section_ref': '6.1'}`
+
+section refs: 6.1
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '6.01'}`
+
+section refs: 6.1
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+### Step 6: `get_section`
+
+args: `{'section_ref': '6.01'}`
+
+section refs: 6.1
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+## Finding
+
+answer: Yes
+
+evidence:
+- (Section 6.01) The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (A) shall, and shall cause each of its Subsidiaries to use commercially reasonable efforts to ... and (B) shall not, and shall cause each of its Subsidiaries not to:
+- (Section 1.1) "COVID-19 Measures" means any action or inaction to address the coronavirus (COVID-19) or comply with any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, travel restrictions, shut down, closure, sequester, safety or similar law, directive, guideline or recommendation promulgated by the Centers for Disease Control and Prevention, the World Health Organization or any state or local Governmental Authority having jurisdiction over the Company, its Subsidiaries or its operations, in each case, in connection with or in response to the coronavirus (COVID-19).
+
+rationale: Yes. Section 6.01 carves out from both its affirmative and negative interim operating covenants any matter 'reasonably undertaken in connection with any COVID-19 Measures,' which is defined to expressly address the coronavirus (COVID-19) pandemic. This is a specific pandemic carve-out, not merely a general 'required by law' exception.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (B) shall not, and shall cause each of its Subsidiaries not to:
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
 ## 00ffcebe096a
 
@@ -197,6 +369,565 @@ No expert-annotated span is recorded for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 0179fcfde7d8
+
+## Question
+
+Which jurisdiction governs the Target's ten largest customer contracts?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+ABSTAINED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'governing law customer contracts'}`
+
+section refs: 3.17, 3.5, 3.17, 5.6, 8.13
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+> nless, to the extent legally permissible and reasonably practicable, (i) it consults with the other party in advance and (ii) unless prohibited by such Governmental Authority, gives the other party the opportunity to attend and participate in such meeting or substantive discussion. (d) Regulatory Matters. Subject to the terms and conditions set forth in this Agreement, without limiting the generality of the other undertakings pursuant to this Section 5.6, each of the Company and Parent agree to take or cause to be taken the following actions: (i) the provision to each and every federal, state,
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"governing law" customer contracts'}`
+
+section refs: 3.17, 3.5, 8.13, 8.13, 3.17
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"governing law"'}`
+
+section refs: 8.13, 8.5, 8.13, 8.13, 3.21
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+> Section 8.5 Applicable Law; Jurisdiction. (a) THIS AGREEMENT SHALL BE INTERPRETED, CONSTRUED AND GOVERNED BY AND IN ACCORDANCE WITH THE LAWS OF THE STATE OF DELAWARE, REGARDLESS OF THE LAWS THAT MIGHT OTHERWISE GOVERN UNDER APPLICABLE CONFLICTS OF LAW PRINCIPLES. The parties hereto hereby irrevocably submit to the personal jurisdiction of the Court of Chancery of the State of Delaware or, if such Court of Chancery shall lack subject matter jurisdiction, the federal courts of the United States of America located in the County of New Castle, Delaware, solely in respect of the interpretation and 
+
+> cal or foreign Law relating to pollution or protection of human health, worker health or the environment (including ambient air, surface water, ground water, land surface or subsurface strata), including any law or regulation relating to emissions, discharges, releases or threatened releases of Hazardous Materials, or otherwise relating to the manufacture, processing, distribution, use, treatment, storage, disposal, transport or handling of Hazardous Materials. ________________ "ERISA" means the Employee Retirement Income Security Act of 1974, as amended, and the regulations promulgated thereu
+
+>  locators, web site addresses and domain names (collectively, "Domain Names"); (vii) any similar, corresponding or equivalent rights to any of the foregoing; and (viii) any registrations of or applications to register any of the foregoing. "IT Assets" means all computers (including, servers, firewalls, workstations, desktops, laptops and handheld devices), Software, websites, hardware, networks, firmware, middleware, routers, hubs, switches, data communications lines, data storage devices, information security and telecommunications capabilities, data centers, operating systems and all other i
+
+> Section 3.21 Inapplicability of Anti-takeover Statutes. Assuming the accuracy of the representations and warranties of Merger Subsidiary and Parent in Section 4.4, there is no takeover or anti-takeover statute or similar Law, including Section 203 of the DGCL, applicable to this Agreement and the Transactions that requires additional action by the Company Board in order for any such anti-takeover statute to be inapplicable to this Agreement and the Transactions. 30 ________________ 
+
+## Finding
+
+answer: ABSTAIN
+
+evidence:
+
+rationale: The agreement does not contain a provision specifying the governing law for the Target's customer contracts. Section 8.5 specifies the governing law for the merger agreement itself, but it does not extend to the individual customer contracts of the Target.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 019a97bf7129
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': 'Intervening Event'}`
+
+section refs: 6.4, 2.5, 6.4, 5.1, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'intervening event'}`
+
+section refs: 6.4, 2.5, 6.4, 5.1, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Intervening Event" means'}`
+
+section refs: 9.5, 6.4, 9.5, 9.5, 6.4
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> ion and materials (including, in each case, to the extent applicable, reissues, divisions, continuations, continuations in part, extensions and re-examinations of any of the foregoing and all rights therein provided by international treaties or conventions), (ii) registrations, applications, provisionals, divisions, continuations, continuations-in-part, re-examinations, extensions, re-issues, renewals and foreign counterparts of or for any of the foregoing and (ii) the right to sue and collect damages for any past infringement of any of the foregoing. (aa) "Interim Period" means the period fro
+
+>  of any rights in respect of that entity's Equity Securities. (h) "Company Collective Bargaining Agreement" means any Contract between the Company or any of its subsidiaries and any labor organization or other authorized employee representative representing current or former employees of the Company or any of its subsidiaries. (i) "Company Parties" means, collectively, the Company, its subsidiaries and its Joint Ventures, and each of them individually is a "Company Party". (j) "Contract" means any legally binding written or oral agreement, contract, subcontract, lease, instrument, note, option
+
+> by Rule 14d-9(f) promulgated under the Exchange Act or a recommendation on Schedule 14D-9 against such tender offer or exchange offer made within ten (10) Business Days after the commencement thereof and in any event at least two (2) Business Days prior to the Company Shareholder Meeting, shall be deemed a Company Change of Recommendation, unless the Company Board of Directors expressly and concurrently reaffirms the Company Recommendation). 50 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 56/97 (f) For purposes o
+
+### Step 5: `search_agreement`
+
+args: `{'query': 'Intervening Event definition'}`
+
+section refs: 9.5, 2.5, 5.1, ARTICLE VII, ARTICLE IX
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+>  its subsidiaries shall only be required to agree to any terms, conditions, liabilities, obligations, commitments or undertakings on or with respect to its business conduct in connection with its obligations under this Section 6.5, if such terms, conditions, liabilities, obligations, commitments or undertakings are binding on such Party or its subsidiaries only in the event the Closing occurs. SECTION 6.6 Notification of Certain Matters. During the Interim Period, the Company shall give prompt notice to Parent, and Parent shall give prompt notice to the Company, of (a) any notice or other comm
+
+> eld prior to such date) or Section 8.1(f) or is terminated by Parent pursuant to Section 8.1(e)(i) and (A) at any time after the date of this Agreement and prior to such termination an Acquisition Proposal shall have been made to the Company, or to the Company Board of Directors or shareholders, or an Acquisition Proposal shall have otherwise become publicly known, and (B) within twelve (12) months after such termination, the Company shall have entered into a definitive agreement with respect to an Acquisition Proposal or shall have consummated an Acquisition Proposal, then, in the event that 
+
+### Step 6: `get_section`
+
+args: `{'section_ref': '6.4'}`
+
+section refs: 6.4
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Intervening Event" shall mean'}`
+
+section refs: 5.1, 9.5, ARTICLE VII, 6.4, 3.8
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+>  its subsidiaries shall only be required to agree to any terms, conditions, liabilities, obligations, commitments or undertakings on or with respect to its business conduct in connection with its obligations under this Section 6.5, if such terms, conditions, liabilities, obligations, commitments or undertakings are binding on such Party or its subsidiaries only in the event the Closing occurs. SECTION 6.6 Notification of Certain Matters. During the Interim Period, the Company shall give prompt notice to Parent, and Parent shall give prompt notice to the Company, of (a) any notice or other comm
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 6.4, 5.1, 3.8, 2.5, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 01ac22924b80
+
+## Question
+
+What efforts standard governs the target's ordinary-course-of-business covenant?
+
+## Options
+
+- Flat covenant (no efforts standard)
+- Commercially reasonable efforts
+- Reasonable best efforts
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'ordinary course conduct of business prior to closing'}`
+
+section refs: 5.3, 4.11, 9.11, 5.1, 5.3
+
+> n as required by GAAP (or any interpretation thereof) or Regulation S-X promulgated under the Exchange Act or other applicable rules and regulations of the SEC or applicable Legal Requirements; (xiv) adopt a plan or agreement of complete or partial liquidation or dissolution, merger, consolidation, restructuring, recapitalization or other reorganization of the Acquired Corporations; (xv) (A) make, change or revoke any material Tax election, (B) change any method of Tax accounting or accounting period used for Tax purposes, (C) settle or compromise any Legal Proceeding in respect of material Ta
+
+> e Agreements to be paid on or prior to the date of this Agreement, and will pay in full any such amounts due on or before the Closing Date. (f) In no event shall the receipt or availability of any funds or financing (including the Financing and the closing of the Royalty Purchase Agreements) by or to Parent or any of its Affiliates or any other financing transaction be a condition to any of the obligations of Parent hereunder. (g) No transfer of property is being made and no obligation is being incurred in connection with the Transactions with the intent to hinder, delay or defraud either pres
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'conduct of business prior to closing ordinary course'}`
+
+section refs: 4.11, 5.3, 9.11, 6.2, 5.1
+
+> e Agreements to be paid on or prior to the date of this Agreement, and will pay in full any such amounts due on or before the Closing Date. (f) In no event shall the receipt or availability of any funds or financing (including the Financing and the closing of the Royalty Purchase Agreements) by or to Parent or any of its Affiliates or any other financing transaction be a condition to any of the obligations of Parent hereunder. (g) No transfer of property is being made and no obligation is being incurred in connection with the Transactions with the intent to hinder, delay or defraud either pres
+
+> n as required by GAAP (or any interpretation thereof) or Regulation S-X promulgated under the Exchange Act or other applicable rules and regulations of the SEC or applicable Legal Requirements; (xiv) adopt a plan or agreement of complete or partial liquidation or dissolution, merger, consolidation, restructuring, recapitalization or other reorganization of the Acquired Corporations; (xv) (A) make, change or revoke any material Tax election, (B) change any method of Tax accounting or accounting period used for Tax purposes, (C) settle or compromise any Legal Proceeding in respect of material Ta
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> date with any reasonable request for additional information, documents or other materials received by any Party or any of its Subsidiaries from any Governmental Body in connection with such applications or filings for the Transactions. Purchaser shall pay all filing fees under the HSR Act and for any filings required under any other applicable Antitrust Laws. Neither Party shall commit to or agree with any Governmental Body to stay, toll or extend any applicable waiting period under the HSR Act, or withdraw any notification filed under the HSR Act, or other applicable Antitrust Laws, without t
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': '"Conduct of Business" "Prior to Closing"'}`
+
+section refs: 8.1, 5.1, 4.11, 6.2, 5.3
+
+> 8.1 Termination. This Agreement may be terminated prior to the Effective Time (or prior to such earlier time as set forth in this Section 8.1): (a) by mutual written consent of Parent and the Company at any time prior to the Offer Acceptance Time; (b) by either Parent or the Company, at any time prior to the Offer Acceptance Time, if the Closing shall not have occurred on or prior to 11:59 p.m., New York City time, on December 1, 2021 (the "End Date"); provided, however, that (x) if as of the End Date the conditions set forth in clause (d) or (f) of Annex I (in the case of (f), solely with res
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> e Agreements to be paid on or prior to the date of this Agreement, and will pay in full any such amounts due on or before the Closing Date. (f) In no event shall the receipt or availability of any funds or financing (including the Financing and the closing of the Royalty Purchase Agreements) by or to Parent or any of its Affiliates or any other financing transaction be a condition to any of the obligations of Parent hereunder. (g) No transfer of property is being made and no obligation is being incurred in connection with the Transactions with the intent to hinder, delay or defraud either pres
+
+> date with any reasonable request for additional information, documents or other materials received by any Party or any of its Subsidiaries from any Governmental Body in connection with such applications or filings for the Transactions. Purchaser shall pay all filing fees under the HSR Act and for any filings required under any other applicable Antitrust Laws. Neither Party shall commit to or agree with any Governmental Body to stay, toll or extend any applicable waiting period under the HSR Act, or withdraw any notification filed under the HSR Act, or other applicable Antitrust Laws, without t
+
+> n as required by GAAP (or any interpretation thereof) or Regulation S-X promulgated under the Exchange Act or other applicable rules and regulations of the SEC or applicable Legal Requirements; (xiv) adopt a plan or agreement of complete or partial liquidation or dissolution, merger, consolidation, restructuring, recapitalization or other reorganization of the Acquired Corporations; (xv) (A) make, change or revoke any material Tax election, (B) change any method of Tax accounting or accounting period used for Tax purposes, (C) settle or compromise any Legal Proceeding in respect of material Ta
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Conduct of Business" covenant ordinary course'}`
+
+section refs: 5.3, 5.3, 3.11, 8.1, 9.11
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> n as required by GAAP (or any interpretation thereof) or Regulation S-X promulgated under the Exchange Act or other applicable rules and regulations of the SEC or applicable Legal Requirements; (xiv) adopt a plan or agreement of complete or partial liquidation or dissolution, merger, consolidation, restructuring, recapitalization or other reorganization of the Acquired Corporations; (xv) (A) make, change or revoke any material Tax election, (B) change any method of Tax accounting or accounting period used for Tax purposes, (C) settle or compromise any Legal Proceeding in respect of material Ta
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> rranty contained in this Agreement or failure to perform any covenant or obligation in this Agreement on the part of the Company shall have occurred such that the conditions set forth in clause (b) or (c) of Annex I would not be satisfied and cannot be cured by the Company by the End Date, or if capable of being cured in such time frame, shall not have commenced to have been cured within thirty (30) days of the date Parent gives the Company notice of such breach or failure to perform; provided, however, that, Parent shall not have the right to terminate this Agreement pursuant to this Section 
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"Section 5.2" conduct of business'}`
+
+section refs: 7.1, 5.2, 5.3, 4.1, 5
+
+> 7.1 No Restraints. There shall not have been issued by any Governmental Body in any jurisdiction in which Parent or the Company has material business operations, and remain in effect any temporary restraining order, preliminary or permanent injunction or other order preventing the consummation of the Merger, nor shall there be any Legal Requirement promulgated, entered, enforced, enacted, issued or deemed applicable to the Merger by any Governmental Body in any jurisdiction in which Parent or the Company has material business operations which prohibits, or makes illegal the consummation of the
+
+> Section 5.2 and 
+
+> e permitted under the applicable Legal Requirements (including any COVID-19 Measures). 34 ________________ 5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would
+
+> 4.1 Due Organization. Parent is a German stock corporation (Aktiengesellschaft) and Purchaser is a corporation, in each case duly organized, validly existing and in good standing under the laws of its jurisdiction of organization (with respect to jurisdictions that recognize such concept) and has all necessary power and authority: (a) to conduct its business in the manner in which its business is currently being conducted; (b) to own and use its assets in the manner in which its assets are currently owned and used; and (c) to perform its obligations under all Contracts by which it is bound, ex
+
+> 5. CERTAIN COVENANTS OF THE COMPANY 
+
+### Step 6: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 7: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 8: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would violate Antitrust Law), (y) for any action required to be or reasonably taken, or omitted to be taken, pursuant to any COVID-19 Measures or which is otherwise required or reasonably taken, or omitted to be taken, in response to COVID-19 or any other pandemic, epidemic or disease outbreak, as determined by the Company in its reasonable discretion, or (z) as set forth in Section 5.2 of the Company Disclosure Schedule, the Company shall, and shall cause each Acquired Corporation to, use commercially reasonable efforts to conduct its business and operations in the ordinary course in all material respects
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 01de6203baeb
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company"'}`
+
+section refs: 3.18, 3.18, 3.21, 3.18, 3.18
+
+> f the Company Disclosure Letter, all employees, consultants and other Third Parties who made material contributions to the discovery or development of any of the Company Intellectual Property did so either (A) within the scope of his or her employment such that, in accordance with applicable Law, all Intellectual Property Rights and Technology (including any Company Software) arising therefrom became the exclusive property of the Company and its Subsidiaries or (B) pursuant to written agreements (which, to the knowledge of the Company, are valid) irrevocably assigning, in accordance with appli
+
+> n accordance with all applicable Laws to protect the secrecy of, and their rights in, all confidential information and Trade Secrets owned by the Company and its Subsidiaries, and, with respect to any confidential information or Trade Secrets owned by any Third Party that have been provided or made available to the Company and its Subsidiaries under Contract (including by any customer of the Company), to the knowledge of the Company, the Company nor any of its Subsidiaries is in breach of the terms of such Contract with respect to the confidentiality of such confidential information or Trade S
+
+>  scope of the Company and any Company Subsidiary and the Personal Data they Process in the conduct of their business, (ii) designed to protect the operation, confidentiality, integrity, availability and security of the Company's and any of the Company's Subsidiaries IT systems, and all Personal Data, against unauthorized access, acquisition, interruption, alteration, modification, or use, and (iii) consistent with the Company's and any of the Company Subsidiaries' Privacy Obligations. To the knowledge of the Company, within the three (3) years prior to the date hereof, neither the Company nor 
+
+> written notice within the past three (3) years challenging the legality, enforceability or ownership of any Company Intellectual Property Rights and Technology owned or purported to be owned by any of the Company (including the Company Registrations). None of the Company Owned Registrations or, to the knowledge of the Company, Company Licensed Registrations, have been adjudged invalid or unenforceable, and (i) there are no pending or to the knowledge of the Company, threatened adversarial proceedings challenging the validity, scope, title or enforceability of such Company Owned Registrations a
+
+>  Subsidiaries own or are licensed under, or otherwise possesses sufficient rights under, the Intellectual Property used in or necessary to conduct the business and operations of the Company and its Subsidiaries as currently conducted. To the knowledge of the Company, the Company and its Subsidiaries will continue to own, license or have the right to use such Intellectual Property immediately following the Closing to the same extent as prior to the Closing. Without limiting the foregoing, to the knowledge of the Company, the Company and its Subsidiaries own or have sufficient licenses or rights
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means'}`
+
+section refs: 9.3, 3.18, 3.18, 3.18, 3.21
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+> f the Company Disclosure Letter, all employees, consultants and other Third Parties who made material contributions to the discovery or development of any of the Company Intellectual Property did so either (A) within the scope of his or her employment such that, in accordance with applicable Law, all Intellectual Property Rights and Technology (including any Company Software) arising therefrom became the exclusive property of the Company and its Subsidiaries or (B) pursuant to written agreements (which, to the knowledge of the Company, are valid) irrevocably assigning, in accordance with appli
+
+> n accordance with all applicable Laws to protect the secrecy of, and their rights in, all confidential information and Trade Secrets owned by the Company and its Subsidiaries, and, with respect to any confidential information or Trade Secrets owned by any Third Party that have been provided or made available to the Company and its Subsidiaries under Contract (including by any customer of the Company), to the knowledge of the Company, the Company nor any of its Subsidiaries is in breach of the terms of such Contract with respect to the confidentiality of such confidential information or Trade S
+
+> written notice within the past three (3) years challenging the legality, enforceability or ownership of any Company Intellectual Property Rights and Technology owned or purported to be owned by any of the Company (including the Company Registrations). None of the Company Owned Registrations or, to the knowledge of the Company, Company Licensed Registrations, have been adjudged invalid or unenforceable, and (i) there are no pending or to the knowledge of the Company, threatened adversarial proceedings challenging the validity, scope, title or enforceability of such Company Owned Registrations a
+
+>  scope of the Company and any Company Subsidiary and the Personal Data they Process in the conduct of their business, (ii) designed to protect the operation, confidentiality, integrity, availability and security of the Company's and any of the Company's Subsidiaries IT systems, and all Personal Data, against unauthorized access, acquisition, interruption, alteration, modification, or use, and (iii) consistent with the Company's and any of the Company Subsidiaries' Privacy Obligations. To the knowledge of the Company, within the three (3) years prior to the date hereof, neither the Company nor 
+
+## Finding
+
+answer: Actual knowledge
+
+evidence:
+- (Section 9.3) "knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel
+
+rationale: The agreement defines "knowledge" for the Company as the "actual knowledge" of specific named officers. It does not include constructive knowledge or any requirement for inquiry.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel;
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 0370079fdb90
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Knowledge of the Company'}`
+
+(tool result text not recorded)
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'Knowledge of the Company'}`
+
+section refs: 3.19, 3.12, 3.24, 3.1, 3.23
+
+> Section 3.19 Compliance with Environmental Laws. There are no actions, suits, investigations, liabilities, inquiries, Proceedings or Orders involving the Company or any of its Subsidiaries or any of their respective assets that are pending or, to the Knowledge of the Company, threatened, nor to the Knowledge of the Company, is there any factual basis for any of the foregoing, as a result of any asserted failure of the Company or any of its Subsidiaries of, or any predecessor thereof, to comply with any Environmental Law. No environmental clearances or other governmental approvals are required 
+
+> rth in Section 3.12(e) of the Company Disclosure Schedules, each Company Benefit Plan is and has been administered in all material respects in compliance with its terms and with all applicable Legal Requirements. (f) Other than routine claims for benefits made in the Ordinary Course of Business, there is no litigation, claim or assessment pending or, to the Company's Knowledge, threatened by, on behalf of, or against any Company Benefit Plan or against the administrators or trustees or other fiduciaries of any Company Benefit Plan 15 ________________ that alleges a violation of applicable stat
+
+> Section 3.24 Intellectual Property. Except as set forth in Section 3.24 of the Company Disclosure Schedules, each of the Company and its Subsidiaries has the unrestricted right and authority, and the Surviving Entity and its Subsidiaries will have the unrestricted right and authority from and after the Effective Time, to use all patents, trademarks, copyrights, service marks, trade names or other intellectual property owned by them as is necessary to enable them to conduct and to continue to conduct all material phases of the businesses of the Company and its Subsidiaries in the manner present
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+> Section 3.23 Labor Matters. (a) There are no collective bargaining agreements or other labor union Contracts applicable to any employees of the Company or any of its Subsidiaries. There is no labor dispute, strike, work stoppage or lockout, or, to the Knowledge of the Company, threat thereof, by or with respect to any employees of the Company or any of its Subsidiaries, and there has been no labor dispute, strike, work stoppage or lockout in the previous three (3) years. There are no organizational efforts with respect to the formation of a collective bargaining unit presently being made, or t
+
+### Step 4: `search_agreement`
+
+args: `{'query': 'Knowledge means actual knowledge'}`
+
+section refs: 12.1, 8.1, 3.17, 9.1, 11.5
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 3.17 No Defaults. Each Company Material Contract is in full force and effect and is valid and enforceable in accordance with its terms, except as such enforcement may be limited by bankruptcy, insolvency, reorganization or other Legal Requirements affecting creditors' rights generally and subject to general principles of equity. To the Knowledge of the Company, no event has occurred or circumstance exists that (with or without notice or lapse of time) may contravene, conflict with or result in a material violation or breach of, or give the Company, any of its Subsidiaries or other Pers
+
+> Section 9.1 Accuracy of Representations and Warranties. For purposes of this Section 9.1, the accuracy of the representations and warranties of Nicolet set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 4.3 and Section 4.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the representatio
+
+> Section 11.5 without notice or liability to any other Person. In some instances, the representations and warranties in this Agreement may represent an allocation among the parties hereto of risks associated with particular matters regardless of the knowledge of any of the parties hereto. Consequently, persons other than the parties may not rely upon the representations and warranties in this Agreement as characterizations of actual facts or circumstances as of the date of this Agreement or as of any other date. Section 11.4 Modification. This Agreement may be amended, modified or supplemented 
+
+### Step 5: `search_agreement`
+
+args: `{'query': 'defined term Knowledge actual inquiry should have known'}`
+
+section refs: 5.3, 6.2, 3.22, 8.1, 4.18
+
+> Section 5.3 Notice of Changes. The Company will give prompt notice to Nicolet of any fact, event or circumstance known to it that: (a) is reasonably likely, individually or taken together with all other facts, events and circumstances known to it, to result in a Material Adverse Effect on the Company; or (b) would cause or constitute a material breach of any of the Company's representations, warranties, covenants or agreements contained herein that reasonably could be expected to give rise, individually or in the aggregate, to the failure of a condition in Article 8; provided, however, that a 
+
+> Section 6.2 Notice of Changes. Nicolet will give prompt notice to the Company of any fact, event or circumstance known to it that: (a) is reasonably likely, individually or taken together with all other facts, events and circumstances known to it, to result in a Material Adverse Effect on Nicolet; or (b) would cause or constitute a material breach of any of Nicolet's representations, warranties, covenants or agreements contained herein that reasonably could be expected to give rise, individually or in the aggregate, to the failure of a condition in Article 9; provided, however, that a failure 
+
+> Section 3.22 Approval Delays. To the Knowledge of the Company, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. The Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). The Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 4.18 Approval Delays. To the Knowledge of Nicolet, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. Nicolet Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). Nicolet Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Knowledge" means the actual knowledge'}`
+
+section refs: 12.1, 8.1, 3.17, 11.5, 12.2
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 3.17 No Defaults. Each Company Material Contract is in full force and effect and is valid and enforceable in accordance with its terms, except as such enforcement may be limited by bankruptcy, insolvency, reorganization or other Legal Requirements affecting creditors' rights generally and subject to general principles of equity. To the Knowledge of the Company, no event has occurred or circumstance exists that (with or without notice or lapse of time) may contravene, conflict with or result in a material violation or breach of, or give the Company, any of its Subsidiaries or other Pers
+
+> Section 11.5 without notice or liability to any other Person. In some instances, the representations and warranties in this Agreement may represent an allocation among the parties hereto of risks associated with particular matters regardless of the knowledge of any of the parties hereto. Consequently, persons other than the parties may not rely upon the representations and warranties in this Agreement as characterizations of actual facts or circumstances as of the date of this Agreement or as of any other date. Section 11.4 Modification. This Agreement may be amended, modified or supplemented 
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+### Step 7: `search_agreement`
+
+args: `{'query': 'Knowledge means after due inquiry'}`
+
+section refs: 12.1, 1.8, 12.2, 11.9, 12.1
+
+>  Contemplated Transactions; or (iii) with which a filing must be made in connection therewith. (kkk) "Representative" means with respect to a particular Person, any director, officer, manager, employee, agent, consultant, advisor or other representative of such Person, including legal counsel, accountants and financial advisors. (lll) "Requisite Regulatory Approvals" means all necessary documentation, applications, notices, petitions, filings, permits, consents, approvals and authorizations from all applicable Regulatory Authorities for approval of the Contemplated Transactions. (mmm) "SEC" me
+
+> Section 1.8 TRUPS and Subordinated Notes Assumption. As of the Effective Time and upon the terms and conditions set forth herein: (a) Nicolet will assume and discharge (i) all of the Company's covenants, agreements and obligations under and relating to the Company Trust Preferred Securities, including (ii) the due and punctual payment of interest on all of the obligations of the Company pursuant to the Company Trust Debentures, and such transfer and assumption as described in clauses (i) and (ii), the "TRUPS Assumption"); (b) Nicolet will assume and discharge all of the Company's covenants, ag
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+> Section 11.9 Further Assurances. The parties agree: (a) to furnish upon request to each other such further information; (b) to execute and deliver to each other such other documents; and (c) to do such other acts and things; all as the other party may reasonably request for the purpose of carrying out the intent of this Agreement and the documents referred to in this Agreement. 
+
+> tly through one or more intermediaries. (qqq) "Superior Proposal" means a bona fide written Acquisition Proposal which the Company Board concludes in good faith to be more favorable from a financial point of view to the Company shareholders than the Merger and the other transactions contemplated hereby, (i) after receiving the advice of its financial advisors (which shall be Stephens, Inc., or any nationally recognized investment banking firm), (ii) after taking into account the likelihood and timing of consummation of the proposed transaction on the terms set forth therein (as compared to, an
+
+### Step 8: `search_agreement`
+
+args: `{'query': 'Knowledge defined section 12.1'}`
+
+section refs: ARTICLE 12, 12.1, 8.12, 3.12, 3.22
+
+> ARTICLE 12 DEFINITIONS 
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+> Section 8.12 Consents. The Company shall have obtained or caused to be obtained the written consents, permissions and approvals as required under any agreements, contracts, appointments, indentures, plans, trusts or other arrangements with third parties as set forth on Section 8.12 of the Company Disclosure Schedules that are required to effect the Contemplated Transactions. 
+
+> Section 3.12 Employee Benefits. (a) Section 3.12(a) of the Company Disclosure Schedules includes a complete and correct list of each Company Benefit Plan. The Company has delivered or made available to Nicolet true and complete copies of the following with respect to each Company Benefit Plan: (i) copies of each Company Benefit Plan (including a written description where no formal plan document exists), and all related plan descriptions and other material, non‐routine written communications provided to participants of the Company Benefit Plans, as required by applicable law, or describing the 
+
+> Section 3.22 Approval Delays. To the Knowledge of the Company, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. The Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). The Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 071c4f13acd4
 
 ## Question
@@ -319,6 +1050,433 @@ The system produced no finding for this case.
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 0939c5133331
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Knowledge of the Company'}`
+
+(tool result text not recorded)
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'Knowledge definition'}`
+
+section refs: 12.1, 8.1, 12.1, 12.2, 5.3
+
+>  in Section 3(1) of ERISA) or other health, welfare or similar plan or arrangement; (iii) "employee benefit plan" (as defined in Section 3(3) of ERISA); (iv) equity-based compensation plan or arrangement (including any stock option, stock purchase, stock ownership, stock appreciation, restricted stock, restricted stock unit, phantom stock or similar plan, agreement or award); (v) other paid time off, compensation, severance, bonus, profit-sharing or incentive plan or arrangement; (vi) other employee benefit plan, practice, policy or arrangement of any kind; or (vii) change in control agreement
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> vestors, or employees; except with respect to clauses (A), (B), (C), (D) and (E), to the extent that the effects of such change are materially disproportionately adverse to the financial condition, results of operations or business of such party and its Subsidiaries, taken as a whole, as compared to other companies in the industry in which such party and its Subsidiaries operate. (mm) "Nasdaq Rules" means the listing rules of the Nasdaq Capital Market. (nn) "Nicolet Articles of Incorporation" means the Amended and Restated Articles of Incorporation of Nicolet, as amended. (oo) "Nicolet Bank" m
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+> Section 5.3 Notice of Changes. The Company will give prompt notice to Nicolet of any fact, event or circumstance known to it that: (a) is reasonably likely, individually or taken together with all other facts, events and circumstances known to it, to result in a Material Adverse Effect on the Company; or (b) would cause or constitute a material breach of any of the Company's representations, warranties, covenants or agreements contained herein that reasonably could be expected to give rise, individually or in the aggregate, to the failure of a condition in Article 8; provided, however, that a 
+
+### Step 4: `search_agreement`
+
+args: `{'query': 'knowledge of'}`
+
+section refs: 3.23, 8.1, 3.19, 3.23, 5.3
+
+> is a party to, or otherwise bound by, any consent decree with, or citation by, any Regulatory Authority relating to employees or employment practices. None of the Company, any of its Subsidiaries or any of its or their executive officers has received within the past three (3) years any written notice of intent by any Regulatory Authority responsible for the enforcement of labor or employment laws to conduct an investigation relating to the Company or any of its Subsidiaries and, to the Knowledge of the Company, no such investigation is in progress. 
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 3.19 Compliance with Environmental Laws. There are no actions, suits, investigations, liabilities, inquiries, Proceedings or Orders involving the Company or any of its Subsidiaries or any of their respective assets that are pending or, to the Knowledge of the Company, threatened, nor to the Knowledge of the Company, is there any factual basis for any of the foregoing, as a result of any asserted failure of the Company or any of its Subsidiaries of, or any predecessor thereof, to comply with any Environmental Law. No environmental clearances or other governmental approvals are required 
+
+> Section 3.23 Labor Matters. (a) There are no collective bargaining agreements or other labor union Contracts applicable to any employees of the Company or any of its Subsidiaries. There is no labor dispute, strike, work stoppage or lockout, or, to the Knowledge of the Company, threat thereof, by or with respect to any employees of the Company or any of its Subsidiaries, and there has been no labor dispute, strike, work stoppage or lockout in the previous three (3) years. There are no organizational efforts with respect to the formation of a collective bargaining unit presently being made, or t
+
+> Section 5.3 Notice of Changes. The Company will give prompt notice to Nicolet of any fact, event or circumstance known to it that: (a) is reasonably likely, individually or taken together with all other facts, events and circumstances known to it, to result in a Material Adverse Effect on the Company; or (b) would cause or constitute a material breach of any of the Company's representations, warranties, covenants or agreements contained herein that reasonably could be expected to give rise, individually or in the aggregate, to the failure of a condition in Article 8; provided, however, that a 
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Knowledge" means'}`
+
+section refs: 12.1, 12.1, 12.1, 12.2, 12.1
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+>  in Section 3(1) of ERISA) or other health, welfare or similar plan or arrangement; (iii) "employee benefit plan" (as defined in Section 3(3) of ERISA); (iv) equity-based compensation plan or arrangement (including any stock option, stock purchase, stock ownership, stock appreciation, restricted stock, restricted stock unit, phantom stock or similar plan, agreement or award); (v) other paid time off, compensation, severance, bonus, profit-sharing or incentive plan or arrangement; (vi) other employee benefit plan, practice, policy or arrangement of any kind; or (vii) change in control agreement
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+> "Transaction Costs" shall mean any and all amounts incurred by the Company or Nicolet, as determined on an after-tax basis, whether or not paid by the Company or Nicolet and whether incurred before, on or after the date of this Agreement, that arise out of or in connection with the negotiation and preparation of this Agreement and the consummation and performance of the transactions contemplated hereby. 54 ________________ (xxx) "Transition Date" means, with respect to any Covered Employee, the date Nicolet commences providing benefits to such employee with respect to each New Plan. (yyy) "U.S
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Knowledge of"'}`
+
+section refs: 8.1, 3.19, 3.23, 9.1, 3.22
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 3.19 Compliance with Environmental Laws. There are no actions, suits, investigations, liabilities, inquiries, Proceedings or Orders involving the Company or any of its Subsidiaries or any of their respective assets that are pending or, to the Knowledge of the Company, threatened, nor to the Knowledge of the Company, is there any factual basis for any of the foregoing, as a result of any asserted failure of the Company or any of its Subsidiaries of, or any predecessor thereof, to comply with any Environmental Law. No environmental clearances or other governmental approvals are required 
+
+> Section 3.23 Labor Matters. (a) There are no collective bargaining agreements or other labor union Contracts applicable to any employees of the Company or any of its Subsidiaries. There is no labor dispute, strike, work stoppage or lockout, or, to the Knowledge of the Company, threat thereof, by or with respect to any employees of the Company or any of its Subsidiaries, and there has been no labor dispute, strike, work stoppage or lockout in the previous three (3) years. There are no organizational efforts with respect to the formation of a collective bargaining unit presently being made, or t
+
+> Section 9.1 Accuracy of Representations and Warranties. For purposes of this Section 9.1, the accuracy of the representations and warranties of Nicolet set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 4.3 and Section 4.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the representatio
+
+> Section 3.22 Approval Delays. To the Knowledge of the Company, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. The Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). The Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Knowledge" shall mean'}`
+
+section refs: 12.2, 8.1, 9.1, 4.19, 12.1
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+> Section 8.1 Accuracy of Representations and Warranties. For purposes of this Section 8.1, the accuracy of the representations and warranties of the Company set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 3.3 and Section 3.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the represent
+
+> Section 9.1 Accuracy of Representations and Warranties. For purposes of this Section 9.1, the accuracy of the representations and warranties of Nicolet set forth in this Agreement shall be assessed as of the date of this Agreement and as of the Closing Date (or such other date(s) as specified, to the extent any representation or warranty speaks as of a specific date). The representations and warranties set forth in Section 4.3 and Section 4.5(a) shall be true and correct (except for inaccuracies which are de minimis in amount and effect). There shall not exist inaccuracies in the representatio
+
+> erwise bound by, any consent decree with, or citation by, any Regulatory Authority relating to employees or employment practices. None of Nicolet, any of its Subsidiaries or any of its or their executive officers has received within the past three (3) years any written notice of intent by any Regulatory Authority responsible for the enforcement of labor or employment laws to conduct an investigation relating to Nicolet or any of its Subsidiaries and, to the Knowledge of Nicolet, no such investigation is in progress. 
+
+> "Transaction Costs" shall mean any and all amounts incurred by the Company or Nicolet, as determined on an after-tax basis, whether or not paid by the Company or Nicolet and whether incurred before, on or after the date of this Agreement, that arise out of or in connection with the negotiation and preparation of this Agreement and the consummation and performance of the transactions contemplated hereby. 54 ________________ (xxx) "Transition Date" means, with respect to any Covered Employee, the date Nicolet commences providing benefits to such employee with respect to each New Plan. (yyy) "U.S
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"knowledge" defined'}`
+
+section refs: 12.1, 12.1, 3.22, 12.2, 4.18
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+>  in Section 3(1) of ERISA) or other health, welfare or similar plan or arrangement; (iii) "employee benefit plan" (as defined in Section 3(3) of ERISA); (iv) equity-based compensation plan or arrangement (including any stock option, stock purchase, stock ownership, stock appreciation, restricted stock, restricted stock unit, phantom stock or similar plan, agreement or award); (v) other paid time off, compensation, severance, bonus, profit-sharing or incentive plan or arrangement; (vi) other employee benefit plan, practice, policy or arrangement of any kind; or (vii) change in control agreement
+
+> Section 3.22 Approval Delays. To the Knowledge of the Company, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. The Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). The Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+> Section 12.2 Principles of Construction. (a) In this Agreement, unless otherwise stated or the context otherwise requires, the following uses apply: (i) actions permitted under this Agreement may be taken at any time and from time to time in the actor's sole discretion; (ii) references to a statute shall refer to the statute and any successor statute, and to all regulations promulgated under or implementing the statute or its successor, as in effect at the relevant time; (iii) in computing periods from a specified date to a later specified date, the words "from" and "commencing on" (and the li
+
+> Section 4.18 Approval Delays. To the Knowledge of Nicolet, there is no reason why the granting of any of the Requisite Regulatory Approvals would be denied or unduly delayed. Nicolet Bank is an "eligible bank" (as such term is defined at 12 C.F.R. § 5.3(g). Nicolet Bank has not been informed that its status as an "eligible bank" will change within one (1) year. 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 096c93b7fd78
+
+## Question
+
+Which jurisdiction governs the Target's ten largest customer contracts?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contract governing law jurisdiction largest ten'}`
+
+section refs: 8.5, ARTICLE VII, 3.11, 3.17, 3.5
+
+> Section 8.5 Applicable Law; Jurisdiction. (a) THIS AGREEMENT SHALL BE INTERPRETED, CONSTRUED AND GOVERNED BY AND IN ACCORDANCE WITH THE LAWS OF THE STATE OF DELAWARE, REGARDLESS OF THE LAWS THAT MIGHT OTHERWISE GOVERN UNDER APPLICABLE CONFLICTS OF LAW PRINCIPLES. The parties hereto hereby irrevocably submit to the personal jurisdiction of the Court of Chancery of the State of Delaware or, if such Court of Chancery shall lack subject matter jurisdiction, the federal courts of the United States of America located in the County of New Castle, Delaware, solely in respect of the interpretation and 
+
+> d neither Parent nor the Company shall have received a standard form letter from the Federal Trade Commission ("FTC") Bureau of Competition, in the form announced and disclosed by the FTC Bureau of Competition on August 3, 2021 and the Parties shall not have been notified by the FTC that the underlying investigation has been closed or otherwise resolved. (c) No Legal Prohibition. No Governmental Authority of competent jurisdiction shall have enacted, issued, promulgated, entered, enforced or deemed applicable to the Merger any applicable Law, or issued or granted any Order (whether temporary, 
+
+> that it is or may be subject to Tax by, or required to file Tax Returns in, that jurisdiction. Neither the Company nor any Company Subsidiary has granted any request, agreement or consent to waive or extend any statute of limitations relating to the payment or collection of Taxes of the Company or the Company Subsidiaries that has not expired. (c) Neither the Company nor any Company Subsidiary has been a party to a "listed transaction" or "transaction of interest" within the meaning of Treasury Regulation Section 1.6011-4(b)(2) and (6) (or similar provisions of state, local, or foreign Law). 1
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'ten largest customers contracts governing law'}`
+
+section refs: 3.17, 3.17, 3.17, 3.5, 8.13
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+> eir Affiliates (other than the Company) or immediate family members (other than offer letters that can be terminated at will without severance obligations and Contracts pursuant to Company Options); (xii) that is with any Governmental Authority under which payments in excess of $1,000,000 were received by the Company in the most recently completed fiscal year; (xiii) pursuant to which the Company or any Company Subsidiaries has continuing guarantee, "earn-out" or similar contingent payment obligations (other than indemnification or performance guarantee obligations provided for in the ordinary
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contract governing law'}`
+
+section refs: 3.17, 3.5, 8.13, 3.15, 5.2
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+> Section 3.15 Employment Matters. (a) Neither the Company nor any Company Subsidiary is a party to or otherwise bound by any collective bargaining agreement, contract or other agreement or understanding with a labor union, works council, labor organization or similar organized employee representative (collectively, "CBAs"), nor is any such contract, agreement or understanding presently being negotiated, nor, to the Knowledge of the Company, is there, a representation campaign respecting any employees of the Company or any of the Company Subsidiaries. As of the Agreement Date, there is no pendin
+
+> other claim (or threatened Legal Proceeding or other claim), other than (A) any Transaction Litigation (subject to Section 5.11) or (B) any Legal Proceeding relating to a breach of this Agreement or any other agreements contemplated hereby and (1) that results solely in a monetary obligation involving only the payment of monies by the Company of not more than $500,000 in the aggregate; (2) that results solely in a monetary obligation that is funded by an indemnity obligation to, or an insurance policy of, the Company and the payment of monies by the Company that together with any settlement ma
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': 'largest customer'}`
+
+section refs: 8.13, 8.13, 8.13, 8.13, 8.13
+
+> ersonally identifiable information" or "personal information" under any Privacy and Data Security Requirement, (ii) any information that, alone or in combination with other information, can reasonably be used to identify an individual natural person or relating to an identified or identifiable natural person, directly or indirectly, including name, a unique identification number, government-issued identifier (including Social Security number and driver's license number), physical address, gender and date of birth and (iii) individually identifiable health information constituting "protected he
+
+> ools and kits, templates, menus, analytics and tracking tools, compilers, libraries, version control systems, operating systems, including any and all software implementations of algorithms, models and methodologies for any of the foregoing, whether in Source Code, Object Code or other form, (ii) databases and compilations, including any and all data and collections of data, whether machine readable or otherwise, (iii) descriptions, flow-charts and other work product used to design, plan, organize and develop any of the foregoing and (iv) all user documentation, including user manuals and trai
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+>  to by the Company, any Company Subsidiary or any Entity with which the Company or any Company Subsidiary is considered a single employer under Section 414(b), (c) or (m) of the Code (a "Company ERISA Affiliate") with respect to any current or former employee, officer or director of the Company or any of the Company Subsidiaries or any beneficiary or dependent thereof or with respect to which the Company, any of the Company Subsidiaries or any Company ERISA Affiliate would reasonably be expected to have any material liability. "Company Equity Appreciation Right" means equity appreciation right
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"ten largest" customer'}`
+
+section refs: 5.3, 8.13, 8.13, 8.13, ARTICLE I
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+> rnmental Authority entered into in the ordinary course with respect to Company Products. "Legal Proceeding" means any action, suit, litigation, arbitration, proceeding (including any civil, criminal, administrative, investigative or appellate proceeding), hearing, inquiry, audit, examination or investigation commenced, brought, conducted or heard by or before, or otherwise involving, any court or other Governmental Authority or any arbitrator or arbitration panel. "Licensed Intellectual Property" means all of the Intellectual Property Rights owned by a third party that is licensed to the Compa
+
+> ARTICLE I THE MERGER 
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': 'largest customers'}`
+
+section refs: 3.14, 5.2, 8.13, 8.13, 8.13
+
+> tered (i) any Personal Data related to the business of the Company or the Company Subsidiaries or (ii) any IT Assets that Process Personal Data related to the business of the Company or the Company Subsidiaries, its respective Personal Data processors, customers, subcontractors or vendors, or any other Persons on its behalf. Neither the Company nor the Company Subsidiaries has notified or, as of the date hereof, plans to notify, either voluntarily or as required by any Privacy and Data Security Requirements any affected individual, any third party, any Governmental Authority or the media of an
+
+> Section 5.2 Operation of the Company's Business. (a) Except (i) as expressly contemplated, required or permitted by this Agreement, (ii) as required by applicable Law, (iii) as set forth in Section 5.2(a) or Section 5.2(b) of the Company Disclosure Letter, (iv) as consented to in writing by Parent (such consent not to be unreasonably withheld, conditioned or delayed) or (v) for any actions taken reasonably and in good faith in response to any COVID-19 Measure or COVID-19, during the Interim Period, the Company shall and shall cause the Company Subsidiaries to: (A) ensure that it conducts its a
+
+> mployees, agents, attorneys, accountants, advisors and investment bankers. "ROCKSTAR Study " means the Company's clinical trial, KD025-213, a Phase 2 Clinical Trial in oncology with 132 patients powered to achieve statistical significance in its primary endpoint of overall response rate as defined by the 2014 NIH Consensus Development Project on Clinical Trials in cGVHD and as assessed by investigators, which endpoint was a clinically significant endpoint. "Sarbanes-Oxley Act" means the Sarbanes-Oxley Act of 2002, as amended and the regulations promulgated thereunder. "Securities Act" means th
+
+> ools and kits, templates, menus, analytics and tracking tools, compilers, libraries, version control systems, operating systems, including any and all software implementations of algorithms, models and methodologies for any of the foregoing, whether in Source Code, Object Code or other form, (ii) databases and compilations, including any and all data and collections of data, whether machine readable or otherwise, (iii) descriptions, flow-charts and other work product used to design, plan, organize and develop any of the foregoing and (iv) all user documentation, including user manuals and trai
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts governed by'}`
+
+section refs: 3.5, 3.17, 3.17, 8.13, 4.9
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> eir Affiliates (other than the Company) or immediate family members (other than offer letters that can be terminated at will without severance obligations and Contracts pursuant to Company Options); (xii) that is with any Governmental Authority under which payments in excess of $1,000,000 were received by the Company in the most recently completed fiscal year; (xiii) pursuant to which the Company or any Company Subsidiaries has continuing guarantee, "earn-out" or similar contingent payment obligations (other than indemnification or performance guarantee obligations provided for in the ordinary
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+> Section 4.9 Certain Arrangements. There are no Contracts or commitments to enter into Contracts between Parent, Merger Subsidiary or any of their Affiliates, on the one hand, and any director, officer or employee of the Company or any of the Company Subsidiaries, on the other hand. 
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': 'customers" "governed" "law" "jurisdiction'}`
+
+section refs: 8.5, 8.13, 5.6, ARTICLE VII, 5.6
+
+> Section 8.5 Applicable Law; Jurisdiction. (a) THIS AGREEMENT SHALL BE INTERPRETED, CONSTRUED AND GOVERNED BY AND IN ACCORDANCE WITH THE LAWS OF THE STATE OF DELAWARE, REGARDLESS OF THE LAWS THAT MIGHT OTHERWISE GOVERN UNDER APPLICABLE CONFLICTS OF LAW PRINCIPLES. The parties hereto hereby irrevocably submit to the personal jurisdiction of the Court of Chancery of the State of Delaware or, if such Court of Chancery shall lack subject matter jurisdiction, the federal courts of the United States of America located in the County of New Castle, Delaware, solely in respect of the interpretation and 
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+> elevant Governmental Authority with jurisdiction over enforcement of any applicable Antitrust Laws ("Government Antitrust Entity" ) giving effect thereto) if such action should be necessary or advisable to avoid, prevent, eliminate or remove the actual, anticipated or threatened (x) commencement of any proceeding in any forum or (y) issuance of any order, decree, decision, determination, judgment or Law, in each case that would delay, restrain, prevent, enjoin or otherwise prohibit consummation of the Transactions by any Government Antitrust Entity (it being understood that no such action will
+
+> d neither Parent nor the Company shall have received a standard form letter from the Federal Trade Commission ("FTC") Bureau of Competition, in the form announced and disclosed by the FTC Bureau of Competition on August 3, 2021 and the Parties shall not have been notified by the FTC that the underlying investigation has been closed or otherwise resolved. (c) No Legal Prohibition. No Governmental Authority of competent jurisdiction shall have enacted, issued, promulgated, entered, enforced or deemed applicable to the Merger any applicable Law, or issued or granted any Order (whether temporary, 
+
+> nless, to the extent legally permissible and reasonably practicable, (i) it consults with the other party in advance and (ii) unless prohibited by such Governmental Authority, gives the other party the opportunity to attend and participate in such meeting or substantive discussion. (d) Regulatory Matters. Subject to the terms and conditions set forth in this Agreement, without limiting the generality of the other undertakings pursuant to this Section 5.6, each of the Company and Parent agree to take or cause to be taken the following actions: (i) the provision to each and every federal, state,
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 0bb71d7e4a73
+
+## Question
+
+What form of consideration do target stockholders receive in the merger?
+
+## Options
+
+- All Cash
+- All Stock
+- Mixed Cash/Stock
+- Mixed Cash/Stock: Election
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'merger consideration'}`
+
+section refs: 12.2, 2.1, 2.5, 1.10, (none)
+
+> the Merger Consideration, extension of the Termination Date, change in the type of merger consideration, or other amendment, modification, waiver or change to the Agreement that is material and adverse to the undersigned and not consented to in advance in writing by the undersigned, and (e) December 31, 2024. For the avoidance of doubt, a decline in Nicolet's stock price shall not be considered a reduction in the merger consideration. 6. Capitalized Terms . Unless otherwise defined herein, all capitalized terms in this Voting and Support Agreement shall have the same meaning as given such term
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> Section 1.10 Alternative Structure. Notwithstanding anything to the contrary contained in this Agreement, before the Effective Time, Nicolet may change the method of effecting the Contemplated Transactions if and to the extent that it concludes such a change to be desirable; provided, that: (a) any such change shall not affect the U.S. federal income tax consequences of the Merger to holders of Company Common Stock; and (b) no such change shall (i) alter or change the amount or kind of the consideration to be issued to holders of Company Common Stock as consideration in the Merger or (ii) mate
+
+> EXHIBIT 2.1 AGREEMENT AND PLAN OF MERGER BY AND BETWEEN NICOLET BANKSHARES, INC. AND COUNTY BANCORP, INC. JUNE 22, 2021 ________________ TABLE OF CONTENTS Article 1 THE MERGER 1 Section 1.1 The Merger 1 Section 1.2 Effective Time; Closing 1 Section 1.3 Effects of the Merger 2 Section 1.4 Organizational Documents of the Surviving Entity 2 Section 1.5 Directors and Officers of the Surviving Entity 2 Section 1.6 Location of the Surviving Entity 2 Section 1.7 Bank Merger 2 Section 1.8 TRUPS and Subordinated Notes Assumption 2 Section 1.9 Absence of Control 2 Section 1.10 Alternative Structure 2 Ar
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'consideration payable to stockholders'}`
+
+section refs: 2.5, 2.5, 2.1, 2.5, 3.12
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> nal shares of Nicolet Common Stock in accordance with Section 2.5 deliverable in respect of the shares of Company Common Stock represented by such Company Stock Certificate; thereupon such Company Stock Certificate shall forthwith be cancelled. (e) No interest will be paid or accrued on any portion of the Merger Consideration deliverable upon surrender of a Company Stock Certificate. (f) After the Effective Time, there shall be no transfers of Outstanding Company Shares on the stock transfer books of the Company. (g) No dividends or other distributions declared with respect to Nicolet Common S
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+> of Nicolet Common Stock and cash for payment of the Merger Consideration pursuant to Section 2.1, and (ii) sufficient cash for payment of cash in lieu of any fractional shares of Nicolet Common Stock in accordance with Section 2.5. Such amount of cash and shares of Nicolet Common Stock, together with any dividends or distributions with respect thereto paid after the Effective Time, are referred to in this Article 2 as the "Conversion Fund." (c) Within five (5) Business Days after the Closing Date, Nicolet shall cause the Exchange Agent to mail to each holder of record of one or more certificat
+
+> ransactions contemplated hereby (including possible terminations of employment in connection therewith) will cause a payment, vesting, increase or acceleration of benefits or benefit entitlements under any Company Benefit Plan or any other increase in the liabilities of the Company or any subsidiary under any Company Benefit Plan. No Company Benefit Plan provides for payment of any amount which, considered in the aggregate with amounts payable pursuant to all other Company Benefit Plans, would reasonably be expected to result in any amount being non-deductible for federal income tax purposes b
+
+### Step 3: `get_section`
+
+args: `{'section_ref': 'Section 2.3'}`
+
+section refs: 2.3
+
+> Section 2.3 and the fractional share procedures in 
+
+### Step 4: `get_section`
+
+args: `{'section_ref': 'Section 2.1'}`
+
+section refs: 2.1
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 2.1 Consideration (a) At the Effective Time'}`
+
+section refs: 2.1, 1.10, 2.5, 2.8, 1.2
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+> Section 1.10 Alternative Structure. Notwithstanding anything to the contrary contained in this Agreement, before the Effective Time, Nicolet may change the method of effecting the Contemplated Transactions if and to the extent that it concludes such a change to be desirable; provided, that: (a) any such change shall not affect the U.S. federal income tax consequences of the Merger to holders of Company Common Stock; and (b) no such change shall (i) alter or change the amount or kind of the consideration to be issued to holders of Company Common Stock as consideration in the Merger or (ii) mate
+
+> ection Deadline, Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock that was issued and outstanding immediately prior to the Effective Time in accordance with the terms of this Section. In order to ensure that the limits specified with respect to the cash consideration specified below are not exceeded, the parties hereby agree that the Exchange Agent, in applying the allocation rules set forth herein, shall have reasonable discretion to round calculations or otherwise adjust results thereof in order to accomplish such purpose, 
+
+> Section 2.8 Company Stock Awards. (a ) Company Stock Options. Immediately prior to the Effective Time, each option issued under the Company Stock Plans that is outstanding immediately prior to the Effective Time (a "Company Stock Option"), whether vested or unvested, shall be cancelled, by virtue of the Merger and without any action on the part of the holder thereof, in consideration for the right to receive, as promptly as practicable (but no later than fifteen (15) calendar days) following the Effective Time, a cash payment (without interest and less applicable withholding Taxes) with respec
+
+> Section 1.2 Effective Time; Closing. (a) The closing of the Merger (the "Closing") shall occur through the mail, by the exchange of documents electronically, or at a place that is mutually acceptable to Nicolet and the Company, or if they fail to agree, at the offices of Bryan Cave Leighton Paisner LLP, 1201 W. Peachtree Street, 14 Floor, Atlanta, Georgia 30309, at 10:00 a.m., local time, on the date that is five (5) Business Days after the satisfaction or waiver (subject to applicable Legal Requirements) of the latest to occur of the conditions set forth in Article 8 and Article 9 (other than
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 2.3 Election and Allocation Procedures'}`
+
+section refs: 2.5, 2.5, 2.5, 2.3, 2.5
+
+> liverable in respect thereof pursuant to this Agreement. (j) If, between the date of this Agreement and the Effective Time, the outstanding shares of Nicolet Common Stock shall have been changed into a different number of shares or into a different class by reason of any stock dividend, subdivision, reclassification, recapitalization, split, combination or exchange of shares, the Merger Consideration per share shall be adjusted appropriately to provide the holders of Company Common Stock the same economic effect as contemplated by this Agreement prior to such event. Section 2.3 Election and Al
+
+> e Business Day that is five (5) Business Days prior to the Effective Time (or such other time and date as Nicolet and the Company may mutually agree) (the "Election Deadline") shall be treated as No-Election Shares. (iii) Any such election shall have been properly made only if the Exchange Agent shall have actually received a properly completed Election Form by the Election Deadline, together with all required accompanying documentation, Company Stock Certificates, and duly executed transmittal materials included with the Election Form, all as described in the instructions to the Election Form
+
+> ection Deadline, Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock that was issued and outstanding immediately prior to the Effective Time in accordance with the terms of this Section. In order to ensure that the limits specified with respect to the cash consideration specified below are not exceeded, the parties hereby agree that the Exchange Agent, in applying the allocation rules set forth herein, shall have reasonable discretion to round calculations or otherwise adjust results thereof in order to accomplish such purpose, 
+
+> Section 2.3 and the fractional share procedures in 
+
+> ock Election Shares." Shares of Company Common Stock as to which a Non-Election or no election has been made are referred to herein as "No-Election Shares." (i) Nicolet and the Company shall cause to be mailed an election form, Letter of Transmittal and other appropriate and customary transmittal materials (which shall specify that delivery shall be effected, and risk of loss and title to the Company Stock Certificates shall pass, only upon proper delivery of such Company Stock Certificates to the Exchange Agent) (collectively, the "Election Form" ) with or following the issuance of the Joint 
+
+### Step 7: `get_section`
+
+args: `{'section_ref': 'Section 2.1(a)'}`
+
+section refs: 2.1
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+### Step 8: `search_agreement`
+
+args: `{'k': 3, 'query': '"each share of Company Common Stock" "converted" "right to receive either"'}`
+
+section refs: 3.5, 2.6, 2.8
+
+> Section 3.5 Capitalization. (a) The authorized capital stock of the Company currently consists exclusively of (i) 50,000,000 shares of Company Common Stock, of which, as of March 31, 2021 (the "Company Capitalization Date"), 7,226,232 shares were issued and 6,094,450 shares were outstanding, (ii) 15,000 shares of Series B Nonvoting Noncumulative Perpetual Preferred Stock, $0.01 par value per share and a redemption price of $1,000.00 per share (the "Company Preferred Stock"), of which, as of the Company Capitalization Date, 8,000 shares were issued and outstanding, and (iii) 585,000 shares of u
+
+> Section 2.6 Company Preferred Stock. At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Preferred Stock, each share of Company Preferred Stock issued and outstanding immediately prior to the Effective Time, if any, will be converted into the right to receive cash in an amount equal to the redemption price of such Company Preferred Stock as of the Effective Time. At the Effective Time, the shares of Company Preferred Stock will no longer be outstanding and will automatically be cancelled and will ceas
+
+> ested or unvested, shall be cancelled (as permitted under Treasury Regulation Section 1.409A-3(j)(4)(ix)(B)), by virtue of the Merger and without any action on the part of the holder thereof, in consideration for the right to receive the number of shares of Company Common Stock subject to such Company Deferred Restricted Stock Unit immediately prior to such cancellation, which shall then be exchanged in accordance this Article 2, treating each share of Company Common Stock received in cancellation of the Company Deferred Restricted Stock Unit as a No-Election Share under Section 2.3. If applic
+
+## Finding
+
+answer: Mixed Cash/Stock: Election
+
+evidence:
+- (Section 2.3(a)) each holder of shares of Company Common Stock shall be provided an opportunity, (i) to elect to receive Nicolet Common Stock with respect to all of such holder's Company Common Stock (a "Stock Election"); (ii) to elect to receive cash with respect to all of such holder's Company Common Stock (a "Cash Election"); (iii) to elect to receive cash with respect to a portion of such holder's Company Common Stock and shares of Nicolet Common Stock with respect to such holder's remaining shares (a "Mixed Election"); or (iv) to indicate that such holder makes no such election with respect to such holder's shares of Company Common Stock (a "Non-Election").
+- (Section 2.5) Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock ... in accordance with the terms of this Section.
+
+rationale: Target stockholders may elect to receive cash, stock, or a mix of both, subject to allocation procedures if cash elections are oversubscribed. This structure corresponds to 'Mixed Cash/Stock: Election' rather than a fixed mixed consideration or a single form of consideration.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in Section 2.3 and the fractional share procedures in Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration").
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -469,6 +1627,380 @@ rationale: The retrieved passages do not contain a definition of 'Knowledge' tha
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 "knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel;
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 0f73effee9aa
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.11
+
+> "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or tra
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '9.11'}`
+
+section refs: 9.11
+
+> 9.11 Construction. (a) For purposes of this Agreement, whenever the context requires: the singular number shall include the plural, and vice versa; the masculine gender shall include the feminine and neuter genders; the feminine gender shall include the masculine and neuter genders; and the neuter gender shall include masculine and feminine genders. (b) The Parties agree that any rule of construction to the effect that ambiguities are to be resolved against the drafting Party shall not be applied in the construction or interpretation of this Agreement. (c) As used in this Agreement, (i) the wo
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" shall mean'}`
+
+section refs: 9.11, 9.11, 3.10, 9.11, 9.11
+
+> e, firmware, middleware, servers, workstations, routers, hubs, switches, data communications lines and all other information technology equipment owned by the applicable Person or licensed or leased by such Person (excluding any public networks). "knowledge" with respect to an Entity shall mean with respect to any matter in question the actual knowledge of such Entity's executive officers after due inquiry. "Leased Real Property" is defined in Section 3.9(b) of this Agreement. A-6 ________________ "Legal Proceeding" shall mean any action, charge, suit, complaint, litigation, arbitration, media
+
+> is Agreement. "Parent Material Adverse Effect" shall mean any event, occurrence, change or development that would or would reasonably be expected to, individually or in the aggregate, materially impair, prevent or materially delay Parent's or Purchaser's ability to consummate the Transactions in a timely manner on the terms set forth herein. "Parent Related Parties" is defined in Section 8.3(b) of this Agreement. "Parent SEC Documents" shall mean all reports, schedules, forms, statements and other documents (including exhibits and all other information incorporated therein) required to be file
+
+> ial Adverse Effect. (f) To the knowledge of the Company, the operation of the business of the Acquired Corporations as conducted as of the date hereof does not infringe, misappropriate or otherwise violate any Intellectual Property owned by any other Person, except as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (g) As of the date of this Agreement, no Legal Proceeding is pending and served (or, to the knowledge of the Company, is being threatened or is pending and has not been served) 18 ________________ against an 
+
+> competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material Contract" is defined in Section 3.11(a) of this Agreement. "Maximum Amount" is defined in Section 6.4(
+
+> Sections 3.3(a), 3.3(c), 3.4, 3.8, 3.23 and 3.24) that are not qualified by a "Material Adverse Effect" shall be true and correct at and as of the expiration time of the Offer on the Expiration Date as if made at and as of the expiration time of the Offer on the Expiration Date (except to the extent any such representation or warranty expressly relates to an earlier date, in which case as of such date), except where the failure of such representations and warranties to be true and correct would not have, individually or in the aggregate, a Material Adverse Effect; (c) the Company shall have co
+
+### Step 4: `get_section`
+
+args: `{'section_ref': '9.11 (definition of Material Adverse Effect)'}`
+
+section refs: 9.11
+
+> 9.11 Construction. (a) For purposes of this Agreement, whenever the context requires: the singular number shall include the plural, and vice versa; the masculine gender shall include the feminine and neuter genders; the feminine gender shall include the masculine and neuter genders; and the neuter gender shall include masculine and feminine genders. (b) The Parties agree that any rule of construction to the effect that ambiguities are to be resolved against the drafting Party shall not be applied in the construction or interpretation of this Agreement. (c) As used in this Agreement, (i) the wo
+
+## Finding
+
+answer: No
+
+evidence:
+- (9.11) "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole
+
+rationale: The definition of 'Material Adverse Effect' for the Company uses the present-tense standard 'has' a material adverse effect, not a forward-looking 'would' or 'could' standard. The forward-looking language appears only in the separate 'Parent Material Adverse Effect' definition or within carve-outs, not in the main MAE test.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including the impact thereof on the relationships, contractual or otherwise, of the Company with employees, labor unions, works councils, financing sources, customers, franchisees, suppliers, partners, Governmental Bodies or other business relationships; (iii) the general conditions or trends in the industries in which the Acquired Corporations operate or in the economy generally or other general business, financial or market conditions, including competition in geographic, product or service areas; (iv) domestic, foreign or global political conditions, economic, regulatory, financial or capital markets conditions (including interest rates, exchange rates, tariffs, trade wars and credit markets); (v) any act of civil unrest, civil disobedience, protests, public demonstrations, insurrection, terrorism, war, cyberterrorism, military activity, sabotage or cybercrime, national or international calamity or any other similar event, including an outbreak or escalation of hostilities involving the United States or any other Governmental Body or the declaration by the United States or any other Governmental Body of a national emergency or war, or any worsening of any such conditions threatened or existing on the date of this Agreement; (vi) any natural or manmade disasters, epidemics, pandemics or disease outbreaks (including COVID-19) or any acts of God; (vii) changes to applicable Legal Requirements (including COVID-19 Measures); (viii) any determination by, or delay of a determination by, the FDA or any other Governmental Body, or any panel or advisory body empowered or appointed thereby, or any indication that any such entity, panel or body will make any determination or delay in making any determination, with respect to the approvability, manufacturing, labeling, contents of package insert, prescribing information, risk management profile, chemistry, manufacturing and controls (CMC) matters or pre-approval inspection matters relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations, or any requirement relating to the results of any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners, including any requirement to conduct further clinical trials or any delayed or accelerated launch of any A-7 _ product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (ix) the results of, or any data derived from, any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners or any announcement thereof; (x) increased incidence or severity of any previously identified side effects (including toxicity), adverse events or safety observations, or reports of new side effects, adverse events or safety observations, with respect to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xi) any recommendations, statements or other pronouncements made, published or proposed by professional medical organizations or any Governmental Body or representative thereof, or any panel or advisory body empowered or appointed thereby, relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xii) any supply chain disruption affecting product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiii) any determination or development relating to coverage, reimbursement or payor rules or policies applicable to, or pricing of, any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiv) the failure of the Company to meet internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect; provided, further, that this clause (xiv) shall not be construed as implying that the Company is making any representation or warranty hereunder with respect to any internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets); (xv) any Legal Proceeding relating to or resulting from this Agreement or the transactions contemplated hereby; (xvi) any action taken by the Company at the written direction of Parent or any action expressly required or permitted to be taken by Parent, Purchaser or the Company pursuant to the terms of this Agreement, or the failure of the Company to take any action that the Company is prohibited by the terms of this Agreement from taking or which the Company did not take on account of withheld consent from Parent; (xvii) any breach by Parent or Purchaser of this Agreement; (xviii) any matter to the extent expressly set forth on the Company Disclosure Schedule or (xix) any change in any Legal Requirement or GAAP or any other applicable accounting principles or standards (or change in interpretations of any Legal Requirement or GAAP or any other applicable accounting principles or standards) after the date of this Agreement; provided, however, that, to the extent such events, circumstances, conditions, changes, developments or effects referred to in clauses (iii), (iv), or (v) has had or would reasonably be expected to have, individually or in the aggregate, a disproportionate adverse effect on the business, financial condition or results of operations of the Acquired Corporations, taken as a whole, relative to other biopharmaceutical companies with products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material C
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 20854b65189a
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company"'}`
+
+section refs: 3.24, ARTICLE 5, 3.19, 3.23, 3.1
+
+> Section 3.24 Intellectual Property. Except as set forth in Section 3.24 of the Company Disclosure Schedules, each of the Company and its Subsidiaries has the unrestricted right and authority, and the Surviving Entity and its Subsidiaries will have the unrestricted right and authority from and after the Effective Time, to use all patents, trademarks, copyrights, service marks, trade names or other intellectual property owned by them as is necessary to enable them to conduct and to continue to conduct all material phases of the businesses of the Company and its Subsidiaries in the manner present
+
+> ARTICLE 5 THE COMPANY'S COVENANTS 
+
+> Section 3.19 Compliance with Environmental Laws. There are no actions, suits, investigations, liabilities, inquiries, Proceedings or Orders involving the Company or any of its Subsidiaries or any of their respective assets that are pending or, to the Knowledge of the Company, threatened, nor to the Knowledge of the Company, is there any factual basis for any of the foregoing, as a result of any asserted failure of the Company or any of its Subsidiaries of, or any predecessor thereof, to comply with any Environmental Law. No environmental clearances or other governmental approvals are required 
+
+> Section 3.23 Labor Matters. (a) There are no collective bargaining agreements or other labor union Contracts applicable to any employees of the Company or any of its Subsidiaries. There is no labor dispute, strike, work stoppage or lockout, or, to the Knowledge of the Company, threat thereof, by or with respect to any employees of the Company or any of its Subsidiaries, and there has been no labor dispute, strike, work stoppage or lockout in the previous three (3) years. There are no organizational efforts with respect to the formation of a collective bargaining unit presently being made, or t
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means'}`
+
+section refs: 12.1, 12.1, 12.1, 12.1, ARTICLE 5
+
+>  in Section 3(1) of ERISA) or other health, welfare or similar plan or arrangement; (iii) "employee benefit plan" (as defined in Section 3(3) of ERISA); (iv) equity-based compensation plan or arrangement (including any stock option, stock purchase, stock ownership, stock appreciation, restricted stock, restricted stock unit, phantom stock or similar plan, agreement or award); (v) other paid time off, compensation, severance, bonus, profit-sharing or incentive plan or arrangement; (vi) other employee benefit plan, practice, policy or arrangement of any kind; or (vii) change in control agreement
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+> rol in any manner the election of a majority of the directors or partners of such Person, or the power to exercise a controlling influence over the management or policies of such Person. (v) "CRA" means the Community Reinvestment Act, as amended. (w) "Deposit Insurance Fund" means the fund that is maintained by the FDIC to allow it to make up for any shortfalls from a failed depository institution's assets. 50 ________________ (x) "DOL" means the U.S. Department of Labor. (y) "Environment" means surface or subsurface soil or strata, surface waters and sediments, navigable waters, groundwater, 
+
+> ARTICLE 5 THE COMPANY'S COVENANTS 
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means the actual knowledge of'}`
+
+section refs: 12.1, 3.12, 3.1, 3.17, 5.5
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> rth in Section 3.12(e) of the Company Disclosure Schedules, each Company Benefit Plan is and has been administered in all material respects in compliance with its terms and with all applicable Legal Requirements. (f) Other than routine claims for benefits made in the Ordinary Course of Business, there is no litigation, claim or assessment pending or, to the Company's Knowledge, threatened by, on behalf of, or against any Company Benefit Plan or against the administrators or trustees or other fiduciaries of any Company Benefit Plan 15 ________________ that alleges a violation of applicable stat
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+> Section 3.17 No Defaults. Each Company Material Contract is in full force and effect and is valid and enforceable in accordance with its terms, except as such enforcement may be limited by bankruptcy, insolvency, reorganization or other Legal Requirements affecting creditors' rights generally and subject to general principles of equity. To the Knowledge of the Company, no event has occurred or circumstance exists that (with or without notice or lapse of time) may contravene, conflict with or result in a material violation or breach of, or give the Company, any of its Subsidiaries or other Pers
+
+> Section 5.5 Information Provided to Nicolet. The Company agrees that the information concerning the Company or any of its Subsidiaries that is provided or to be provided by the Company in writing to Nicolet specifically for inclusion in the Registration Statement or Joint Proxy Statement and any other documents to be filed with any Regulatory Authority in connection with the Contemplated Transactions will: (a) at the respective times such documents are filed and, in the case of the Registration Statement, when it becomes effective and, with respect to the Joint Proxy Statement, when mailed, no
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means the actual knowledge of the following individuals'}`
+
+section refs: 3.12, 12.1, 12.1, 3.1, 3.17
+
+> rth in Section 3.12(e) of the Company Disclosure Schedules, each Company Benefit Plan is and has been administered in all material respects in compliance with its terms and with all applicable Legal Requirements. (f) Other than routine claims for benefits made in the Ordinary Course of Business, there is no litigation, claim or assessment pending or, to the Company's Knowledge, threatened by, on behalf of, or against any Company Benefit Plan or against the administrators or trustees or other fiduciaries of any Company Benefit Plan 15 ________________ that alleges a violation of applicable stat
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+> Section 3.17 No Defaults. Each Company Material Contract is in full force and effect and is valid and enforceable in accordance with its terms, except as such enforcement may be limited by bankruptcy, insolvency, reorganization or other Legal Requirements affecting creditors' rights generally and subject to general principles of equity. To the Knowledge of the Company, no event has occurred or circumstance exists that (with or without notice or lapse of time) may contravene, conflict with or result in a material violation or breach of, or give the Company, any of its Subsidiaries or other Pers
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means the actual knowledge of'}`
+
+section refs: 12.1, 3.12, 3.1, 3.17, 5.5
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> rth in Section 3.12(e) of the Company Disclosure Schedules, each Company Benefit Plan is and has been administered in all material respects in compliance with its terms and with all applicable Legal Requirements. (f) Other than routine claims for benefits made in the Ordinary Course of Business, there is no litigation, claim or assessment pending or, to the Company's Knowledge, threatened by, on behalf of, or against any Company Benefit Plan or against the administrators or trustees or other fiduciaries of any Company Benefit Plan 15 ________________ that alleges a violation of applicable stat
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+> Section 3.17 No Defaults. Each Company Material Contract is in full force and effect and is valid and enforceable in accordance with its terms, except as such enforcement may be limited by bankruptcy, insolvency, reorganization or other Legal Requirements affecting creditors' rights generally and subject to general principles of equity. To the Knowledge of the Company, no event has occurred or circumstance exists that (with or without notice or lapse of time) may contravene, conflict with or result in a material violation or breach of, or give the Company, any of its Subsidiaries or other Pers
+
+> Section 5.5 Information Provided to Nicolet. The Company agrees that the information concerning the Company or any of its Subsidiaries that is provided or to be provided by the Company in writing to Nicolet specifically for inclusion in the Registration Statement or Joint Proxy Statement and any other documents to be filed with any Regulatory Authority in connection with the Contemplated Transactions will: (a) at the respective times such documents are filed and, in the case of the Registration Statement, when it becomes effective and, with respect to the Joint Proxy Statement, when mailed, no
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means the actual knowledge of the following persons'}`
+
+section refs: 12.1, 11.5, 12.1, 3.1, 6.4
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 11.5 without notice or liability to any other Person. In some instances, the representations and warranties in this Agreement may represent an allocation among the parties hereto of risks associated with particular matters regardless of the knowledge of any of the parties hereto. Consequently, persons other than the parties may not rely upon the representations and warranties in this Agreement as characterizations of actual facts or circumstances as of the date of this Agreement or as of any other date. Section 11.4 Modification. This Agreement may be amended, modified or supplemented 
+
+> d approval of this Agreement by the shareholders of Nicolet, in accordance with the WBCL and Nicolet Articles of Incorporation, and approval of the issuance of the Nicolet Common Stock pursuant to this Agreement by the shareholders of Nicolet, in accordance with Nasdaq Rules. nd 52 ________________ (zz) "Nicolet SEC Reports" means the annual, quarterly and other reports, schedules, forms, statements and other documents (including exhibits and all other information incorporated therein) filed or furnished by Nicolet with the SEC under the Securities Act, the Exchange Act, or the regulations of 
+
+> Section 3.1 Company Organization. The Company: (a) is a corporation duly organized, validly existing and in good standing under the laws of the State of Wisconsin and is also in good standing in each other jurisdiction in which the nature of the business conducted or the properties or assets owned or leased by it makes such qualification necessary, except where the failure to be so qualified and in good standing would not have a Material Adverse Effect on the Company; (b) is registered with the Federal Reserve as a bank holding company under the Bank Holding Company Act of 1956, as amended; an
+
+> the right of any Person (any such action, an "Indemnification Proceeding") to which the Indemnified Party was made a party by virtue of his or her service in any of the capacities set forth above in clauses (1) through (3) of this Section 6.4(a), to the extent that such Indemnified Party has been successful on the merits or otherwise in the defense of such Indemnification Proceeding. (b) From and after the Effective Time, Nicolet shall, to the fullest extent permitted under applicable Legal Requirements, indemnify and hold harmless (1) any natural person who is or was an employee or agent of t
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Knowledge of the Company" means'}`
+
+section refs: 12.1, 12.1, 12.1, 12.1, ARTICLE 5
+
+>  in Section 3(1) of ERISA) or other health, welfare or similar plan or arrangement; (iii) "employee benefit plan" (as defined in Section 3(3) of ERISA); (iv) equity-based compensation plan or arrangement (including any stock option, stock purchase, stock ownership, stock appreciation, restricted stock, restricted stock unit, phantom stock or similar plan, agreement or award); (v) other paid time off, compensation, severance, bonus, profit-sharing or incentive plan or arrangement; (vi) other employee benefit plan, practice, policy or arrangement of any kind; or (vii) change in control agreement
+
+> inary course of the normal day-to-day operations of other Persons that are in the same line of business as such Person. (ddd) "OREO" means real estate owned by a Person and designated as "other real estate owned." (eee) "Outstanding Company Shares" means the shares of Company Common Stock issued and outstanding immediately prior to the Effective Time. (fff) "PBGC" means the U.S. Pension Benefit Guaranty Corporation. (ggg) "Person" means any individual, corporation (including any non-profit corporation), general or limited partnership, limited liability company, foundation, joint venture, estat
+
+> Section 12.1 Definitions. In addition to those terms defined throughout this Agreement, the following terms, when used herein, shall have the following meanings: (a) "Acquisition Proposal" means a tender or exchange offer to acquire more than 25% of the voting power in the Company or the Bank, a proposal for a merger, consolidation or other business combination involving the Company or the Bank or any other proposal or offer to acquire in any manner more than 25% of the voting power in, or more than 25% of the business, assets or deposits of, the Company or the Bank, other than the transaction
+
+> rol in any manner the election of a majority of the directors or partners of such Person, or the power to exercise a controlling influence over the management or policies of such Person. (v) "CRA" means the Community Reinvestment Act, as amended. (w) "Deposit Insurance Fund" means the fund that is maintained by the FDIC to allow it to make up for any shortfalls from a failed depository institution's assets. 50 ________________ (x) "DOL" means the U.S. Department of Labor. (y) "Environment" means surface or subsurface soil or strata, surface waters and sediments, navigable waters, groundwater, 
+
+> ARTICLE 5 THE COMPANY'S COVENANTS 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 219d406fe171
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+ABSTAINED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 6.4, 5.1, 3.8, 2.5, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Intervening Event" definition'}`
+
+section refs: 9.5, 5.1, 2.5, ARTICLE VII, ARTICLE IX
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+>  its subsidiaries shall only be required to agree to any terms, conditions, liabilities, obligations, commitments or undertakings on or with respect to its business conduct in connection with its obligations under this Section 6.5, if such terms, conditions, liabilities, obligations, commitments or undertakings are binding on such Party or its subsidiaries only in the event the Closing occurs. SECTION 6.6 Notification of Certain Matters. During the Interim Period, the Company shall give prompt notice to Parent, and Parent shall give prompt notice to the Company, of (a) any notice or other comm
+
+> eld prior to such date) or Section 8.1(f) or is terminated by Parent pursuant to Section 8.1(e)(i) and (A) at any time after the date of this Agreement and prior to such termination an Acquisition Proposal shall have been made to the Company, or to the Company Board of Directors or shareholders, or an Acquisition Proposal shall have otherwise become publicly known, and (B) within twelve (12) months after such termination, the Company shall have entered into a definitive agreement with respect to an Acquisition Proposal or shall have consummated an Acquisition Proposal, then, in the event that 
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 6.4, 5.1, 3.8, 2.5, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Intervening Event" means'}`
+
+section refs: 9.5, 6.4, 9.5, 9.5, 6.4
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> ion and materials (including, in each case, to the extent applicable, reissues, divisions, continuations, continuations in part, extensions and re-examinations of any of the foregoing and all rights therein provided by international treaties or conventions), (ii) registrations, applications, provisionals, divisions, continuations, continuations-in-part, re-examinations, extensions, re-issues, renewals and foreign counterparts of or for any of the foregoing and (ii) the right to sue and collect damages for any past infringement of any of the foregoing. (aa) "Interim Period" means the period fro
+
+>  of any rights in respect of that entity's Equity Securities. (h) "Company Collective Bargaining Agreement" means any Contract between the Company or any of its subsidiaries and any labor organization or other authorized employee representative representing current or former employees of the Company or any of its subsidiaries. (i) "Company Parties" means, collectively, the Company, its subsidiaries and its Joint Ventures, and each of them individually is a "Company Party". (j) "Contract" means any legally binding written or oral agreement, contract, subcontract, lease, instrument, note, option
+
+> by Rule 14d-9(f) promulgated under the Exchange Act or a recommendation on Schedule 14D-9 against such tender offer or exchange offer made within ten (10) Business Days after the commencement thereof and in any event at least two (2) Business Days prior to the Company Shareholder Meeting, shall be deemed a Company Change of Recommendation, unless the Company Board of Directors expressly and concurrently reaffirms the Company Recommendation). 50 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 56/97 (f) For purposes o
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Intervening Event" definition section'}`
+
+section refs: 2.5, 5.1, ARTICLE VII, ARTICLE VII, ARTICLE IX
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+>  its subsidiaries shall only be required to agree to any terms, conditions, liabilities, obligations, commitments or undertakings on or with respect to its business conduct in connection with its obligations under this Section 6.5, if such terms, conditions, liabilities, obligations, commitments or undertakings are binding on such Party or its subsidiaries only in the event the Closing occurs. SECTION 6.6 Notification of Certain Matters. During the Interim Period, the Company shall give prompt notice to Parent, and Parent shall give prompt notice to the Company, of (a) any notice or other comm
+
+> is entitled to indemnification under this Section 6.11 (whether arising before, at or after the Effective Time) on or prior to the sixth anniversary of the Effective Time, the provisions of this Section 6.11 shall continue in effect until the final disposition of such Proceeding. (f) If Parent, the Surviving Corporation or any of its successors or assigns (i) consolidates with or merges into any other Person and shall not be the continuing or surviving corporation or entity of such consolidation or merger, or (ii) transfers or conveys all or substantially all of its properties and assets to an
+
+> eld prior to such date) or Section 8.1(f) or is terminated by Parent pursuant to Section 8.1(e)(i) and (A) at any time after the date of this Agreement and prior to such termination an Acquisition Proposal shall have been made to the Company, or to the Company Board of Directors or shareholders, or an Acquisition Proposal shall have otherwise become publicly known, and (B) within twelve (12) months after such termination, the Company shall have entered into a definitive agreement with respect to an Acquisition Proposal or shall have consummated an Acquisition Proposal, then, in the event that 
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 6.4, 5.1, 3.8, 2.5, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Intervening Event" definition OR "Intervening Event" means'}`
+
+section refs: 9.5, 6.4, 9.5, 6.4, 9.5
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> by Rule 14d-9(f) promulgated under the Exchange Act or a recommendation on Schedule 14D-9 against such tender offer or exchange offer made within ten (10) Business Days after the commencement thereof and in any event at least two (2) Business Days prior to the Company Shareholder Meeting, shall be deemed a Company Change of Recommendation, unless the Company Board of Directors expressly and concurrently reaffirms the Company Recommendation). 50 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 56/97 (f) For purposes o
+
+> h of the preceding clauses (i) through (xii)). (hh) "Material Business Transaction" means a transaction (i) that would prevent, materially delay or materially impair the consummation of the Merger or (ii) in which the holders of Company Shares would not be entitled to receive, in respect of each Company Share held thereby (other than Cancelled Shares and Dissenting Shares), an amount in cash equal to the Per Share Merger Consideration (taking into account the amounts paid in respect thereof pursuant to this Agreement). 83 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/ed
+
+> owingly encourage any Parent Business Combination, (b) enter into any letter of intent, memorandum of understanding, merger agreement, acquisition agreement, option agreement, joint venture agreement, partnership agreement or other similar agreement constituting or related to, or that is intended to effect, any Parent Business Combination or that would reasonably be expected to cause Parent to abandon, terminate or fail to consummate the Merger or the other transactions contemplated by this Agreement, (c) enter into, initiate, continue, engage in or otherwise participate in any way in any disc
+
+>  or share capital, (ii) any warrants, Contracts or other rights or options directly or indirectly to subscribe for or to purchase any capital stock, membership interests or other equity interests or share capital of such Person, (iii) all securities or instruments, directly or indirectly, exchangeable for or convertible or exercisable into, any of the foregoing or with any profit participation features with respect to such Person, or (iv) any share appreciation rights, phantom share rights or other similar rights with respect to such Person or its business. (q) "ERISA Affiliate" means each ent
+
+## Finding
+
+answer: ABSTAIN
+
+evidence:
+
+rationale: The term "Intervening Event" is not defined in this agreement, nor does the agreement appear to use the term in the context of a board's fiduciary duties or change of recommendation provisions. As the term is absent, I must abstain.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -741,6 +2273,154 @@ No expert-annotated span is recorded for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 244901d12f76
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Superior Proposal'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'definition Superior Proposal means'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Superior Proposal" means any written proposal'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"Superior Proposal" means any proposal'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': '"Superior Proposal" means any third party'}`
+
+section refs: 5.3, 5.3, 8.4, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> nt with any person, to confer any rights or remedies upon any person other than the parties hereto and their respective successors and permitted assigns or to otherwise create any third-party beneficiary hereto, except (a) with respect to the Indemnified Persons who are express third party beneficiaries of Section 5.10 and (b) from and after the Effective Time, the right of the holders of Company Common Stock to receive the Merger Consideration payable in accordance with Section 1.3. 59 ________________ 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': '"Superior Proposal" means any acquisition proposal'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': '"Superior Proposal" means'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 257db09a639b
 
 ## Question
@@ -832,6 +2512,69 @@ rationale: The Knowledge definition in Section 9.03 explicitly limits knowledge 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 277ca05c77e2
+
+## Question
+
+What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+ABSTAINED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'percentage of revenue customer contracts change-of-control termination rights'}`
+
+section refs: 6.5, 8.1, 5.2, ARTICLE IX, 3.11
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> he business of it or its Subsidiaries or the Surviving Corporation or to the receipt of regulatory approvals for the transactions contemplated hereby on a timely basis; (j) take any action or knowingly fail to take any action where such action or failure to act could reasonably be expected to prevent the Merger from qualifying as a "reorganization" within the meaning of Section 368(a) of the Code; (k) amend the Boston Private Articles of Organization, Boston Private Bylaws or comparable governing documents of its Subsidiaries; (l) merge or consolidate itself or any of its Subsidiaries with any
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"change of control" termination rights revenue percentage'}`
+
+section refs: 6.5, ARTICLE IX, 8.1, (none), ARTICLE VIII
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ARTICLE VIII TERMINATION AND AMENDMENT 
+
+## Finding
+
+answer: ABSTAIN
+
+evidence:
+
+rationale: The agreement does not contain any provision specifying the percentage of the Target's revenue derived from customer contracts that include change-of-control termination rights. I have searched the agreement and found no such disclosure or representation.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 2c1307dce765
 
 ## Question
@@ -894,6 +2637,51 @@ rationale: No. The tail-period trigger in Section 8.02(b)(iii) is disjunctive: i
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 SECTION 8.02. Effect of Termination. (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (B) within 12 months of such termination the Company or any of its Subsidiaries enters into an Acquisition Agreement with respect to any Acquisition Proposal or any Acquisition Proposal is consummated
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 2c8bbf68f5ab
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+EXECUTION_FAILED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.11
+
+> "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or tra
+
+### Step 2: `get_section`
+
+args: `{}`
+
+(tool result text not recorded)
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including the impact thereof on the relationships, contractual or otherwise, of the Company with employees, labor unions, works councils, financing sources, customers, franchisees, suppliers, partners, Governmental Bodies or other business relationships; (iii) the general conditions or trends in the industries in which the Acquired Corporations operate or in the economy generally or other general business, financial or market conditions, including competition in geographic, product or service areas; (iv) domestic, foreign or global political conditions, economic, regulatory, financial or capital markets conditions (including interest rates, exchange rates, tariffs, trade wars and credit markets); (v) any act of civil unrest, civil disobedience, protests, public demonstrations, insurrection, terrorism, war, cyberterrorism, military activity, sabotage or cybercrime, national or international calamity or any other similar event, including an outbreak or escalation of hostilities involving the United States or any other Governmental Body or the declaration by the United States or any other Governmental Body of a national emergency or war, or any worsening of any such conditions threatened or existing on the date of this Agreement; (vi) any natural or manmade disasters, epidemics, pandemics or disease outbreaks (including COVID-19) or any acts of God; (vii) changes to applicable Legal Requirements (including COVID-19 Measures); (viii) any determination by, or delay of a determination by, the FDA or any other Governmental Body, or any panel or advisory body empowered or appointed thereby, or any indication that any such entity, panel or body will make any determination or delay in making any determination, with respect to the approvability, manufacturing, labeling, contents of package insert, prescribing information, risk management profile, chemistry, manufacturing and controls (CMC) matters or pre-approval inspection matters relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations, or any requirement relating to the results of any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners, including any requirement to conduct further clinical trials or any delayed or accelerated launch of any A-7 _ product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (ix) the results of, or any data derived from, any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners or any announcement thereof; (x) increased incidence or severity of any previously identified side effects (including toxicity), adverse events or safety observations, or reports of new side effects, adverse events or safety observations, with respect to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xi) any recommendations, statements or other pronouncements made, published or proposed by professional medical organizations or any Governmental Body or representative thereof, or any panel or advisory body empowered or appointed thereby, relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xii) any supply chain disruption affecting product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiii) any determination or development relating to coverage, reimbursement or payor rules or policies applicable to, or pricing of, any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiv) the failure of the Company to meet internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect; provided, further, that this clause (xiv) shall not be construed as implying that the Company is making any representation or warranty hereunder with respect to any internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets); (xv) any Legal Proceeding relating to or resulting from this Agreement or the transactions contemplated hereby; (xvi) any action taken by the Company at the written direction of Parent or any action expressly required or permitted to be taken by Parent, Purchaser or the Company pursuant to the terms of this Agreement, or the failure of the Company to take any action that the Company is prohibited by the terms of this Agreement from taking or which the Company did not take on account of withheld consent from Parent; (xvii) any breach by Parent or Purchaser of this Agreement; (xviii) any matter to the extent expressly set forth on the Company Disclosure Schedule or (xix) any change in any Legal Requirement or GAAP or any other applicable accounting principles or standards (or change in interpretations of any Legal Requirement or GAAP or any other applicable accounting principles or standards) after the date of this Agreement; provided, however, that, to the extent such events, circumstances, conditions, changes, developments or effects referred to in clauses (iii), (iv), or (v) has had or would reasonably be expected to have, individually or in the aggregate, a disproportionate adverse effect on the business, financial condition or results of operations of the Acquired Corporations, taken as a whole, relative to other biopharmaceutical companies with products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material C
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -1606,6 +3394,201 @@ rationale: Placeholder — continuing retrieval of Section 6.9's representative-
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 395a5a84db01
+
+## Question
+
+What standard governs the target's liability for a no-shop breach committed by its non-officer/director representatives?
+
+## Options
+
+- Strict liability
+- Reasonable standard
+
+## Status
+
+EXECUTION_FAILED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'no-shop breach liability standard non-officer director representatives'}`
+
+section refs: 4.6, 3.6, 6.6, 7.2, 3.6
+
+> arge-offs and accruals) of SVB Financial or any of its Subsidiaries or their respective internal accounting controls, including any material complaint, allegation, assertion or claim that SVB Financial or any of its Subsidiaries has engaged in questionable accounting or auditing practices, and (ii) no employee of or attorney representing SVB Financial or any of its Subsidiaries, whether or not employed by SVB Financial or any of its Subsidiaries, has reported evidence of a material violation of securities laws or banking laws, breach of fiduciary duty or similar violation by SVB Financial or a
+
+> mittee thereof, or to the knowledge of Boston Private, to any director or officer of Boston Private or any Boston Private Subsidiary (including pursuant to any whistleblower or similar process). (f) As of the date of this Agreement, no executive officer of Boston Private has failed in any respect to make the certifications required of him or her under Section 302 or 906 of the Sarbanes-Oxley Act. -17- ________________ 
+
+> Section 6.6). 6.6 Indemnification; Directors' and Officers' Insurance. (a) From and after the Effective Time, the Surviving Corporation shall indemnify and hold harmless, to the fullest extent permitted by applicable law, each present and former director, officer or employee of Boston Private and its Subsidiaries (in each case, when acting in such capacity) (collectively, the "Boston Private Indemnified Parties") against any costs or expenses (including reasonable attorneys' fees), judgments, fines, losses, damages or liabilities incurred in connection with any threatened or actual claim, acti
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> ief financial officer will not be able to give the certifications and attestations required pursuant to the rules and regulations adopted pursuant to Section 404 of the Sarbanes-Oxley Act, without qualification, when next due. -16- ________________ (e) Since January 1, 2018, (i) neither Boston Private nor any of its Subsidiaries, nor, to the knowledge of Boston Private, any director, officer, auditor, accountant or representative of Boston Private or any of its Subsidiaries, has received or otherwise had or obtained knowledge of any material complaint, allegation, assertion or claim, whether w
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'representatives breach no solicitation covenant liability'}`
+
+section refs: 7.2, 7.2, 9.11, 3.14, 3.14
+
+> vate shall give SVB Financial the opportunity to participate at its own expense in the defense or settlement of any shareholder litigation against Boston Private and/or its directors or affiliates relating to the transactions contemplated by this Agreement, and no such settlement shall be agreed without SVB Financial's prior written consent (such consent not to be unreasonably withheld, conditioned or delayed). 6.16 Trust Preferred Securities. Upon the Effective Time, SVB Financial or a Subsidiary of SVB Financial shall assume the due and punctual performance and observance of the covenants an
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> 9.11 Assignment; Third Party Beneficiaries. Neither this Agreement nor any of the rights, interests or obligations shall be assigned by any of the parties hereto (whether by operation of law or otherwise) without the prior written consent of the other party. Any purported assignment in contravention hereof shall be null and void. Subject to the preceding sentence, this Agreement will be binding upon, inure to the benefit of and be enforceable by the parties and their respective successors and assigns. Except as otherwise specifically provided in Section 6.6, which is intended to benefit each B
+
+> , (iv) neither Boston Private nor any of its Subsidiaries has knowledge of, or has received notice of, any violation of any Boston Private Contract by any of the other parties thereto which would reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, and (v) no event or condition exists which constitutes or, after notice or lapse of time or both, will constitute, a material breach or default on the part of Boston Private or any of its Subsidiaries, or to the knowledge of Boston Private, any other party thereto, of or under any such
+
+>  than with respect to indebtedness disclosed in any Boston Private Report(s) filed since January 1, 2020; -26- ________________ (ix) that is a settlement, consent or similar agreement and contains any material continuing obligations of Boston Private or any of its Subsidiaries; (x) that relates to the acquisition or disposition of any person, business or asset and under which Boston Private or its Subsidiaries have or may have a material obligation or liability; or (xi) pursuant to which (i) any license, covenant not to sue, release, waiver, option or other right is granted under any material 
+
+### Step 3: `get_section`
+
+args: `{'section_ref': '6.9'}`
+
+(tool result text not recorded)
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '6.9 Acquisition Proposals'}`
+
+section refs: 7.2, 7.2, 8.1, 6.3, 6.3
+
+> with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> d against any Acquisition Proposal or (B) reaffirm the board recommendation within ten (10) business days (or such fewer number of days as remains prior to the Boston Private Meeting) after an Acquisition Proposal is made public or any request by SVB Financial to do so, (iv) adopted, approved, recommended or endorsed an Acquisition Proposal or publicly announced an intention to adopt, approve, recommend or endorse an Acquisition Proposal or (v) publicly proposed to do any of the foregoing or (B) Boston Private or the Boston Private Board of Directors shall have breached its obligations under S
+
+> ng) after an Acquisition Proposal is made public or any request by SVB Financial to do so, (iv) adopt, approve, recommend or endorse an Acquisition Proposal or publicly announce an intention to adopt, approve, recommend or endorse an Acquisition Proposal, or (v) publicly propose to do any of the foregoing. Boston Private shall engage a proxy solicitor reasonably acceptable to SVB Financial to assist in the solicitation of proxies from shareholders relating to the Requisite Boston Private Vote. However, subject to Section 8.1 and Section 8.2, if the Board of Directors of Boston Private, after r
+
+> roposal, the Boston Private Board of Directors shall have concluded in good faith, after giving effect to all the adjustments which may be offered by SVB Financial pursuant to clause (iv) below, that such Acquisition Proposal constitutes a Superior Proposal; (iii) Boston Private shall notify SVB Financial, at least four (4) business days in advance, of the intention of the Boston Private Board of Directors to change its recommendation (including, in the event such change in recommendation is in response to an Acquisition Proposal, the identity of the party making such Acquisition Proposal and 
+
+### Step 5: `get_section`
+
+args: `{}`
+
+(tool result text not recorded)
+
+### Step 6: `search_agreement`
+
+args: `{'k': 3, 'query': '"6.9 Acquisition Proposals" Boston Private shall not shall cause its Subsidiaries'}`
+
+section refs: 7.2, 7.2, 7.2
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of
+
+> sions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement w
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.9 Acquisition Proposals. (a) Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to, directly or indirectly, (i) initiate, solicit, knowingly encourage or knowingly facilitate inquiries or proposals with respect to, (ii) engage or participate in any negotiations with any person concerning, (iii) provide any confidential or nonpublic information or data to, or have or participate in any discussions with, any person relating to, any Acquisition Proposal or (iv) publicly propose any of the foregoing or propose any of the foregoing to a third party; provided, that, prior to receipt of the Requisite Boston Private Vote, in the event Boston Private receives an unsolicited bona fide written Acquisition Proposal, it may, and may permit its Subsidiaries and its and its Subsidiaries' officers, directors, agents, advisors and representatives to, furnish or cause to be furnished nonpublic information or data and participate in such negotiations or discussions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement with such third party on terms no less favorable to it than the Confidentiality Agreement, which confidentiality agreement shall not provide such person with any exclusive right to negotiate with Boston Private. Boston Private will, will cause its officers and directors to, and will use reasonable best efforts to cause its agents, advisors and representatives to, immediately cease and cause to be terminated any activities, discussions or negotiations conducted before the date of this Agreement with any person other than SVB Financial with respect to any Acquisition Proposal. Boston Private will promptly (and in any event within twenty-four (24) hours and before entering into any discussions or providing any information) advise SVB Financial following receipt of any Acquisition Proposal or any inquiry which could reasonably be expected to lead to an Acquisition Proposal, and the substance thereof (including the material terms and conditions of and the identity of the person making such inquiry or Acquisition Proposal), will provide SVB Financial with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of its Subsidiaries is a party in accordance with the terms thereof. Boston Private shall not, and shall cause its Subsidiaries and its and their officers, directors, agents, advisors and representatives not to on its behalf, enter into any letter of intent, memorandum of understanding, agreement in principle, acquisition agreement, merger agreement, or other agreement (other than a confidentiality agreement referred to and entered into in accordance with this Section 6.9(a)) relating to any Acquisition Proposal. As used in this Agreement, "Acquisition Proposal" means, other than the transactions contemplated by this Agreement, any offer, proposal or inquiry relating to, or any third party indication of interest in, (i) any acquisition or purchase, direct or indirect, of 25% or more of the consolidated assets of Boston Private and its Subsidiaries or 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, (ii) any tender offer (including a self tender offer) or exchange offer that, if consummated, would result in such third party beneficially owning 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, or (iii) a merger, consolidation, share exchange or other business combination involving Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private. As used in this Agreement, "Superior Proposal" means a bona fide written Acquisition Proposal that the Board of Directors of Boston Private concludes in good faith to be more favorable to its shareholders than the Merger and the other transactions contemplated hereby, (i) after receiving the advice of its financial advisors, (ii) after taking into account the likelihood of consummation of such transaction on the terms set forth therein and (iii) after taking into account all legal (with the advice of outside counsel), financial (including the financing terms of any such proposal), regulatory and other aspects of such proposal (including any expense reimbursement provisions and conditions to closing) and any other relevant factors permitted under applicable law; provided, that for purposes of the definition of "Superior Proposal," the reference to "25%" in the definition of Acquisition Proposal shall instead refer to "50%".
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 398be705a6ca
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Knowledge definition'}`
+
+section refs: 9.3, 3.21, 3.18, 3.18, 3.24
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+>  scope of the Company and any Company Subsidiary and the Personal Data they Process in the conduct of their business, (ii) designed to protect the operation, confidentiality, integrity, availability and security of the Company's and any of the Company's Subsidiaries IT systems, and all Personal Data, against unauthorized access, acquisition, interruption, alteration, modification, or use, and (iii) consistent with the Company's and any of the Company Subsidiaries' Privacy Obligations. To the knowledge of the Company, within the three (3) years prior to the date hereof, neither the Company nor 
+
+> n accordance with all applicable Laws to protect the secrecy of, and their rights in, all confidential information and Trade Secrets owned by the Company and its Subsidiaries, and, with respect to any confidential information or Trade Secrets owned by any Third Party that have been provided or made available to the Company and its Subsidiaries under Contract (including by any customer of the Company), to the knowledge of the Company, the Company nor any of its Subsidiaries is in breach of the terms of such Contract with respect to the confidentiality of such confidential information or Trade S
+
+>  Subsidiaries own or are licensed under, or otherwise possesses sufficient rights under, the Intellectual Property used in or necessary to conduct the business and operations of the Company and its Subsidiaries as currently conducted. To the knowledge of the Company, the Company and its Subsidiaries will continue to own, license or have the right to use such Intellectual Property immediately following the Closing to the same extent as prior to the Closing. Without limiting the foregoing, to the knowledge of the Company, the Company and its Subsidiaries own or have sufficient licenses or rights
+
+>  means any anti-money laundering-related laws, regulations, and codes of practice applicable to the Company and the Company Subsidiaries and their operation, including without limitation the EU Anti-Money Laundering Directives and any laws, decrees, administrative orders, circulars, or instructions implementing or interpreting same, and the applicable financial recordkeeping and reporting requirements of the U.S. Currency and Foreign Transaction Reporting Act of 1970. (d) None of the Company or any of the Company Subsidiaries is party to any pending or to the knowledge of the Company, threaten
+
+### Step 3: `lookup_defined_term`
+
+args: `{'term': 'Knowledge of the Company'}`
+
+(tool result text not recorded)
+
+### Step 4: `get_section`
+
+args: `{'section_ref': '9.3'}`
+
+section refs: 9.3
+
+> SECTION 9.03. Definitions. For purposes of this Agreement: An "Affiliate" or "affiliate" of any person means another person that directly or indirectly, through one or more intermediaries, controls, is controlled by, or is under common control with, such first person. A "business day" means any day other than a Saturday, Sunday or day on which banks are required or authorized by Law to close in New York, New York. The "CARES Act" means the Coronavirus Aid, Relief, and Economic Security Act (H.R. 748) and any similar or successor legislation in any applicable jurisdiction, and any subsequent le
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '9.03'}`
+
+section refs: 9.3
+
+> SECTION 9.03. Definitions. For purposes of this Agreement: An "Affiliate" or "affiliate" of any person means another person that directly or indirectly, through one or more intermediaries, controls, is controlled by, or is under common control with, such first person. A "business day" means any day other than a Saturday, Sunday or day on which banks are required or authorized by Law to close in New York, New York. The "CARES Act" means the Coronavirus Aid, Relief, and Economic Security Act (H.R. 748) and any similar or successor legislation in any applicable jurisdiction, and any subsequent le
+
+### Step 6: `answer`
+
+args: `{}`
+
+(no retrieved text)
+
+### Step 7: `search_agreement`
+
+args: `{'k': 3, 'query': '"knowledge" with respect to the Company means the actual knowledge'}`
+
+section refs: 9.3, 3.18, 3.18
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+> n accordance with all applicable Laws to protect the secrecy of, and their rights in, all confidential information and Trade Secrets owned by the Company and its Subsidiaries, and, with respect to any confidential information or Trade Secrets owned by any Third Party that have been provided or made available to the Company and its Subsidiaries under Contract (including by any customer of the Company), to the knowledge of the Company, the Company nor any of its Subsidiaries is in breach of the terms of such Contract with respect to the confidentiality of such confidential information or Trade S
+
+> f the Company Disclosure Letter, all employees, consultants and other Third Parties who made material contributions to the discovery or development of any of the Company Intellectual Property did so either (A) within the scope of his or her employment such that, in accordance with applicable Law, all Intellectual Property Rights and Technology (including any Company Software) arising therefrom became the exclusive property of the Company and its Subsidiaries or (B) pursuant to written agreements (which, to the knowledge of the Company, are valid) irrevocably assigning, in accordance with appli
+
+## Finding
+
+answer: Actual knowledge
+
+evidence:
+- (Section 9.3) "knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel; and with respect to Parent and Sub, knowledge means the actual knowledge of the persons listed on Section 9.03 of the Parent Disclosure Letter.
+
+rationale: The agreement defines "knowledge" explicitly as "actual knowledge" of specific named officers for the Company and specific persons for Parent/Sub. It does not include constructive knowledge or what individuals should have known.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel;
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 3ad7312556b5
 
 ## Question
@@ -1668,6 +3651,254 @@ The system produced no finding for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 3b3241d33194
+
+## Question
+
+What standard must the target board find its fiduciary duties require before taking action on an unsolicited proposal under the no-shop's fiduciary exception?
+
+## Options
+
+- "Inconsistent" with fiduciary duties
+- "Reasonably likely/expected to be inconsistent" with fiduciary duties
+- Other specified standard
+- "Reasonably likely/expected violation" of fiduciary duties
+- "Reasonably likely/expected breach" of fiduciary duties
+- "Required to comply" with fiduciary duties
+- "Breach" of fiduciary duties
+- "Violation" of fiduciary duties
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'no-shop fiduciary exception board determine'}`
+
+section refs: 6.4, 6.4, 6.4, 6.4, 3.8
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> constitutes a Superior Proposal, and such Acquisition Proposal is not withdrawn, the Company or the Company Board of Directors may (A) make a Company Change of Recommendation and/or (B) terminate this Agreement pursuant to Section 8.1(d)(ii) to enter into a definitive agreement with respect to such Superior Proposal, in each case, if (and only if) (1) in the event the Agreement is terminated pursuant to Section 8.1(d)(ii), the Company pays to Parent any Company Termination Fee required to be paid pursuant to Section 8.2(b)(i) at such time as set forth in Section 8.2(b)(i) and (2) after consult
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'fiduciary duties no-shop'}`
+
+section refs: 6.4, 6.4, 6.4, ARTICLE VII, 3.7
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> e consents (for the avoidance of doubt, this clause (ii) does not apply to criminal or quasi-criminal liabilities from or arising out of any Proceedings), and (iii) the Surviving Corporation shall reasonably cooperate in the defense of any such matter. In the event any claim for indemnification is asserted or made by any Indemnified Party pursuant to this Section 6.11, any determination required to be made with respect to whether such Indemnified Party's conduct complies with the standards under the NMBCA, the Surviving Corporation Charter or other applicable Law shall be made by independent l
+
+> _____________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 27/97 (i) any significant deficiencies and material weaknesses in the design or operation of internal control over financial reporting which are reasonably likely to adversely affect the Company's ability to record, process, summarize and report financial information and (ii) any fraud, whether or not material, that involves management or other employees who have a significant role in the Company's internal control over financial reporting. (e) Except for matters resolved
+
+### Step 3: `get_section`
+
+args: `{'section_ref': '6.1'}`
+
+section refs: 6.1
+
+> SECTION 6.1 Company No Solicitation. (a) During the Interim Period, the Company shall not, and shall cause its subsidiaries and its and their respective directors, officers, and employees not to, and shall use its reasonable best efforts to cause its and their respective consultants, attorneys, accountants, financial advisors, agents, investment bankers or other representatives (collectively, "Representatives") not to (and shall not authorize or permit their respective Representatives to), (i) initiate, solicit, knowingly encourage or knowingly facilitate any inquiries with respect to or that 
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': 'fiduciary exception'}`
+
+section refs: 6.4, (none), 3.8, 3.16, 5.1
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> mpany Exception Section 5.1 COVID Parent Exception Section 5.2 Credit Facilities Section 9.5(m) Derivative Product Section 9.5(n) Direct Plan Section 2.2(c) Directors Deferred Plan Section 2.2(d) Dissenting Shares Section 2.3 DPA Section 6.5(c)(ii) D&O Insurance Section 6.11(d) Earned Performance Shares Section 2.2(b) Easement Section 3.14(c) Effective Time Section 1.4 End Date Section 8.1(c) Environmental Law Section 3.17(f) Equity Conversion Factor Section 9.5(o) Equity Securities Section 9.5(p) ERISA Section 3.11(a) 3 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edg
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> Section 3.16. 28 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 34/97 (b) Neither the Company nor any of its subsidiaries is obligated under, or a party to, any option, right of first refusal or other contractual right or obligation to sell, assign or dispose of any Company Material Real Property (or any portion thereof) that, if such sale, assignment or disposition is consummated, would reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) Except in any suc
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"could be reasonably expected" "fiduciary" "no-shop"'}`
+
+section refs: 6.4, 6.4, 6.4, 3.11, 6.4
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> the Company's right to amend, modify or terminate, any Company Plan. (f) No payment or benefit that could be paid or provided (whether in cash or property or the vesting of property or the cancellation of indebtedness) to any Company Employee who is a "disqualified individual" within the meaning of Section 280G of the Code will constitute an "excess parachute payment" (as defined in Section 280G(b)(1) of the Code) as a result of the consummation of the transactions contemplated by this Agreement. 26 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000
+
+> osal only pursuant to an executed Acceptable Confidentiality Agreement and such furnished information is delivered to Parent at substantially the same time (to the extent such information has not been previously furnished or made available by the Company to Parent). 48 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 54/97 (c) Except as contemplated by Section 6.1(d), neither the Company Board of Directors nor any committee thereof shall (i) (A) withhold, withdraw, qualify or modify, or resolve to or propose to withh
+
+### Step 6: `get_section`
+
+args: `{'section_ref': '6.1(b)'}`
+
+section refs: 6.1
+
+> SECTION 6.1 Company No Solicitation. (a) During the Interim Period, the Company shall not, and shall cause its subsidiaries and its and their respective directors, officers, and employees not to, and shall use its reasonable best efforts to cause its and their respective consultants, attorneys, accountants, financial advisors, agents, investment bankers or other representatives (collectively, "Representatives") not to (and shall not authorize or permit their respective Representatives to), (i) initiate, solicit, knowingly encourage or knowingly facilitate any inquiries with respect to or that 
+
+### Step 7: `search_agreement`
+
+args: `{'k': 10, 'query': '"could be reasonably expected to result in a breach" fiduciary'}`
+
+section refs: 6.4, 6.4, 9.5, 3.8, 6.4, 6.1, 3.11, 3.7, ARTICLE VIII, 6.4
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> /data/0001108426/000119312520273264/d77373dex21.htm 91/97 an act or failure to act undertaken by or on behalf of the breaching Party with actual or constructive knowledge that such Party's act or failure to act would, or would reasonably be expected to, result in or constitute a material breach of this Agreement. For the avoidance of doubt, a Willful Breach will include a Party's failure to consummate the Closing when required under this Agreement. 
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> constitutes a Superior Proposal, and such Acquisition Proposal is not withdrawn, the Company or the Company Board of Directors may (A) make a Company Change of Recommendation and/or (B) terminate this Agreement pursuant to Section 8.1(d)(ii) to enter into a definitive agreement with respect to such Superior Proposal, in each case, if (and only if) (1) in the event the Agreement is terminated pursuant to Section 8.1(d)(ii), the Company pays to Parent any Company Termination Fee required to be paid pursuant to Section 8.2(b)(i) at such time as set forth in Section 8.2(b)(i) and (2) after consult
+
+> uding all material terms, thereof. The Company shall keep Parent informed in all material respects on a reasonably prompt basis of the current status and material terms of any such Acquisition Proposal including any material changes in respect of any such Acquisition Proposal and shall promptly (and in no event later than twenty- four (24) hours following any such change) deliver to Parent a summary of any material changes to any such Acquisition Proposal. Notwithstanding anything to the contrary herein, the Company may grant a waiver, amendment or release under any confidentiality or standsti
+
+> 0001108426/000119312520273264/d77373dex21.htm 31/97 proceedings, investigations or claims (other than routine claims for benefits in the ordinary course), or material administrative proceeding by the IRS, the Department of Labor, or any other Governmental Entity, are pending or, to the knowledge of the Company, threatened, (iii) all contributions, reimbursements, premium payments and other payments required to be made by the Company or any of its subsidiaries to or on behalf of any Company Plan have been made on or before their applicable due dates, and (iv) there has been no prohibited transa
+
+> _____________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 27/97 (i) any significant deficiencies and material weaknesses in the design or operation of internal control over financial reporting which are reasonably likely to adversely affect the Company's ability to record, process, summarize and report financial information and (ii) any fraud, whether or not material, that involves management or other employees who have a significant role in the Company's internal control over financial reporting. (e) Except for matters resolved
+
+> ent, development, change, effect or occurrence that has had, or would reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (e) Burdensome Effect. No Final Order granting any of the Required Regulatory Approvals and the CFIUS Approval imposes terms or conditions that, individually or in the aggregate (when taken together with the other Final Orders granting such Required Regulatory Approvals and the CFIUS Approval), could reasonably be expected to have a Burdensome Effect; (f) Dissenting Shares. The total number of Dissenting Shares shall n
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+## Finding
+
+answer: "Reasonably likely/expected breach" of fiduciary duties
+
+evidence:
+- (6.4) failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law
+- (6.4) after consultation with its outside legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law
+
+rationale: The no-shop's fiduciary exception (Section 6.4) permits board action upon determining that failing to act "could be reasonably expected to result in a breach of its fiduciary duties." This standard matches the "Reasonably likely/expected breach" option.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(b) Notwithstanding anything to the contrary in Section 6.1(a) or Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has made a bona fide written Acquisition Proposal after the date hereof that, in each case, did not result from a breach of this Section 6.1, if the Company Board of Directors (A) shall have determined in good faith, after consultation with its outside legal counsel and financial advisors, that such Acquisition Proposal could reasonably be expected to constitute, result in or lead to a Superior Proposal and (B) after consultation with its outside legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law;
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 3c2f5a208002
+
+## Question
+
+How long does the acquirer have to match a competing offer before the target board may change its recommendation?
+
+## Options
+
+- 4 business days
+- 5 business days
+- 3 business days
+- 4 calendar days
+- 3 calendar days
+- 2 business days or less
+- Greater than 5 business days
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'matching rights competing offer notice period days'}`
+
+section refs: 1.1, 6.1, 8.1, 8.1, 1.1
+
+> or 1.1(d) or (H) provide any "subsequent offering period" (or any extension thereof) within the meaning of Rule 14d-11 promulgated under the Exchange Act. The Offer may not be withdrawn prior to the Expiration Date of the Offer, unless this Agreement is terminated in accordance with Section 8. (c) Expiration and Extension of the Offer. The Offer shall initially be scheduled to expire at one minute after 11:59 p.m. New York City time on the date that is twenty (20) business days (determined as set forth in Rule 14d-1(g)(3) and Rule 14e-1(a) under the Exchange Act) from the Offer Commencement Da
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+> 8.1 Termination. This Agreement may be terminated prior to the Effective Time (or prior to such earlier time as set forth in this Section 8.1): (a) by mutual written consent of Parent and the Company at any time prior to the Offer Acceptance Time; (b) by either Parent or the Company, at any time prior to the Offer Acceptance Time, if the Closing shall not have occurred on or prior to 11:59 p.m., New York City time, on December 1, 2021 (the "End Date"); provided, however, that (x) if as of the End Date the conditions set forth in clause (d) or (f) of Annex I (in the case of (f), solely with res
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+> thereof or NASDAQ applicable to the Offer; and (B) periods of up to ten (10) business days per extension, until any waiting period (and any extension thereof) applicable to the consummation of the Offer under the HSR Act shall have expired or been terminated; and (iii) if, as of the then-scheduled Expiration Date, any Offer Condition is not satisfied and has not been waived, at the request of the Company, Purchaser shall, and Parent shall cause Purchaser to, extend the Offer on one or more occasions for an additional period of up to ten (10) business days per extension, to permit such Offer Co
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'change recommendation fiduciary out superior proposal'}`
+
+section refs: 6.1, 6.1, 6.1, 5.3, 8.1
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+> lsewhere in this Agreement, if at any time during the Pre-Closing Period any Acquired Corporation or any of their respective Representatives receives an unsolicited written inquiry, proposal, offer or Acquisition Proposal from any Person or group of Persons which Acquisition Proposal was made or renewed on or after the date of this Agreement, (i) the Company and its Representatives may contact such Person or group of Persons to clarify the terms and conditions thereof and (ii) if the Company Board determines, in good faith, after consultation with financial advisors and outside legal counsel, 
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+### Step 3: `get_section`
+
+args: `{'section_ref': 'Section 6.1(b)'}`
+
+section refs: 6.1
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Determination Notice" three business days Superior Offer'}`
+
+section refs: 6.1, 6.1, 1.1, 8.1, 1.1
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> or 1.1(d) or (H) provide any "subsequent offering period" (or any extension thereof) within the meaning of Rule 14d-11 promulgated under the Exchange Act. The Offer may not be withdrawn prior to the Expiration Date of the Offer, unless this Agreement is terminated in accordance with Section 8. (c) Expiration and Extension of the Offer. The Offer shall initially be scheduled to expire at one minute after 11:59 p.m. New York City time on the date that is twenty (20) business days (determined as set forth in Rule 14d-1(g)(3) and Rule 14e-1(a) under the Exchange Act) from the Offer Commencement Da
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+> set forth in this Agreement, be consummated as soon as practicable following the consummation of the Offer. AGREEMENT NOW, THEREFORE, in consideration of the foregoing and the representations, warranties, covenants and agreements contained in this Agreement, and for other good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, the Parties to this Agreement, intending to be legally bound, agree as follows: SECTION 1. THE OFFER 1.1 The Offer. (a) Commencement of the Offer. Provided that this Agreement shall not have been terminated in accordance with Section
+
+### Step 5: `lookup_defined_term`
+
+args: `{'term': 'Superior Offer'}`
+
+section refs: 9.11
+
+> "Superior Offer" shall mean a bona fide written Acquisition Proposal that the Company Board determines, in its good-faith judgment, after consultation with outside legal counsel and its financial advisors, taking into account all legal, regulatory, timing and financing aspects (including certainty of closing) of the proposal and the Person making the proposal and other aspects of the Acquisition Proposal that the Company Board deems relevant, would, if consummated, result in a transaction that is more favorable to the Company's stockholders (solely in their capacity as such) from a financial p
+
+## Finding
+
+answer: 3 business days
+
+evidence:
+- (Section 6.1(b)(i)) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e)... at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice")... and (B) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice...
+
+rationale: The agreement stipulates that the Company must provide a 'Determination Notice' at least three (3) business days before changing its recommendation. During this 3-business-day window, the Acquirer may propose revisions or counter-proposals. After this period expires, if no superior proposal is made, the Board may change its recommendation.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.1 Company Board Recommendation; Termination. (b) Notwithstanding anything to the contrary contained in this Agreement, at any time prior to the Offer Acceptance Time: (i) if the Company has received a bona fide written Acquisition Proposal from any Person or group of Persons that has not been withdrawn and after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer, (x) the Company Board may make a Company Adverse Recommendation Change, and/or (y) the Company may terminate this Agreement to enter into a Specified Agreement with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination); and (B) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer. Issuance of any "stop, look and listen" communication by or on behalf of the Company pursuant to Rule 14d-9(f) shall not be considered a Company Adverse Recommendation Change and shall not require the giving of a Determination Notice or compliance with the procedures set forth in this Section 6.1. For the avoidance of doubt, the provisions of this Section 6.1(b)(i) shall also apply to any material amendment to any Acquisition Proposal and require a new Determination Notice, except that the references to three (3) business days shall be deemed to be two (2) business days (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least three (3) business days prior to making any such Company Adverse Recommendation Change; and (C) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with its financial advisors and outside legal counsel, the Company Board shall have determined, in good faith, that the failure to make the Company Adverse Recommendation Change in response to such Change in Circumstance would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 3f1932caac19
 
 ## Question
@@ -1714,6 +3945,61 @@ rationale: Section 6.01 explicitly carves out from the negative interim operatin
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (B) shall not, and shall cause each of its Subsidiaries not to:
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 3f3999fe9738
+
+## Question
+
+What standard must the target board find its fiduciary duties require before taking action on an unsolicited proposal under the no-shop's fiduciary exception?
+
+## Options
+
+- "Inconsistent" with fiduciary duties
+- "Reasonably likely/expected to be inconsistent" with fiduciary duties
+- Other specified standard
+- "Reasonably likely/expected violation" of fiduciary duties
+- "Reasonably likely/expected breach" of fiduciary duties
+- "Required to comply" with fiduciary duties
+- "Breach" of fiduciary duties
+- "Violation" of fiduciary duties
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'no-shop fiduciary exception board determination'}`
+
+section refs: 6.4, 6.4, 6.4, 6.4, ARTICLE VII
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> constitutes a Superior Proposal, and such Acquisition Proposal is not withdrawn, the Company or the Company Board of Directors may (A) make a Company Change of Recommendation and/or (B) terminate this Agreement pursuant to Section 8.1(d)(ii) to enter into a definitive agreement with respect to such Superior Proposal, in each case, if (and only if) (1) in the event the Agreement is terminated pursuant to Section 8.1(d)(ii), the Company pays to Parent any Company Termination Fee required to be paid pursuant to Section 8.2(b)(i) at such time as set forth in Section 8.2(b)(i) and (2) after consult
+
+> e consents (for the avoidance of doubt, this clause (ii) does not apply to criminal or quasi-criminal liabilities from or arising out of any Proceedings), and (iii) the Surviving Corporation shall reasonably cooperate in the defense of any such matter. In the event any claim for indemnification is asserted or made by any Indemnified Party pursuant to this Section 6.11, any determination required to be made with respect to whether such Indemnified Party's conduct complies with the standards under the NMBCA, the Surviving Corporation Charter or other applicable Law shall be made by independent l
+
+## Finding
+
+answer: "Reasonably likely/expected breach" of fiduciary duties
+
+evidence:
+- (Section 6.4) after consultation with its outside legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law
+
+rationale: The agreement requires the board to determine that failing to take action 'could be reasonably expected to result in a breach of its fiduciary duties under applicable Law'. This matches the option 'Reasonably likely/expected breach' of fiduciary duties.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(b) Notwithstanding anything to the contrary in Section 6.1(a) or Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has made a bona fide written Acquisition Proposal after the date hereof that, in each case, did not result from a breach of this Section 6.1, if the Company Board of Directors (A) shall have determined in good faith, after consultation with its outside legal counsel and financial advisors, that such Acquisition Proposal could reasonably be expected to constitute, result in or lead to a Superior Proposal and (B) after consultation with its outside legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law;
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -1891,6 +4177,535 @@ rationale: The retrieved passages do not contain any information about the perce
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 4677d6bffa6f
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.11
+
+> "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or tra
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '9.11'}`
+
+section refs: 9.11
+
+> 9.11 Construction. (a) For purposes of this Agreement, whenever the context requires: the singular number shall include the plural, and vice versa; the masculine gender shall include the feminine and neuter genders; the feminine gender shall include the masculine and neuter genders; and the neuter gender shall include masculine and feminine genders. (b) The Parties agree that any rule of construction to the effect that ambiguities are to be resolved against the drafting Party shall not be applied in the construction or interpretation of this Agreement. (c) As used in this Agreement, (i) the wo
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" shall mean'}`
+
+section refs: 9.11, 9.11, 3.10, 9.11, 9.11
+
+> e, firmware, middleware, servers, workstations, routers, hubs, switches, data communications lines and all other information technology equipment owned by the applicable Person or licensed or leased by such Person (excluding any public networks). "knowledge" with respect to an Entity shall mean with respect to any matter in question the actual knowledge of such Entity's executive officers after due inquiry. "Leased Real Property" is defined in Section 3.9(b) of this Agreement. A-6 ________________ "Legal Proceeding" shall mean any action, charge, suit, complaint, litigation, arbitration, media
+
+> is Agreement. "Parent Material Adverse Effect" shall mean any event, occurrence, change or development that would or would reasonably be expected to, individually or in the aggregate, materially impair, prevent or materially delay Parent's or Purchaser's ability to consummate the Transactions in a timely manner on the terms set forth herein. "Parent Related Parties" is defined in Section 8.3(b) of this Agreement. "Parent SEC Documents" shall mean all reports, schedules, forms, statements and other documents (including exhibits and all other information incorporated therein) required to be file
+
+> ial Adverse Effect. (f) To the knowledge of the Company, the operation of the business of the Acquired Corporations as conducted as of the date hereof does not infringe, misappropriate or otherwise violate any Intellectual Property owned by any other Person, except as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (g) As of the date of this Agreement, no Legal Proceeding is pending and served (or, to the knowledge of the Company, is being threatened or is pending and has not been served) 18 ________________ against an 
+
+> competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material Contract" is defined in Section 3.11(a) of this Agreement. "Maximum Amount" is defined in Section 6.4(
+
+> Sections 3.3(a), 3.3(c), 3.4, 3.8, 3.23 and 3.24) that are not qualified by a "Material Adverse Effect" shall be true and correct at and as of the expiration time of the Offer on the Expiration Date as if made at and as of the expiration time of the Offer on the Expiration Date (except to the extent any such representation or warranty expressly relates to an earlier date, in which case as of such date), except where the failure of such representations and warranties to be true and correct would not have, individually or in the aggregate, a Material Adverse Effect; (c) the Company shall have co
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect'}`
+
+section refs: 9.11, 9.11, 9.11, 3.10, 3.11
+
+> e, firmware, middleware, servers, workstations, routers, hubs, switches, data communications lines and all other information technology equipment owned by the applicable Person or licensed or leased by such Person (excluding any public networks). "knowledge" with respect to an Entity shall mean with respect to any matter in question the actual knowledge of such Entity's executive officers after due inquiry. "Leased Real Property" is defined in Section 3.9(b) of this Agreement. A-6 ________________ "Legal Proceeding" shall mean any action, charge, suit, complaint, litigation, arbitration, media
+
+>  or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including t
+
+> is Agreement. "Parent Material Adverse Effect" shall mean any event, occurrence, change or development that would or would reasonably be expected to, individually or in the aggregate, materially impair, prevent or materially delay Parent's or Purchaser's ability to consummate the Transactions in a timely manner on the terms set forth herein. "Parent Related Parties" is defined in Section 8.3(b) of this Agreement. "Parent SEC Documents" shall mean all reports, schedules, forms, statements and other documents (including exhibits and all other information incorporated therein) required to be file
+
+> material impairment of any Acquired Corporation's ownership interest in any material Company IP or (ii) the loss or termination of, or material restrictions on, any licenses or rights to Intellectual Property granted to an Acquired Corporation, except in each case as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (k) Except as has not had, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect, (i) the Acquired Corporations have taken commercially reasonable actions to
+
+>  (xi) any other Company Contract that is currently in effect and has been filed (or is required to be filed) by the Company as an exhibit pursuant to Item 601(b)(10) of Regulation S-K under the Securities Act or that would be required to be disclosed under Item 404 of Regulation S-K under the Securities Act. Each such Contract described in clauses (i) through (xi) above is referred to herein as a "Material Contract." (b) As of the date of this Agreement, the Company has either delivered or made available to Parent or Parent's Representatives or has publicly made available (subject to necessary
+
+## Finding
+
+answer: Other forward-looking standard
+
+evidence:
+- (9.11) "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole
+
+rationale: The definition of 'Material Adverse Effect' in Section 9.11 uses the present tense 'has a material adverse effect' rather than a forward-looking standard like 'would be expected to'. While other parts of the agreement (such as representations and warranties) use 'would not have, and would not reasonably be expected to have' a Material Adverse Effect, the definition itself does not contain a forward-looking standard.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including the impact thereof on the relationships, contractual or otherwise, of the Company with employees, labor unions, works councils, financing sources, customers, franchisees, suppliers, partners, Governmental Bodies or other business relationships; (iii) the general conditions or trends in the industries in which the Acquired Corporations operate or in the economy generally or other general business, financial or market conditions, including competition in geographic, product or service areas; (iv) domestic, foreign or global political conditions, economic, regulatory, financial or capital markets conditions (including interest rates, exchange rates, tariffs, trade wars and credit markets); (v) any act of civil unrest, civil disobedience, protests, public demonstrations, insurrection, terrorism, war, cyberterrorism, military activity, sabotage or cybercrime, national or international calamity or any other similar event, including an outbreak or escalation of hostilities involving the United States or any other Governmental Body or the declaration by the United States or any other Governmental Body of a national emergency or war, or any worsening of any such conditions threatened or existing on the date of this Agreement; (vi) any natural or manmade disasters, epidemics, pandemics or disease outbreaks (including COVID-19) or any acts of God; (vii) changes to applicable Legal Requirements (including COVID-19 Measures); (viii) any determination by, or delay of a determination by, the FDA or any other Governmental Body, or any panel or advisory body empowered or appointed thereby, or any indication that any such entity, panel or body will make any determination or delay in making any determination, with respect to the approvability, manufacturing, labeling, contents of package insert, prescribing information, risk management profile, chemistry, manufacturing and controls (CMC) matters or pre-approval inspection matters relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations, or any requirement relating to the results of any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners, including any requirement to conduct further clinical trials or any delayed or accelerated launch of any A-7 _ product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (ix) the results of, or any data derived from, any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners or any announcement thereof; (x) increased incidence or severity of any previously identified side effects (including toxicity), adverse events or safety observations, or reports of new side effects, adverse events or safety observations, with respect to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xi) any recommendations, statements or other pronouncements made, published or proposed by professional medical organizations or any Governmental Body or representative thereof, or any panel or advisory body empowered or appointed thereby, relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xii) any supply chain disruption affecting product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiii) any determination or development relating to coverage, reimbursement or payor rules or policies applicable to, or pricing of, any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiv) the failure of the Company to meet internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect; provided, further, that this clause (xiv) shall not be construed as implying that the Company is making any representation or warranty hereunder with respect to any internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets); (xv) any Legal Proceeding relating to or resulting from this Agreement or the transactions contemplated hereby; (xvi) any action taken by the Company at the written direction of Parent or any action expressly required or permitted to be taken by Parent, Purchaser or the Company pursuant to the terms of this Agreement, or the failure of the Company to take any action that the Company is prohibited by the terms of this Agreement from taking or which the Company did not take on account of withheld consent from Parent; (xvii) any breach by Parent or Purchaser of this Agreement; (xviii) any matter to the extent expressly set forth on the Company Disclosure Schedule or (xix) any change in any Legal Requirement or GAAP or any other applicable accounting principles or standards (or change in interpretations of any Legal Requirement or GAAP or any other applicable accounting principles or standards) after the date of this Agreement; provided, however, that, to the extent such events, circumstances, conditions, changes, developments or effects referred to in clauses (iii), (iv), or (v) has had or would reasonably be expected to have, individually or in the aggregate, a disproportionate adverse effect on the business, financial condition or results of operations of the Acquired Corporations, taken as a whole, relative to other biopharmaceutical companies with products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material C
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 467a807c6d9f
+
+## Question
+
+How long does the acquirer have to match a competing offer before the target board may change its recommendation?
+
+## Options
+
+- 4 business days
+- 5 business days
+- 3 business days
+- 4 calendar days
+- 3 calendar days
+- 2 business days or less
+- Greater than 5 business days
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'matching rights period'}`
+
+section refs: 1.1, 3.8, 2.8, 9.11, 3.3
+
+> or 1.1(d) or (H) provide any "subsequent offering period" (or any extension thereof) within the meaning of Rule 14d-11 promulgated under the Exchange Act. The Offer may not be withdrawn prior to the Expiration Date of the Offer, unless this Agreement is terminated in accordance with Section 8. (c) Expiration and Extension of the Offer. The Offer shall initially be scheduled to expire at one minute after 11:59 p.m. New York City time on the date that is twenty (20) business days (determined as set forth in Rule 14d-1(g)(3) and Rule 14e-1(a) under the Exchange Act) from the Offer Commencement Da
+
+> 3.8 Absence of Changes. (a) Since March 31, 2021 to the date of this Agreement, there has not been any Material Adverse Effect that is continuing. (b) Since March 31, 2021 to the date of this Agreement, there has not been any event, occurrence, or action that, if taken during the Pre-Closing Period without Parent's consent, would constitute a breach of any of the covenants in clauses (i)-(ii), (vi), (x), (xiii), or (xvi) (solely as it relates to the foregoing) of Section 5.2(b). 17 ________________ 
+
+> ate, as contemplated by this Section 2. 11 ________________ 2.7 Dissenters' Rights. Notwithstanding anything in this Agreement to the contrary, Shares outstanding immediately prior to the Effective Time, and held by holders who are entitled to appraisal rights under Section 262 of the DGCL and have properly exercised and perfected their respective demands for appraisal of such Shares in the time and manner provided in Section 262 of the DGCL and, as of the Effective Time, have neither effectively withdrawn nor lost their rights to such appraisal and payment under the DGCL (the "Dissenting Shar
+
+> nkers' acceptances (other than letters of credit used as security for leases), (iv) all indebtedness created or arising under any conditional sale or other title retention agreement with respect to property acquired or (v) any guaranty of any such obligations described in clauses (i) through (iv) of any Person other than the Company (other than, in any case, accounts payable to trade creditors and accrued expenses, in each case, arising in the ordinary course of business consistent with past practice). "Indemnified Persons" is defined in Section 6.4(a) of this Agreement. "Initial Expiration Da
+
+> italization Date, there are no: (i) outstanding shares of capital stock of, or other equity interests in, any Acquired Corporation; (ii) outstanding subscriptions, options, calls, warrants or rights (whether or not currently exercisable) obligating any Acquired Corporation to issue any shares of capital stock, restricted stock units, stock-based performance units or any other rights that are linked to, or the value of which is in any way based on or derived from the value of any shares of capital stock or other securities of any Acquired Corporation; (iii) outstanding securities, instruments, 
+
+### Step 2: `search_agreement`
+
+args: `{'query': 'match a competing offer'}`
+
+section refs: 8.1, 1.1, 1.1, 1.1, 7.2
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+> dition and the other conditions set forth in Annex I (collectively, the "Offer Conditions"). The Offer shall be made by means of an offer to purchase (the "Offer to Purchase") that contains the terms set forth in this Agreement, the Minimum Condition, the Termination Condition and the other Offer Conditions. Purchaser expressly reserves the right to (i) increase the Offer Price, (ii) waive any Offer Condition and (iii) make any other changes in the terms and conditions of the Offer not inconsistent with the terms of this Agreement; provided, however, that notwithstanding anything to the contra
+
+> ditionally terminate the Offer and shall not acquire any Shares pursuant to the Offer. If the Offer is terminated by Purchaser in accordance with the terms of this Agreement, Purchaser shall promptly return, and shall cause any depository acting on behalf of Purchaser to return, in accordance with applicable Legal Requirements, all tendered Shares to the registered holders thereof. (e) Offer Documents. Promptly on the Offer Commencement Date, Parent and Purchaser shall (i) file with the SEC a tender offer statement on Schedule TO with respect to the Offer (together with any exhibits, amendment
+
+> set forth in this Agreement, be consummated as soon as practicable following the consummation of the Offer. AGREEMENT NOW, THEREFORE, in consideration of the foregoing and the representations, warranties, covenants and agreements contained in this Agreement, and for other good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, the Parties to this Agreement, intending to be legally bound, agree as follows: SECTION 1. THE OFFER 1.1 The Offer. (a) Commencement of the Offer. Provided that this Agreement shall not have been terminated in accordance with Section
+
+> 7.2 Consummation of Offer. Purchaser (or Parent on Purchaser's behalf) shall have accepted for payment all of the Shares validly tendered pursuant to the Offer and not validly withdrawn. 50 ________________ 
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'superior proposal matching period'}`
+
+section refs: 5.3, 6.1, 6.1, 5.3, 1.1
+
+> lsewhere in this Agreement, if at any time during the Pre-Closing Period any Acquired Corporation or any of their respective Representatives receives an unsolicited written inquiry, proposal, offer or Acquisition Proposal from any Person or group of Persons which Acquisition Proposal was made or renewed on or after the date of this Agreement, (i) the Company and its Representatives may contact such Person or group of Persons to clarify the terms and conditions thereof and (ii) if the Company Board determines, in good faith, after consultation with financial advisors and outside legal counsel, 
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+> or 1.1(d) or (H) provide any "subsequent offering period" (or any extension thereof) within the meaning of Rule 14d-11 promulgated under the Exchange Act. The Offer may not be withdrawn prior to the Expiration Date of the Offer, unless this Agreement is terminated in accordance with Section 8. (c) Expiration and Extension of the Offer. The Offer shall initially be scheduled to expire at one minute after 11:59 p.m. New York City time on the date that is twenty (20) business days (determined as set forth in Rule 14d-1(g)(3) and Rule 14e-1(a) under the Exchange Act) from the Offer Commencement Da
+
+### Step 4: `get_section`
+
+args: `{'section_ref': 'Section 6.1'}`
+
+section refs: 6.1
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+### Step 5: `get_section`
+
+args: `{'section_ref': 'Section 6.1(b)'}`
+
+section refs: 6.1
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+### Step 6: `search_agreement`
+
+args: `{'query': 'Determination Notice business days superior proposal'}`
+
+section refs: 6.1, 6.1, 5.3, 6.1, 5.3
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> lsewhere in this Agreement, if at any time during the Pre-Closing Period any Acquired Corporation or any of their respective Representatives receives an unsolicited written inquiry, proposal, offer or Acquisition Proposal from any Person or group of Persons which Acquisition Proposal was made or renewed on or after the date of this Agreement, (i) the Company and its Representatives may contact such Person or group of Persons to clarify the terms and conditions thereof and (ii) if the Company Board determines, in good faith, after consultation with financial advisors and outside legal counsel, 
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+## Finding
+
+answer: 3 business days
+
+evidence:
+- (Section 6.1(b)(i)) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice")
+
+rationale: Section 6.1(b)(i) requires a Determination Notice at least 3 business days before a Company Adverse Recommendation Change, establishing a 3-business-day initial matching period for Parent to propose revised terms and match a competing offer.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.1 Company Board Recommendation; Termination. (b) Notwithstanding anything to the contrary contained in this Agreement, at any time prior to the Offer Acceptance Time: (i) if the Company has received a bona fide written Acquisition Proposal from any Person or group of Persons that has not been withdrawn and after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer, (x) the Company Board may make a Company Adverse Recommendation Change, and/or (y) the Company may terminate this Agreement to enter into a Specified Agreement with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination); and (B) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer. Issuance of any "stop, look and listen" communication by or on behalf of the Company pursuant to Rule 14d-9(f) shall not be considered a Company Adverse Recommendation Change and shall not require the giving of a Determination Notice or compliance with the procedures set forth in this Section 6.1. For the avoidance of doubt, the provisions of this Section 6.1(b)(i) shall also apply to any material amendment to any Acquisition Proposal and require a new Determination Notice, except that the references to three (3) business days shall be deemed to be two (2) business days (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least three (3) business days prior to making any such Company Adverse Recommendation Change; and (C) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with its financial advisors and outside legal counsel, the Company Board shall have determined, in good faith, that the failure to make the Company Adverse Recommendation Change in response to such Change in Circumstance would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 4d3e9974918d
+
+## Question
+
+What form of consideration do target stockholders receive in the merger?
+
+## Options
+
+- All Cash
+- All Stock
+- Mixed Cash/Stock
+- Mixed Cash/Stock: Election
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'merger consideration stockholders receive'}`
+
+section refs: 2.5, 2.5, 2.5, 12.2, 2.1
+
+>  that represented Company Common Stock before the Effective Time will be deemed for all purposes to represent the number of shares of Nicolet Common Stock or cash into which they were converted pursuant to this Article 2. Section 2.5 No Fractional Shares. Notwithstanding anything to the contrary contained in this Agreement, no fractional shares of Nicolet Common Stock shall be issued as Merger Consideration in the Merger. Each holder of Company Common Stock who would otherwise be entitled to receive a fractional share of Nicolet Common Stock pursuant to this Article 2 shall instead be entitled
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> liverable in respect thereof pursuant to this Agreement. (j) If, between the date of this Agreement and the Effective Time, the outstanding shares of Nicolet Common Stock shall have been changed into a different number of shares or into a different class by reason of any stock dividend, subdivision, reclassification, recapitalization, split, combination or exchange of shares, the Merger Consideration per share shall be adjusted appropriately to provide the holders of Company Common Stock the same economic effect as contemplated by this Agreement prior to such event. Section 2.3 Election and Al
+
+> the Merger Consideration, extension of the Termination Date, change in the type of merger consideration, or other amendment, modification, waiver or change to the Agreement that is material and adverse to the undersigned and not consented to in advance in writing by the undersigned, and (e) December 31, 2024. For the avoidance of doubt, a decline in Nicolet's stock price shall not be considered a reduction in the merger consideration. 6. Capitalized Terms . Unless otherwise defined herein, all capitalized terms in this Voting and Support Agreement shall have the same meaning as given such term
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+## Finding
+
+answer: Mixed Cash/Stock: Election
+
+evidence:
+- (Section 2.3(a)) each holder of shares of Company Common Stock shall be provided an opportunity, (i) to elect to receive Nicolet Common Stock with respect to all of 4 ________________ such holder's Company Common Stock (a "Stock Election"); (ii) to elect to receive cash with respect to all of such holder's Company Common Stock (a "Cash Election"); (iii) to elect to receive cash with respect to a portion of such holder's Company Common Stock and shares of Nicolet Common Stock with respect to such holder's remaining shares (a "Mixed Election"); or (iv) to indicate that such holder makes no such election with respect to such holder's shares of Company Common Stock (a "Non-Election").
+
+rationale: The agreement provides stockholders with the opportunity to elect between stock, cash, or a mix of both, as explicitly detailed in Section 2.3(a) regarding election and allocation procedures.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in Section 2.3 and the fractional share procedures in Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration").
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 57652b548046
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. 
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" means'}`
+
+section refs: 4.10, 5.5, 4.16, 9.6, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means'}`
+
+section refs: 4.10, 9.6, 4.16, 4.16, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means any'}`
+
+section refs: 4.10, 4.16, 4.21, 9.6, 4.16
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means any Effect that'}`
+
+section refs: 4.10, 4.21, 4.16, 9.6, 4.16
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means any Effect that has a material adverse effect on the business'}`
+
+section refs: 4.10, 4.16, 4.21, 4.19, 4.16
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means'}`
+
+section refs: 4.10, 9.6, 4.16, 4.16, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means any change, event, circumstance, development or effect'}`
+
+section refs: 4.10, 9.6, 4.21, 9.6, 4.16
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 5b65980d9ad6
+
+## Question
+
+Does the agreement's definition of Knowledge include constructive knowledge?
+
+## Options
+
+- Constructive knowledge
+- Actual knowledge
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Knowledge'}`
+
+(tool result text not recorded)
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Knowledge of the Company'}`
+
+(tool result text not recorded)
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Knowledge" means'}`
+
+section refs: 9.3, 9.3, 9.3, 9.3, 9.3
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+>  and all (i) technology, formulae, algorithms, procedures, processes, methods and methodologies, techniques, know how, ideas, creations, concepts, inventions, discoveries, improvements, and invention disclosures (whether or not patentable or reduced to practice); (ii) technical, engineering, manufacturing, product, marketing, servicing, financial, supplier, personnel and other information and materials; (iii) customer lists, customer contact and registration information, customer correspondence and customer purchasing histories; (iv) specifications, designs, models, devices, prototypes, schema
+
+> fication, loss, theft, corruption or other unauthorized Processing of Personal Data, (b) inadvertent, unauthorized or unlawful sale, or rental of Personal Data, or (c) other unauthorized access to, use of, or interruption of any IT assets. "Software" means any and all (i) computer programs, including any and all software implementations of algorithms, heuristics, models and methodologies, (ii) testing, validation, verification and quality assurance materials, (iii) databases, conversions, interpreters and compilations, including any and all data and collections of data, whether machine readabl
+
+> OVID-19 Measures" means any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, shut down, closure, sequester, safety or similar Law, directive or guidelines promulgated by any Governmental Entity, including the Centers for Disease Control and Prevention and the World Health Organization, in each case, in connection with or in response to COVID-19, including the CARES Act and the Families First Coronavirus Response Act, as may be amended. -74- ________________ "Debt Financing Sources" means Bank of America, N.A. and BofA Securities, Inc. and any other entiti
+
+>  secure payment of, workers' compensation, unemployment insurance, pension programs and similar obligations, (vi) mechanics', carriers', workmen's, repairer's, warehouser's, landlord's, lessors' or other similar Liens or other similar encumbrances arising out of, incurred in or otherwise related to the ordinary course of business that do not materially interfere with the present use of, or materially detract from the value of, the property related thereto, (vii) non-exclusive licenses of Company Intellectual Property granted in the ordinary course of business and (viii) those Liens set forth o
+
+### Step 4: `search_agreement`
+
+args: `{'query': 'knowledge defined'}`
+
+section refs: 9.4, 9.3, 3.21, 3.18, 3.18
+
+> SECTION 9.04. Interpretation; Disclosure Letters. When a reference is made in this Agreement to a Section, such reference shall be to a Section of this Agreement unless otherwise indicated. The preamble and the recitals set forth at the beginning of this Agreement are incorporated by reference into and made a part of this Agreement. The table of contents and headings contained in this Agreement are for reference purposes only and shall not affect in any way the meaning or interpretation of this Agreement. Whenever the words "include," "includes" or "including" are used in this Agreement, they 
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+>  scope of the Company and any Company Subsidiary and the Personal Data they Process in the conduct of their business, (ii) designed to protect the operation, confidentiality, integrity, availability and security of the Company's and any of the Company's Subsidiaries IT systems, and all Personal Data, against unauthorized access, acquisition, interruption, alteration, modification, or use, and (iii) consistent with the Company's and any of the Company Subsidiaries' Privacy Obligations. To the knowledge of the Company, within the three (3) years prior to the date hereof, neither the Company nor 
+
+>  Subsidiaries own or are licensed under, or otherwise possesses sufficient rights under, the Intellectual Property used in or necessary to conduct the business and operations of the Company and its Subsidiaries as currently conducted. To the knowledge of the Company, the Company and its Subsidiaries will continue to own, license or have the right to use such Intellectual Property immediately following the Closing to the same extent as prior to the Closing. Without limiting the foregoing, to the knowledge of the Company, the Company and its Subsidiaries own or have sufficient licenses or rights
+
+> n accordance with all applicable Laws to protect the secrecy of, and their rights in, all confidential information and Trade Secrets owned by the Company and its Subsidiaries, and, with respect to any confidential information or Trade Secrets owned by any Third Party that have been provided or made available to the Company and its Subsidiaries under Contract (including by any customer of the Company), to the knowledge of the Company, the Company nor any of its Subsidiaries is in breach of the terms of such Contract with respect to the confidentiality of such confidential information or Trade S
+
+### Step 5: `search_agreement`
+
+args: `{'query': 'constructive knowledge'}`
+
+section refs: 3.18, 9.3, 3.18, 3.18, 3.21
+
+>  respects in good working condition and reasonably sufficient for the needs of the Company and its Subsidiaries. The Company and its Subsidiaries (i) lawfully owns, leases or licenses all Systems and such Systems are reasonably sufficient for the immediate and anticipated needs of the Company and its Subsidiaries, including as to capacity, scalability, and ability to process current and anticipated peak volumes in a timely manner, and (ii) will continue to have such rights immediately after the Closing. In the past two (2) years, there has been no failure or other substandard performance of or
+
+> ghts") and other rights with respect to Software, databases and other compilations or collections or data or information, including registrations and applications therefor; (iv) rights under applicable trade secret Law in any information, including inventions, discoveries and invention disclosures (whether or not patented), formulae, patterns, compilations, programs (including the Source Code for any Software), devices, methods, strategies, techniques and processes, in each case that derives independent economic value, actual or potential, from not being generally known or readily ascertainabl
+
+> written notice within the past three (3) years challenging the legality, enforceability or ownership of any Company Intellectual Property Rights and Technology owned or purported to be owned by any of the Company (including the Company Registrations). None of the Company Owned Registrations or, to the knowledge of the Company, Company Licensed Registrations, have been adjudged invalid or unenforceable, and (i) there are no pending or to the knowledge of the Company, threatened adversarial proceedings challenging the validity, scope, title or enforceability of such Company Owned Registrations a
+
+>  Subsidiaries own or are licensed under, or otherwise possesses sufficient rights under, the Intellectual Property used in or necessary to conduct the business and operations of the Company and its Subsidiaries as currently conducted. To the knowledge of the Company, the Company and its Subsidiaries will continue to own, license or have the right to use such Intellectual Property immediately following the Closing to the same extent as prior to the Closing. Without limiting the foregoing, to the knowledge of the Company, the Company and its Subsidiaries own or have sufficient licenses or rights
+
+>  scope of the Company and any Company Subsidiary and the Personal Data they Process in the conduct of their business, (ii) designed to protect the operation, confidentiality, integrity, availability and security of the Company's and any of the Company's Subsidiaries IT systems, and all Personal Data, against unauthorized access, acquisition, interruption, alteration, modification, or use, and (iii) consistent with the Company's and any of the Company Subsidiaries' Privacy Obligations. To the knowledge of the Company, within the three (3) years prior to the date hereof, neither the Company nor 
+
+### Step 6: `search_agreement`
+
+args: `{'query': 'reasonable inquiry'}`
+
+section refs: ARTICLE VII, ARTICLE VII, ARTICLE VII, ARTICLE VII, 3.11
+
+> tions. The parties shall undertake reasonable best efforts to promptly take, or cause to be taken, all action, and do, or cause to be done, all things necessary or advisable to obtain CFIUS Approval as soon as practicable, and in any event prior to the Outside Date, including, but not limited to, using reasonable best efforts, if required, to execute a reasonable letter of assurance or entering into another reasonable form of mitigation agreement with CFIUS or CFIUS member agencies on terms, conditions, or measures sought by CFIUS, provided, however, that no party shall be required to take or 
+
+> ll consider in good faith the views of the other parties in connection with any analysis, appearance, presentation, memorandum, brief, argument, opinion or proposal made or submitted in connection with any such request, inquiry, investigation, action or Legal Proceeding. In addition, except as may be prohibited by any Governmental Entity or by any Law, in connection with any such request, inquiry, investigation, action or Legal Proceeding, each party hereto will permit authorized representatives of the other parties to be present at each meeting or conference relating to such request, inquiry,
+
+> nt, timing or termination of the Financing)) promptly (and in any event within two business days) following execution thereof. Parent and Sub acknowledge and agree that the obtaining of the Financing, or any Alternative Financing, is not a condition to Closing. -60- ________________ (e) Prior to the Closing, the Company shall use reasonable best efforts to provide to Parent and Sub, and shall cause each of its Subsidiaries to use reasonable best efforts to provide, and shall use its reasonable best efforts to cause its Representatives, including legal and accounting, to provide, in each case, 
+
+> t, reasonable access during normal business hours during the period prior to the Effective Time to all its and its subsidiaries' properties, books, contracts, commitments, personnel and records and, during such period, the Company shall, and shall cause each of its subsidiaries to, furnish promptly to Parent (a) a copy of each report, schedule, registration statement and other document filed by it during such period pursuant to the U.S. federal or state securities laws and (b) all other information concerning its business, properties and personnel as such other party may reasonably request. By
+
+> SECTION 3.11. Litigation. Except as set forth on Section 3.11 of the Company Disclosure Letter, there is no, and since January 1, 2019, there has not been any, suit, action, hearing, investigation, inquiry, claim, charge, action, arbitration, mediation, governmental investigation or other legal or administrative proceeding (each, an "Action") (or group of related Actions) pending or, to the knowledge of the Company, threatened against the Company, any Company Subsidiary or any Person whose liability or obligation the Company or any of its Subsidiaries has retained or assumed either contractual
+
+### Step 7: `search_agreement`
+
+args: `{'query': 'should have known'}`
+
+section refs: 8.1, 9.3, 3.8, 3.11, 7.2
+
+> he receipt of the Company Stockholder Approval, pursuant to and in accordance with clause (z) of the second sentence of Section 5.02(b); provided; however, that the Company shall have prior to or concurrently with such termination paid to Parent the Termination Fee; or -66- ________________ (g) by the Company, if (i) all of the conditions set forth in Section 7.01 and Section 7.02 have been and remain satisfied or waived (by the party entitled to the benefit of such condition) (other than delivery of items to be delivered at the Closing and other than satisfaction of those conditions that by t
+
+> ent of the Marketing Period ceases to be Compliant, then the Marketing Period shall be deemed not to have occurred); provided, that if the Company shall in good faith reasonably believe it has provided the Required Information to Parent and that the Marketing Period has commenced, it may deliver to Parent a written notice to that effect (stating when it believes it completed such delivery), in which case the Marketing Period will be deemed to have commenced on the date of such notice unless Parent in good faith reasonably believes the Marketing Period has not commenced and within three (3) Bus
+
+> SECTION 3.08. Absence of Certain Changes or Events. Since April 1, 2020, except as disclosed in the Filed Company SEC Documents and except as specifically contemplated by, or as disclosed in, this Agreement, the Company has conducted its business only in the ordinary course consistent with past practice, and during such period there has not been: -13- ________________ (i) any event, change, effect, occurrence, state of facts or development that, individually or in the aggregate, has had or would reasonably be expected to have a Company Material Adverse Effect; or (ii) any action which, if it h
+
+> SECTION 3.11. Litigation. Except as set forth on Section 3.11 of the Company Disclosure Letter, there is no, and since January 1, 2019, there has not been any, suit, action, hearing, investigation, inquiry, claim, charge, action, arbitration, mediation, governmental investigation or other legal or administrative proceeding (each, an "Action") (or group of related Actions) pending or, to the knowledge of the Company, threatened against the Company, any Company Subsidiary or any Person whose liability or obligation the Company or any of its Subsidiaries has retained or assumed either contractual
+
+> se (ii), the failure of any such other representations and warranties to be so true and correct has not resulted in, and would not reasonably be expected to result in, individually or in the aggregate, a Company Material Adverse Effect. (b) Performance of Obligations of the Company. The Company shall have performed and complied in all material respects with all obligations, covenants and agreements required to be performed or complied with by it under this Agreement. (c) Company Closing Certificate. Parent shall have received at the Closing a certificate signed on behalf of the Company by the 
+
+## Finding
+
+answer: Actual knowledge
+
+evidence:
+- (Section 9.3) "knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel; and with respect to Parent and Sub, knowledge means the actual knowledge of the persons listed on Section 9.03 of the Parent Disclosure Letter.
+
+rationale: The agreement defines "knowledge" as "actual knowledge" of specified individuals and does not extend to constructive knowledge or what reasonable inquiry would reveal. No reference to "should have known" or similar constructive language appears in the definition.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"knowledge", with respect to the Company, means the actual knowledge of the Company's President, Chief Executive Officer, Chief Financial Officer, Chief Operating Officer, Chief Strategy Officer or General Counsel;
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -2073,6 +4888,150 @@ The system produced no finding for this case.
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 6c917de1e740
+
+## Question
+
+What efforts standard governs the target's ordinary-course-of-business covenant?
+
+## Options
+
+- Flat covenant (no efforts standard)
+- Commercially reasonable efforts
+- Reasonable best efforts
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'ordinary course conduct business'}`
+
+section refs: 5.3, 3.11, 9.11, 4.11, 3.10
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> iaries, taken as a whole on a consolidated basis, shall be able to pay their debts and obligations in the ordinary course of business as they become due; and (iii) Parent and its Subsidiaries, taken as a whole on a consolidated basis, shall have adequate capital to carry on their businesses. Notwithstanding the foregoing, Parent makes no representation or warranty with respect to statements made or incorporated in any Royalty Purchase Agreement or to any Financing Source based on information supplied in writing by or on behalf of the Company or the Acquired Corporations for inclusion or incorp
+
+> ase, as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (i) Section 3.10(i) of the Company Disclosure Schedule sets forth each Contract pursuant to which any material Intellectual Property has been licensed, sold, assigned or otherwise conveyed to an Acquired Corporation, or pursuant to which any Acquired Corporation has otherwise received or acquired any right in any material Intellectual Property (other than any Contract between any Acquired Corporation and its current or former employees, contractors or consultants, 
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '5.3'}`
+
+section refs: 5.3
+
+> Section 5.3 of this Agreement, the Acquired Corporations shall reasonably consult with Parent in respect of such matters, and use reasonable best efforts to (i) provide Parent with written cash management reports each week describing the Acquired Corporations' cash position and use of cash for the prior week and a cash forecast for the succeeding week, and such other related information as is otherwise reasonably requested by Parent and (ii) participate in discussions weekly, or as otherwise reasonably requested by Parent to review any such cash management reports and cash forecasts; provided,
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'Conduct of Business Prior to Closing'}`
+
+section refs: 8.1, 5.1, 4.11, 6.2, 6.14
+
+> 8.1 Termination. This Agreement may be terminated prior to the Effective Time (or prior to such earlier time as set forth in this Section 8.1): (a) by mutual written consent of Parent and the Company at any time prior to the Offer Acceptance Time; (b) by either Parent or the Company, at any time prior to the Offer Acceptance Time, if the Closing shall not have occurred on or prior to 11:59 p.m., New York City time, on December 1, 2021 (the "End Date"); provided, however, that (x) if as of the End Date the conditions set forth in clause (d) or (f) of Annex I (in the case of (f), solely with res
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> e Agreements to be paid on or prior to the date of this Agreement, and will pay in full any such amounts due on or before the Closing Date. (f) In no event shall the receipt or availability of any funds or financing (including the Financing and the closing of the Royalty Purchase Agreements) by or to Parent or any of its Affiliates or any other financing transaction be a condition to any of the obligations of Parent hereunder. (g) No transfer of property is being made and no obligation is being incurred in connection with the Transactions with the intent to hinder, delay or defraud either pres
+
+> date with any reasonable request for additional information, documents or other materials received by any Party or any of its Subsidiaries from any Governmental Body in connection with such applications or filings for the Transactions. Purchaser shall pay all filing fees under the HSR Act and for any filings required under any other applicable Antitrust Laws. Neither Party shall commit to or agree with any Governmental Body to stay, toll or extend any applicable waiting period under the HSR Act, or withdraw any notification filed under the HSR Act, or other applicable Antitrust Laws, without t
+
+> s, including using reasonable best efforts to: 48 ________________ (i) maintain in effect the Royalty Purchase Agreements and comply in all material respects with its obligations under the Royalty Purchase Agreements, and (ii) satisfy on a timely basis, and in a manner that will not impede the ability of the Parties to consummate the Transactions promptly upon the Closing Date, all conditions to the funding of the Financing set forth in the Royalty Purchase Agreements. Parent shall (A) upon reasonable request, keep the Company informed in reasonable detail of the status of Parent's efforts to 
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 5.2 Conduct of Business'}`
+
+section refs: 7.1, 5.2, 5.3, 4.1, 5
+
+> 7.1 No Restraints. There shall not have been issued by any Governmental Body in any jurisdiction in which Parent or the Company has material business operations, and remain in effect any temporary restraining order, preliminary or permanent injunction or other order preventing the consummation of the Merger, nor shall there be any Legal Requirement promulgated, entered, enforced, enacted, issued or deemed applicable to the Merger by any Governmental Body in any jurisdiction in which Parent or the Company has material business operations which prohibits, or makes illegal the consummation of the
+
+> Section 5.2 and 
+
+> e permitted under the applicable Legal Requirements (including any COVID-19 Measures). 34 ________________ 5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would
+
+> 4.1 Due Organization. Parent is a German stock corporation (Aktiengesellschaft) and Purchaser is a corporation, in each case duly organized, validly existing and in good standing under the laws of its jurisdiction of organization (with respect to jurisdictions that recognize such concept) and has all necessary power and authority: (a) to conduct its business in the manner in which its business is currently being conducted; (b) to own and use its assets in the manner in which its assets are currently owned and used; and (c) to perform its obligations under all Contracts by which it is bound, ex
+
+> 5. CERTAIN COVENANTS OF THE COMPANY 
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 6: `search_agreement`
+
+args: `{'k': 10, 'query': '5.2 Operation of the Acquired Corporations Business'}`
+
+section refs: 5.1, 3.11, 4.9, 3.1, (none), 3.12, 2, 3.10, 5.3, 5.3
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> e other Acquired Corporations, and their respective Affiliates, stockholders, directors, officers, employees, consultants, agents, representatives and advisors certain estimates, projections, forecasts and other forward-looking information, as well as certain business plan information, regarding the Acquired Corporations and their respective businesses and operations. Parent and Purchaser hereby acknowledge that there are uncertainties inherent in attempting to make such estimates, projections, forecasts and other forward- looking statements, as well as in such business plans, and that Parent 
+
+> 3.1 Due Organization; Subsidiaries, Etc. (a) The Company is a corporation duly organized, validly existing and in good standing under the laws of the State of Delaware, and the Company's only Subsidiary is Constellation Securities Corporation, a corporation duly organized, validly existing and in good standing under the laws of the State of Massachusetts (Company and such Subsidiary, an "Acquired Corporation" and, collectively, the "Acquired Corporations"). Each Acquired Corporation has all necessary power and authority: (i) to conduct its business in the manner in which its business is curren
+
+> ARENT AND PURCHASER 28 4.1 Due Organization 28 4.2 Purchaser 29 4.3 Authority; Binding Nature of Agreement 29 4.4 Non-Contravention; Consents 29 4.5 Information Supplied 30 4.6 Legal Proceedings; Orders 30 4.7 Funds; Valid Issuance 30 4.8 Ownership of Shares 31 4.9 Acknowledgement by Parent and Purchaser 31 4.10 Brokers and Other Advisors 32 4.11 Financing. 32 SECTION 5. CERTAIN COVENANTS OF THE COMPANY 33 5.1 Access and Investigation 33 5.2 Operation of the Acquired Corporations' Business 35 5.3 No Solicitation 38 SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 39 6.1 Company Board Recommendat
+
+> 3.12 Liabilities. The Acquired Corporations do not have any liabilities of any nature (whether accrued, absolute, contingent or otherwise) which would be required to be reflected or reserved against on a consolidated balance sheet of the Company prepared in accordance with GAAP or the notes thereto, except for: (i) liabilities disclosed, reflected or reserved against in the Company's financial statements or the notes thereto included in the Company SEC Documents filed prior to the date of this Agreement; (ii) liabilities or obligations incurred pursuant to the terms of or expressly contemplate
+
+> 2. MERGER TRANSACTION 
+
+> 3.10 Intellectual Property. (a) Section 3.10(a) of the Company Disclosure Schedule identifies, as of the date of this Agreement, each item of Registered IP owned or purported to be owned by any Acquired Corporation as of the date of this Agreement (the "Company Registered IP"). (b) To the knowledge of the Company, none of the issued Company Patents is invalid or unenforceable, except as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (c) All material Company IP is owned, and all material registered IP is owned exclusive
+
+> e permitted under the applicable Legal Requirements (including any COVID-19 Measures). 34 ________________ 5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would
+
+> between wholly owned Subsidiaries of the Company) of (A) any capital stock, equity interest or other security of the Acquired Corporation, (B) any option, call, warrant, restricted securities or right to acquire any capital stock, equity interest or other security of the Acquired Corporation (or valued based upon any equity interest or other security of any Acquired Corporation), or (C) any instrument convertible into or exchangeable for any capital stock, equity interest or other security of the Acquired Corporation (except that (I) the Company may issue Shares upon the exercise of Company Op
+
+### Step 7: `get_section`
+
+args: `{'section_ref': '5.2(a)'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 8: `search_agreement`
+
+args: `{'k': 3, 'query': 'use commercially reasonable efforts to conduct its business and operations in the ordinary course'}`
+
+section refs: 5.1, 6.14, 5.3
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> 6.14 Parent Financing. (a) Parent and Purchaser shall use their reasonable best efforts to take, or cause to be taken, all actions and do, or cause to be done, all things necessary, advisable or proper to obtain funds sufficient to fund any amount payable by Parent or Purchaser (or either of their respective Affiliates) in connection with the Transactions, including the payment of all of Parent's, Purchaser's and their respective Affiliates' costs and expenses incurred in the evaluation, negotiation and execution of the Transactions. In furtherance and not in limitation of the foregoing, unles
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+## Finding
+
+answer: Commercially reasonable efforts
+
+evidence:
+- (5.2(a)) the Company shall, and shall cause each Acquired Corporation to, use commercially reasonable efforts to conduct its business and operations in the ordinary course in all material respects
+
+rationale: The agreement specifies that the target must use 'commercially reasonable efforts' to conduct its business in the ordinary course during the pre-closing period, as stated in Section 5.2(a).
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would violate Antitrust Law), (y) for any action required to be or reasonably taken, or omitted to be taken, pursuant to any COVID-19 Measures or which is otherwise required or reasonably taken, or omitted to be taken, in response to COVID-19 or any other pandemic, epidemic or disease outbreak, as determined by the Company in its reasonable discretion, or (z) as set forth in Section 5.2 of the Company Disclosure Schedule, the Company shall, and shall cause each Acquired Corporation to, use commercially reasonable efforts to conduct its business and operations in the ordinary course in all material respects
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -2468,6 +5427,288 @@ rationale: Section 6.1(b) establishes the matching rights period. The Company mu
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 7e0d928a44af
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. 
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Material Adverse Effect means any effect'}`
+
+section refs: 4.21, 4.10, 5.5, 4.16, 4.19
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+### Step 3: `lookup_defined_term`
+
+args: `{'term': 'Company Material Adverse Effect'}`
+
+(tool result text not recorded)
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Company Material Adverse Effect" means'}`
+
+section refs: 4.10, 9.6, 4.16, 4.16, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"Material Adverse Effect" defined term section 9'}`
+
+section refs: 4.15, 4.16, 4.16, 4.19, 5.5
+
+> 4.15 Environmental Matters. Except as would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, (a) each of the Company and the Company Subsidiaries is and has for the past five (5) years been in compliance with applicable Environmental Laws, (b) each of the Company and the Company Subsidiaries has, or has applied for, all Environmental Permits necessary for the conduct and operation of their respective businesses as now being conducted and is, and for the past five (5) years has been, in compliance with the terms and conditions thereof, and
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': '"Company Material Adverse Effect" means any effect or change'}`
+
+section refs: 4.10, 4.21, 4.16, 9.6, 4.16
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': '"Effect" means any change or effect'}`
+
+section refs: 9.6, 9.6, 8.1, 9.6, 4.20
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+>  effect that was enacted, promulgated or deemed applicable to the Merger by any Governmental Entity of competent jurisdiction, in each case, permanently restraining, enjoining, preventing or otherwise prohibiting or making illegal (1) prior to the Acceptance Time, the consummation of the Offer, or (2) prior to the Effective Time, the consummation of the Merger, and, in each case, such Order or Law shall have become final and nonappealable; provided, that the right to terminate this Agreement pursuant to this Section 8.1(c) shall be available only if the party seeking to terminate this Agreemen
+
+>  diminution in such holder's base salary in effect immediately prior to such reduction; or (ii) requiring such holder to move his or her principal place of employment to a location more than thirty (30) miles outside of the location as of the immediately prior to the Effective Time. "Governmental Entity" means any supranational, national, federal, state, county, municipal, local or foreign government or other political subdivision thereof, any court, any arbitral body, any entity or instrumentality exercising executive, legislative, judicial, regulatory, taxing, administrative, prosecutorial o
+
+> 4.20 Construction Matters. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, (i) the land, homes and other improvements sold by the Company and the Company Subsidiaries have at all times during the period of time in which the Company or the Company Subsidiaries have owned such land, homes and other improvements, complied with all applicable building codes, zoning, -34- ________________ land use, Environmental Laws or similar Laws then in effect (ii) there are no pending vendor recalls of which the Company
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': '"Company Material Adverse Effect" means any effect or change or development'}`
+
+section refs: 4.10, 4.21, 4.16, 9.6, 4.19
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 7e9616bd0780
+
+## Question
+
+What efforts standard governs the target's ordinary-course-of-business covenant?
+
+## Options
+
+- Flat covenant (no efforts standard)
+- Commercially reasonable efforts
+- Reasonable best efforts
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'conduct of business prior to closing'}`
+
+section refs: 8.1, 5.1, 4.11, 6.2, 6.14
+
+> 8.1 Termination. This Agreement may be terminated prior to the Effective Time (or prior to such earlier time as set forth in this Section 8.1): (a) by mutual written consent of Parent and the Company at any time prior to the Offer Acceptance Time; (b) by either Parent or the Company, at any time prior to the Offer Acceptance Time, if the Closing shall not have occurred on or prior to 11:59 p.m., New York City time, on December 1, 2021 (the "End Date"); provided, however, that (x) if as of the End Date the conditions set forth in clause (d) or (f) of Annex I (in the case of (f), solely with res
+
+> 5.1 Access and Investigation. During the period from the date of this Agreement until the earlier of the Effective Time and the termination of this Agreement pursuant to Section 8.1 (the "Pre-Closing Period"), upon reasonable advance notice to the Company, the Acquired Corporations shall, and shall use reasonable best efforts to cause the respective Representatives of the Acquired Corporations to provide Parent and Parent's Representatives with reasonable access during normal business hours of the Company to the Company's designated Representatives and assets, books, records, work papers and o
+
+> e Agreements to be paid on or prior to the date of this Agreement, and will pay in full any such amounts due on or before the Closing Date. (f) In no event shall the receipt or availability of any funds or financing (including the Financing and the closing of the Royalty Purchase Agreements) by or to Parent or any of its Affiliates or any other financing transaction be a condition to any of the obligations of Parent hereunder. (g) No transfer of property is being made and no obligation is being incurred in connection with the Transactions with the intent to hinder, delay or defraud either pres
+
+> date with any reasonable request for additional information, documents or other materials received by any Party or any of its Subsidiaries from any Governmental Body in connection with such applications or filings for the Transactions. Purchaser shall pay all filing fees under the HSR Act and for any filings required under any other applicable Antitrust Laws. Neither Party shall commit to or agree with any Governmental Body to stay, toll or extend any applicable waiting period under the HSR Act, or withdraw any notification filed under the HSR Act, or other applicable Antitrust Laws, without t
+
+> s, including using reasonable best efforts to: 48 ________________ (i) maintain in effect the Royalty Purchase Agreements and comply in all material respects with its obligations under the Royalty Purchase Agreements, and (ii) satisfy on a timely basis, and in a manner that will not impede the ability of the Parties to consummate the Transactions promptly upon the Closing Date, all conditions to the funding of the Financing set forth in the Royalty Purchase Agreements. Parent shall (A) upon reasonable request, keep the Company informed in reasonable detail of the status of Parent's efforts to 
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"conduct of business"'}`
+
+section refs: 9.11, 5.3, 3.10, 4.1, 5
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> ase, as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (i) Section 3.10(i) of the Company Disclosure Schedule sets forth each Contract pursuant to which any material Intellectual Property has been licensed, sold, assigned or otherwise conveyed to an Acquired Corporation, or pursuant to which any Acquired Corporation has otherwise received or acquired any right in any material Intellectual Property (other than any Contract between any Acquired Corporation and its current or former employees, contractors or consultants, 
+
+> 4.1 Due Organization. Parent is a German stock corporation (Aktiengesellschaft) and Purchaser is a corporation, in each case duly organized, validly existing and in good standing under the laws of its jurisdiction of organization (with respect to jurisdictions that recognize such concept) and has all necessary power and authority: (a) to conduct its business in the manner in which its business is currently being conducted; (b) to own and use its assets in the manner in which its assets are currently owned and used; and (c) to perform its obligations under all Contracts by which it is bound, ex
+
+> 5. CERTAIN COVENANTS OF THE COMPANY 
+
+### Step 3: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"conduct of business" "ordinary course"'}`
+
+section refs: 5.3, 3.10, 3.11, 9.11, 4.11
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> ase, as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (i) Section 3.10(i) of the Company Disclosure Schedule sets forth each Contract pursuant to which any material Intellectual Property has been licensed, sold, assigned or otherwise conveyed to an Acquired Corporation, or pursuant to which any Acquired Corporation has otherwise received or acquired any right in any material Intellectual Property (other than any Contract between any Acquired Corporation and its current or former employees, contractors or consultants, 
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> iaries, taken as a whole on a consolidated basis, shall be able to pay their debts and obligations in the ordinary course of business as they become due; and (iii) Parent and its Subsidiaries, taken as a whole on a consolidated basis, shall have adequate capital to carry on their businesses. Notwithstanding the foregoing, Parent makes no representation or warranty with respect to statements made or incorporated in any Royalty Purchase Agreement or to any Financing Source based on information supplied in writing by or on behalf of the Company or the Acquired Corporations for inclusion or incorp
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '5.2'}`
+
+section refs: 5.2
+
+> Section 5.2 and 
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"5.2"'}`
+
+section refs: 5.2, 5, 8, 2, 9
+
+> Section 5.2 and 
+
+> 5. CERTAIN COVENANTS OF THE COMPANY 
+
+> 8. TERMINATION 
+
+> 2. MERGER TRANSACTION 
+
+> 9. MISCELLANEOUS PROVISIONS 
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"conduct of business" "ordinary course" "shall"'}`
+
+section refs: 5.3, 4.11, 9.11, 3.11, 3.10
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> iaries, taken as a whole on a consolidated basis, shall be able to pay their debts and obligations in the ordinary course of business as they become due; and (iii) Parent and its Subsidiaries, taken as a whole on a consolidated basis, shall have adequate capital to carry on their businesses. Notwithstanding the foregoing, Parent makes no representation or warranty with respect to statements made or incorporated in any Royalty Purchase Agreement or to any Financing Source based on information supplied in writing by or on behalf of the Company or the Acquired Corporations for inclusion or incorp
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> ase, as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (i) Section 3.10(i) of the Company Disclosure Schedule sets forth each Contract pursuant to which any material Intellectual Property has been licensed, sold, assigned or otherwise conveyed to an Acquired Corporation, or pursuant to which any Acquired Corporation has otherwise received or acquired any right in any material Intellectual Property (other than any Contract between any Acquired Corporation and its current or former employees, contractors or consultants, 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"conduct of business" "operate" "ordinary course"'}`
+
+section refs: 5.3, 3.11, 3.10, 9.11, 4.11
+
+> ations or (D) for transactions between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company); (viii) lend money or make capital contributions or advances to or make investments in, any Person, or incur or guarantee any Indebtedness for borrowed money (except for (A) loans, capital contributions, advances or investments between the Company and any wholly owned Subsidiary of the Company or between wholly owned Subsidiaries of the Company, (B) short-term loans, of not more than $1,000,000 in the aggregate, incurred in the ordinary course o
+
+> ound Licenses, and clinical trial agreements entered into in the ordinary course of business; (iii) a Company Contract relating to Indebtedness for borrowed money of any Acquired Corporation with a principal amount in excess of $1,000,000 (whether incurred, assumed, guaranteed or secured by any asset); (iv) a Company Contract that prohibits the payment of dividends or distributions in respect of the capital stock of any Acquired Corporation, the pledging of the capital stock or other equity interests of any Acquired Corporation or the issuance of any guaranty by any Acquired Corporation; (v) a
+
+> ase, as would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (i) Section 3.10(i) of the Company Disclosure Schedule sets forth each Contract pursuant to which any material Intellectual Property has been licensed, sold, assigned or otherwise conveyed to an Acquired Corporation, or pursuant to which any Acquired Corporation has otherwise received or acquired any right in any material Intellectual Property (other than any Contract between any Acquired Corporation and its current or former employees, contractors or consultants, 
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> iaries, taken as a whole on a consolidated basis, shall be able to pay their debts and obligations in the ordinary course of business as they become due; and (iii) Parent and its Subsidiaries, taken as a whole on a consolidated basis, shall have adequate capital to carry on their businesses. Notwithstanding the foregoing, Parent makes no representation or warranty with respect to statements made or incorporated in any Royalty Purchase Agreement or to any Financing Source based on information supplied in writing by or on behalf of the Company or the Acquired Corporations for inclusion or incorp
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+5.2 Operation of the Acquired Corporations' Business. (a) During the Pre-Closing Period, except (w) as required or otherwise contemplated under this Agreement or as prohibited or required by applicable Legal Requirements, (x) with the written consent of Parent (which consent shall not be unreasonably withheld, delayed or conditioned, and provided that no consent shall be required if the Company reasonably believes after consulting with outside legal counsel that seeking such consent would violate Antitrust Law), (y) for any action required to be or reasonably taken, or omitted to be taken, pursuant to any COVID-19 Measures or which is otherwise required or reasonably taken, or omitted to be taken, in response to COVID-19 or any other pandemic, epidemic or disease outbreak, as determined by the Company in its reasonable discretion, or (z) as set forth in Section 5.2 of the Company Disclosure Schedule, the Company shall, and shall cause each Acquired Corporation to, use commercially reasonable efforts to conduct its business and operations in the ordinary course in all material respects
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 808a4e97cb87
 
 ## Question
@@ -2561,6 +5802,246 @@ rationale: The tail period termination fee is triggered only if an Acquisition P
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 SECTION 8.02. Effect of Termination. (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (B) within 12 months of such termination the Company or any of its Subsidiaries enters into an Acquisition Agreement with respect to any Acquisition Proposal or any Acquisition Proposal is consummated
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 82cf6f17bd8b
+
+## Question
+
+During the tail period, must an acquisition proposal have been publicly disclosed or made known to trigger the termination fee?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'termination fee tail period'}`
+
+section refs: ARTICLE IX, 5.2, 8.1, ARTICLE IX, ARTICLE IX
+
+> ution and performance of this Agreement, the structuring of the Transactions, including the Financing, and any agreements relating thereto. If at the same time or after the Company has paid Expenses pursuant to this Section 8.02(c) the Company is obligated to pay the Termination Fee, the payment of Expenses shall reduce on a dollar for dollar basis the payment by the Company of the Termination Fee. Notwithstanding anything to the contrary contained in this Section 8.02(c) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Pare
+
+> e Triggering Notice (a "Parent Proposal"), such Superior Proposal remains a Superior Proposal and the Company Board has again made a Withdrawal Determination in response to such Superior Proposal or such Intervening Event is continuing and the Company Board has again made a Withdrawal Determination in response to such Intervening Event (it being understood and agreed that if, in light of any Parent Proposal, the Company Board is no longer able to make a Withdrawal Determination with respect to such Superior Proposal or Intervening Event, then the Company shall immediately enter into amendments
+
+> he receipt of the Company Stockholder Approval, pursuant to and in accordance with clause (z) of the second sentence of Section 5.02(b); provided; however, that the Company shall have prior to or concurrently with such termination paid to Parent the Termination Fee; or -66- ________________ (g) by the Company, if (i) all of the conditions set forth in Section 7.01 and Section 7.02 have been and remain satisfied or waived (by the party entitled to the benefit of such condition) (other than delivery of items to be delivered at the Closing and other than satisfaction of those conditions that by t
+
+> Article IX and the applicable definitions elsewhere in this Agreement, which provisions shall survive such termination; provided that the foregoing shall not relieve any party, subject in the case of Parent and Sub to Section 8.02(f), from liability for any Willful and Material Breach of any of its representations, warranties, covenants or agreements set forth in any Transaction Agreement. -67- ________________ (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (i) Parent terminates this Agreement pursuant to Section 8.01(d); (ii) the Company terminates this A
+
+>  that in the case of termination pursuant to clause (iii) above such payment shall be made on the date of execution of such definitive agreement or, if earlier, consummation of such transactions or the making of such recommendation). Notwithstanding anything to the contrary contained in this Section 8.02(b) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Parent would have had the right to terminate this Agreement, Parent shall be entitled to receipt of any Termination Fee that would have been (or would have subsequently bec
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Acquisition Proposal'}`
+
+section refs: 5.2
+
+> "Acquisition Proposal" means any inquiry, proposal, or indication of interest or offer by an unaffiliated third party or the securityholders of such party relating to, or reasonably expected to lead to, in a single transaction or series of transactions: (i) the issuance by the Company to, or the acquisition by, any third party or the securityholders of any third party of, 15% or more of any class of the equity interests in the Company (by vote or by value), (ii) any merger, consolidation, business combination, reorganization, share exchange, dual listed company structure, sale of assets, recap
+
+## Finding
+
+answer: Yes
+
+evidence:
+- (Section 8.02(b)) an Acquisition Proposal has been made to the Company or to stockholders of the Company generally or shall have otherwise become publicly known or any person shall have publicly announced an intention (whether or not condition and whether or not withdrawn) to make an Acquisition Proposal and thereafter
+
+rationale: The agreement requires that an Acquisition Proposal must have been made to the Company or its stockholders, or have become publicly known, or have been publicly announced, as a condition to triggering the tail-period termination fee under Section 8.02(b)(iii).
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+SECTION 8.02. Effect of Termination. (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (B) within 12 months of such termination the Company or any of its Subsidiaries enters into an Acquisition Agreement with respect to any Acquisition Proposal or any Acquisition Proposal is consummated
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 877f36deab78
+
+## Question
+
+Does the negative interim operating covenant carve out actions required by COVID-19/pandemic measures?
+
+## Options
+
+- No
+- Yes
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'conduct of business pending the closing'}`
+
+section refs: 2.1, 8.1, 4.15, 6.1, 6.1
+
+> less another time or date is agreed to in writing by the parties hereto. The Closing shall be held at the offices of Morrison & Foerster LLP, 250 West 55th Street, New York, NY 10019, unless another place is agreed to in writing by the parties hereto; provided that the parties intend that the Closing shall be effected, to the extent practicable, by conference call and the electronic delivery of documents to be held in escrow by outside counsel to the recipient party pending authorization to release at the Closing. 
+
+> eir nature are to be satisfied by actions taken at the Closing; provided that each such condition is then capable of being satisfied at a Closing on such date, assuming for purposes hereof that the date of termination is the Closing Date) have been satisfied or waived, (B) the Company has confirmed to Parent in writing that the Company is ready, willing and able to consummate the Merger, and (C) Parent and Merger Sub fail to consummate the Merger within five Business Days after the later of (1) the date the Closing should have occurred pursuant to Section 2.01 and (2) the delivery by the Compa
+
+> ion thereof) ending after the Closing Date as a result of (A) an installment sale or open transaction disposition made on or prior to the Closing Date or (B) a gain recognition agreement or closing agreement (whether under Section 7121 of the Code or under any corresponding provision of state, local or foreign Applicable Law) executed on or prior to the Closing Date; (h) neither the Company nor any of its Subsidiaries (i) is or has been a member of any group that has filed a combined, consolidated or unitary Tax Return provided for under Applicable Law with respect to Taxes for any taxable per
+
+> nt, repurchase, prepay, terminate or refinance any Indebtedness arising under the Existing Credit Agreement; (m) make, change or revoke any material Tax election, change any annual Tax accounting period, file any material amended Tax Return or file any material Tax Return in a manner inconsistent with past practice, enter into any "closing agreement" within the meaning of Section 7121 of the Code (or similar provision of state, local or non-U.S. law) in respect of any material Tax, settle any material Tax Proceeding, surrender any right to claim a material Tax refund, offset or other reduction
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'COVID-19 Measures'}`
+
+section refs: 1.1
+
+> "COVID-19 Measures" means any action or inaction to address the coronavirus (COVID-19) or comply with any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, travel restrictions, shut down, closure, sequester, safety or similar law, directive, guideline or recommendation promulgated by the Centers for Disease Control and Prevention, the World Health Organization or any state or local Governmental Authority having jurisdiction over the Company, its Subsidiaries or its operations, in each case, in connection with or in response to the coronavirus (COVID-19). 
+
+## Finding
+
+answer: Yes
+
+evidence:
+- (Section 6.01) The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (A) shall, and shall cause each of its Subsidiaries to use commercially reasonable efforts to
+
+rationale: The negative interim operating covenant in Section 6.01 explicitly includes a carve-out for actions 'reasonably undertaken in connection with any COVID-19 Measures'. 'COVID-19 Measures' is a defined term in Section 1.1 that covers actions taken to address the coronavirus or comply with related government directives.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (B) shall not, and shall cause each of its Subsidiaries not to:
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 8ac2e203f4f3
+
+## Question
+
+What form of consideration do target stockholders receive in the merger?
+
+## Options
+
+- All Cash
+- All Stock
+- Mixed Cash/Stock
+- Mixed Cash/Stock: Election
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 10, 'query': 'merger consideration cash stock per share'}`
+
+section refs: 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.6, 2.5, 2.8, 2.1
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> Cash Election Threshold, then the Exchange Agent shall convert, on a pro rata basis, a sufficient number of Stock Election Shares into Cash Election Shares (the "Reallocated Cash Election Shares" ) such that the sum of the number of Cash Election Shares plus the Reallocated Cash Election Shares equals the Cash Election Threshold and each Reallocated Cash Election Share shall be converted into the right to receive the Per Share Cash Consideration; and (D) each Stock Election Share which is not a Reallocated Cash Election Share shall be converted into the right to receive the Per Share Stock Con
+
+>  that represented Company Common Stock before the Effective Time will be deemed for all purposes to represent the number of shares of Nicolet Common Stock or cash into which they were converted pursuant to this Article 2. Section 2.5 No Fractional Shares. Notwithstanding anything to the contrary contained in this Agreement, no fractional shares of Nicolet Common Stock shall be issued as Merger Consideration in the Merger. Each holder of Company Common Stock who would otherwise be entitled to receive a fractional share of Nicolet Common Stock pursuant to this Article 2 shall instead be entitled
+
+> ection Deadline, Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock that was issued and outstanding immediately prior to the Effective Time in accordance with the terms of this Section. In order to ensure that the limits specified with respect to the cash consideration specified below are not exceeded, the parties hereby agree that the Exchange Agent, in applying the allocation rules set forth herein, shall have reasonable discretion to round calculations or otherwise adjust results thereof in order to accomplish such purpose, 
+
+> liverable in respect thereof pursuant to this Agreement. (j) If, between the date of this Agreement and the Effective Time, the outstanding shares of Nicolet Common Stock shall have been changed into a different number of shares or into a different class by reason of any stock dividend, subdivision, reclassification, recapitalization, split, combination or exchange of shares, the Merger Consideration per share shall be adjusted appropriately to provide the holders of Company Common Stock the same economic effect as contemplated by this Agreement prior to such event. Section 2.3 Election and Al
+
+> of Nicolet Common Stock and cash for payment of the Merger Consideration pursuant to Section 2.1, and (ii) sufficient cash for payment of cash in lieu of any fractional shares of Nicolet Common Stock in accordance with Section 2.5. Such amount of cash and shares of Nicolet Common Stock, together with any dividends or distributions with respect thereto paid after the Effective Time, are referred to in this Article 2 as the "Conversion Fund." (c) Within five (5) Business Days after the Closing Date, Nicolet shall cause the Exchange Agent to mail to each holder of record of one or more certificat
+
+> Section 2.6 Company Preferred Stock. At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Preferred Stock, each share of Company Preferred Stock issued and outstanding immediately prior to the Effective Time, if any, will be converted into the right to receive cash in an amount equal to the redemption price of such Company Preferred Stock as of the Effective Time. At the Effective Time, the shares of Company Preferred Stock will no longer be outstanding and will automatically be cancelled and will ceas
+
+>  Shares twelve (12) months after the Effective Time shall be paid to the Surviving Entity, or its successors in interest. Any holders of Outstanding Company Shares who have not theretofore complied with this Article 2 shall thereafter look only to the Surviving Entity, or its successors in interest, for issuance of Nicolet Common Stock and/or cash pursuant to the Merger Consideration and the payment of cash in lieu of any fractional shares deliverable in respect of such shareholders' shares of Company Common Stock, as well as any accrued and unpaid dividends or distributions on shares of such 
+
+> Section 2.8 Company Stock Awards. (a ) Company Stock Options. Immediately prior to the Effective Time, each option issued under the Company Stock Plans that is outstanding immediately prior to the Effective Time (a "Company Stock Option"), whether vested or unvested, shall be cancelled, by virtue of the Merger and without any action on the part of the holder thereof, in consideration for the right to receive, as promptly as practicable (but no later than fifteen (15) calendar days) following the Effective Time, a cash payment (without interest and less applicable withholding Taxes) with respec
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+### Step 2: `get_section`
+
+args: `{'section_ref': 'Section 2.1'}`
+
+section refs: 2.1
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+### Step 3: `get_section`
+
+args: `{'section_ref': 'Section 2.1'}`
+
+section refs: 2.1
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Section 2.1" consideration per share stock cash'}`
+
+section refs: 2.5, 2.5, 2.5, 2.5, 2.5
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> Cash Election Threshold, then the Exchange Agent shall convert, on a pro rata basis, a sufficient number of Stock Election Shares into Cash Election Shares (the "Reallocated Cash Election Shares" ) such that the sum of the number of Cash Election Shares plus the Reallocated Cash Election Shares equals the Cash Election Threshold and each Reallocated Cash Election Share shall be converted into the right to receive the Per Share Cash Consideration; and (D) each Stock Election Share which is not a Reallocated Cash Election Share shall be converted into the right to receive the Per Share Stock Con
+
+> ection Deadline, Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock that was issued and outstanding immediately prior to the Effective Time in accordance with the terms of this Section. In order to ensure that the limits specified with respect to the cash consideration specified below are not exceeded, the parties hereby agree that the Exchange Agent, in applying the allocation rules set forth herein, shall have reasonable discretion to round calculations or otherwise adjust results thereof in order to accomplish such purpose, 
+
+>  that represented Company Common Stock before the Effective Time will be deemed for all purposes to represent the number of shares of Nicolet Common Stock or cash into which they were converted pursuant to this Article 2. Section 2.5 No Fractional Shares. Notwithstanding anything to the contrary contained in this Agreement, no fractional shares of Nicolet Common Stock shall be issued as Merger Consideration in the Merger. Each holder of Company Common Stock who would otherwise be entitled to receive a fractional share of Nicolet Common Stock pursuant to this Article 2 shall instead be entitled
+
+> of Nicolet Common Stock and cash for payment of the Merger Consideration pursuant to Section 2.1, and (ii) sufficient cash for payment of cash in lieu of any fractional shares of Nicolet Common Stock in accordance with Section 2.5. Such amount of cash and shares of Nicolet Common Stock, together with any dividends or distributions with respect thereto paid after the Effective Time, are referred to in this Article 2 as the "Conversion Fund." (c) Within five (5) Business Days after the Closing Date, Nicolet shall cause the Exchange Agent to mail to each holder of record of one or more certificat
+
+### Step 5: `get_section`
+
+args: `{'section_ref': 'Section 2.3'}`
+
+section refs: 2.3
+
+> Section 2.3 and the fractional share procedures in 
+
+### Step 6: `get_section`
+
+args: `{'section_ref': 'Section 2.3'}`
+
+section refs: 2.3
+
+> Section 2.3 and the fractional share procedures in 
+
+### Step 7: `get_section`
+
+args: `{'section_ref': 'Section 2.3 Election and Allocation Procedures'}`
+
+(tool result text not recorded)
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': '"Section 2.1" "Consideration" each share will be converted'}`
+
+section refs: 2.1, 2.5, 2.5, 2.5, 2.5
+
+> Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in 
+
+> Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration"). (b) The total cash and stock consideration to be paid by Nicolet in respect of shares of Company Common Stock is referred to herein as the "Merger Consideration." Notwithstanding anything in this Section 2.1 to the contrary, at the Effective Time and by virtue of the Merger, each share of Company Common Stock held in the Company's trea
+
+> ection Deadline, Nicolet shall cause the Exchange Agent to allocate the Merger Consideration among the holders of Company Common Stock that was issued and outstanding immediately prior to the Effective Time in accordance with the terms of this Section. In order to ensure that the limits specified with respect to the cash consideration specified below are not exceeded, the parties hereby agree that the Exchange Agent, in applying the allocation rules set forth herein, shall have reasonable discretion to round calculations or otherwise adjust results thereof in order to accomplish such purpose, 
+
+> Cash Election Threshold, then the Exchange Agent shall convert, on a pro rata basis, a sufficient number of Stock Election Shares into Cash Election Shares (the "Reallocated Cash Election Shares" ) such that the sum of the number of Cash Election Shares plus the Reallocated Cash Election Shares equals the Cash Election Threshold and each Reallocated Cash Election Share shall be converted into the right to receive the Per Share Cash Consideration; and (D) each Stock Election Share which is not a Reallocated Cash Election Share shall be converted into the right to receive the Per Share Stock Con
+
+>  that represented Company Common Stock before the Effective Time will be deemed for all purposes to represent the number of shares of Nicolet Common Stock or cash into which they were converted pursuant to this Article 2. Section 2.5 No Fractional Shares. Notwithstanding anything to the contrary contained in this Agreement, no fractional shares of Nicolet Common Stock shall be issued as Merger Consideration in the Merger. Each holder of Company Common Stock who would otherwise be entitled to receive a fractional share of Nicolet Common Stock pursuant to this Article 2 shall instead be entitled
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in Section 2.3 and the fractional share procedures in Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration").
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -2785,6 +6266,354 @@ rationale: The Section 9.11 definition of "Material Adverse Effect" opens with a
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 900b6a983149
+
+## Question
+
+What standard governs the target's liability for a no-shop breach committed by its non-officer/director representatives?
+
+## Options
+
+- Strict liability
+- Reasonable standard
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'no-shop solicitation breach liability'}`
+
+section refs: 3.14, 7.2, ARTICLE VII, 7.2, 4.6
+
+> , (iv) neither Boston Private nor any of its Subsidiaries has knowledge of, or has received notice of, any violation of any Boston Private Contract by any of the other parties thereto which would reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, and (v) no event or condition exists which constitutes or, after notice or lapse of time or both, will constitute, a material breach or default on the part of Boston Private or any of its Subsidiaries, or to the knowledge of Boston Private, any other party thereto, of or under any such
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> Article VII; provided, that any failure to give notice in accordance with the foregoing with respect to any breach shall not be deemed to constitute a violation of this Section 6.8 or the failure of any condition set forth in 
+
+> vate shall give SVB Financial the opportunity to participate at its own expense in the defense or settlement of any shareholder litigation against Boston Private and/or its directors or affiliates relating to the transactions contemplated by this Agreement, and no such settlement shall be agreed without SVB Financial's prior written consent (such consent not to be unreasonably withheld, conditioned or delayed). 6.16 Trust Preferred Securities. Upon the Effective Time, SVB Financial or a Subsidiary of SVB Financial shall assume the due and punctual performance and observance of the covenants an
+
+> arge-offs and accruals) of SVB Financial or any of its Subsidiaries or their respective internal accounting controls, including any material complaint, allegation, assertion or claim that SVB Financial or any of its Subsidiaries has engaged in questionable accounting or auditing practices, and (ii) no employee of or attorney representing SVB Financial or any of its Subsidiaries, whether or not employed by SVB Financial or any of its Subsidiaries, has reported evidence of a material violation of securities laws or banking laws, breach of fiduciary duty or similar violation by SVB Financial or a
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Target Non-D&O Representatives'}`
+
+section refs: 6.2, 5.2, 7.2, 3.11, 3.27
+
+> omers, jeopardize the attorney-client privilege of the institution in possession or control of such information (after giving due consideration to the existence of any common interest, joint defense or similar agreement between the parties) or contravene any law, rule, regulation, order, judgment, decree, fiduciary duty or binding agreement entered into prior to the date of this Agreement. The parties hereto will make appropriate substitute disclosure arrangements under circumstances in which the restrictions of the preceding sentence apply. (b) Each of SVB Financial and Boston Private shall h
+
+> ments that do not materially increase liabilities) or terminate any Boston Private Benefit Plan, or any arrangement that would be a Boston Private Benefit Plan if in effect on the date hereof, (ii) increase the compensation or benefits payable to any current or former employee, officer, director or consultant, (iii) pay or award, or commit to pay or award, any material bonuses or incentive compensation other than in the ordinary course of business consistent with past practice, (iv) grant or accelerate the vesting of any equity-based awards or other compensation, (v) enter into any new, or ame
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+>  that has two (2) or more contributing sponsors at least two (2) of whom are not under common control, within the meaning of Section 4063 of ERISA (a "Multiple Employer Plan"), and none of Boston Private and its Subsidiaries nor any Boston Private ERISA Affiliate has incurred any liability that has not been satisfied to a Multiemployer Plan or Multiple Employer Plan as a result of a complete or partial withdrawal (as those terms are defined in Part I of Subtitle E of Title IV of ERISA) from a Multiemployer Plan or Multiple Employer Plan. (f) Except as required by applicable law, no Boston Priv
+
+>  protect non-public personal information about customers, clients and other third parties, (vii) written recordkeeping policies and procedures and (viii) other policies required to be maintained by such Advisory Entity under applicable law, including Rules 204A-1 and 206(4)-7 under the Investment Advisers Act, except, in each case under clauses (i)-(viii), as would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on Boston Private. -35- ________________ (e) With respect to each Advisory Entity, except as would not reasonably be expected to be, ind
+
+### Step 3: `get_section`
+
+args: `{'section_ref': '6.9'}`
+
+(tool result text not recorded)
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': 'agents advisors representatives reasonable best efforts no shop'}`
+
+section refs: 7.2, 7.2, 7.2, 6.1, 7.2
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> lective investment in transferable securities) (each a "Non-U.S. Retail Fund"), as promptly as practicable following the date of this Agreement, to the extent required by applicable law or the terms of the existing Advisory Agreement with such Non-U.S. Retail Fund, Boston Private shall use its reasonable best efforts, and shall cause each of its Subsidiaries to use their reasonable best efforts to (A) provide notice of the transactions contemplated by this Agreement to such Non-U.S. Retail Fund and, where required by applicable law or the applicable Advisory Agreement, to the investors in such
+
+> sions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement w
+
+> n connection with the transactions contemplated by this Agreement. In exercising the foregoing right, each of the parties hereto shall act reasonably and as promptly as practicable. The parties hereto agree that they will consult with each other with respect to the obtaining of all permits, consents, approvals and authorizations of all third parties and Governmental Entities necessary or advisable to consummate the transactions contemplated by this Agreement and each party will keep the other reasonably apprised of the status of matters relating to completion of the transactions contemplated h
+
+> bligation or agreement of a third party to not solicit, hire or attempt to solicit or hire any employee of Boston Private or any Boston Private Subsidiary for employment or in any other capacity (including as an independent contractor or consultant) contained in any existing agreement entered into in connection with any investment, strategic transaction, acquisition, disposition or other similar transaction between Boston Private or any Boston Private Subsidiary and such third party. 6.18 Advisory Contracts. (a) Public Funds. Subject to the requirements of applicable law and the fiduciary duti
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': 'Non-D&O Representatives liability breach'}`
+
+section refs: 7.2, 3.6, 6.2, ARTICLE VII, 3.14
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+>  Topic 326. (c) Except as would not reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, neither Boston Private nor any of its Subsidiaries has any liability of any nature whatsoever (whether absolute, accrued, contingent or otherwise and whether due or to become due) required by GAAP to be included on a consolidated balance sheet of Boston Private, except for those liabilities that are reflected or reserved against on the consolidated balance sheet of Boston Private included in its Quarterly Report on Form 10-Q for the fiscal qu
+
+> omers, jeopardize the attorney-client privilege of the institution in possession or control of such information (after giving due consideration to the existence of any common interest, joint defense or similar agreement between the parties) or contravene any law, rule, regulation, order, judgment, decree, fiduciary duty or binding agreement entered into prior to the date of this Agreement. The parties hereto will make appropriate substitute disclosure arrangements under circumstances in which the restrictions of the preceding sentence apply. (b) Each of SVB Financial and Boston Private shall h
+
+> Article VII; provided, that any failure to give notice in accordance with the foregoing with respect to any breach shall not be deemed to constitute a violation of this Section 6.8 or the failure of any condition set forth in 
+
+> , (iv) neither Boston Private nor any of its Subsidiaries has knowledge of, or has received notice of, any violation of any Boston Private Contract by any of the other parties thereto which would reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, and (v) no event or condition exists which constitutes or, after notice or lapse of time or both, will constitute, a material breach or default on the part of Boston Private or any of its Subsidiaries, or to the knowledge of Boston Private, any other party thereto, of or under any such
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': 'agents advisors representatives reasonable best efforts cause not to'}`
+
+section refs: 7.2, 7.2, 7.2, 7.2, 6.1
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> sions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement w
+
+> bligation or agreement of a third party to not solicit, hire or attempt to solicit or hire any employee of Boston Private or any Boston Private Subsidiary for employment or in any other capacity (including as an independent contractor or consultant) contained in any existing agreement entered into in connection with any investment, strategic transaction, acquisition, disposition or other similar transaction between Boston Private or any Boston Private Subsidiary and such third party. 6.18 Advisory Contracts. (a) Public Funds. Subject to the requirements of applicable law and the fiduciary duti
+
+> lective investment in transferable securities) (each a "Non-U.S. Retail Fund"), as promptly as practicable following the date of this Agreement, to the extent required by applicable law or the terms of the existing Advisory Agreement with such Non-U.S. Retail Fund, Boston Private shall use its reasonable best efforts, and shall cause each of its Subsidiaries to use their reasonable best efforts to (A) provide notice of the transactions contemplated by this Agreement to such Non-U.S. Retail Fund and, where required by applicable law or the applicable Advisory Agreement, to the investors in such
+
+> n connection with the transactions contemplated by this Agreement. In exercising the foregoing right, each of the parties hereto shall act reasonably and as promptly as practicable. The parties hereto agree that they will consult with each other with respect to the obtaining of all permits, consents, approvals and authorizations of all third parties and Governmental Entities necessary or advisable to consummate the transactions contemplated by this Agreement and each party will keep the other reasonably apprised of the status of matters relating to completion of the transactions contemplated h
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': 'Non-D&O Representatives strict liability'}`
+
+section refs: 3.6, 6.2, 9.11, 7.2, 3.29
+
+>  Topic 326. (c) Except as would not reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, neither Boston Private nor any of its Subsidiaries has any liability of any nature whatsoever (whether absolute, accrued, contingent or otherwise and whether due or to become due) required by GAAP to be included on a consolidated balance sheet of Boston Private, except for those liabilities that are reflected or reserved against on the consolidated balance sheet of Boston Private included in its Quarterly Report on Form 10-Q for the fiscal qu
+
+> omers, jeopardize the attorney-client privilege of the institution in possession or control of such information (after giving due consideration to the existence of any common interest, joint defense or similar agreement between the parties) or contravene any law, rule, regulation, order, judgment, decree, fiduciary duty or binding agreement entered into prior to the date of this Agreement. The parties hereto will make appropriate substitute disclosure arrangements under circumstances in which the restrictions of the preceding sentence apply. (b) Each of SVB Financial and Boston Private shall h
+
+> 9.11 Assignment; Third Party Beneficiaries. Neither this Agreement nor any of the rights, interests or obligations shall be assigned by any of the parties hereto (whether by operation of law or otherwise) without the prior written consent of the other party. Any purported assignment in contravention hereof shall be null and void. Subject to the preceding sentence, this Agreement will be binding upon, inure to the benefit of and be enforceable by the parties and their respective successors and assigns. Except as otherwise specifically provided in Section 6.6, which is intended to benefit each B
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> 3.29 No Other Representations or Warranties. (a) Except for the representations and warranties made by Boston Private in this Article III, neither Boston Private nor any other person makes any express or implied representation or warranty with respect to Boston Private, its Subsidiaries, or their respective businesses, operations, assets, liabilities, conditions (financial or otherwise) or prospects, and Boston Private hereby disclaims any such other representations or warranties. In particular, without limiting the foregoing disclaimer, neither Boston Private nor any other person makes or has
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 6.9 Acquisition Proposals Boston Private shall not shall cause'}`
+
+section refs: 7.2, 7.2, 7.2, 6.3, 8.1
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of
+
+> sions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement w
+
+>  law to continue to recommend this Agreement. Any material amendment to any Acquisition Proposal will be deemed to be a new Acquisition Proposal for purposes of this Section 6.3 and will require a new notice period as referred to in this Section 6.3. -55- ________________ (b) Boston Private shall adjourn or postpone the Boston Private Meeting, if, as of the time for which such meeting is originally scheduled there are insufficient shares of Boston Private Common Stock represented (either in person or by proxy) to constitute a quorum necessary to conduct the business of such meeting, or if on t
+
+> d against any Acquisition Proposal or (B) reaffirm the board recommendation within ten (10) business days (or such fewer number of days as remains prior to the Boston Private Meeting) after an Acquisition Proposal is made public or any request by SVB Financial to do so, (iv) adopted, approved, recommended or endorsed an Acquisition Proposal or publicly announced an intention to adopt, approve, recommend or endorse an Acquisition Proposal or (v) publicly proposed to do any of the foregoing or (B) Boston Private or the Boston Private Board of Directors shall have breached its obligations under S
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.9 Acquisition Proposals. (a) Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to, directly or indirectly, (i) initiate, solicit, knowingly encourage or knowingly facilitate inquiries or proposals with respect to, (ii) engage or participate in any negotiations with any person concerning, (iii) provide any confidential or nonpublic information or data to, or have or participate in any discussions with, any person relating to, any Acquisition Proposal or (iv) publicly propose any of the foregoing or propose any of the foregoing to a third party; provided, that, prior to receipt of the Requisite Boston Private Vote, in the event Boston Private receives an unsolicited bona fide written Acquisition Proposal, it may, and may permit its Subsidiaries and its and its Subsidiaries' officers, directors, agents, advisors and representatives to, furnish or cause to be furnished nonpublic information or data and participate in such negotiations or discussions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement with such third party on terms no less favorable to it than the Confidentiality Agreement, which confidentiality agreement shall not provide such person with any exclusive right to negotiate with Boston Private. Boston Private will, will cause its officers and directors to, and will use reasonable best efforts to cause its agents, advisors and representatives to, immediately cease and cause to be terminated any activities, discussions or negotiations conducted before the date of this Agreement with any person other than SVB Financial with respect to any Acquisition Proposal. Boston Private will promptly (and in any event within twenty-four (24) hours and before entering into any discussions or providing any information) advise SVB Financial following receipt of any Acquisition Proposal or any inquiry which could reasonably be expected to lead to an Acquisition Proposal, and the substance thereof (including the material terms and conditions of and the identity of the person making such inquiry or Acquisition Proposal), will provide SVB Financial with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of its Subsidiaries is a party in accordance with the terms thereof. Boston Private shall not, and shall cause its Subsidiaries and its and their officers, directors, agents, advisors and representatives not to on its behalf, enter into any letter of intent, memorandum of understanding, agreement in principle, acquisition agreement, merger agreement, or other agreement (other than a confidentiality agreement referred to and entered into in accordance with this Section 6.9(a)) relating to any Acquisition Proposal. As used in this Agreement, "Acquisition Proposal" means, other than the transactions contemplated by this Agreement, any offer, proposal or inquiry relating to, or any third party indication of interest in, (i) any acquisition or purchase, direct or indirect, of 25% or more of the consolidated assets of Boston Private and its Subsidiaries or 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, (ii) any tender offer (including a self tender offer) or exchange offer that, if consummated, would result in such third party beneficially owning 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, or (iii) a merger, consolidation, share exchange or other business combination involving Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private. As used in this Agreement, "Superior Proposal" means a bona fide written Acquisition Proposal that the Board of Directors of Boston Private concludes in good faith to be more favorable to its shareholders than the Merger and the other transactions contemplated hereby, (i) after receiving the advice of its financial advisors, (ii) after taking into account the likelihood of consummation of such transaction on the terms set forth therein and (iii) after taking into account all legal (with the advice of outside counsel), financial (including the financing terms of any such proposal), regulatory and other aspects of such proposal (including any expense reimbursement provisions and conditions to closing) and any other relevant factors permitted under applicable law; provided, that for purposes of the definition of "Superior Proposal," the reference to "25%" in the definition of Acquisition Proposal shall instead refer to "50%".
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 9163c425ca88
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Intervening Event'}`
+
+section refs: 6.4, 2.5, 6.4, 5.1, ARTICLE V
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> SECTION 2.5 Adjustments. In the event that the number of Company Shares issued and outstanding after the date hereof and prior to the Effective Time or the number of securities convertible or exchangeable into or exercisable for Company Shares shall have been changed into a different number of Company Shares or securities convertible or exchangeable into or exercisable for Company Shares, as applicable, or securities of a different class as a result, in either case, of a reclassification, stock split (including a reverse stock split), stock dividend, recapitalization, merger, issuer tender or 
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+> ARTICLE V CONDUCT OF BUSINESS PENDING THE MERGER 
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'intervening event knowledge requirement'}`
+
+section refs: 6.4, 6.4, 3.8, 3.11, 5.1
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> 0001108426/000119312520273264/d77373dex21.htm 31/97 proceedings, investigations or claims (other than routine claims for benefits in the ordinary course), or material administrative proceeding by the IRS, the Department of Labor, or any other Governmental Entity, are pending or, to the knowledge of the Company, threatened, (iii) all contributions, reimbursements, premium payments and other payments required to be made by the Company or any of its subsidiaries to or on behalf of any Company Plan have been made on or before their applicable due dates, and (iv) there has been no prohibited transa
+
+> (B) that the Company determines is incurred in connection with the repair or replacement of facilities or equipment destroyed or damaged due to casualty or accident or natural disaster or other force majeure event necessary or advisable to maintain or restore safe, adequate and reliable electric transmission service or to prevent any threat to health and safety of natural Persons; provided, further, that the Company shall use commercially reasonable efforts to consult with Parent prior to making or agreeing to make any such expenditure described in clauses (A) or (B) above; (xix) enter into an
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Intervening Event" means'}`
+
+section refs: 9.5, 6.4, 9.5, 9.5, 6.4
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> ion and materials (including, in each case, to the extent applicable, reissues, divisions, continuations, continuations in part, extensions and re-examinations of any of the foregoing and all rights therein provided by international treaties or conventions), (ii) registrations, applications, provisionals, divisions, continuations, continuations-in-part, re-examinations, extensions, re-issues, renewals and foreign counterparts of or for any of the foregoing and (ii) the right to sue and collect damages for any past infringement of any of the foregoing. (aa) "Interim Period" means the period fro
+
+>  of any rights in respect of that entity's Equity Securities. (h) "Company Collective Bargaining Agreement" means any Contract between the Company or any of its subsidiaries and any labor organization or other authorized employee representative representing current or former employees of the Company or any of its subsidiaries. (i) "Company Parties" means, collectively, the Company, its subsidiaries and its Joint Ventures, and each of them individually is a "Company Party". (j) "Contract" means any legally binding written or oral agreement, contract, subcontract, lease, instrument, note, option
+
+> by Rule 14d-9(f) promulgated under the Exchange Act or a recommendation on Schedule 14D-9 against such tender offer or exchange offer made within ten (10) Business Days after the commencement thereof and in any event at least two (2) Business Days prior to the Company Shareholder Meeting, shall be deemed a Company Change of Recommendation, unless the Company Board of Directors expressly and concurrently reaffirms the Company Recommendation). 50 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 56/97 (f) For purposes o
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': 'definition Intervening Event unknown signing'}`
+
+section refs: 6.4, 6.4, 8.1, 9.5, ARTICLE IX
+
+> ors and (2) a copy of the most current draft of any written communication (including any agreement) relating to the Superior Proposal and (y) during the Notice Period (as extended pursuant to the following sentence of this Section 6.1(d)), (i) the Company complies with the following sentence of this Section 6.1(d) and (ii) if Parent shall have delivered to the Company a written, binding, irrevocable offer, capable of being accepted by the Company, to alter the terms of this Agreement, the Company Board of Directors thereafter reaffirms in good faith (after consultation with its outside counsel
+
+> constitutes a Superior Proposal, and such Acquisition Proposal is not withdrawn, the Company or the Company Board of Directors may (A) make a Company Change of Recommendation and/or (B) terminate this Agreement pursuant to Section 8.1(d)(ii) to enter into a definitive agreement with respect to such Superior Proposal, in each case, if (and only if) (1) in the event the Agreement is terminated pursuant to Section 8.1(d)(ii), the Company pays to Parent any Company Termination Fee required to be paid pursuant to Section 8.2(b)(i) at such time as set forth in Section 8.2(b)(i) and (2) after consult
+
+> roviding written notice of such extension not less than three (3) Business Days prior to the End Date; provided, further, that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to the Party seeking to terminate if any action of such Party (or, in the case of Parent, Merger Sub) or the failure of such Party (or, in the case of Parent, Merger Sub) to perform any of its obligations under this Agreement required to be performed at or prior to the Effective Time has been the primary cause of the failure of the Effective Time to occur on or before the End D
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> eld prior to such date) or Section 8.1(f) or is terminated by Parent pursuant to Section 8.1(e)(i) and (A) at any time after the date of this Agreement and prior to such termination an Acquisition Proposal shall have been made to the Company, or to the Company Board of Directors or shareholders, or an Acquisition Proposal shall have otherwise become publicly known, and (B) within twelve (12) months after such termination, the Company shall have entered into a definitive agreement with respect to an Acquisition Proposal or shall have consummated an Acquisition Proposal, then, in the event that 
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': '"Intervening Event" means any event'}`
+
+section refs: 9.5, 6.4, 9.5, 3.8, 9.5
+
+> unicipal, foreign or other law, statute, constitution, principle of common law, ordinance, code, decree, order, judgment, injunction, rule, regulation, executive order, ruling or requirement issued, enacted, adopted, promulgated, implemented or otherwise put into effect by or under the authority of any Governmental Entity or any order or decision of an applicable arbitrator or arbitration panel. (ff) "Liability" means any liability, cost, expense, debt or obligation of any kind, character, or description, and whether known or unknown, accrued, matured, absolute, determined, determinable, conti
+
+> by Rule 14d-9(f) promulgated under the Exchange Act or a recommendation on Schedule 14D-9 against such tender offer or exchange offer made within ten (10) Business Days after the commencement thereof and in any event at least two (2) Business Days prior to the Company Shareholder Meeting, shall be deemed a Company Change of Recommendation, unless the Company Board of Directors expressly and concurrently reaffirms the Company Recommendation). 50 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 56/97 (f) For purposes o
+
+>  of any rights in respect of that entity's Equity Securities. (h) "Company Collective Bargaining Agreement" means any Contract between the Company or any of its subsidiaries and any labor organization or other authorized employee representative representing current or former employees of the Company or any of its subsidiaries. (i) "Company Parties" means, collectively, the Company, its subsidiaries and its Joint Ventures, and each of them individually is a "Company Party". (j) "Contract" means any legally binding written or oral agreement, contract, subcontract, lease, instrument, note, option
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+>  or share capital, (ii) any warrants, Contracts or other rights or options directly or indirectly to subscribe for or to purchase any capital stock, membership interests or other equity interests or share capital of such Person, (iii) all securities or instruments, directly or indirectly, exchangeable for or convertible or exercisable into, any of the foregoing or with any profit participation features with respect to such Person, or (iv) any share appreciation rights, phantom share rights or other similar rights with respect to such Person or its business. (q) "ERISA Affiliate" means each ent
+
+### Step 7: `get_section`
+
+args: `{'section_ref': '6.4(f)'}`
+
+section refs: 6.4
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+### Step 8: `get_section`
+
+args: `{'section_ref': 'Section 6.4(f)(vii)'}`
+
+section refs: 6.4
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 9199abf474ca
+
+## Question
+
+How long does the acquirer have to match a competing offer before the target board may change its recommendation?
+
+## Options
+
+- 4 business days
+- 5 business days
+- 3 business days
+- 4 calendar days
+- 3 calendar days
+- 2 business days or less
+- Greater than 5 business days
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'match a competing offer'}`
+
+section refs: 8.1, 1.1, 1.1, 1.1, 7.2
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+> dition and the other conditions set forth in Annex I (collectively, the "Offer Conditions"). The Offer shall be made by means of an offer to purchase (the "Offer to Purchase") that contains the terms set forth in this Agreement, the Minimum Condition, the Termination Condition and the other Offer Conditions. Purchaser expressly reserves the right to (i) increase the Offer Price, (ii) waive any Offer Condition and (iii) make any other changes in the terms and conditions of the Offer not inconsistent with the terms of this Agreement; provided, however, that notwithstanding anything to the contra
+
+> ditionally terminate the Offer and shall not acquire any Shares pursuant to the Offer. If the Offer is terminated by Purchaser in accordance with the terms of this Agreement, Purchaser shall promptly return, and shall cause any depository acting on behalf of Purchaser to return, in accordance with applicable Legal Requirements, all tendered Shares to the registered holders thereof. (e) Offer Documents. Promptly on the Offer Commencement Date, Parent and Purchaser shall (i) file with the SEC a tender offer statement on Schedule TO with respect to the Offer (together with any exhibits, amendment
+
+> set forth in this Agreement, be consummated as soon as practicable following the consummation of the Offer. AGREEMENT NOW, THEREFORE, in consideration of the foregoing and the representations, warranties, covenants and agreements contained in this Agreement, and for other good and valuable consideration, the receipt and sufficiency of which is hereby acknowledged, the Parties to this Agreement, intending to be legally bound, agree as follows: SECTION 1. THE OFFER 1.1 The Offer. (a) Commencement of the Offer. Provided that this Agreement shall not have been terminated in accordance with Section
+
+> 7.2 Consummation of Offer. Purchaser (or Parent on Purchaser's behalf) shall have accepted for payment all of the Shares validly tendered pursuant to the Offer and not validly withdrawn. 50 ________________ 
+
+### Step 2: `search_agreement`
+
+args: `{'query': 'Company Board Recommendation Change match'}`
+
+section refs: 6.1, 6.1, 6.1, 8.1, 1.2
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+> formation shall have become false or misleading in any material respect, and the Company further agrees to take all steps necessary to promptly cause the Schedule 14D-9 as so corrected to be filed with the SEC and to be disseminated to holders of Shares, in each case as and to the extent required by applicable Legal Requirements. Parent and Purchaser shall promptly furnish or otherwise make available to the Company or the Company's legal counsel all information concerning Parent or Purchaser that may be required by the Exchange Act to be set forth in the Schedule 14D-9 or as reasonably request
+
+## Finding
+
+answer: 3 business days
+
+evidence:
+- (section 6.1) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice")
+
+rationale: The agreement requires the Company to provide Parent with a 'Determination Notice' at least three business days prior to making a Company Adverse Recommendation Change or terminating the agreement for a Superior Offer, allowing Parent time to propose revisions.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.1 Company Board Recommendation; Termination. (b) Notwithstanding anything to the contrary contained in this Agreement, at any time prior to the Offer Acceptance Time: (i) if the Company has received a bona fide written Acquisition Proposal from any Person or group of Persons that has not been withdrawn and after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer, (x) the Company Board may make a Company Adverse Recommendation Change, and/or (y) the Company may terminate this Agreement to enter into a Specified Agreement with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination); and (B) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer. Issuance of any "stop, look and listen" communication by or on behalf of the Company pursuant to Rule 14d-9(f) shall not be considered a Company Adverse Recommendation Change and shall not require the giving of a Determination Notice or compliance with the procedures set forth in this Section 6.1. For the avoidance of doubt, the provisions of this Section 6.1(b)(i) shall also apply to any material amendment to any Acquisition Proposal and require a new Determination Notice, except that the references to three (3) business days shall be deemed to be two (2) business days (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least three (3) business days prior to making any such Company Adverse Recommendation Change; and (C) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with its financial advisors and outside legal counsel, the Company Board shall have determined, in good faith, that the failure to make the Company Adverse Recommendation Change in response to such Change in Circumstance would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 9535fb643ead
 
 ## Question
@@ -2940,6 +6769,110 @@ No expert-annotated span is recorded for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## 95c75c5bc1d8
+
+## Question
+
+What standard must the target board find its fiduciary duties require before taking action on an unsolicited proposal under the no-shop's fiduciary exception?
+
+## Options
+
+- "Inconsistent" with fiduciary duties
+- "Reasonably likely/expected to be inconsistent" with fiduciary duties
+- Other specified standard
+- "Reasonably likely/expected violation" of fiduciary duties
+- "Reasonably likely/expected breach" of fiduciary duties
+- "Required to comply" with fiduciary duties
+- "Breach" of fiduciary duties
+- "Violation" of fiduciary duties
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'no-shop fiduciary exception'}`
+
+section refs: 6.4, 3.8, 3.16, 6.4, (none)
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> Section 3.16. 28 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edgar/data/0001108426/000119312520273264/d77373dex21.htm 34/97 (b) Neither the Company nor any of its subsidiaries is obligated under, or a party to, any option, right of first refusal or other contractual right or obligation to sell, assign or dispose of any Company Material Real Property (or any portion thereof) that, if such sale, assignment or disposition is consummated, would reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) Except in any suc
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> mpany Exception Section 5.1 COVID Parent Exception Section 5.2 Credit Facilities Section 9.5(m) Derivative Product Section 9.5(n) Direct Plan Section 2.2(c) Directors Deferred Plan Section 2.2(d) Dissenting Shares Section 2.3 DPA Section 6.5(c)(ii) D&O Insurance Section 6.11(d) Earned Performance Shares Section 2.2(b) Easement Section 3.14(c) Effective Time Section 1.4 End Date Section 8.1(c) Environmental Law Section 3.17(f) Equity Conversion Factor Section 9.5(o) Equity Securities Section 9.5(p) ERISA Section 3.11(a) 3 ________________ 3/3/22, 11:24 AM EX-2.1 https://www.sec.gov/Archives/edg
+
+### Step 2: `get_section`
+
+args: `{'section_ref': 'Section 6.4'}`
+
+section refs: 6.4
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 6.4 Company Board of Directors shall have determined in good faith failing to do so could be reasonably expected to result in a breach of its fiduciary duties'}`
+
+section refs: 6.4, 6.4, 6.4, 6.4, 6.4
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> sal, that the Company Board of Directors recommends rejection of such tender or exchange offer or (G) resolve, publicly propose or agree to do any of the foregoing (each such action set forth in clauses (A) through (G) above being a "Company Change of Recommendation"), (ii) authorize, cause or permit the Company or any of its subsidiaries to enter into a merger agreement, letter of intent, agreement in principle, share purchase agreement, asset purchase agreement, share exchange agreement, option agreement or other similar contract (other than the Acceptable Confidentiality Agreement) or recom
+
+> constitutes a Superior Proposal, and such Acquisition Proposal is not withdrawn, the Company or the Company Board of Directors may (A) make a Company Change of Recommendation and/or (B) terminate this Agreement pursuant to Section 8.1(d)(ii) to enter into a definitive agreement with respect to such Superior Proposal, in each case, if (and only if) (1) in the event the Agreement is terminated pursuant to Section 8.1(d)(ii), the Company pays to Parent any Company Termination Fee required to be paid pursuant to Section 8.2(b)(i) at such time as set forth in Section 8.2(b)(i) and (2) after consult
+
+### Step 4: `get_section`
+
+args: `{'section_ref': 'Section 6.4(b)'}`
+
+section refs: 6.4
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': 'Section 6.4(b)(iii) fiduciary duties breach reasonably expected'}`
+
+section refs: 6.4, 6.4, 6.4, 3.8, 9.5
+
+> de legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law and (C) prior to provision of any material or information, and engagement in any discussions, has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; or (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has ma
+
+> uch additional period) or (ii) in the case of an Intervening Event, the failure of the Company Board of Directors to make a Company Change of Recommendation could not be reasonably expected to result in a breach of its fiduciary duties under applicable Laws. Any such Company Change of Recommendation shall not change the approval of this Agreement or any other approval of the Company Board of Directors in any respect that would have the effect of causing any corporate takeover statute or other similar statute or any provision of the Company Articles of Incorporation to be applicable to the tran
+
+> Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (i) (x) taking and disclosing to its shareholders a position in accordance with Rule 14d-9 or Rule 14e-2(a) promulgated under the Exchange Act, (y) making any "stop-look-and-listen" communication to the shareholders of the Company pursuant to Rule 14d-9(f) under the Exchange Act or (z) making any disclosure to shareholders of the Company with regard to the transactions contemplated by this Agreement or an Acquisition Proposal made after the date hereof if, in the good faith judgme
+
+> in accordance with its terms, subject to the Bankruptcy and Equity Exception, except (i) to the extent that any Company Material Contract expires or terminates in accordance with its terms in the ordinary course of business consistent with past practice, and (ii) for such failures to be legal, valid and binding or to be in full force and effect that do not have and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect on the Company. (c) No event has occurred that, with notice or the passage of time, or both, would constitute a breach or default 
+
+> /data/0001108426/000119312520273264/d77373dex21.htm 91/97 an act or failure to act undertaken by or on behalf of the breaching Party with actual or constructive knowledge that such Party's act or failure to act would, or would reasonably be expected to, result in or constitute a material breach of this Agreement. For the avoidance of doubt, a Willful Breach will include a Party's failure to consummate the Closing when required under this Agreement. 
+
+## Finding
+
+answer: "Reasonably likely/expected breach" of fiduciary duties
+
+evidence:
+- (Section 6.4(b)(iii)) shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law
+- (Section 6.4(b)(ii)) shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of the fiduciary duties of the Company Board of Directors under applicable Law
+
+rationale: The agreement specifies that the Board must determine that failing to take action 'could be reasonably expected to result in a breach of its fiduciary duties.' This matches the option '"Reasonably likely/expected breach" of fiduciary duties' found in Section 6.4(b)(ii) and (iii).
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(b) Notwithstanding anything to the contrary in Section 6.1(a) or Section 6.4, nothing contained in this Agreement shall prevent the Company or the Company Board of Directors from: (iii) prior to obtaining the Company Requisite Vote, participating and engaging in any negotiations or discussions with any Person or group and their respective Representatives who has made a bona fide written Acquisition Proposal after the date hereof that, in each case, did not result from a breach of this Section 6.1, if the Company Board of Directors (A) shall have determined in good faith, after consultation with its outside legal counsel and financial advisors, that such Acquisition Proposal could reasonably be expected to constitute, result in or lead to a Superior Proposal and (B) after consultation with its outside legal counsel, shall have determined in good faith that failing to do so could be reasonably expected to result in a breach of its fiduciary duties under applicable Law;
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## 95c91f882ce7
 
 ## Question
@@ -2990,6 +6923,309 @@ rationale: The MAE definition uses a double-negative formulation: 'would not hav
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including the impact thereof on the relationships, contractual or otherwise, of the Company with employees, labor unions, works councils, financing sources, customers, franchisees, suppliers, partners, Governmental Bodies or other business relationships; (iii) the general conditions or trends in the industries in which the Acquired Corporations operate or in the economy generally or other general business, financial or market conditions, including competition in geographic, product or service areas; (iv) domestic, foreign or global political conditions, economic, regulatory, financial or capital markets conditions (including interest rates, exchange rates, tariffs, trade wars and credit markets); (v) any act of civil unrest, civil disobedience, protests, public demonstrations, insurrection, terrorism, war, cyberterrorism, military activity, sabotage or cybercrime, national or international calamity or any other similar event, including an outbreak or escalation of hostilities involving the United States or any other Governmental Body or the declaration by the United States or any other Governmental Body of a national emergency or war, or any worsening of any such conditions threatened or existing on the date of this Agreement; (vi) any natural or manmade disasters, epidemics, pandemics or disease outbreaks (including COVID-19) or any acts of God; (vii) changes to applicable Legal Requirements (including COVID-19 Measures); (viii) any determination by, or delay of a determination by, the FDA or any other Governmental Body, or any panel or advisory body empowered or appointed thereby, or any indication that any such entity, panel or body will make any determination or delay in making any determination, with respect to the approvability, manufacturing, labeling, contents of package insert, prescribing information, risk management profile, chemistry, manufacturing and controls (CMC) matters or pre-approval inspection matters relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations, or any requirement relating to the results of any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners, including any requirement to conduct further clinical trials or any delayed or accelerated launch of any A-7 _ product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (ix) the results of, or any data derived from, any pre-clinical or clinical testing being conducted by or on behalf of the Acquired Corporations, any of its competitors or any of their respective collaboration partners or any announcement thereof; (x) increased incidence or severity of any previously identified side effects (including toxicity), adverse events or safety observations, or reports of new side effects, adverse events or safety observations, with respect to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xi) any recommendations, statements or other pronouncements made, published or proposed by professional medical organizations or any Governmental Body or representative thereof, or any panel or advisory body empowered or appointed thereby, relating to any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xii) any supply chain disruption affecting product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiii) any determination or development relating to coverage, reimbursement or payor rules or policies applicable to, or pricing of, any product candidates of the Acquired Corporations or any products or product candidates of any competitors of the Acquired Corporations; (xiv) the failure of the Company to meet internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect; provided, further, that this clause (xiv) shall not be construed as implying that the Company is making any representation or warranty hereunder with respect to any internal or analysts' expectations or projections, forecasts, guidance, estimates or budgets); (xv) any Legal Proceeding relating to or resulting from this Agreement or the transactions contemplated hereby; (xvi) any action taken by the Company at the written direction of Parent or any action expressly required or permitted to be taken by Parent, Purchaser or the Company pursuant to the terms of this Agreement, or the failure of the Company to take any action that the Company is prohibited by the terms of this Agreement from taking or which the Company did not take on account of withheld consent from Parent; (xvii) any breach by Parent or Purchaser of this Agreement; (xviii) any matter to the extent expressly set forth on the Company Disclosure Schedule or (xix) any change in any Legal Requirement or GAAP or any other applicable accounting principles or standards (or change in interpretations of any Legal Requirement or GAAP or any other applicable accounting principles or standards) after the date of this Agreement; provided, however, that, to the extent such events, circumstances, conditions, changes, developments or effects referred to in clauses (iii), (iv), or (v) has had or would reasonably be expected to have, individually or in the aggregate, a disproportionate adverse effect on the business, financial condition or results of operations of the Acquired Corporations, taken as a whole, relative to other biopharmaceutical companies with products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material C
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 9ac16ad9b93e
+
+## Question
+
+During the tail period, must an acquisition proposal have been publicly disclosed or made known to trigger the termination fee?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 10, 'query': 'tail period termination fee acquisition proposal publicly disclosed'}`
+
+section refs: ARTICLE IX, 5.2, 5.2, 5.2, 5.2, ARTICLE IX, 9.3, 8.1, 5.2, 5.2
+
+> Article IX and the applicable definitions elsewhere in this Agreement, which provisions shall survive such termination; provided that the foregoing shall not relieve any party, subject in the case of Parent and Sub to Section 8.02(f), from liability for any Willful and Material Breach of any of its representations, warranties, covenants or agreements set forth in any Transaction Agreement. -67- ________________ (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (i) Parent terminates this Agreement pursuant to Section 8.01(d); (ii) the Company terminates this A
+
+> e Triggering Notice (a "Parent Proposal"), such Superior Proposal remains a Superior Proposal and the Company Board has again made a Withdrawal Determination in response to such Superior Proposal or such Intervening Event is continuing and the Company Board has again made a Withdrawal Determination in response to such Intervening Event (it being understood and agreed that if, in light of any Parent Proposal, the Company Board is no longer able to make a Withdrawal Determination with respect to such Superior Proposal or Intervening Event, then the Company shall immediately enter into amendments
+
+> lf of the Company or any of its subsidiaries or otherwise, shall be deemed to be a breach of this Section 5.02(a) by the Company. -44- ________________ (b) Neither the Company Board nor any committee thereof shall (i) (A) withdraw, qualify or modify in a manner adverse to Parent or Sub, or propose publicly to withdraw, qualify or modify in a manner adverse to Parent or Sub, the Company Board Recommendation, or resolve or agree to take any such action, (B) adopt, endorse, approve or recommend, or propose publicly to adopt, endorse, approve or recommend, any Acquisition Proposal, or resolve or a
+
+> ter the date hereof shall request the prompt return or destruction of all confidential information previously furnished to such Person(s) within the last twelve months for the purpose of evaluating a possible Acquisition Proposal and (3) terminate access to any physical or electronic data rooms relating to a possible Acquisition Proposal. Notwithstanding the foregoing, at any time prior to receipt of the Company Stockholder Approval, if the Company Board receives a written bona fide Acquisition Proposal after the date hereof that was not solicited by the Company or its Representatives and did 
+
+> erein as an "Adverse Recommendation Change") or (ii) approve, authorize, cause or permit the Company or any Company Subsidiary to enter into, any letter of intent, term sheet, memorandum of understanding, agreement in principle, acquisition agreement, option agreement, merger agreement, joint venture agreement, partnership agreement or other agreement relating to any Acquisition Proposal, other than a confidentiality agreement entered into in compliance with Section 5.02(a)(II)(x) (an "Acquisition Agreement"), or resolve, agree or publicly propose to take any such action. Notwithstanding the f
+
+> ution and performance of this Agreement, the structuring of the Transactions, including the Financing, and any agreements relating thereto. If at the same time or after the Company has paid Expenses pursuant to this Section 8.02(c) the Company is obligated to pay the Termination Fee, the payment of Expenses shall reduce on a dollar for dollar basis the payment by the Company of the Termination Fee. Notwithstanding anything to the contrary contained in this Section 8.02(c) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Pare
+
+> ll have publicly announced any intention to, or determined that it must, restate any financial information or financial statements included in the Required Information or publicly announced that any such restatement is under consideration or is a possibility, in which case the Marketing Period may not commence unless and until such restatement has been completed or the Company has determined and announced that no such restatement is required in accordance with GAAP; provided, further, that November 26, 2020 and November 27, 2020 shall not constitute a business day for purposes of the Marketing
+
+> he receipt of the Company Stockholder Approval, pursuant to and in accordance with clause (z) of the second sentence of Section 5.02(b); provided; however, that the Company shall have prior to or concurrently with such termination paid to Parent the Termination Fee; or -66- ________________ (g) by the Company, if (i) all of the conditions set forth in Section 7.01 and Section 7.02 have been and remain satisfied or waived (by the party entitled to the benefit of such condition) (other than delivery of items to be delivered at the Closing and other than satisfaction of those conditions that by t
+
+> SECTION 5.02. No Solicitation. (a) The Company shall not, and shall cause its subsidiaries not to, and shall cause any officer, director or employee of, or any investment banker, attorney, accountant or other advisor or representative (collectively, "Representatives") of, the Company or any of its subsidiaries not to, directly or indirectly (i) solicit, initiate or encourage the submission of, any Acquisition Proposal, or take any other action to facilitate any inquiries or the making of any proposal that constitutes, or may reasonably be expected to lead to, any Acquisition Proposal, (ii) ent
+
+> ring Notice and a new Notice Period (except that the five (5) business day notice period referred to in the Notice Period shall instead be equal to the longer of (I) three (3) business days and (II) the period remaining under the Notice Period immediately prior to the delivery of such additional notice under this sentence). -45- ________________ (c) The Company shall promptly (but in no event more than 24 hours after receipt thereof) advise Parent in writing of any Acquisition Proposal or any inquiry with respect to or that is reasonably likely to lead to any Acquisition Proposal, the identity
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '8.02(b)'}`
+
+section refs: 8.2
+
+> SECTION 8.02. Effect of Termination. (a) In the event of termination of this Agreement by either the Company or Parent as provided in Section 8.01, this Agreement shall forthwith terminate and become void and have no further force or effect, without any liability or obligation on the part of Parent, Sub or the Company, other than this Section 8.02, Section 6.01 (last sentence only) Section 6.02 (last sentence only), Section 6.08, Section 6.11(f) and 
+
+### Step 3: `get_section`
+
+args: `{'section_ref': '8.02(b)'}`
+
+section refs: 8.2
+
+> SECTION 8.02. Effect of Termination. (a) In the event of termination of this Agreement by either the Company or Parent as provided in Section 8.01, this Agreement shall forthwith terminate and become void and have no further force or effect, without any liability or obligation on the part of Parent, Sub or the Company, other than this Section 8.02, Section 6.01 (last sentence only) Section 6.02 (last sentence only), Section 6.08, Section 6.11(f) and 
+
+### Step 4: `get_section`
+
+args: `{'section_ref': '8.02(b)(iii)'}`
+
+section refs: 8.2
+
+> SECTION 8.02. Effect of Termination. (a) In the event of termination of this Agreement by either the Company or Parent as provided in Section 8.01, this Agreement shall forthwith terminate and become void and have no further force or effect, without any liability or obligation on the part of Parent, Sub or the Company, other than this Section 8.02, Section 6.01 (last sentence only) Section 6.02 (last sentence only), Section 6.08, Section 6.11(f) and 
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': '"8.02(b)" Termination Fee'}`
+
+section refs: ARTICLE IX, ARTICLE IX, ARTICLE IX, ARTICLE IX, ARTICLE IX
+
+> ution and performance of this Agreement, the structuring of the Transactions, including the Financing, and any agreements relating thereto. If at the same time or after the Company has paid Expenses pursuant to this Section 8.02(c) the Company is obligated to pay the Termination Fee, the payment of Expenses shall reduce on a dollar for dollar basis the payment by the Company of the Termination Fee. Notwithstanding anything to the contrary contained in this Section 8.02(c) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Pare
+
+> Article IX and the applicable definitions elsewhere in this Agreement, which provisions shall survive such termination; provided that the foregoing shall not relieve any party, subject in the case of Parent and Sub to Section 8.02(f), from liability for any Willful and Material Breach of any of its representations, warranties, covenants or agreements set forth in any Transaction Agreement. -67- ________________ (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (i) Parent terminates this Agreement pursuant to Section 8.01(d); (ii) the Company terminates this A
+
+>  that in the case of termination pursuant to clause (iii) above such payment shall be made on the date of execution of such definitive agreement or, if earlier, consummation of such transactions or the making of such recommendation). Notwithstanding anything to the contrary contained in this Section 8.02(b) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Parent would have had the right to terminate this Agreement, Parent shall be entitled to receipt of any Termination Fee that would have been (or would have subsequently bec
+
+> ement, and that, without these agreements, the parties would not enter into this Agreement and the damages resulting from termination of this Agreement under circumstances where a Termination Fee or Parent Termination Fee and other amounts payable under Section 8.02(b), Section 8.02(c) and Section 8.02(d) are payable are uncertain and incapable of accurate calculation and, therefore, the amounts payable pursuant to Section 8.02(b), Section 8.02(c) and Section 8.02(d) are not a penalty but rather constitute amounts akin to liquidated damages in a reasonable amount that will compensate Parent or
+
+>  other liabilities arising out of or in connection with breaches by Parent of its representations, warranties, covenants and agreements contained in this Agreement or arising from any claim or cause of action that any Company Related Party may have, including for a breach of Section 1.02 as a result of the Debt Financing not being available to be drawn down or otherwise arising from the Commitment Letters or in respect of any oral representation made or alleged to be made in connection herewith or therewith. Notwithstanding anything to the contrary, in no event shall the Company be entitled to
+
+## Finding
+
+answer: No
+
+evidence:
+- (8.02(b)(iii)) an Acquisition Proposal has been made to the Company or to stockholders of the Company generally or shall have otherwise become publicly known or any person shall have publicly announced an intention (whether or not condition and whether or not withdrawn) to make an Acquisition Proposal
+
+rationale: The termination fee tail trigger in Section 8.02(b)(iii) does not require public disclosure: it includes proposals made privately 'to the Company' as sufficient to start the tail period, no less than publicly known proposals.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+SECTION 8.02. Effect of Termination. (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (B) within 12 months of such termination the Company or any of its Subsidiaries enters into an Acquisition Agreement with respect to any Acquisition Proposal or any Acquisition Proposal is consummated
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 9c61c248b3bb
+
+## Question
+
+What standard governs the target's liability for a no-shop breach committed by its non-officer/director representatives?
+
+## Options
+
+- Strict liability
+- Reasonable standard
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'no-shop breach representatives'}`
+
+section refs: 3.14, 7.2, ARTICLE VII, 6.2, 4.6
+
+> , (iv) neither Boston Private nor any of its Subsidiaries has knowledge of, or has received notice of, any violation of any Boston Private Contract by any of the other parties thereto which would reasonably be expected to have, either individually or in the aggregate, a Material Adverse Effect on Boston Private, and (v) no event or condition exists which constitutes or, after notice or lapse of time or both, will constitute, a material breach or default on the part of Boston Private or any of its Subsidiaries, or to the knowledge of Boston Private, any other party thereto, of or under any such
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> Article VII; provided, that any failure to give notice in accordance with the foregoing with respect to any breach shall not be deemed to constitute a violation of this Section 6.8 or the failure of any condition set forth in 
+
+> omers, jeopardize the attorney-client privilege of the institution in possession or control of such information (after giving due consideration to the existence of any common interest, joint defense or similar agreement between the parties) or contravene any law, rule, regulation, order, judgment, decree, fiduciary duty or binding agreement entered into prior to the date of this Agreement. The parties hereto will make appropriate substitute disclosure arrangements under circumstances in which the restrictions of the preceding sentence apply. (b) Each of SVB Financial and Boston Private shall h
+
+> arge-offs and accruals) of SVB Financial or any of its Subsidiaries or their respective internal accounting controls, including any material complaint, allegation, assertion or claim that SVB Financial or any of its Subsidiaries has engaged in questionable accounting or auditing practices, and (ii) no employee of or attorney representing SVB Financial or any of its Subsidiaries, whether or not employed by SVB Financial or any of its Subsidiaries, has reported evidence of a material violation of securities laws or banking laws, breach of fiduciary duty or similar violation by SVB Financial or a
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '6.9'}`
+
+(tool result text not recorded)
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to'}`
+
+section refs: 7.2, 7.2, 7.2, 5.1, 7.2
+
+> Section 7.2 or 7.3 to be satisfied, or otherwise constitute a breach of this Agreement by the party failing to give such notice, in each case, unless the underlying breach would independently result in a failure of the conditions set forth in Section 7.2 or 7.3 to be satisfied; and provided, further, that the delivery of any notice pursuant to this Section 6.8 shall not cure any breach of, or noncompliance with, any other provision of this Agreement or limit the remedies available to the party receiving such notice. -60- ________________ 6.9 Acquisition Proposals. (a) Boston Private shall not,
+
+> sions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement w
+
+> bligation or agreement of a third party to not solicit, hire or attempt to solicit or hire any employee of Boston Private or any Boston Private Subsidiary for employment or in any other capacity (including as an independent contractor or consultant) contained in any existing agreement entered into in connection with any investment, strategic transaction, acquisition, disposition or other similar transaction between Boston Private or any Boston Private Subsidiary and such third party. 6.18 Advisory Contracts. (a) Public Funds. Subject to the requirements of applicable law and the fiduciary duti
+
+> 5.1 Conduct of Business of Boston Private Prior to the Effective Time. During the period from the date of this Agreement to the Effective Time or earlier termination of this Agreement, except as expressly contemplated or permitted by this Agreement (including as set forth in the Boston Private Disclosure Schedule), required by law (including the Pandemic Measures) or as consented to in writing by SVB Financial (such consent not to be unreasonably withheld, conditioned or delayed), (i) Boston Private shall, and shall cause its Subsidiaries to, (a) conduct its business only in the ordinary cours
+
+> with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of
+
+## Finding
+
+answer: Reasonable standard
+
+evidence:
+- (6.9(a)) Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to, directly or indirectly, (i) initiate, solicit, knowingly encourage or knowingly facilitate inquiries or proposals with respect to
+
+rationale: The agreement distinguishes between the obligations of Boston Private, its subsidiaries, and its officers and directors (who are subject to a direct prohibition) and its agents, advisors, and representatives, for whom Boston Private is only required to use its 'reasonable best efforts' to ensure compliance. This 'reasonable best efforts' standard governs the target's liability for breaches by non-officer/director representatives.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+6.9 Acquisition Proposals. (a) Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to, directly or indirectly, (i) initiate, solicit, knowingly encourage or knowingly facilitate inquiries or proposals with respect to, (ii) engage or participate in any negotiations with any person concerning, (iii) provide any confidential or nonpublic information or data to, or have or participate in any discussions with, any person relating to, any Acquisition Proposal or (iv) publicly propose any of the foregoing or propose any of the foregoing to a third party; provided, that, prior to receipt of the Requisite Boston Private Vote, in the event Boston Private receives an unsolicited bona fide written Acquisition Proposal, it may, and may permit its Subsidiaries and its and its Subsidiaries' officers, directors, agents, advisors and representatives to, furnish or cause to be furnished nonpublic information or data and participate in such negotiations or discussions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement with such third party on terms no less favorable to it than the Confidentiality Agreement, which confidentiality agreement shall not provide such person with any exclusive right to negotiate with Boston Private. Boston Private will, will cause its officers and directors to, and will use reasonable best efforts to cause its agents, advisors and representatives to, immediately cease and cause to be terminated any activities, discussions or negotiations conducted before the date of this Agreement with any person other than SVB Financial with respect to any Acquisition Proposal. Boston Private will promptly (and in any event within twenty-four (24) hours and before entering into any discussions or providing any information) advise SVB Financial following receipt of any Acquisition Proposal or any inquiry which could reasonably be expected to lead to an Acquisition Proposal, and the substance thereof (including the material terms and conditions of and the identity of the person making such inquiry or Acquisition Proposal), will provide SVB Financial with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of its Subsidiaries is a party in accordance with the terms thereof. Boston Private shall not, and shall cause its Subsidiaries and its and their officers, directors, agents, advisors and representatives not to on its behalf, enter into any letter of intent, memorandum of understanding, agreement in principle, acquisition agreement, merger agreement, or other agreement (other than a confidentiality agreement referred to and entered into in accordance with this Section 6.9(a)) relating to any Acquisition Proposal. As used in this Agreement, "Acquisition Proposal" means, other than the transactions contemplated by this Agreement, any offer, proposal or inquiry relating to, or any third party indication of interest in, (i) any acquisition or purchase, direct or indirect, of 25% or more of the consolidated assets of Boston Private and its Subsidiaries or 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, (ii) any tender offer (including a self tender offer) or exchange offer that, if consummated, would result in such third party beneficially owning 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, or (iii) a merger, consolidation, share exchange or other business combination involving Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private. As used in this Agreement, "Superior Proposal" means a bona fide written Acquisition Proposal that the Board of Directors of Boston Private concludes in good faith to be more favorable to its shareholders than the Merger and the other transactions contemplated hereby, (i) after receiving the advice of its financial advisors, (ii) after taking into account the likelihood of consummation of such transaction on the terms set forth therein and (iii) after taking into account all legal (with the advice of outside counsel), financial (including the financing terms of any such proposal), regulatory and other aspects of such proposal (including any expense reimbursement provisions and conditions to closing) and any other relevant factors permitted under applicable law; provided, that for purposes of the definition of "Superior Proposal," the reference to "25%" in the definition of Acquisition Proposal shall instead refer to "50%".
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## 9cdf994eba15
+
+## Question
+
+What forward-looking standard does the Material Adverse Effect definition use (e.g. 'would' vs 'could' reasonably be expected to)?
+
+## Options
+
+- "Would" (reasonably) be expected to
+- No
+- "Would"
+- Other forward-looking standard
+- "Could" (reasonably) be expected to
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. 
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Company MAE'}`
+
+(tool result text not recorded)
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" definition'}`
+
+section refs: 4.21, 5.5, 4.16, 4.10, 4.19
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Material Adverse Effect" means'}`
+
+section refs: 4.10, 5.5, 4.16, 9.6, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" means'}`
+
+section refs: 4.10, 9.6, 4.16, 4.16, 4.21
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> r settlement or consent agreement, in each case, with a Governmental Entity of competent jurisdiction that is binding on the applicable Person under applicable Law. "OSHA" means the Occupational Safety and Health Act of 1970, as amended, and the rules and regulations promulgated thereunder. "Parent Material Adverse Effect" means any Effect that, individually or in the aggregate with all other Effects, arose from an action taken by Parent or Merger Sub that would prevent the consummation of the Merger prior to the Outside Date or materially delay consummation of the Merger. "Parent Related Part
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" definition'}`
+
+section refs: 4.21, 4.10, 4.16, 4.16, 4.19
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.19 Homeowners Associations. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither the Company nor any Company Subsidiary has "declarant" rights or effective control with respect to any Company Owned Real Property. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, as of the date hereof, neither Company nor any Company Subsidiary has received written notice from any Homeowners Association i
+
+### Step 7: `get_section`
+
+args: `{'section_ref': 'Article I'}`
+
+section refs: ARTICLE 1
+
+> ARTICLE 1 THE OFFER 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" definition section'}`
+
+section refs: 4.16, 4.21, 4.16, 4.10, 9.17
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -3387,6 +7623,94 @@ rationale: The no-shop fiduciary exception in Section 6.1(b)(iii) requires the b
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## aff73090bd9b
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+ABSTAINED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Intervening"'}`
+
+section refs: 9.11, 8, 9.11, 6.4, 9.11
+
+>  or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including t
+
+> 8. TERMINATION 
+
+>  nor shall there be any Legal Requirement promulgated, entered, enforced, enacted, issued or deemed applicable to the Offer or the Merger by any Governmental Body in any jurisdiction in which Parent or the Company has material business operations which prohibits, or makes illegal the acquisition of or payment for Shares pursuant to the Offer or the consummation of the Merger; provided, however, that Parent and Purchaser shall not be permitted to invoke this clause (f) unless they shall have taken all actions required under this Agreement to have any such order lifted; and (g) the Agreement sha
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> Sections 3.3(a), 3.3(c), 3.4, 3.8, 3.23 and 3.24) that are not qualified by a "Material Adverse Effect" shall be true and correct at and as of the expiration time of the Offer on the Expiration Date as if made at and as of the expiration time of the Offer on the Expiration Date (except to the extent any such representation or warranty expressly relates to an earlier date, in which case as of such date), except where the failure of such representations and warranties to be true and correct would not have, individually or in the aggregate, a Material Adverse Effect; (c) the Company shall have co
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Intervening Event"'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+## Finding
+
+answer: ABSTAIN
+
+evidence:
+
+rationale: The term 'Intervening Event' is not defined in this agreement, nor does the agreement contain any provision referencing or defining an 'Intervening Event' in the context of fiduciary duties or board recommendations.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Change in Circumstance" shall mean any fact, change, event, occurrence, condition, circumstance or development with respect to the Company that was not actually known to the Company Board prior to the date of this Agreement (or, if known, the consequences of which were not known by the Company Board prior to the date of this Agreement); provided, that the receipt, existence or terms of an Acquisition Proposal shall not be deemed to be a Change in Circumstance.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## aff954956d71
 
 ## Question
@@ -3711,6 +8035,503 @@ No expert-annotated span is recorded for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## b5946568a23b
+
+## Question
+
+Does the Material Adverse Effect definition carve out stockholder litigation arising from the merger agreement?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the C
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'Company Material Adverse Effect stockholder litigation'}`
+
+section refs: 9.6, 9.6, 4.16, 9.17, 4.16
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 4: `search_agreement`
+
+args: `{'query': 'stockholder litigation carve out Material Adverse Effect'}`
+
+section refs: 9.6, 9.6, 9.17, 6.4, 4.10
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+> ile any material Tax Return required to be filed (after taking into account any extensions) by the applicable entity, (G) prepare any material Tax Return on a basis inconsistent with past practice, (H) consent to any extension or waiver of any limitation period with respect to any material claim or assessment for Taxes or (I) adopt or change any material Tax accounting principle, method, period or practice; (xiv) waive, release, assign, settle or compromise any claims, liabilities or obligations arising out of, related to or in connection with litigation (other than litigation arising in conne
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" provided however that no Effect'}`
+
+section refs: 9.6, 4.10, 9.6, 4.16, 4.21
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+### Step 7: `search_agreement`
+
+args: `{'query': 'clauses (i) through (vi) of the definition of Company Material Adverse Effect'}`
+
+section refs: 9.6, 9.6, 9.17, 9.17, 4.10
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+> et forth therein) shall not be true and correct in all respects at and as of immediately prior to the Expiration Time as though made at and as of such time (except to the extent expressly made as of an earlier date, in which case, at and as of such earlier date), except where the failure to be so true and correct would not have or reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect; (3) the Company shall have failed to comply with or perform in all material respects its agreements, obligations and covenants required to be complied with or perform
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '(i) general economic conditions (ii)'}`
+
+section refs: 9.6, 9.6, 1.1, 9.9, 4.17
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> in the securities markets, capital markets, credit markets, currency markets or other financial markets in the United States or any other country or region in the world, including (A) changes in interest rates in the United States or any other country or region in the world and changes in exchange rates for the currencies of any countries and (B) any suspension of trading in securities (whether equity, debt, derivative or hybrid securities) generally on any securities exchange or over-the-counter market operating in the United States or any other country or region in the world; -81- __________
+
+> ery procedures that have not yet been "received", as defined by Section 251(h) of the DGCL), represents at least a majority of all then outstanding Company Shares as of the Expiration Time; and (ii) the other conditions set forth in Annex A (as they may be amended in accordance with this Agreement). (b) Waiver of Conditions. Parent and Merger Sub expressly reserve the right (but are not obligated to) at any time and from time to time in their sole discretion to waive, in whole or in part, any of the conditions to the Offer, to make any change in the terms of or conditions to the Offer in a man
+
+> 9.9 Severability. If any term or other provision of this Agreement is invalid, illegal or incapable of being enforced by any rule of Law or public policy, all other conditions and provisions of this Agreement shall nevertheless remain in full force and effect so long as the economic or legal substance of the transactions contemplated hereby is not affected in any manner materially adverse to any party. Upon such determination that any such term or other provision is invalid, illegal or incapable of being enforced, the parties hereto shall negotiate in good faith to modify this Agreement so as 
+
+> 4.17 Tax Matters. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect: (a) all Tax Returns that are required to be filed by the Company or the Company Subsidiaries have been timely filed with the appropriate Governmental Entity (taking into account any extension of time within which to file), and all such Tax Returns are true, complete and accurate; (b) the Company and the Company Subsidiaries have timely paid all Taxes due and owing by any of them (whether or not shown on any Tax Return), other than Taxes a
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any and all other effects) to the extent directly or indirectly resulting from, attributable to or arising out of any of the following shall be taken into account when determining whether a "Company Material Adverse Effect" has occurred, except to the extent any Effect directly or indirectly results from, arises out of or is attributable to the matters described in following clauses (i) through (vi), to the extent such Effect disproportionately and adversely affects the Company and its Subsidiaries relative to other companies operating in any industry or industries in which the Company or its Subsidiaries operate (in which case, the incremental disproportionate impact or impacts shall be taken into account in determining whether there has been, or would reasonably be expected to be, a "Company Material Adverse Effect"): (i) general economic conditions (or changes in such conditions) in the United States or any other country or region in the world, or conditions in the global economy generally; (ii) general conditions (or changes in such conditions) in the securities markets, capital markets, credit markets, currency markets or other financial markets in the United States or any other country or region in the world, including (A) changes in interest rates in the United States or any other country or region in the world and changes in exchange rates for the currencies of any countries and (B) any suspension of trading in securities (whether equity, debt, derivative or hybrid securities) generally on any securities exchange or over-the-counter market operating in the United States or any other country or region in the world; -81- (iii) general conditions (or changes in such conditions) in the homebuilder industry or any other industries in which the Company or its Subsidiaries operate; (iv) political conditions (or changes in such conditions) in the United States or any other country or region in the world, or acts of war, sabotage or terrorism (including any escalation or general worsening of any such acts of war, sabotage or terrorism) in the United States or any other country or region in the world; (v) earthquakes, hurricanes, tsunamis, tornadoes, floods, epidemics, pandemics (including COVID-19), cyberattacks, mudslides, wild fires or other natural disasters, weather conditions and other force majeure events in the United States or any other country or region in the world; (vi) changes or proposed changes in Law after the date of this Agreement (or the interpretation thereof), any COVID-19 Measures or any change in any COVID-19 Measures (or the interpretation thereof), or changes or proposed changes in GAAP or other accounting standards (or the interpretation thereof); (vii) the announcement of, or the compliance with, this Agreement, or the pendency or consummation of the transactions contemplated hereby, including (A) the identity of Parent, Merger Sub or their Affiliates and (B) the termination (or the failure or potential failure to renew or enter into) any Contracts with customers, suppliers, distributors or other business partners, and (C) any other negative development in the Company's relationships with any of its customers, suppliers, distributors or other business partners; provided that, (1) this clause (vii) shall not apply to any representations and warranties set forth in Section 4.4 or the conditions set forth in clause (B)(2) of Annex A with respect to the representations warranties set forth in Section 4.4 and (2) in the case of subclauses (A), (B) and (C) of this clause (vii), the Company and its Subsidiaries have complied with their obligations under Section 6.1; (viii) any actions taken or failure to take action, in each case, by Parent or any of its controlled Affiliates, or the taking of any action required by this Agreement (other than any action required by the first sentence of Section 6.1), or the failure to take any action prohibited by this Agreement; (ix) any voluntary departure of any officers, directors, employees or independent contractors of the Company or its Subsidiaries, directly resulting from, arising out of, attributable to, or related to the transactions contemplated by this Agreement; or (x) changes in the Company's stock price or the trading volume of the Company's stock, in and of itself, or any failure by the Company to meet any estimates or expectations of the Company's revenue, earnings or other financial performance or results of operations for any period, in and of itself, or any failure by the Company to meet any internal budgets, plans or forecasts of its revenues, earnings or other financial performance or results of operations, in and of itself (but not, in each case, the underlying cause of such changes or failures, unless the underlying cause of such changes or failures would otherwise be excepted from the definition of a "Company Material Adverse Effect"). -82- ______
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## b82f23b94fe0
+
+## Question
+
+What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'change-of-control termination rights revenue customer contracts'}`
+
+section refs: 6.5, 8.1, 3.11, 3.14, ARTICLE IX
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+> Article IX shall survive any termination of this Agreement, and (ii) notwithstanding anything to the contrary contained in this Agreement, neither SVB Financial nor Boston Private shall be relieved or released from any liabilities or damages arising out of its fraud or willful and material breach of any provision of this Agreement. (b) (i) In the event that after the date of this Agreement a bona fide Acquisition Proposal shall have been made known to the Board of Directors or senior management of Boston Private or shall have been made directly to its shareholders generally or any person shall
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination percentage revenue'}`
+
+section refs: (none), ARTICLE IX, 6.5, 8.2, 8.1
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination'}`
+
+section refs: 8.1, 8.2, 6.5, ARTICLE VIII, 6.3
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> ARTICLE VIII TERMINATION AND AMENDMENT 
+
+> roposal, the Boston Private Board of Directors shall have concluded in good faith, after giving effect to all the adjustments which may be offered by SVB Financial pursuant to clause (iv) below, that such Acquisition Proposal constitutes a Superior Proposal; (iii) Boston Private shall notify SVB Financial, at least four (4) business days in advance, of the intention of the Boston Private Board of Directors to change its recommendation (including, in the event such change in recommendation is in response to an Acquisition Proposal, the identity of the party making such Acquisition Proposal and 
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination revenue percentage'}`
+
+section refs: ARTICLE IX, (none), 6.5, 8.2, 8.1
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+### Step 5: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination revenue'}`
+
+section refs: 6.5, 8.1, (none), 8.2, 5.2
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+> ments that do not materially increase liabilities) or terminate any Boston Private Benefit Plan, or any arrangement that would be a Boston Private Benefit Plan if in effect on the date hereof, (ii) increase the compensation or benefits payable to any current or former employee, officer, director or consultant, (iii) pay or award, or commit to pay or award, any material bonuses or incentive compensation other than in the ordinary course of business consistent with past practice, (iv) grant or accelerate the vesting of any equity-based awards or other compensation, (v) enter into any new, or ame
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination rights revenue'}`
+
+section refs: 6.5, 8.1, (none), 3.11, 3.14
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination rights revenue percentage'}`
+
+section refs: 6.5, ARTICLE IX, (none), 8.1, 3.11
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': 'customer contracts change of control termination rights revenue'}`
+
+section refs: 6.5, 8.1, (none), 3.11, 3.14
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## b8dca4c22077
+
+## Question
+
+Does the Material Adverse Effect definition carve out stockholder litigation arising from the merger agreement?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the C
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'stockholder litigation arising from this Agreement carve-out Material Adverse Effect'}`
+
+section refs: 9.6, 4.12, 5.5, 9.6, 9.17
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> Company Material Adverse Effect, since January 1, 2018, (i) there have been no grievances, hand-billing, picketing, work stoppage, lock-out, slowdown or labor strike or, to the Knowledge of the Company, threatened against the Company or any Company Subsidiary and (ii) there is no unfair labor practice, labor dispute or labor arbitration proceeding pending, or to the Knowledge of the Company, threatened against the Company or any Company Subsidiary. (f) No notice, consent or consultation obligations with respect to any employee of the Company or Company Subsidiary, or any labor or other employe
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> t Financing Sources will have any liability or obligation, for any claims, causes of action or liabilities arising under, out of, in connection with or related in any manner to the items in the immediately preceding clauses (a) through (d), it being expressly agreed and acknowledged that no personal liability, obligation or losses whatsoever will attach to, be imposed on or otherwise be incurred by any of the aforementioned, as such, arising under, out of, in connection with or related in any manner to the items in the immediately preceding clauses (a) through (d), in each case, except for cla
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '(i) general economic conditions (ii) changes in laws (iii) changes in market prices (iv) changes in general political conditions (v) changes in GAAP (vi) merger agreement execution'}`
+
+section refs: 9.6, 9.6, 1.1, 6.4, 9.16
+
+> in the securities markets, capital markets, credit markets, currency markets or other financial markets in the United States or any other country or region in the world, including (A) changes in interest rates in the United States or any other country or region in the world and changes in exchange rates for the currencies of any countries and (B) any suspension of trading in securities (whether equity, debt, derivative or hybrid securities) generally on any securities exchange or over-the-counter market operating in the United States or any other country or region in the world; -81- __________
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> ery procedures that have not yet been "received", as defined by Section 251(h) of the DGCL), represents at least a majority of all then outstanding Company Shares as of the Expiration Time; and (ii) the other conditions set forth in Annex A (as they may be amended in accordance with this Agreement). (b) Waiver of Conditions. Parent and Merger Sub expressly reserve the right (but are not obligated to) at any time and from time to time in their sole discretion to waive, in whole or in part, any of the conditions to the Offer, to make any change in the terms of or conditions to the Offer in a man
+
+>  cause to be done, and to assist and cooperate with the other parties in doing, all things necessary, proper or advisable under Law or otherwise to consummate and make effective the Merger, the Offer and the other transactions contemplated by this Agreement as promptly as practicable, (ii) take all such actions (if any) as may be required to cause the expiration of the notice periods under Competition Laws with respect to such transactions as promptly as practicable after the execution of this Agreement, (iii) obtain (A) from any Governmental Entity any consents, licenses, permits, waivers, ap
+
+> than those conditions that by their nature are to be satisfied as of immediately prior to the Expiration Time, but subject to the fulfillment or waiver of such conditions as of immediately prior to the Expiration Time), (iii) with respect to the Merger, the payment of the Merger Consideration and the Equity Financing related thereto, all of the conditions set forth in Section 7.1 and Section 7.2 have been and continue to be satisfied or validly waived (other than those conditions that by their terms are to be satisfied at the Closing, but subject to the fulfillment or valid waiver of those con
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 6: `search_agreement`
+
+args: `{'k': 5, 'query': '(vii) this Agreement or the execution thereof (viii) announcement of merger'}`
+
+section refs: 9.6, ARTICLE 7, 1.1, 6.4, 4.3
+
+> n thereof); (vii) the announcement of, or the compliance with, this Agreement, or the pendency or consummation of the transactions contemplated hereby, including (A) the identity of Parent, Merger Sub or their Affiliates and (B) the termination (or the failure or potential failure to renew or enter into) any Contracts with customers, suppliers, distributors or other business partners, and (C) any other negative development in the Company's relationships with any of its customers, suppliers, distributors or other business partners; provided that, (1) this clause (vii) shall not apply to any rep
+
+> Article 7, in each case, within its control (v) defend and seek to prevent the initiation of all actions, lawsuits or other legal, regulatory or other Proceedings to which it is a party challenging or affecting this Agreement or the consummation of the transactions contemplated by this Agreement, in each case until the issuance of a final, nonappealable Order, (vi) seek to have lifted or rescinded any injunction or restraining order that may adversely affect the ability of the parties to consummate the transactions contemplated hereby, in each case until the issuance of a final, nonappealable 
+
+> termination of this Agreement. (v) Notwithstanding any other provision in this Agreement to the contrary, in no event shall Parent or Merger Sub be required to extend the Offer beyond the Outside Date. -5- ________________ (vi) If the Offer is terminated or withdrawn by Merger Sub, or this Agreement is terminated in accordance with Article 8, prior to the Acceptance Time, Merger Sub shall, and Parent shall cause Merger Sub to, promptly return or cause to be returned all tendered Company Shares to the registered holders thereof. (vii) The Company agrees that no Company Shares held by the Compan
+
+>  cause to be done, and to assist and cooperate with the other parties in doing, all things necessary, proper or advisable under Law or otherwise to consummate and make effective the Merger, the Offer and the other transactions contemplated by this Agreement as promptly as practicable, (ii) take all such actions (if any) as may be required to cause the expiration of the notice periods under Competition Laws with respect to such transactions as promptly as practicable after the execution of this Agreement, (iii) obtain (A) from any Governmental Entity any consents, licenses, permits, waivers, ap
+
+> 4.3 Authority. The Company has all requisite corporate power and authority necessary to execute and deliver this Agreement and, assuming the Merger is consummated in accordance with Section 251(h) of the DGCL, to perform (subject to the conditions contained herein) its obligations hereunder and to consummate the transactions contemplated by the Agreement, including the Merger and the Offer. The Company Board, at a meeting duly called and held, has by unanimous vote (i) determined that this Agreement and the transactions contemplated hereby, including the Offer and the Merger, are advisable, fa
+
+### Step 7: `search_agreement`
+
+args: `{'k': 5, 'query': 'stockholder litigation proceeding claim suit arising from this Agreement'}`
+
+section refs: (none), ARTICLE 7, ARTICLE 7, (none), 9.16
+
+> s 37 5.2 Authority 38 5.3 No Conflict 38 5.4 Required Filings and Consents 38 5.5 Litigation 39 5.6 Schedule TO; Schedule 14D-9 39 5.7 Brokers 39 5.8 Ownership of Company Capital Stock 39 5.9 Ownership of Merger Sub 40 5.10 Solvency 40 5.11 Absence of Certain Arrangements 40 5.12 Financing 41 5.13 No Other Representations or Warranties 42 ARTICLE 6 COVENANTS 43 6.1 Conduct of Business by the Company and Parent Pending the Closing 43 6.2 Access to Information; Confidentiality 48 6.3 No Solicitation by the Company 49 6.4 Efforts 53 6.5 Merger 55 6.6 Public Announcements 55 6.7 Employee Benefit M
+
+> regulations thereunder ("Section 16"), of Company Shares and Company Equity Awards pursuant to this Agreement and the Merger shall be an exempt transaction for purposes of Section 16. 6.11 Stockholder Litigation. Prior to the earlier of the Effective Time or the termination of this Agreement, the Company shall promptly (and, in any event, within two (2) Business Days) notify Parent of any Proceeding brought by the stockholders of the Company or other Persons (other than Parent, Merger Sub, or its Affiliates) against the Company or any of its directors, officers or the Representatives of the Co
+
+> f any) set forth in the Company Charter, the Company Bylaws, the certificate of incorporation and bylaws, or equivalent organizational documents, of any Company Subsidiary, and any Existing Indemnification Agreements, as applicable; provided, that -58- ________________ the applicable Covered Person provides an undertaking to repay such advance if it is ultimately determined by a final non-appealable order of a court of competent jurisdiction that such Covered Person is not entitled to indemnification under this Section 6.8 or otherwise. Notwithstanding anything herein to the contrary, if any P
+
+> Stockholders accept the Offer and tender their Company Shares to Merger Sub pursuant to the Offer (the "Company Board Recommendation"); WHEREAS, the sole member of Parent and the board of directors of Merger Sub have (i) declared it advisable for Parent and Merger Sub, to enter into this Agreement, and (ii) approved the execution and delivery by Parent and Merger Sub, respectively, of this -1- ________________ Agreement, the performance by Parent and Merger Sub, respectively, of their respective covenants and agreements contained herein and the consummation of the Offer and the Merger upon the
+
+>  exempt or immune from the jurisdiction of any such court or from any legal process commenced in such courts (whether through service of notice, attachment prior to judgment, attachment in aid of execution of judgment, execution of judgment or otherwise) and (iii) to the fullest extent permitted by applicable Law, any claim that (A) the Proceeding in such court is brought in an inconvenient forum, (B) the venue of such Proceeding is improper or (C) this Agreement, or the subject matter hereof, may not be enforced in or by such courts. Each of the parties hereto agrees that a final judgment in 
+
+### Step 8: `search_agreement`
+
+args: `{'k': 5, 'query': '(x) stockholder litigation claim proceeding arising out of this Agreement'}`
+
+section refs: 9.17, ARTICLE 7, (none), 9.16, ARTICLE 7
+
+> t Financing Sources will have any liability or obligation, for any claims, causes of action or liabilities arising under, out of, in connection with or related in any manner to the items in the immediately preceding clauses (a) through (d), it being expressly agreed and acknowledged that no personal liability, obligation or losses whatsoever will attach to, be imposed on or otherwise be incurred by any of the aforementioned, as such, arising under, out of, in connection with or related in any manner to the items in the immediately preceding clauses (a) through (d), in each case, except for cla
+
+> f any) set forth in the Company Charter, the Company Bylaws, the certificate of incorporation and bylaws, or equivalent organizational documents, of any Company Subsidiary, and any Existing Indemnification Agreements, as applicable; provided, that -58- ________________ the applicable Covered Person provides an undertaking to repay such advance if it is ultimately determined by a final non-appealable order of a court of competent jurisdiction that such Covered Person is not entitled to indemnification under this Section 6.8 or otherwise. Notwithstanding anything herein to the contrary, if any P
+
+> s 37 5.2 Authority 38 5.3 No Conflict 38 5.4 Required Filings and Consents 38 5.5 Litigation 39 5.6 Schedule TO; Schedule 14D-9 39 5.7 Brokers 39 5.8 Ownership of Company Capital Stock 39 5.9 Ownership of Merger Sub 40 5.10 Solvency 40 5.11 Absence of Certain Arrangements 40 5.12 Financing 41 5.13 No Other Representations or Warranties 42 ARTICLE 6 COVENANTS 43 6.1 Conduct of Business by the Company and Parent Pending the Closing 43 6.2 Access to Information; Confidentiality 48 6.3 No Solicitation by the Company 49 6.4 Efforts 53 6.5 Merger 55 6.6 Public Announcements 55 6.7 Employee Benefit M
+
+>  exempt or immune from the jurisdiction of any such court or from any legal process commenced in such courts (whether through service of notice, attachment prior to judgment, attachment in aid of execution of judgment, execution of judgment or otherwise) and (iii) to the fullest extent permitted by applicable Law, any claim that (A) the Proceeding in such court is brought in an inconvenient forum, (B) the venue of such Proceeding is improper or (C) this Agreement, or the subject matter hereof, may not be enforced in or by such courts. Each of the parties hereto agrees that a final judgment in 
+
+> regulations thereunder ("Section 16"), of Company Shares and Company Equity Awards pursuant to this Agreement and the Merger shall be an exempt transaction for purposes of Section 16. 6.11 Stockholder Litigation. Prior to the earlier of the Effective Time or the termination of this Agreement, the Company shall promptly (and, in any event, within two (2) Business Days) notify Parent of any Proceeding brought by the stockholders of the Company or other Persons (other than Parent, Merger Sub, or its Affiliates) against the Company or any of its directors, officers or the Representatives of the Co
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any and all other effects) to the extent directly or indirectly resulting from, attributable to or arising out of any of the following shall be taken into account when determining whether a "Company Material Adverse Effect" has occurred, except to the extent any Effect directly or indirectly results from, arises out of or is attributable to the matters described in following clauses (i) through (vi), to the extent such Effect disproportionately and adversely affects the Company and its Subsidiaries relative to other companies operating in any industry or industries in which the Company or its Subsidiaries operate (in which case, the incremental disproportionate impact or impacts shall be taken into account in determining whether there has been, or would reasonably be expected to be, a "Company Material Adverse Effect"): (i) general economic conditions (or changes in such conditions) in the United States or any other country or region in the world, or conditions in the global economy generally; (ii) general conditions (or changes in such conditions) in the securities markets, capital markets, credit markets, currency markets or other financial markets in the United States or any other country or region in the world, including (A) changes in interest rates in the United States or any other country or region in the world and changes in exchange rates for the currencies of any countries and (B) any suspension of trading in securities (whether equity, debt, derivative or hybrid securities) generally on any securities exchange or over-the-counter market operating in the United States or any other country or region in the world; -81- (iii) general conditions (or changes in such conditions) in the homebuilder industry or any other industries in which the Company or its Subsidiaries operate; (iv) political conditions (or changes in such conditions) in the United States or any other country or region in the world, or acts of war, sabotage or terrorism (including any escalation or general worsening of any such acts of war, sabotage or terrorism) in the United States or any other country or region in the world; (v) earthquakes, hurricanes, tsunamis, tornadoes, floods, epidemics, pandemics (including COVID-19), cyberattacks, mudslides, wild fires or other natural disasters, weather conditions and other force majeure events in the United States or any other country or region in the world; (vi) changes or proposed changes in Law after the date of this Agreement (or the interpretation thereof), any COVID-19 Measures or any change in any COVID-19 Measures (or the interpretation thereof), or changes or proposed changes in GAAP or other accounting standards (or the interpretation thereof); (vii) the announcement of, or the compliance with, this Agreement, or the pendency or consummation of the transactions contemplated hereby, including (A) the identity of Parent, Merger Sub or their Affiliates and (B) the termination (or the failure or potential failure to renew or enter into) any Contracts with customers, suppliers, distributors or other business partners, and (C) any other negative development in the Company's relationships with any of its customers, suppliers, distributors or other business partners; provided that, (1) this clause (vii) shall not apply to any representations and warranties set forth in Section 4.4 or the conditions set forth in clause (B)(2) of Annex A with respect to the representations warranties set forth in Section 4.4 and (2) in the case of subclauses (A), (B) and (C) of this clause (vii), the Company and its Subsidiaries have complied with their obligations under Section 6.1; (viii) any actions taken or failure to take action, in each case, by Parent or any of its controlled Affiliates, or the taking of any action required by this Agreement (other than any action required by the first sentence of Section 6.1), or the failure to take any action prohibited by this Agreement; (ix) any voluntary departure of any officers, directors, employees or independent contractors of the Company or its Subsidiaries, directly resulting from, arising out of, attributable to, or related to the transactions contemplated by this Agreement; or (x) changes in the Company's stock price or the trading volume of the Company's stock, in and of itself, or any failure by the Company to meet any estimates or expectations of the Company's revenue, earnings or other financial performance or results of operations for any period, in and of itself, or any failure by the Company to meet any internal budgets, plans or forecasts of its revenues, earnings or other financial performance or results of operations, in and of itself (but not, in each case, the underlying cause of such changes or failures, unless the underlying cause of such changes or failures would otherwise be excepted from the definition of a "Company Material Adverse Effect"). -82- ______
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## b93457685f21
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 10, 'query': 'Superior Proposal'}`
+
+section refs: 6.3, 6.3, 6.3, 6.3, 6.3, 4.6, 6.1, 6.3, 6.1, 6.1
+
+> on or group who has made a bona fide written Acquisition Proposal that was not solicited in material breach of Section 6.1(b) if the Board of Directors (or a duly authorized committee thereof) (A) shall have determined in good faith, after consultation with its outside legal counsel and financial advisors, that such Acquisition Proposal constitutes or could reasonably be expected to constitute, result in or lead to a Superior Proposal and (B) has received from the Person so requesting such information an executed Acceptable Confidentiality Agreement; provided that the Company furnishes any non
+
+>  advisors and taking into account any changes to the terms of this Agreement agreed to in writing by Parent during the Notice Period) that the failure to make a Change of Recommendation or to terminate this Agreement pursuant to Section 8.1(d)(ii) would be reasonably likely to be inconsistent with its fiduciary duties under applicable Law, or in the case of an Acquisition Proposal, such Acquisition Proposal continues to constitute a Superior Proposal; provided, however, that any amendment to the financial terms or other material terms or conditions (including the provision of financing) of suc
+
+> e Board of Directors (or a duly authorized committee thereof) as of the date hereof, the material consequences of which were not known and reasonably foreseeable to the Board of Directors (or a duly authorized committee thereof) as of the date hereof and (B) becomes known to or by the Board of Directors (or a duly authorized committee thereof) prior to the time the Company Requisite Vote is obtained; provided, however, that none of the following will alone constitute an Intervening Event: changes in the market price or trading volume of the Shares or the fact that the Company meets or exceeds 
+
+> Acquisition Proposal constitutes or could reasonably be expected to constitute, result in or lead to a Superior Proposal; (v) prior to obtaining the Company Requisite Vote, making a Change of Recommendation (to the extent permitted by Section 6.1(e)); or (vi) resolving or agreeing to take any of the foregoing actions, to the extent such actions would be permitted by the foregoing clauses (i) through (v). (d) Except as otherwise provided in Section 6.1(c) or as contemplated by Section 6.1(e), the Board of Directors and any committee thereof shall not (i) (A) withdraw or rescind (or change or qu
+
+> ality Agreement) relating to any Acquisition Proposal or recommend any tender offer providing for, with respect to, or in connection with any Acquisition Proposal. 46 ________________ (e) Notwithstanding anything in this Section 6.1 to the contrary, at any time prior to obtaining the Company Requisite Vote, (i) the Board of Directors (or a duly authorized committee thereof) may effect a Change of Recommendation in response to an Intervening Event or (ii) if the Board of Directors (or a duly authorized committee thereof) determines in good faith, after consultation with its financial advisors a
+
+> tockholder of the Company agrees to vote to approve this Agreement or the Merger or agrees to vote against any Superior Proposal, other than the Voting Agreement, (B) any holder of Options or Restricted Stock would be entitled to receive consideration of a different amount or nature than the consideration payable pursuant to Section 2.2, (C) any third party has agreed to provide, directly or indirectly, equity or other capital to Parent or the Company or any of their Subsidiaries to finance in whole or in part the transactions contemplated herein, or (D) any Company Employee has agreed to rema
+
+> er Acquisition Proposal which the Board of Directors (or a duly authorized committee thereof) determined in good faith, after consultation with its financial advisor and outside legal counsel, warranted the Board of Directors' (or such duly authorize committee's) further discussion. 43 ________________ (b) Except as it may relate to any Excluded Party or as permitted by this Section 6.1, including the last sentence of this Section 6.1(b), from 11:59 p.m. (New York City time) on the No-Shop Period Start Date until the Effective Time or, if earlier, the termination of this Agreement in accordanc
+
+> tee thereof) determines that the failure to make a Change of Recommendation or to terminate this Agreement pursuant to Section 8.1(d)(ii) would be reasonably likely to be inconsistent with its fiduciary duties under applicable Law; provided, further, that the Company will not be entitled to effect such Change of Recommendation or terminate this Agreement in accordance with Section 8.1(d)(ii) unless (x) the Company delivers to Parent a written notice (a "Company Notice"), at least four (4) Business Days before the Board of Directors (or a duly authorized committee thereof) takes such action, ad
+
+> any Acquisition Proposals (or inquiries, proposals or offers or other efforts that constitute, could constitute, or could reasonably be expected to lead to an Acquisition Proposal, including any Person that has informed the Company or its Representatives of an intention to make or has publicly announced an intention to make an Acquisition Proposal) and cooperate with or assist or participate in or facilitate or encourage any such inquiries, proposals, offers, discussions or negotiations or any effort or attempt to make any Acquisition Proposals, including granting a waiver, amendment or releas
+
+> he Company shall promptly (and in any event within forty-eight (48) hours thereof) notify in writing Parent of the receipt of any Acquisition Proposal after the No-Shop Period Start Date, which notice shall include a copy of any such Acquisition Proposal made in writing and any other written terms and proposals provided (including financing commitments) to the Company or its Representatives and a written summary of material terms and conditions of any such Acquisition Proposal not made in writing. Thereafter, the Company shall keep Parent reasonably informed of the status and material terms of
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+section refs: 6.3
+
+> "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or
+
+### Step 3: `lookup_defined_term`
+
+args: `{'term': 'Acquisition Proposal'}`
+
+section refs: 6.3
+
+> "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company,
+
+## Finding
+
+answer: 50%
+
+evidence:
+- (Section 6.3) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%")
+- (Section 6.3) "Acquisition Proposal" means any proposal or offer ... relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries ... that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole
+
+rationale: The Superior Proposal definition incorporates the Acquisition Proposal definition but replaces the "15%" threshold with "50%". For asset deals (clause (A) of Acquisition Proposal), the threshold is therefore 50% or more of consolidated revenues, net income, or assets.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(i) "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company, (C) any tender offer or exchange offer that if consummated would result in any Person beneficially owning 15% or more of the total voting power of the equity securities of the Company, (D) any merger, reorganization, consolidation, share exchange, business combination, recapitalization, liquidation, dissolution or similar business combination transaction involving the equity of the Company, or (E) any combination of the foregoing. (iv) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or other aspects of such proposal or offer (including any break-up fee, expense reimbursement provisions, and conditions to consummation) and the transactions contemplated hereby and after taking into account any changes to the terms of this Agreement proposed in writing by Parent in response to such Superior Proposal pursuant to, and in accordance with, Section 6.1(e), to be more favorable from a financial point of view to the stockholders of the Company than the transactions contemplated hereby.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## bb7a04d97925
 
 ## Question
@@ -3778,6 +8599,279 @@ rationale: Section 6.1(b)(i) requires the Company to give Parent a Determination
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 6.1 Company Board Recommendation; Termination. (b) Notwithstanding anything to the contrary contained in this Agreement, at any time prior to the Offer Acceptance Time: (i) if the Company has received a bona fide written Acquisition Proposal from any Person or group of Persons that has not been withdrawn and after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer, (x) the Company Board may make a Company Adverse Recommendation Change, and/or (y) the Company may terminate this Agreement to enter into a Specified Agreement with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination); and (B) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with outside legal counsel, the Company Board shall have determined, in good faith, that such Acquisition Proposal is a Superior Offer. Issuance of any "stop, look and listen" communication by or on behalf of the Company pursuant to Rule 14d-9(f) shall not be considered a Company Adverse Recommendation Change and shall not require the giving of a Determination Notice or compliance with the procedures set forth in this Section 6.1. For the avoidance of doubt, the provisions of this Section 6.1(b)(i) shall also apply to any material amendment to any Acquisition Proposal and require a new Determination Notice, except that the references to three (3) business days shall be deemed to be two (2) business days (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least three (3) business days prior to making any such Company Adverse Recommendation Change; and (C) at the end of the three (3) business-day period following the provision of the Determination Notice, after giving effect to any revisions to the terms of this Agreement irrevocably proposed in writing by Parent or any other proposals irrevocably offered in writing by Parent in response to such Determination Notice, after consultation with its financial advisors and outside legal counsel, the Company Board shall have determined, in good faith, that the failure to make the Company Adverse Recommendation Change in response to such Change in Circumstance would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## bcb8fd6634ee
+
+## Question
+
+Does the negative interim operating covenant carve out actions required by COVID-19/pandemic measures?
+
+## Options
+
+- No
+- Yes
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'negative interim covenant'}`
+
+section refs: 9.10, 9.12, 4.8, ARTICLE 6, 8.1
+
+> Section 9.10 Severability. If any term, provision, covenant or restriction of this Agreement is held by a court of competent jurisdiction or other Governmental Authority to be invalid, void or unenforceable, the remainder of the terms, provisions, covenants and restrictions of this Agreement shall remain in full force and effect and shall in no way be affected, impaired or invalidated so long as the economic or legal substance of the transactions contemplated by this Agreement is not affected in any manner materially adverse to any party. Upon such a determination, the parties hereto agree to 
+
+> Section 9.12 Entire Agreement; No Reliance; Access to Information. (a) This Agreement, the Confidentiality Agreement, the exhibits and schedules to this Agreement, the Company Disclosure Schedule, the Financing Commitment Letters and the Guarantees constitute the entire agreement among the parties with respect to the subject matter hereof and supersede all prior agreements and understandings, both written and oral, among the parties with respect thereto. 88 ________________ (b) The Company, Parent and Merger Sub agree that, except for the representations and warranties contained in Article 4 a
+
+> Section 4.08 Financial Statements; Internal Controls. (a) The audited consolidated financial statements and unaudited consolidated interim financial statements of the Company included in the Company SEC Documents (i) complied as to form, as of their respective filing dates with the SEC, in all material respects with the applicable accounting requirements and the published rules and regulations of the SEC with respect thereto, (ii) were prepared in accordance with GAAP applied on a consistent basis during the periods involved (except, in the case of unaudited financial statements, for the absen
+
+> ARTICLE 6 COVENANTS 
+
+> ently enjoining, restraining or otherwise prohibiting the consummation of the transactions contemplated by this Agreement (notwithstanding any approval of this Agreement by the stockholders of the Company); provided, however, that the party seeking to terminate this Agreement shall have complied with its obligations under Section 6.12; (d) by either Parent or the Company, upon written notice to the other party, if the Stockholder Meeting shall have been duly convened and held and completed and the Stockholder Approval has not been obtained by reason of the failure to obtain the required vote u
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'pandemic COVID-19 carveout'}`
+
+section refs: 6.1, 1.1, 4.17, 1.1, ARTICLE 7
+
+> ny Subsidiary of the Company (including any COVID-19 Measures) or (y) respond to third-party supply or service disruptions caused by the coronavirus (COVID-19) pandemic; provided that the Company shall, to the extent legally permissible and only if time permits, consult with Parent prior to taking the actions described in this sentence. 
+
+> any kind. "COVID-19 Measures" means any action or inaction to address the coronavirus (COVID-19) or comply with any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, travel restrictions, shut down, closure, sequester, safety or similar law, directive, guideline or recommendation promulgated by the Centers for Disease Control and Prevention, the World Health Organization or any state or local Governmental Authority having jurisdiction over the Company, its Subsidiaries or its operations, in each case, in connection with or in response to the coronavirus (CO
+
+> s or operating units within any site of employment or facility of the Company or any Subsidiary in the past three years. During the 90 day period preceding the date hereof, no employee has suffered an "employment loss" as defined in the WARN Act with respect to the Company or any Subsidiary. (g) The Company and its Subsidiaries have complied with all Applicable Laws in all material respects, and have made commercially reasonable efforts to comply with all applicable guidance published by a Governmental Authority, concerning workplace and employee health and safety practices related to the coro
+
+> sm, terrorism or military actions (including any outbreak, escalation or general worsening of any such acts of hostilities, war, sabotage, cyberterrorism, terrorism or military actions) in the United States or any other country or region in the world; (vii) earthquakes, hurricanes, tsunamis, tornadoes, floods, mudslides, wild fires, weather conditions, outbreaks, epidemics, pandemics or disease outbreaks (including the coronavirus (COVID-19 pandemic), other public health conditions or other natural or man-made disasters or acts of God in the United States or any other country or region in the 
+
+> o the extent disclosed to Parent as of the date hereof, in each case without giving effect to any reduction in annual base salary, base hourly rate, cash incentive compensation opportunities or employee benefits in response to or otherwise related to the coronavirus (COVID-19) pandemic. (c) From and after the Closing Date, with respect to each Parent Benefit Plan that is an "employee welfare benefit plan" as defined in Section 3(1) of ERISA in which any Continuing Employee is or becomes eligible to participate, Parent shall, or shall cause the Surviving Corporation or its applicable Subsidiary
+
+### Step 3: `get_section`
+
+args: `{'section_ref': 'Section 6.1'}`
+
+section refs: 6.1
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+### Step 4: `get_section`
+
+args: `{'section_ref': 'Section 6.01'}`
+
+section refs: 6.1
+
+> Section 6.01 Conduct of the Company. The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in acco
+
+### Step 5: `lookup_defined_term`
+
+args: `{'term': 'COVID-19 Measures'}`
+
+section refs: 1.1
+
+> "COVID-19 Measures" means any action or inaction to address the coronavirus (COVID-19) or comply with any quarantine, "shelter in place," "stay at home," workforce reduction, social distancing, travel restrictions, shut down, closure, sequester, safety or similar law, directive, guideline or recommendation promulgated by the Centers for Disease Control and Prevention, the World Health Organization or any state or local Governmental Authority having jurisdiction over the Company, its Subsidiaries or its operations, in each case, in connection with or in response to the coronavirus (COVID-19). 
+
+## Finding
+
+answer: Yes
+
+evidence:
+- (Section 6.01) The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures...
+
+rationale: Yes. Section 6.01 (Conduct of the Company), which imposes negative interim covenants, explicitly carves out matters "reasonably undertaken in connection with any COVID-19 Measures" from the restrictions.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+The Company covenants and agrees that, except for matters (i) expressly permitted or expressly contemplated by this Agreement, (ii) set forth on Part 6.01 of the Company Disclosure Schedule, (iii) reasonably undertaken in connection with any COVID-19 Measures, (iv) undertaken with the prior written consent of Parent (which shall not be unreasonably withheld, conditioned or delayed), (v) required by Applicable Law or the rules and regulations of Nasdaq, from the date hereof until the earlier of the Effective Time and the termination of this Agreement in accordance with Article 8 hereof, the Company (B) shall not, and shall cause each of its Subsidiaries not to:
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## bdad5a71be5b
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+section refs: 6.3
+
+> "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Acquisition Proposal'}`
+
+section refs: 6.3
+
+> "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company,
+
+## Finding
+
+answer: 50%
+
+evidence:
+- (Section 6.3) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%")
+- (Section 6.3) "Acquisition Proposal" means any proposal or offer... relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries... that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries
+
+rationale: The definition of 'Superior Proposal' incorporates the definition of 'Acquisition Proposal' but explicitly states that references to '15%' are replaced by '50%'. The 'Acquisition Proposal' definition includes asset acquisitions constituting '15% or more' of assets. Thus, the asset-deal threshold for a Superior Proposal is 50%.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(i) "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company, (C) any tender offer or exchange offer that if consummated would result in any Person beneficially owning 15% or more of the total voting power of the equity securities of the Company, (D) any merger, reorganization, consolidation, share exchange, business combination, recapitalization, liquidation, dissolution or similar business combination transaction involving the equity of the Company, or (E) any combination of the foregoing. (iv) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or other aspects of such proposal or offer (including any break-up fee, expense reimbursement provisions, and conditions to consummation) and the transactions contemplated hereby and after taking into account any changes to the terms of this Agreement proposed in writing by Parent in response to such Superior Proposal pursuant to, and in accordance with, Section 6.1(e), to be more favorable from a financial point of view to the stockholders of the Company than the transactions contemplated hereby.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## bfe8e4f1b6b8
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Superior Proposal"'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Acquisition Proposal" means'}`
+
+section refs: 5.3, 5.3, 8.13, 5.3, ARTICLE VIII
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+> s Section 3.16 Interim Period Section 5.1 Leased Real Property Section 3.18(b) Legal Restraint Section 6.1(c) Merger Consideration Section 1.2(a) Merger Subsidiary Preamble Merger Recitals Notice Period Section 5.3(e)(ii) Parent Employee Benefit Plan Section 5.13(c) Parent Preamble Permits Section 3.12(c) Preferred Stock Merger Consideration Section 1.2(d) Proxy Statement Section 5.4 SEC Section 3.5(a) Stockholders Meeting Section 5.5 Surviving Corporation Section 1.1(a) Termination Date Section 7.1(b) Transaction Litigation Section 5.11 Uncertificated Shares Section 1.3(a) Willful Breach Sect
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> ent that (A) this Agreement is terminated pursuant to Section 7.1(c), (B) following the execution of this Agreement and prior to the time at which a vote is taken on the adoption of this Agreement at the Stockholders Meeting (or an adjournment or postponement thereof) an offer or proposal for a Competing Acquisition Transaction is publicly announced or shall become publicly known and is not publicly withdrawn prior to the Stockholders Meeting and (C) within twelve (12) months following the termination of this Agreement pursuant to Section 7.1(c), the foregoing Competing Acquisition Transaction
+
+### Step 5: `get_section`
+
+args: `{'section_ref': 'Section 1.2'}`
+
+section refs: 1.2
+
+> Section 1.2 Conversion of Shares of Capital Stock. At the Effective Time, by virtue of the Merger and without any further action on the part of Parent, Merger Subsidiary, the Company or any holder of any shares of Company Common Stock, any holder of any shares of Convertible Preferred Stock or any shares of capital stock of Merger Subsidiary or Parent: (a) except as otherwise provided in Section 1.2(b), Section 1.2(c) or 
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means any'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Superior Proposal" shall mean'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 8: `get_section`
+
+args: `{'section_ref': 'Section 8.13'}`
+
+section refs: 8.13
+
+> Section 8.13 Counterparts; Signatures. This Agreement may be executed in one or more counterparts, each of which shall be deemed an original but all of which together shall be considered one and the same agreement and shall become effective when counterparts have been signed by each of the parties hereto and delivered to the other parties, it being understood that all parties need not sign the same counterpart. This Agreement may be executed and delivered by facsimile transmission, by electronic mail in "portable document format" (".pdf") form, or by any other electronic means intended to pres
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -4329,6 +9423,74 @@ The Company covenants and agrees that, except for matters (i) expressly permitte
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## dab5815482ae
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+ANSWERED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+section refs: 6.3
+
+> "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or
+
+### Step 2: `lookup_defined_term`
+
+args: `{'term': 'Acquisition Proposal'}`
+
+section refs: 6.3
+
+> "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company,
+
+### Step 3: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+section refs: 6.3
+
+> "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or
+
+### Step 4: `lookup_defined_term`
+
+args: `{'term': 'Acquisition Proposal'}`
+
+section refs: 6.3
+
+> "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company,
+
+## Finding
+
+answer: 50%
+
+evidence:
+- (Section 6.3) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%")
+- (Section 6.3) "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole
+
+rationale: The definition of 'Superior Proposal' incorporates the definition of 'Acquisition Proposal' but replaces the 15% threshold with 50%. Since the asset-deal branch of 'Acquisition Proposal' (clause A) uses that percentage threshold, the resulting threshold for a Superior Proposal involving an asset deal is 50%.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+(i) "Acquisition Proposal" means any proposal or offer from any Person or group of Persons (other than Parent, Merger Sub or their respective Affiliates) relating to (A) any direct or indirect acquisition, purchase, sale, lease or other disposition of assets of the Company or its Subsidiaries, in one transaction or a series of related transactions, that constitutes 15% or more of the consolidated revenues, net income or assets of the Company and its Subsidiaries, taken as a whole, (B) any issuance of Shares representing 15% or more of the total voting power of the equity securities of the Company, (C) any tender offer or exchange offer that if consummated would result in any Person beneficially owning 15% or more of the total voting power of the equity securities of the Company, (D) any merger, reorganization, consolidation, share exchange, business combination, recapitalization, liquidation, dissolution or similar business combination transaction involving the equity of the Company, or (E) any combination of the foregoing. (iv) "Superior Proposal" means a bona fide written Acquisition Proposal (except that the references therein to "15%" shall be replaced by "50%"), in each case, that the Board of Directors (or a duly authorized committee thereof) in good faith determines, after consultation with its outside legal counsel and financial advisor, after taking into account all such factors and matters deemed relevant in good faith by the Board of Directors (or a duly authorized committee thereof), including legal, financial (including the financing terms of any such proposal), regulatory (including antitrust), timing or other aspects of such proposal or offer (including any break-up fee, expense reimbursement provisions, and conditions to consummation) and the transactions contemplated hereby and after taking into account any changes to the terms of this Agreement proposed in writing by Parent in response to such Superior Proposal pursuant to, and in accordance with, Section 6.1(e), to be more favorable from a financial point of view to the stockholders of the Company than the transactions contemplated hereby.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## db26af4231f1
 
 ## Question
@@ -4465,6 +9627,349 @@ No expert-annotated span is recorded for this case.
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## e09718eaec33
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+ABSTAINED
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'k': 10, 'query': '"Intervening Event"'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2, 3.8, 6.14, 2.8, 6.4, 8.2
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+> 3.8 Absence of Changes. (a) Since March 31, 2021 to the date of this Agreement, there has not been any Material Adverse Effect that is continuing. (b) Since March 31, 2021 to the date of this Agreement, there has not been any event, occurrence, or action that, if taken during the Pre-Closing Period without Parent's consent, would constitute a breach of any of the covenants in clauses (i)-(ii), (vi), (x), (xiii), or (xvi) (solely as it relates to the foregoing) of Section 5.2(b). 17 ________________ 
+
+> reasonable best efforts to arrange and obtain, as promptly as practicable, from the same and/or alternative financing sources, alternative financing in an amount sufficient, when taken together with cash on hand readily available to Parent (as demonstrated by Parent to the reasonable satisfaction of the Company), to consummate the transactions contemplated by this Agreement and pay any amounts due from Parent under this Agreement and which do not include any conditions to the consummation of such alternative financing that are more onerous, when taken as a whole, than the conditions set forth 
+
+> Section 2.8, Parent shall, or shall cause the Surviving Corporation to, promptly replace or restore the cash in the Payment Fund so as to ensure that the Payment Fund is, at all times, maintained at a level sufficient for the Paying Agent to make such payments promptly as and when required pursuant to Section 1.1(h), Section 2.5 and Section 2.8. 9 ________________ (b) Promptly after the Effective Time (but in no event later than three (3) business days thereafter), the Surviving Corporation shall cause to be mailed to each Person who was, at the Effective Time, a holder of record of (i) Shares
+
+> 6.4 Indemnification of Officers and Directors. (a) Parent agrees that all rights to indemnification, advancement of expenses and exculpation from liabilities for acts or omissions occurring at or prior to the Effective Time (whether asserted or claimed prior to, at or after the Effective Time) now existing in favor of the current or former directors or officers of any Acquired Corporation and any indemnification or other similar agreements of any Acquired Corporation, in each case as in effect on the date of this Agreement, shall continue in full force and effect in accordance with their terms
+
+> 8.2 Effect of Termination. In the event of the termination of this Agreement as provided in Section 8.1, written notice thereof shall be given to the other Party or Parties, specifying the provision hereof pursuant to which such termination is made, and this Agreement shall be of no further force or effect and there shall be no liability in connection with this Agreement on the part of Parent, Purchaser or the Company or any of their respective financing sources, former, current or future officers, directors, partners, stockholders, managers, members or Affiliates following any such terminatio
+
+### Step 3: `search_agreement`
+
+args: `{'k': 10, 'query': '"Intervening" event'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2, 3.8, 6.14, 2.8, 8.2, 2.8
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+> 3.8 Absence of Changes. (a) Since March 31, 2021 to the date of this Agreement, there has not been any Material Adverse Effect that is continuing. (b) Since March 31, 2021 to the date of this Agreement, there has not been any event, occurrence, or action that, if taken during the Pre-Closing Period without Parent's consent, would constitute a breach of any of the covenants in clauses (i)-(ii), (vi), (x), (xiii), or (xvi) (solely as it relates to the foregoing) of Section 5.2(b). 17 ________________ 
+
+> reasonable best efforts to arrange and obtain, as promptly as practicable, from the same and/or alternative financing sources, alternative financing in an amount sufficient, when taken together with cash on hand readily available to Parent (as demonstrated by Parent to the reasonable satisfaction of the Company), to consummate the transactions contemplated by this Agreement and pay any amounts due from Parent under this Agreement and which do not include any conditions to the consummation of such alternative financing that are more onerous, when taken as a whole, than the conditions set forth 
+
+> Section 2.8, Parent shall, or shall cause the Surviving Corporation to, promptly replace or restore the cash in the Payment Fund so as to ensure that the Payment Fund is, at all times, maintained at a level sufficient for the Paying Agent to make such payments promptly as and when required pursuant to Section 1.1(h), Section 2.5 and Section 2.8. 9 ________________ (b) Promptly after the Effective Time (but in no event later than three (3) business days thereafter), the Surviving Corporation shall cause to be mailed to each Person who was, at the Effective Time, a holder of record of (i) Shares
+
+> 8.2 Effect of Termination. In the event of the termination of this Agreement as provided in Section 8.1, written notice thereof shall be given to the other Party or Parties, specifying the provision hereof pursuant to which such termination is made, and this Agreement shall be of no further force or effect and there shall be no liability in connection with this Agreement on the part of Parent, Purchaser or the Company or any of their respective financing sources, former, current or future officers, directors, partners, stockholders, managers, members or Affiliates following any such terminatio
+
+> that has a per Share exercise price that is equal to, or greater than, the Merger Consideration shall be cancelled for no consideration. (b) As soon as reasonably practicable after the Effective Time (but no later than the second payroll period after the Effective Time), the Surviving Corporation shall pay the amounts provided for in Section 2.8(a), net of any applicable Tax withholding payable pursuant to Section 2.8(a)), to the holders of Company Options, with such payments to be made through, to the extent applicable, the Surviving Corporation's payroll. 12 ________________ (c) As soon as p
+
+### Step 4: `search_agreement`
+
+args: `{'k': 10, 'query': '"Company Board" recommendation change'}`
+
+section refs: 6.1, 6.1, 6.1, 8.1, 9.11, 1.2, 1.2, 5.3, 9.1, 5.3
+
+> Section 6.1. SECTION 6. ADDITIONAL COVENANTS OF THE PARTIES 6.1 Company Board Recommendation; Termination. (a) Subject to Section 6.1(b), the Company hereby consents to the inclusion of a description of the Company Board Recommendation in the Offer Documents. Subject to Section 6.1(b), during the Pre-Closing Period, neither the Company Board nor any committee thereof shall (i) (A) withdraw (or modify in a manner adverse to Parent or Purchaser), or publicly propose to withdraw (or modify in a manner adverse to Parent or Purchaser), the Company Board Recommendation or (B) approve, recommend or d
+
+> and (ii) other than in connection with an Acquisition Proposal, the Company Board may make a Company Adverse Recommendation Change in response to a Change in Circumstance, if: (A) the Company Board determines in good faith, after consultation with the Company's financial advisors and outside legal counsel, that the failure to do so would be reasonably likely to be inconsistent with the fiduciary duties of the Company Board under applicable Legal Requirements; (B) the Company shall have given Parent a Determination Notice, specifying the Change in Circumstance in reasonable detail, at least thr
+
+> nt with respect to such Superior Offer, in each case, if: (A) the Company shall have given Parent prior written notice of its intention to consider making a Company Adverse Recommendation Change or terminating this Agreement pursuant to Section 8.1(e), including, if not already provided, providing to Parent the material terms and conditions of the Acquisition Proposal, at least three (3) business days prior to making any such Company Adverse Recommendation Change or termination (a "Determination Notice") (which notice shall not constitute a Company Adverse Recommendation Change or termination)
+
+>  the Offer or the Merger or making consummation of the Offer or the Merger illegal, which order, decree, ruling or other action shall be final and nonappealable; provided that the right to terminate this Agreement pursuant to this Section 8.1(c) shall not be available to any Party whose material breach of this Agreement has caused or resulted in such final and non-appealable order, decree, ruling or other action or that has failed to comply with its obligations under Section 6.2 with respect to the removal of such order, injunction decree, ruling or other action; (d) by Parent at any time prio
+
+>  purpose or effect of monopolization, restraint of trade, lessening of competition, or foreign investment. "Book-Entry Common Shares" shall mean non-certificated Shares represented by book-entry. A-1 ________________ "Book-Entry Shares" shall mean Book-Entry Common Shares. "business day" shall mean a day except a Saturday, a Sunday or other day on which banks in New York City or Frankfurt, Germany are authorized or required by Legal Requirements to be closed. "Capitalization Date" is defined in Section 3.3(a) of this Agreement. "Certificates" is defined in Section 2.6(b) of this Agreement. "Ch
+
+> formation shall have become false or misleading in any material respect, and the Company further agrees to take all steps necessary to promptly cause the Schedule 14D-9 as so corrected to be filed with the SEC and to be disseminated to holders of Shares, in each case as and to the extent required by applicable Legal Requirements. Parent and Purchaser shall promptly furnish or otherwise make available to the Company or the Company's legal counsel all information concerning Parent or Purchaser that may be required by the Exchange Act to be set forth in the Schedule 14D-9 or as reasonably request
+
+> 1.2 Company Actions. (a) Schedule 14D-9. Promptly on the Offer Commencement Date, following the filing of the Offer Documents, the Company shall (i) file with the SEC a Tender Offer Solicitation/Recommendation Statement on Schedule 14D-9 (together with any exhibits, amendments or supplements thereto, the "Schedule 14D-9") that, subject to Section 6.1(b), shall reflect the Company Board Recommendation and include the notice and other information required by Section 262(d)(2) of the DGCL and (ii) cause the Schedule 14D-9 and related documents to be disseminated to holders of Shares as and to the
+
+> lsewhere in this Agreement, if at any time during the Pre-Closing Period any Acquired Corporation or any of their respective Representatives receives an unsolicited written inquiry, proposal, offer or Acquisition Proposal from any Person or group of Persons which Acquisition Proposal was made or renewed on or after the date of this Agreement, (i) the Company and its Representatives may contact such Person or group of Persons to clarify the terms and conditions thereof and (ii) if the Company Board determines, in good faith, after consultation with financial advisors and outside legal counsel, 
+
+> 9.1 Amendment. Prior to the Effective Time, subject to Section 6.4(d), this Agreement may be amended with the approval of the Company Board and the Parent Management Board and the Parent Supervisory Board, at any time prior to the Offer Acceptance Time by an instrument in writing signed on behalf of each of the Parties hereto. 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+### Step 5: `search_agreement`
+
+args: `{'k': 10, 'query': '"Intervening" defined term'}`
+
+section refs: 9.11, 9.11, 6.14, 9.11, 6.9, 9.11, 6.4, 3.18, 9.10, 6.4
+
+> competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material Contract" is defined in Section 3.11(a) of this Agreement. "Maximum Amount" is defined in Section 6.4(
+
+> f any Contracts to which the relevant party is a party or under general principles of commercial or government contract law (including mechanics', materialmen's, carriers', workmen's, warehouseman's, repairmen's, landlords' and similar liens granted or which arise in the ordinary course of business), (d) Encumbrances that are restrictions against the transfer or assignment of any Contract that are included in the terms of such Contract and (e) Encumbrances that are easements, rights-of-way, encroachments, restrictions, conditions and other similar Encumbrances incurred or suffered in the ordin
+
+> nt, supplement or other modification to or waiver of any provision of the Royalty Purchase Agreements that would not, and would not reasonably be expected to, (A) reduce the aggregate amount of the Financing contemplated by the applicable Royalty Purchase Agreement, (B) adversely affect the ability of Parent to enforce its rights against any other party to the Royalty Purchase Agreements, in each case, as so amended, replaced, supplemented or otherwise modified, relative to the ability of Parent to enforce its rights against the other parties to the Royalty Purchase Agreements as in effect on 
+
+> to or upon the environment, including the air, soil, improvements, surface water, groundwater, the sewer, septic system, storm drain, publicly owned treatment works, or waste treatment, storage or disposal systems. "Representatives" shall mean officers, directors, employees, attorneys, accountants, investment bankers, consultants, agents, financial advisors, other advisors and other representatives. "Royalty Purchase Agreements" is defined in Section 4.11(a) of this Agreement. "Schedule 14D-9" is defined in Section 1.2(a) of this Agreement. "SEC" shall mean the U.S. Securities and Exchange Com
+
+> 6.9 Section 16 Matters. The Company, and the Company Board (or a duly formed committee thereof consisting of non-employee directors (as such term is defined for the purposes of Rule 16b-3 promulgated under the Exchange Act)), shall, to the extent necessary, take appropriate action, prior to or as of the Offer Acceptance Time, to approve, for purposes of Section 16(b) of the Exchange Act, the disposition and cancellation or deemed disposition and cancellation of Shares, and Company Options in the Transactions by applicable individuals and to cause such dispositions and/or cancellations to be ex
+
+> , liquidation, dissolution or similar transaction involving the Company that, if consummated, would result in any Person or group beneficially owning 20% or more of the outstanding Shares, in each case other than the Transactions. "Affiliate" shall mean, as to any Person, any other Person that, directly or indirectly, controls, or is controlled by, or is under common control with, such Person. For this purpose, "control" (including, with its correlative meanings, "controlled by" and "under common control with") shall mean the possession, directly or indirectly, of the power to direct or cause 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> A and the Code and (ii) there are no actions, suits or claims pending (other than routine claims for benefits) or, to the Company's knowledge, threatened with respect to an Employee Plan or to the knowledge of the Company against any fiduciary of such Employee Plan involving an Employee Plan. No Employee Plan is subject to the laws of a jurisdiction outside of the United States. (d) Except to the extent required under Section 601 et seq. of ERISA or 4980B of the Code (or any other similar state or local Legal Requirement), no Acquired Corporation has any present or future obligation to provide
+
+> 9.10 Severability. If any term or provision of this Agreement is invalid, illegal or incapable of being enforced by any Legal Requirement or public policy, as determined by a final judgment of a court of competent jurisdiction, all other terms and provisions of this Agreement shall nevertheless remain in full force and effect so long as the economic or legal substance of the Offer and the Merger is not affected in any manner materially adverse to any party. Upon such determination that any term or other provision is invalid, illegal or incapable of being enforced, the Parties shall negotiate i
+
+> 6.4 Indemnification of Officers and Directors. (a) Parent agrees that all rights to indemnification, advancement of expenses and exculpation from liabilities for acts or omissions occurring at or prior to the Effective Time (whether asserted or claimed prior to, at or after the Effective Time) now existing in favor of the current or former directors or officers of any Acquired Corporation and any indemnification or other similar agreements of any Acquired Corporation, in each case as in effect on the date of this Agreement, shall continue in full force and effect in accordance with their terms
+
+## Finding
+
+answer: ABSTAIN
+
+evidence:
+
+rationale: The defined term "Intervening Event" is genuinely absent from this agreement. Searches for the term found no definition or substantive use. The agreement uses "Change in Circumstance" instead, but the question specifically asks about an "Intervening Event" definition, which does not exist here.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Change in Circumstance" shall mean any fact, change, event, occurrence, condition, circumstance or development with respect to the Company that was not actually known to the Company Board prior to the date of this Agreement (or, if known, the consequences of which were not known by the Company Board prior to the date of this Agreement); provided, that the receipt, existence or terms of an Acquisition Proposal shall not be deemed to be a Change in Circumstance.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## e2cf18975d55
+
+## Question
+
+What percentage of the Target's revenue comes from customer contracts containing change-of-control termination rights?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 10, 'query': 'change of control termination rights revenue percentage customer contracts'}`
+
+section refs: 6.5, (none), ARTICLE IX, 8.1, 3.11, 3.14, ARTICLE IX, 5.2, 3.10, 8.2
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+> Article IX shall survive any termination of this Agreement, and (ii) notwithstanding anything to the contrary contained in this Agreement, neither SVB Financial nor Boston Private shall be relieved or released from any liabilities or damages arising out of its fraud or willful and material breach of any provision of this Agreement. (b) (i) In the event that after the date of this Agreement a bona fide Acquisition Proposal shall have been made known to the Board of Directors or senior management of Boston Private or shall have been made directly to its shareholders generally or any person shall
+
+> he business of it or its Subsidiaries or the Surviving Corporation or to the receipt of regulatory approvals for the transactions contemplated hereby on a timely basis; (j) take any action or knowingly fail to take any action where such action or failure to act could reasonably be expected to prevent the Merger from qualifying as a "reorganization" within the meaning of Section 368(a) of the Code; (k) amend the Boston Private Articles of Organization, Boston Private Bylaws or comparable governing documents of its Subsidiaries; (l) merge or consolidate itself or any of its Subsidiaries with any
+
+> by contract or otherwise; (xi) neither Boston Private nor any of its Subsidiaries has been, within the past two (2) years or otherwise as part of a "plan (or series of related transactions)" within the meaning of Section 355(e) of the Code of which the Merger is also a part, a "distributing corporation" or a "controlled corporation" (within the meaning of Section 355(a)(1)(A) of the Code) in a distribution of stock intending to qualify for tax-free treatment under Section 355 of the Code; (xii) neither Boston Private nor any of its Subsidiaries has participated in a "listed transaction" within
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+### Step 2: `search_agreement`
+
+args: `{'k': 10, 'query': 'revenue percentage change of control termination rights contracts'}`
+
+section refs: 6.5, (none), ARTICLE IX, 8.1, 3.11, 3.14, 8.2, 5.2, 5.2, ARTICLE IX
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ion Fee"); provided, that for purposes of this Section 8.2(b), all references in the definition of Acquisition Proposal to "25%" shall instead refer to "50%". -71- ________________ (ii) In the event that this Agreement is terminated by SVB Financial pursuant to Section 8.1(e) (or this Agreement is terminated pursuant to Section 8.1(c) but at the time of such termination SVB Financial could have terminated this Agreement pursuant to Section 8.1(e)), then Boston Private shall pay SVB Financial, by wire transfer of same day funds, the Termination Fee within two business days of the date of termin
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+> ments that do not materially increase liabilities) or terminate any Boston Private Benefit Plan, or any arrangement that would be a Boston Private Benefit Plan if in effect on the date hereof, (ii) increase the compensation or benefits payable to any current or former employee, officer, director or consultant, (iii) pay or award, or commit to pay or award, any material bonuses or incentive compensation other than in the ordinary course of business consistent with past practice, (iv) grant or accelerate the vesting of any equity-based awards or other compensation, (v) enter into any new, or ame
+
+> he business of it or its Subsidiaries or the Surviving Corporation or to the receipt of regulatory approvals for the transactions contemplated hereby on a timely basis; (j) take any action or knowingly fail to take any action where such action or failure to act could reasonably be expected to prevent the Merger from qualifying as a "reorganization" within the meaning of Section 368(a) of the Code; (k) amend the Boston Private Articles of Organization, Boston Private Bylaws or comparable governing documents of its Subsidiaries; (l) merge or consolidate itself or any of its Subsidiaries with any
+
+> Article IX shall survive any termination of this Agreement, and (ii) notwithstanding anything to the contrary contained in this Agreement, neither SVB Financial nor Boston Private shall be relieved or released from any liabilities or damages arising out of its fraud or willful and material breach of any provision of this Agreement. (b) (i) In the event that after the date of this Agreement a bona fide Acquisition Proposal shall have been made known to the Board of Directors or senior management of Boston Private or shall have been made directly to its shareholders generally or any person shall
+
+### Step 3: `search_agreement`
+
+args: `{'k': 10, 'query': '"change of control" "customer" contract termination revenue'}`
+
+section refs: 8.1, 6.5, 8.2, (none), 5.2, 3.11, 3.14, 3.27, ARTICLE IX, 5.2
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+> Stock 2 SVB Financial Disclosure Schedule 38 SVB Financial Financial ESPP 39 SVB Financial PSU Award 39 SVB Financial Regulatory Agreement 45 SVB Financial Reports 44 SVB Financial Restricted Stock Award 39 SVB Financial RSU Award 4 SVB Financial Share Closing Price 9 SVB Financial Stock Option 3 SVB Financial Stock Options 39 Takeover Statutes 32 Tax 20 -vii- ________________ Tax Return 20 Taxes 20 Termination Date 70 Termination Fee 71 Transaction Notice 65 Trust Preferred Securities 63 Volcker Rule 37 -viii- ________________ AGREEMENT AND PLAN OF MERGER AGREEMENT AND PLAN OF MERGER, dated a
+
+> ments that do not materially increase liabilities) or terminate any Boston Private Benefit Plan, or any arrangement that would be a Boston Private Benefit Plan if in effect on the date hereof, (ii) increase the compensation or benefits payable to any current or former employee, officer, director or consultant, (iii) pay or award, or commit to pay or award, any material bonuses or incentive compensation other than in the ordinary course of business consistent with past practice, (iv) grant or accelerate the vesting of any equity-based awards or other compensation, (v) enter into any new, or ame
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> 3.14 Certain Contracts. (a) Except as set forth in Section 3.14(a) of the Boston Private Disclosure Schedule or as filed with any Boston Private Reports, as of the date hereof, neither Boston Private nor any of its Subsidiaries is a party to or bound by any contract, arrangement, commitment or understanding (whether written or oral), but excluding any Boston Private Benefit Plan: -25- ________________ (i) which is a "material contract" (as such term is defined in Item 601(b)(10) of Regulation S-K of the SEC); (ii) which contains a provision that materially restricts the conduct of any line of 
+
+> ch it is a party (each such contract, an "Advisory Agreement"). Each Advisory Agreement includes all provisions required by and complies in all respects with the Investment Advisers Act, and no Advisory Entity provides Investment Advisory Services to any person other than advisory clients of the Advisory Entity and such services are in each case provided pursuant to a written Advisory Agreement. (c) The accounts of each advisory client of Boston Private or its Subsidiaries, for purposes of the Investment Advisers Act, that are subject to ERISA have been managed by the applicable Advisory Entit
+
+> Article IX shall survive any termination of this Agreement, and (ii) notwithstanding anything to the contrary contained in this Agreement, neither SVB Financial nor Boston Private shall be relieved or released from any liabilities or damages arising out of its fraud or willful and material breach of any provision of this Agreement. (b) (i) In the event that after the date of this Agreement a bona fide Acquisition Proposal shall have been made known to the Board of Directors or senior management of Boston Private or shall have been made directly to its shareholders generally or any person shall
+
+>  in a fiduciary or similar capacity or in satisfaction of debts previously contracted in good faith in the ordinary course of business consistent with past practice, make any material investment in or acquisition of (whether by purchase of stock or securities, contributions to capital, property transfers, merger or consolidation, or formation of a joint venture or otherwise) any other person or the property or assets of any other person, in each case, other than in a wholly owned Subsidiary of Boston Private; (f) engage in "proprietary trading" (as defined in the Volcker Rule), acquire or hold
+
+### Step 4: `search_agreement`
+
+args: `{'k': 10, 'query': '"change of control" termination right revenue customer'}`
+
+section refs: 6.5, 8.1, 8.2, 4.4, 3.4, ARTICLE VIII, 3.11, 8.1, 3.14, 3.14
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+>  any of the obligations, covenants or agreements or any of the representations or warranties (or any such representation or warranty shall cease to be true) set forth in this Agreement on the part of Boston Private, in the case of a termination by SVB Financial, or SVB Financial, in the case of a termination by Boston Private, which breach or failure to be true, either individually or in the aggregate with all other breaches by such party (or failures of such representations or warranties to be true), would constitute, if occurring or continuing on the Closing Date, the failure of a condition 
+
+> 8.2 Effect of Termination. (a) In the event of termination of this Agreement by either SVB Financial or Boston Private as provided in Section 8.1, this Agreement shall forthwith become void and have no effect, and none of SVB Financial, Boston Private, any of their respective Subsidiaries or any of the officers or directors of any of them shall have any liability of any nature whatsoever hereunder, or in connection with the transactions contemplated hereby, except that (i) Sections 3.3(a), 3.7, 4.3(a), 4.7, 6.2(b), this Section 8.2 and 
+
+> Section 4.4 are duly obtained, (x) violate any law, statute, code, ordinance, rule, regulation, judgment, order, writ, decree or injunction applicable to SVB Financial, any of its Subsidiaries or any of their respective properties or assets or (y) violate, conflict with, result in a breach of any provision of or the loss of any benefit under, constitute a default (or an event which, with notice or lapse of time, or both, would constitute a default) under, result in the termination of or a right of termination or cancellation under, accelerate the performance required by, or result in the creat
+
+> Section 3.4 are duly obtained, (x) violate any law, statute, code, ordinance, rule, regulation, judgment, order, writ, decree or injunction applicable to Boston Private or any of its Subsidiaries or any of their respective properties or assets, or (y) violate, conflict with, result in a breach of any provision of or the loss of any benefit under, constitute a default (or an event which, with notice or lapse of time, or both, would constitute a default) under, result in the termination of or a right of termination or cancellation under, accelerate the performance required by, or result in the c
+
+> ARTICLE VIII TERMINATION AND AMENDMENT 
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> 8.1 Termination. This Agreement may be terminated at any time prior to the Effective Time, whether before or after approval of this Agreement by the shareholders of Boston Private: (a) by mutual consent of SVB Financial and Boston Private in a written instrument, if the Board of Directors of each so determines by a vote of a majority of the members of its entire Board; (b) by either SVB Financial or Boston Private if any Governmental Entity that must grant a Requisite Regulatory Approval has denied approval of the Merger or the Bank Merger and such denial has become final and nonappealable or 
+
+> 3.14 Certain Contracts. (a) Except as set forth in Section 3.14(a) of the Boston Private Disclosure Schedule or as filed with any Boston Private Reports, as of the date hereof, neither Boston Private nor any of its Subsidiaries is a party to or bound by any contract, arrangement, commitment or understanding (whether written or oral), but excluding any Boston Private Benefit Plan: -25- ________________ (i) which is a "material contract" (as such term is defined in Item 601(b)(10) of Regulation S-K of the SEC); (ii) which contains a provision that materially restricts the conduct of any line of 
+
+> actions contemplated by this Agreement, where such increase or acceleration of benefits or obligations, right of cancellation or termination, or change in calculation of value of benefits would, either individually or in the aggregate, reasonably be expected to have a Material Adverse Effect on Boston Private; (vi) (A) that relates to the incurrence of indebtedness by Boston Private or any of its Subsidiaries, including any sale and leaseback transactions, capitalized leases and other similar financing arrangements (other than deposit liabilities, trade payables, federal funds purchased, advan
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '3.14'}`
+
+section refs: 3.14
+
+> 3.14 Certain Contracts. (a) Except as set forth in Section 3.14(a) of the Boston Private Disclosure Schedule or as filed with any Boston Private Reports, as of the date hereof, neither Boston Private nor any of its Subsidiaries is a party to or bound by any contract, arrangement, commitment or understanding (whether written or oral), but excluding any Boston Private Benefit Plan: -25- ________________ (i) which is a "material contract" (as such term is defined in Item 601(b)(10) of Regulation S-K of the SEC); (ii) which contains a provision that materially restricts the conduct of any line of 
+
+### Step 6: `get_section`
+
+args: `{'section_ref': '3.14(a)'}`
+
+section refs: 3.14
+
+> 3.14 Certain Contracts. (a) Except as set forth in Section 3.14(a) of the Boston Private Disclosure Schedule or as filed with any Boston Private Reports, as of the date hereof, neither Boston Private nor any of its Subsidiaries is a party to or bound by any contract, arrangement, commitment or understanding (whether written or oral), but excluding any Boston Private Benefit Plan: -25- ________________ (i) which is a "material contract" (as such term is defined in Item 601(b)(10) of Regulation S-K of the SEC); (ii) which contains a provision that materially restricts the conduct of any line of 
+
+### Step 7: `search_agreement`
+
+args: `{'k': 10, 'query': 'revenue percentage contracts containing change of control'}`
+
+section refs: 5.2, 6.5, 5.2, 7.2, 5.2, 3.10, 3.11, 5.2, 3.1, 1.5
+
+> he business of it or its Subsidiaries or the Surviving Corporation or to the receipt of regulatory approvals for the transactions contemplated hereby on a timely basis; (j) take any action or knowingly fail to take any action where such action or failure to act could reasonably be expected to prevent the Merger from qualifying as a "reorganization" within the meaning of Section 368(a) of the Code; (k) amend the Boston Private Articles of Organization, Boston Private Bylaws or comparable governing documents of its Subsidiaries; (l) merge or consolidate itself or any of its Subsidiaries with any
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> ments that do not materially increase liabilities) or terminate any Boston Private Benefit Plan, or any arrangement that would be a Boston Private Benefit Plan if in effect on the date hereof, (ii) increase the compensation or benefits payable to any current or former employee, officer, director or consultant, (iii) pay or award, or commit to pay or award, any material bonuses or incentive compensation other than in the ordinary course of business consistent with past practice, (iv) grant or accelerate the vesting of any equity-based awards or other compensation, (v) enter into any new, or ame
+
+> o such change or amendment shall (i) alter or change the amount or kind of the Merger Consideration provided for in this Agreement, (ii) adversely affect the Tax treatment of the Merger with respect to Boston Private's shareholders or (iii) be reasonably likely to cause the Closing to be materially delayed or the receipt of the Requisite Regulatory Approvals to be prevented or materially delayed. 6.12 Restructuring Efforts. If Boston Private shall have failed to obtain the Requisite Boston Private Vote at the duly convened Boston Private Meeting or any adjournment or postponement thereof, each
+
+> al expenditure budget set forth in Section 5.2(q) of the Boston Private Disclosure Schedule; (r) make, change or revoke any material Tax election, change an annual Tax accounting period, adopt or change any material Tax accounting method, file any material amended Tax Return, enter into any material closing agreement with respect to Taxes, or settle any material Tax claim, audit, assessment or dispute or surrender any right to claim a material refund of Taxes, in each case, other than in the ordinary course of business; (s) (i) except as set forth in Section 5.2(s)(i) of the Boston Private Dis
+
+> by contract or otherwise; (xi) neither Boston Private nor any of its Subsidiaries has been, within the past two (2) years or otherwise as part of a "plan (or series of related transactions)" within the meaning of Section 355(e) of the Code of which the Merger is also a part, a "distributing corporation" or a "controlled corporation" (within the meaning of Section 355(a)(1)(A) of the Code) in a distribution of stock intending to qualify for tax-free treatment under Section 355 of the Code; (xii) neither Boston Private nor any of its Subsidiaries has participated in a "listed transaction" within
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+> practices or policies (including any change in the maximum ratio or similar limits as a percentage of its capital exposure applicable with respect to its loan portfolio or any segment thereof), except as required by applicable law, regulation or policies imposed by any Governmental Entity or (ii) make any loans or extensions of credit or renewals thereof, except in the ordinary course of business consistent with past practice, provided (A) any loan or extension of credit or renewal thereof that pursuant to Boston Private's approved loan policies as in effect as of the date hereof (copies of wh
+
+> ate hereof, in U.S. generally accepted accounting principles ("GAAP") or applicable regulatory accounting requirements, (B) changes, after the date hereof, in laws, rules or regulations of general applicability to companies in the industries in which such party and its Subsidiaries operate, or interpretations thereof by courts or Governmental Entities, (C) changes, after the date hereof, in global, national or regional political conditions (including the outbreak of war or acts of terrorism) or in economic or market (including equity, credit and debt markets, as well as changes in interest rat
+
+> nt number or kind of shares or securities, as a result of a reorganization, recapitalization, reclassification, stock dividend, stock split, reverse stock split, or other similar change in capitalization, or there shall be any extraordinary dividend or distribution, an appropriate and proportionate adjustment shall be made to the Exchange Ratio, and to the Merger Consideration, to give holders of Boston Private Common Stock the same economic effect as contemplated by this Agreement prior to such event. (c) Notwithstanding anything in this Agreement to the contrary, at the Effective Time, all s
+
+### Step 8: `search_agreement`
+
+args: `{'k': 10, 'query': '"change of control" "contract" "customer" "revenue"'}`
+
+section refs: 6.5, 5.2, 6.3, 7.2, 7.2, 3.21, 5.2, 3.27, 3.1, 3.11
+
+> ent, to the extent reasonably possible, a deemed distribution or loan offset with respect to such outstanding loans. -57- ________________ (e) SVB Financial shall, or shall cause the Surviving Corporation to, assume and honor all Boston Private Benefit Plans in accordance with their terms. SVB Financial hereby acknowledges that a "change in control", "sale event" (or similar phrase) within the meaning of the Boston Private Benefit Plans will occur at the Effective Time. (f) Notwithstanding the provisions of Section 6.10, prior to Boston Private making any broad-based written or material oral c
+
+> he business of it or its Subsidiaries or the Surviving Corporation or to the receipt of regulatory approvals for the transactions contemplated hereby on a timely basis; (j) take any action or knowingly fail to take any action where such action or failure to act could reasonably be expected to prevent the Merger from qualifying as a "reorganization" within the meaning of Section 368(a) of the Code; (k) amend the Boston Private Articles of Organization, Boston Private Bylaws or comparable governing documents of its Subsidiaries; (l) merge or consolidate itself or any of its Subsidiaries with any
+
+> roposal, the Boston Private Board of Directors shall have concluded in good faith, after giving effect to all the adjustments which may be offered by SVB Financial pursuant to clause (iv) below, that such Acquisition Proposal constitutes a Superior Proposal; (iii) Boston Private shall notify SVB Financial, at least four (4) business days in advance, of the intention of the Boston Private Board of Directors to change its recommendation (including, in the event such change in recommendation is in response to an Acquisition Proposal, the identity of the party making such Acquisition Proposal and 
+
+>  Directors from complying with Rule 14d-9 and Rule 14e-2 under the Exchange Act with respect to an Acquisition Proposal or from making any legally required disclosure to Boston Private's shareholders; provided, that such Rules will in no way eliminate or modify the effect that any action pursuant to such Rules would otherwise have under this Agreement. 6.10 Public Announcements. Boston Private and SVB Financial shall each use their reasonable best efforts (a) to develop a joint communications plan, (b) to ensure that all press releases and other public statements with respect to the transactio
+
+> o such change or amendment shall (i) alter or change the amount or kind of the Merger Consideration provided for in this Agreement, (ii) adversely affect the Tax treatment of the Merger with respect to Boston Private's shareholders or (iii) be reasonably likely to cause the Closing to be materially delayed or the receipt of the Requisite Regulatory Approvals to be prevented or materially delayed. 6.12 Restructuring Efforts. If Boston Private shall have failed to obtain the Requisite Boston Private Vote at the duly convened Boston Private Meeting or any adjournment or postponement thereof, each
+
+> 3.21 State Takeover Laws. The Board of Directors of Boston Private has taken all action necessary and appropriate to render Chapters 110C, 110D and 110F of the Massachusetts General Laws and any similar "moratorium," "control share," "fair price," "takeover" or "interested shareholder" law (any such laws, "Takeover Statutes") inapplicable to this Agreement and the other transactions contemplated hereby. 
+
+> al expenditure budget set forth in Section 5.2(q) of the Boston Private Disclosure Schedule; (r) make, change or revoke any material Tax election, change an annual Tax accounting period, adopt or change any material Tax accounting method, file any material amended Tax Return, enter into any material closing agreement with respect to Taxes, or settle any material Tax claim, audit, assessment or dispute or surrender any right to claim a material refund of Taxes, in each case, other than in the ordinary course of business; (s) (i) except as set forth in Section 5.2(s)(i) of the Boston Private Dis
+
+> ch it is a party (each such contract, an "Advisory Agreement"). Each Advisory Agreement includes all provisions required by and complies in all respects with the Investment Advisers Act, and no Advisory Entity provides Investment Advisory Services to any person other than advisory clients of the Advisory Entity and such services are in each case provided pursuant to a written Advisory Agreement. (c) The accounts of each advisory client of Boston Private or its Subsidiaries, for purposes of the Investment Advisers Act, that are subject to ERISA have been managed by the applicable Advisory Entit
+
+> ate hereof, in U.S. generally accepted accounting principles ("GAAP") or applicable regulatory accounting requirements, (B) changes, after the date hereof, in laws, rules or regulations of general applicability to companies in the industries in which such party and its Subsidiaries operate, or interpretations thereof by courts or Governmental Entities, (C) changes, after the date hereof, in global, national or regional political conditions (including the outbreak of war or acts of terrorism) or in economic or market (including equity, credit and debt markets, as well as changes in interest rat
+
+> 3.11 Employees. (a) Section 3.11(a) of the Boston Private Disclosure Schedule sets forth an accurate and complete list of each material Boston Private Benefit Plan. Each Boston Private Benefit Plan (as defined below) has been established, operated and administered in material compliance with its terms and the requirements of all applicable laws, including ERISA and the Code. For purposes of this Agreement, the term "Boston Private Benefit Plans" means all employee benefit plans (as defined in Section 3(3) of the Employee Retirement Income Security Act of 1974, as amended ("ERISA")), whether or
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## e6da07dca0c4
 
 ## Question
@@ -4510,6 +10015,138 @@ rationale: Section 6.9(a) imposes a 'reasonable best efforts' standard on Boston
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 6.9 Acquisition Proposals. (a) Boston Private shall not, shall cause its Subsidiaries and its and their officers and directors not to, and shall use its reasonable best efforts to cause its and their agents, advisors and representatives not to, directly or indirectly, (i) initiate, solicit, knowingly encourage or knowingly facilitate inquiries or proposals with respect to, (ii) engage or participate in any negotiations with any person concerning, (iii) provide any confidential or nonpublic information or data to, or have or participate in any discussions with, any person relating to, any Acquisition Proposal or (iv) publicly propose any of the foregoing or propose any of the foregoing to a third party; provided, that, prior to receipt of the Requisite Boston Private Vote, in the event Boston Private receives an unsolicited bona fide written Acquisition Proposal, it may, and may permit its Subsidiaries and its and its Subsidiaries' officers, directors, agents, advisors and representatives to, furnish or cause to be furnished nonpublic information or data and participate in such negotiations or discussions to the extent that its Board of Directors concludes in good faith (after receiving the advice of its outside counsel, and with respect to financial matters, its financial advisors) that failure to take such actions would be more likely than not to result in a violation of its fiduciary duties under applicable law; provided, further, that, prior to or concurrently with providing any nonpublic information permitted to be provided pursuant to the foregoing proviso, Boston Private shall have provided such information to SVB Financial, and shall have entered into a confidentiality agreement with such third party on terms no less favorable to it than the Confidentiality Agreement, which confidentiality agreement shall not provide such person with any exclusive right to negotiate with Boston Private. Boston Private will, will cause its officers and directors to, and will use reasonable best efforts to cause its agents, advisors and representatives to, immediately cease and cause to be terminated any activities, discussions or negotiations conducted before the date of this Agreement with any person other than SVB Financial with respect to any Acquisition Proposal. Boston Private will promptly (and in any event within twenty-four (24) hours and before entering into any discussions or providing any information) advise SVB Financial following receipt of any Acquisition Proposal or any inquiry which could reasonably be expected to lead to an Acquisition Proposal, and the substance thereof (including the material terms and conditions of and the identity of the person making such inquiry or Acquisition Proposal), will provide SVB Financial with an unredacted copy of any such Acquisition Proposal and any draft agreements, proposals or other materials received in connection with any such inquiry or Acquisition Proposal, and will promptly (and in any event within twenty-four (24) hours) advise SVB Financial of any related material developments, discussions and negotiations on a current basis, including any amendments to or revisions of the material terms of such inquiry or Acquisition Proposal. Boston Private shall use its reasonable best efforts to enforce any existing confidentiality or standstill agreements to which it or any of its Subsidiaries is a party in accordance with the terms thereof. Boston Private shall not, and shall cause its Subsidiaries and its and their officers, directors, agents, advisors and representatives not to on its behalf, enter into any letter of intent, memorandum of understanding, agreement in principle, acquisition agreement, merger agreement, or other agreement (other than a confidentiality agreement referred to and entered into in accordance with this Section 6.9(a)) relating to any Acquisition Proposal. As used in this Agreement, "Acquisition Proposal" means, other than the transactions contemplated by this Agreement, any offer, proposal or inquiry relating to, or any third party indication of interest in, (i) any acquisition or purchase, direct or indirect, of 25% or more of the consolidated assets of Boston Private and its Subsidiaries or 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, (ii) any tender offer (including a self tender offer) or exchange offer that, if consummated, would result in such third party beneficially owning 25% or more of any class of equity or voting securities of Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private, or (iii) a merger, consolidation, share exchange or other business combination involving Boston Private or its Subsidiaries whose assets, individually or in the aggregate, constitute more than 25% of the consolidated assets of Boston Private. As used in this Agreement, "Superior Proposal" means a bona fide written Acquisition Proposal that the Board of Directors of Boston Private concludes in good faith to be more favorable to its shareholders than the Merger and the other transactions contemplated hereby, (i) after receiving the advice of its financial advisors, (ii) after taking into account the likelihood of consummation of such transaction on the terms set forth therein and (iii) after taking into account all legal (with the advice of outside counsel), financial (including the financing terms of any such proposal), regulatory and other aspects of such proposal (including any expense reimbursement provisions and conditions to closing) and any other relevant factors permitted under applicable law; provided, that for purposes of the definition of "Superior Proposal," the reference to "25%" in the definition of Acquisition Proposal shall instead refer to "50%".
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## e9a11bb3de12
+
+## Question
+
+Does the Material Adverse Effect definition carve out stockholder litigation arising from the merger agreement?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.6
+
+> "Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the C
+
+### Step 2: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" shall mean'}`
+
+section refs: 9.6, 9.6, 4.10, 4.16, 9.17
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> et forth therein) shall not be true and correct in all respects at and as of immediately prior to the Expiration Time as though made at and as of such time (except to the extent expressly made as of an earlier date, in which case, at and as of such earlier date), except where the failure to be so true and correct would not have or reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect; (3) the Company shall have failed to comply with or perform in all material respects its agreements, obligations and covenants required to be complied with or perform
+
+### Step 4: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" "stockholder litigation"'}`
+
+section refs: 9.6, 9.6, 4.16, 9.17, 4.16
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+> 4.16 Intellectual Property. (a) Section 4.16(a) of the Company Disclosure Letter sets forth a true, correct and complete list of all material Company Intellectual Property which is registered with, or with respect to which applications for registrations have been submitted to, a Governmental Entity or other organization or entity having authority over the issuance and maintenance thereof. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, none of the registrations, issuances and applications of the Company
+
+### Step 5: `get_section`
+
+args: `{'section_ref': '9.6'}`
+
+section refs: 9.6
+
+> 9.6 Certain Definitions. For purposes of this Agreement, the term: "2021 Executive Bonus Program" means the Company's 2021 annual bonus program established pursuant to its Executive Compensation Incentive Plan and actions of the Compensation Committee of the Company's Board of Directors on February 8, 2021 and March 8, 2021 and the Company's Board of Directors on July 22, 2021. "Acceptable Confidentiality Agreement" means a confidentiality agreement that contains confidentiality and non-use and other provisions that are at least as restrictive in all respects with respect to the Company or Par
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" "provided, however, that"'}`
+
+section refs: 9.6, 9.6, 4.21, 4.10, 4.16
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> 4.21 Insurance. Except as would not have and would not reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect, the Company and the Company Subsidiaries maintain policies of insurance covering the Company, the Company Subsidiaries and their respective employees, properties or assets (collectively, "Insurance Policies") in an amount that is adequate for the operation of the Company's and the Company Subsidiaries' businesses. Neither the Company nor any Company Subsidiary (a) is in breach or default of any of the Insurance Policies or (b) has received 
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" "litigation"'}`
+
+section refs: 9.6, 9.6, 4.16, 5.5, 4.10
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> individually or in the aggregate, a Company Material Adverse Effect, (i) as of the date of this -29- ________________ Agreement, no Proceedings are pending against the Company or any Company Subsidiary or, to the Knowledge of the Company, are threatened, alleging that the Company or any Company Subsidiary is infringing, misappropriating, diluting or otherwise violating the Intellectual Property of any Person or otherwise challenging the ownership or use of any of the Company Intellectual Property, and no such Proceedings have been brought since January 1, 2018 and (ii) to the Knowledge of the 
+
+> 5.5 Litigation . As of the date of this Agreement, there is no Proceeding to which Parent or any Subsidiary of Parent is a party pending or, to the Knowledge of Parent, threatened that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. As of the date of this Agreement, neither Parent nor any Subsidiary of Parent is subject to any outstanding Order that would reasonably be expected to have, individually or in the aggregate, a Parent Material Adverse Effect. 
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Company Material Adverse Effect" "provided, however, that" "clauses (i) through (vi)"'}`
+
+section refs: 9.6, 9.6, 9.17, 4.10, 9.17
+
+> t (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any a
+
+> s all Intellectual Property owned or purported to be owned by the Company or any Company Subsidiary. "Company Intervening Event" means any fact, change, condition, occurrence, effect, event, circumstance or development with respect to the Company and the Company Subsidiaries, taken as a whole, that (a) was not known or reasonably foreseeable (with respect to substance or timing) to the Company Board, or a committee thereof, as of or prior to the date of this Agreement and (b) first becomes known to the Company Board after the execution of this Agreement and at any time prior to the Acceptance 
+
+> et forth therein) shall not be true and correct in all respects at and as of immediately prior to the Expiration Time as though made at and as of such time (except to the extent expressly made as of an earlier date, in which case, at and as of such earlier date), except where the failure to be so true and correct would not have or reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect; (3) the Company shall have failed to comply with or perform in all material respects its agreements, obligations and covenants required to be complied with or perform
+
+> 4.10 Absence of Certain Changes or Events. (a) Since January 1, 2021 through the date of this Agreement, the Company and the Company Subsidiaries have conducted their respective businesses in all material respects in the ordinary course of business consistent with past practice. (b) Since January 1, 2021 through the date of this Agreement, there has not occurred any Effect that has had, or would reasonably be expected to have, individually or in the aggregate, a Company Material Adverse Effect. 
+
+> quisition of Company Shares by Parent or Merger Sub, or the Merger; (2) (i) the representations and warranties of the Company set forth in Section 4.2(a) and Section 4.2(b) shall not be true and correct in all respects as of the Capitalization Date, except for de minimis inaccuracies, (ii) the representations and warranties of the Company set forth in the second and third sentences of Section 4.1(a) (without giving effect to any "Company Material Adverse Effect" qualifier set forth therein) and Section 4.2 (other than Section 4.2(a) and Section 4.2(b)) shall not be true and correct in all mate
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Company Material Adverse Effect" shall mean any state of facts, change, condition, occurrence, effect, event, circumstance or development (each an "Effect", and collectively, "Effects"), individually or in the aggregate, that (a) has had, or would reasonably be expected to have, a material adverse effect on the business, assets, properties, condition (financial or otherwise) or results of operations of the Company and its Subsidiaries, taken as a whole or (b) would reasonably be expected to prevent the Company from consummating, or to materially impair or materially delay the ability of the Company to consummate, the Merger or any of the other transactions contemplated by this Agreement; provided, however, that, solely in the case of clause (a), no Effect (by itself or when aggregated or taken together with any and all other effects) to the extent directly or indirectly resulting from, attributable to or arising out of any of the following shall be taken into account when determining whether a "Company Material Adverse Effect" has occurred, except to the extent any Effect directly or indirectly results from, arises out of or is attributable to the matters described in following clauses (i) through (vi), to the extent such Effect disproportionately and adversely affects the Company and its Subsidiaries relative to other companies operating in any industry or industries in which the Company or its Subsidiaries operate (in which case, the incremental disproportionate impact or impacts shall be taken into account in determining whether there has been, or would reasonably be expected to be, a "Company Material Adverse Effect"): (i) general economic conditions (or changes in such conditions) in the United States or any other country or region in the world, or conditions in the global economy generally; (ii) general conditions (or changes in such conditions) in the securities markets, capital markets, credit markets, currency markets or other financial markets in the United States or any other country or region in the world, including (A) changes in interest rates in the United States or any other country or region in the world and changes in exchange rates for the currencies of any countries and (B) any suspension of trading in securities (whether equity, debt, derivative or hybrid securities) generally on any securities exchange or over-the-counter market operating in the United States or any other country or region in the world; -81- (iii) general conditions (or changes in such conditions) in the homebuilder industry or any other industries in which the Company or its Subsidiaries operate; (iv) political conditions (or changes in such conditions) in the United States or any other country or region in the world, or acts of war, sabotage or terrorism (including any escalation or general worsening of any such acts of war, sabotage or terrorism) in the United States or any other country or region in the world; (v) earthquakes, hurricanes, tsunamis, tornadoes, floods, epidemics, pandemics (including COVID-19), cyberattacks, mudslides, wild fires or other natural disasters, weather conditions and other force majeure events in the United States or any other country or region in the world; (vi) changes or proposed changes in Law after the date of this Agreement (or the interpretation thereof), any COVID-19 Measures or any change in any COVID-19 Measures (or the interpretation thereof), or changes or proposed changes in GAAP or other accounting standards (or the interpretation thereof); (vii) the announcement of, or the compliance with, this Agreement, or the pendency or consummation of the transactions contemplated hereby, including (A) the identity of Parent, Merger Sub or their Affiliates and (B) the termination (or the failure or potential failure to renew or enter into) any Contracts with customers, suppliers, distributors or other business partners, and (C) any other negative development in the Company's relationships with any of its customers, suppliers, distributors or other business partners; provided that, (1) this clause (vii) shall not apply to any representations and warranties set forth in Section 4.4 or the conditions set forth in clause (B)(2) of Annex A with respect to the representations warranties set forth in Section 4.4 and (2) in the case of subclauses (A), (B) and (C) of this clause (vii), the Company and its Subsidiaries have complied with their obligations under Section 6.1; (viii) any actions taken or failure to take action, in each case, by Parent or any of its controlled Affiliates, or the taking of any action required by this Agreement (other than any action required by the first sentence of Section 6.1), or the failure to take any action prohibited by this Agreement; (ix) any voluntary departure of any officers, directors, employees or independent contractors of the Company or its Subsidiaries, directly resulting from, arising out of, attributable to, or related to the transactions contemplated by this Agreement; or (x) changes in the Company's stock price or the trading volume of the Company's stock, in and of itself, or any failure by the Company to meet any estimates or expectations of the Company's revenue, earnings or other financial performance or results of operations for any period, in and of itself, or any failure by the Company to meet any internal budgets, plans or forecasts of its revenues, earnings or other financial performance or results of operations, in and of itself (but not, in each case, the underlying cause of such changes or failures, unless the underlying cause of such changes or failures would otherwise be excepted from the definition of a "Company Material Adverse Effect"). -82- ______
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
@@ -4829,6 +10466,218 @@ rationale: The fiduciary exception standard requires the board to determine in g
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__
 
+## f1d688c4a4a0
+
+## Question
+
+Does the Intervening Event definition require the event to be unknown, or its consequences unknown, as of signing?
+
+## Options
+
+- Known, but consequences unknown or not reasonably foreseeable, at signing
+- Not known and not reasonably foreseeable at signing
+- Known, but consequences unknown, at signing
+- Not known at signing
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Intervening Event'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'Intervening Event'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+### Step 3: `search_agreement`
+
+args: `{'k': 5, 'query': 'intervening event knowledge requirement'}`
+
+section refs: 9.11, 5.3, 3.22, 5.3, 3.13
+
+> e, firmware, middleware, servers, workstations, routers, hubs, switches, data communications lines and all other information technology equipment owned by the applicable Person or licensed or leased by such Person (excluding any public networks). "knowledge" with respect to an Entity shall mean with respect to any matter in question the actual knowledge of such Entity's executive officers after due inquiry. "Leased Real Property" is defined in Section 3.9(b) of this Agreement. A-6 ________________ "Legal Proceeding" shall mean any action, charge, suit, complaint, litigation, arbitration, media
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+> 3.22 Legal Proceedings; Orders. (a) There is no Legal Proceeding pending (or, to the knowledge of the Company, threatened) against an Acquired Corporation or to the knowledge of the Company, against any present or former officer, director or employee of an Acquired Corporation in such individual's capacity as such, other than any Legal Proceedings that would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. (b) To the Company's knowledge, as of the date of this Agreement, there is no order, writ, injunction or judgment to which
+
+> lsewhere in this Agreement, if at any time during the Pre-Closing Period any Acquired Corporation or any of their respective Representatives receives an unsolicited written inquiry, proposal, offer or Acquisition Proposal from any Person or group of Persons which Acquisition Proposal was made or renewed on or after the date of this Agreement, (i) the Company and its Representatives may contact such Person or group of Persons to clarify the terms and conditions thereof and (ii) if the Company Board determines, in good faith, after consultation with financial advisors and outside legal counsel, 
+
+> 3.13 Compliance with Legal Requirements. Each Acquired Corporation is, and has been since January 1, 2019, in compliance with all applicable Legal Requirements, except where the failure to be in compliance would not have, and would not reasonably be expected to have, individually or in the aggregate, a Material Adverse Effect. Since January 1, 2019, no Acquired Corporation has been given written notice of, or been charged with, any unresolved violation of any Legal Requirement applicable to such Acquired Corporation, except, in each case, for any such violation that would not have, and would n
+
+### Step 4: `search_agreement`
+
+args: `{'k': 5, 'query': '"Intervening Event" defined'}`
+
+section refs: 9.11, 9.11, 9.11, 2.7, 6.4
+
+>  purpose or effect of monopolization, restraint of trade, lessening of competition, or foreign investment. "Book-Entry Common Shares" shall mean non-certificated Shares represented by book-entry. A-1 ________________ "Book-Entry Shares" shall mean Book-Entry Common Shares. "business day" shall mean a day except a Saturday, a Sunday or other day on which banks in New York City or Frankfurt, Germany are authorized or required by Legal Requirements to be closed. "Capitalization Date" is defined in Section 3.3(a) of this Agreement. "Certificates" is defined in Section 2.6(b) of this Agreement. "Ch
+
+> competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material Contract" is defined in Section 3.11(a) of this Agreement. "Maximum Amount" is defined in Section 6.4(
+
+>  or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or trading volume of the Company's stock (provided, however, that the underlying causes thereof, to the extent not otherwise excluded by this definition, may be deemed to contribute to a Material Adverse Effect); (ii) the execution, announcement or pendency of this Agreement or the terms hereof (including the identity of Parent or Purchaser) or the announcement, pendency or consummation of the Transactions, including t
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> 6.4 Indemnification of Officers and Directors. (a) Parent agrees that all rights to indemnification, advancement of expenses and exculpation from liabilities for acts or omissions occurring at or prior to the Effective Time (whether asserted or claimed prior to, at or after the Effective Time) now existing in favor of the current or former directors or officers of any Acquired Corporation and any indemnification or other similar agreements of any Acquired Corporation, in each case as in effect on the date of this Agreement, shall continue in full force and effect in accordance with their terms
+
+### Step 5: `lookup_defined_term`
+
+args: `{'term': 'Material Adverse Effect'}`
+
+section refs: 9.11
+
+> "Material Adverse Effect" shall mean any event, occurrence, change or development that has a material adverse effect on the business, results of operations or financial condition of the Acquired Corporations taken as a whole; provided, however, that no event, occurrence, change, or development resulting or arising from or relating to or in connection with any of the following matters shall be deemed, either alone or in combination, to constitute or contribute to, or be taken into account in determining whether there has been, a Material Adverse Effect: (i) any change in the market price or tra
+
+### Step 6: `search_agreement`
+
+args: `{'k': 10, 'query': '"Intervening Event" OR "intervening event"'}`
+
+section refs: 2.7, 8.2, 6.4, 9.11, 4.6, 1.1, 6.4, 3.8, 6.14, 8
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> 8.2 Effect of Termination. In the event of the termination of this Agreement as provided in Section 8.1, written notice thereof shall be given to the other Party or Parties, specifying the provision hereof pursuant to which such termination is made, and this Agreement shall be of no further force or effect and there shall be no liability in connection with this Agreement on the part of Parent, Purchaser or the Company or any of their respective financing sources, former, current or future officers, directors, partners, stockholders, managers, members or Affiliates following any such terminatio
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> competitive with the products of the Acquired Corporations (and, in the case of biopharmaceutical companies with multiple product lines or divisions, relative only to the products or product candidates that are, or are reasonably likely to be, competitive with the products of the Acquired Corporations), in which case only the incremental disproportionate impact shall be taken into account when determining whether a "Material Adverse Effect" has occurred or may, would or could occur. "Material Contract" is defined in Section 3.11(a) of this Agreement. "Maximum Amount" is defined in Section 6.4(
+
+> 4.6 Legal Proceedings; Orders. There is no Legal Proceeding pending and served (or, to the knowledge of Parent or Purchaser, pending and not served or overtly threatened) against Parent, Purchaser or any of their respective Subsidiaries, or to the knowledge of Parent or Purchaser, against any present or former officer, director or employee of Parent, Purchaser or any of their respective Subsidiaries, except as would not and would not reasonably be expected to, individually or in the aggregate, have a Parent Material Adverse Effect. To the knowledge of Parent or Purchaser, as of the date of thi
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 6.4 Indemnification of Officers and Directors. (a) Parent agrees that all rights to indemnification, advancement of expenses and exculpation from liabilities for acts or omissions occurring at or prior to the Effective Time (whether asserted or claimed prior to, at or after the Effective Time) now existing in favor of the current or former directors or officers of any Acquired Corporation and any indemnification or other similar agreements of any Acquired Corporation, in each case as in effect on the date of this Agreement, shall continue in full force and effect in accordance with their terms
+
+> 3.8 Absence of Changes. (a) Since March 31, 2021 to the date of this Agreement, there has not been any Material Adverse Effect that is continuing. (b) Since March 31, 2021 to the date of this Agreement, there has not been any event, occurrence, or action that, if taken during the Pre-Closing Period without Parent's consent, would constitute a breach of any of the covenants in clauses (i)-(ii), (vi), (x), (xiii), or (xvi) (solely as it relates to the foregoing) of Section 5.2(b). 17 ________________ 
+
+> reasonable best efforts to arrange and obtain, as promptly as practicable, from the same and/or alternative financing sources, alternative financing in an amount sufficient, when taken together with cash on hand readily available to Parent (as demonstrated by Parent to the reasonable satisfaction of the Company), to consummate the transactions contemplated by this Agreement and pay any amounts due from Parent under this Agreement and which do not include any conditions to the consummation of such alternative financing that are more onerous, when taken as a whole, than the conditions set forth 
+
+> 8. TERMINATION 
+
+### Step 7: `search_agreement`
+
+args: `{'k': 10, 'query': '"intervening" event'}`
+
+section refs: 2.7, 6.4, 5.3, 1.1, 2, 3.8, 6.14, 2.8, 8.2, 2.8
+
+> no event, however, shall such investments delay the receipt by the former holders of Shares or Company Warrants of the Merger Consideration, as applicable, or otherwise impair such holders' rights hereunder. To the extent Parent becomes aware that (i) there are any losses with respect to any such investments or (ii) the Payment Fund has diminished for any reason below the level required for the Paying Agent to make prompt cash payment pursuant to Section 1.1(h), Section 2.5 and 
+
+> he Effective 44 ________________ Time, including this Agreement and the transactions and actions contemplated hereby), arising out of or pertaining to the fact that the Indemnified Person is or was a director or officer of any Acquired Corporation or is or was serving at the request of any Acquired Corporation as a director or officer of another Person, whether asserted or claimed prior to, at or after the Effective Time, to the fullest extent permitted under applicable Legal Requirements. In the event of any such claim, action, suit or proceeding, (x) each Indemnified Person will be entitled 
+
+> y (and in any event within twenty-four (24) hours after knowledge of receipt by an executive officer or director of the Company) notify Parent in writing of any bona fide written Acquisition Proposal that are received by any Acquired Corporation, (ii) provide to Parent a summary of the material terms and conditions of any such Acquisition Proposal and (iii) keep Parent reasonably informed on a prompt basis of any material developments regarding any such Acquisition Proposal and the material terms and conditions thereof (including any change in price or form of consideration or other material a
+
+>  with respect to the Offer Documents promptly after receipt of those comments (including oral comments). Each of Parent and Purchaser shall respond promptly to any comments (including oral comments) of the SEC or its staff with respect to the Offer Documents or the Offer. (f) Funds. Without limiting the generality of Section 6.11, Parent shall cause to be provided to Purchaser, on a timely basis (and in any event prior to the expiration time of the Offer on the Expiration Date), all of the funds necessary to purchase all Shares that Purchaser becomes obligated to purchase pursuant to the Offer
+
+> 2. MERGER TRANSACTION 
+
+> 3.8 Absence of Changes. (a) Since March 31, 2021 to the date of this Agreement, there has not been any Material Adverse Effect that is continuing. (b) Since March 31, 2021 to the date of this Agreement, there has not been any event, occurrence, or action that, if taken during the Pre-Closing Period without Parent's consent, would constitute a breach of any of the covenants in clauses (i)-(ii), (vi), (x), (xiii), or (xvi) (solely as it relates to the foregoing) of Section 5.2(b). 17 ________________ 
+
+> reasonable best efforts to arrange and obtain, as promptly as practicable, from the same and/or alternative financing sources, alternative financing in an amount sufficient, when taken together with cash on hand readily available to Parent (as demonstrated by Parent to the reasonable satisfaction of the Company), to consummate the transactions contemplated by this Agreement and pay any amounts due from Parent under this Agreement and which do not include any conditions to the consummation of such alternative financing that are more onerous, when taken as a whole, than the conditions set forth 
+
+> Section 2.8, Parent shall, or shall cause the Surviving Corporation to, promptly replace or restore the cash in the Payment Fund so as to ensure that the Payment Fund is, at all times, maintained at a level sufficient for the Paying Agent to make such payments promptly as and when required pursuant to Section 1.1(h), Section 2.5 and Section 2.8. 9 ________________ (b) Promptly after the Effective Time (but in no event later than three (3) business days thereafter), the Surviving Corporation shall cause to be mailed to each Person who was, at the Effective Time, a holder of record of (i) Shares
+
+> 8.2 Effect of Termination. In the event of the termination of this Agreement as provided in Section 8.1, written notice thereof shall be given to the other Party or Parties, specifying the provision hereof pursuant to which such termination is made, and this Agreement shall be of no further force or effect and there shall be no liability in connection with this Agreement on the part of Parent, Purchaser or the Company or any of their respective financing sources, former, current or future officers, directors, partners, stockholders, managers, members or Affiliates following any such terminatio
+
+> that has a per Share exercise price that is equal to, or greater than, the Merger Consideration shall be cancelled for no consideration. (b) As soon as reasonably practicable after the Effective Time (but no later than the second payroll period after the Effective Time), the Surviving Corporation shall pay the amounts provided for in Section 2.8(a), net of any applicable Tax withholding payable pursuant to Section 2.8(a)), to the holders of Company Options, with such payments to be made through, to the extent applicable, the Surviving Corporation's payroll. 12 ________________ (c) As soon as p
+
+### Step 8: `lookup_defined_term`
+
+args: `{'term': 'Change in Circumstance'}`
+
+section refs: 9.11
+
+> "Change in Circumstance" shall mean any fact, change, event, occurrence, condition, circumstance or development with respect to the Company that was not actually known to the Company Board prior to the date of this Agreement (or, if known, the consequences of which were not known by the Company Board prior to the date of this Agreement); provided, that the receipt, existence or terms of an Acquisition Proposal shall not be deemed to be a Change in Circumstance. "Closing" is defined in Section 2.3(a) of this Agreement. "Closing Date" is defined in Section 2.3(a) of this Agreement. 
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+"Change in Circumstance" shall mean any fact, change, event, occurrence, condition, circumstance or development with respect to the Company that was not actually known to the Company Board prior to the date of this Agreement (or, if known, the consequences of which were not known by the Company Board prior to the date of this Agreement); provided, that the receipt, existence or terms of an Acquisition Proposal shall not be deemed to be a Change in Circumstance.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## f5ca12b6f461
+
+## Question
+
+During the tail period, must an acquisition proposal have been publicly disclosed or made known to trigger the termination fee?
+
+## Options
+
+- Yes
+- No
+
+## Status
+
+EXECUTION_FAILED
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'k': 5, 'query': 'tail period termination fee acquisition proposal'}`
+
+section refs: 5.2, ARTICLE IX, ARTICLE IX, 5.2, 5.2
+
+> e Triggering Notice (a "Parent Proposal"), such Superior Proposal remains a Superior Proposal and the Company Board has again made a Withdrawal Determination in response to such Superior Proposal or such Intervening Event is continuing and the Company Board has again made a Withdrawal Determination in response to such Intervening Event (it being understood and agreed that if, in light of any Parent Proposal, the Company Board is no longer able to make a Withdrawal Determination with respect to such Superior Proposal or Intervening Event, then the Company shall immediately enter into amendments
+
+> Article IX and the applicable definitions elsewhere in this Agreement, which provisions shall survive such termination; provided that the foregoing shall not relieve any party, subject in the case of Parent and Sub to Section 8.02(f), from liability for any Willful and Material Breach of any of its representations, warranties, covenants or agreements set forth in any Transaction Agreement. -67- ________________ (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (i) Parent terminates this Agreement pursuant to Section 8.01(d); (ii) the Company terminates this A
+
+> ution and performance of this Agreement, the structuring of the Transactions, including the Financing, and any agreements relating thereto. If at the same time or after the Company has paid Expenses pursuant to this Section 8.02(c) the Company is obligated to pay the Termination Fee, the payment of Expenses shall reduce on a dollar for dollar basis the payment by the Company of the Termination Fee. Notwithstanding anything to the contrary contained in this Section 8.02(c) or elsewhere in this Agreement, in the event this Agreement is terminated by the Company for any reason at a time when Pare
+
+> ter the date hereof shall request the prompt return or destruction of all confidential information previously furnished to such Person(s) within the last twelve months for the purpose of evaluating a possible Acquisition Proposal and (3) terminate access to any physical or electronic data rooms relating to a possible Acquisition Proposal. Notwithstanding the foregoing, at any time prior to receipt of the Company Stockholder Approval, if the Company Board receives a written bona fide Acquisition Proposal after the date hereof that was not solicited by the Company or its Representatives and did 
+
+> ring Notice and a new Notice Period (except that the five (5) business day notice period referred to in the Notice Period shall instead be equal to the longer of (I) three (3) business days and (II) the period remaining under the Notice Period immediately prior to the delivery of such additional notice under this sentence). -45- ________________ (c) The Company shall promptly (but in no event more than 24 hours after receipt thereof) advise Parent in writing of any Acquisition Proposal or any inquiry with respect to or that is reasonably likely to lead to any Acquisition Proposal, the identity
+
+### Step 2: `search_agreement`
+
+args: `{'k': 5, 'query': 'publicly disclosed acquisition proposal'}`
+
+section refs: 5.2, 5.2, 5.2, 5.2, 5.2
+
+> lf of the Company or any of its subsidiaries or otherwise, shall be deemed to be a breach of this Section 5.02(a) by the Company. -44- ________________ (b) Neither the Company Board nor any committee thereof shall (i) (A) withdraw, qualify or modify in a manner adverse to Parent or Sub, or propose publicly to withdraw, qualify or modify in a manner adverse to Parent or Sub, the Company Board Recommendation, or resolve or agree to take any such action, (B) adopt, endorse, approve or recommend, or propose publicly to adopt, endorse, approve or recommend, any Acquisition Proposal, or resolve or a
+
+> ter the date hereof shall request the prompt return or destruction of all confidential information previously furnished to such Person(s) within the last twelve months for the purpose of evaluating a possible Acquisition Proposal and (3) terminate access to any physical or electronic data rooms relating to a possible Acquisition Proposal. Notwithstanding the foregoing, at any time prior to receipt of the Company Stockholder Approval, if the Company Board receives a written bona fide Acquisition Proposal after the date hereof that was not solicited by the Company or its Representatives and did 
+
+> SECTION 5.02. No Solicitation. (a) The Company shall not, and shall cause its subsidiaries not to, and shall cause any officer, director or employee of, or any investment banker, attorney, accountant or other advisor or representative (collectively, "Representatives") of, the Company or any of its subsidiaries not to, directly or indirectly (i) solicit, initiate or encourage the submission of, any Acquisition Proposal, or take any other action to facilitate any inquiries or the making of any proposal that constitutes, or may reasonably be expected to lead to, any Acquisition Proposal, (ii) ent
+
+>  Person making such Acquisition Proposal and its Representatives pursuant to a confidentiality agreement not materially less restrictive in the aggregate of the other party than the Confidentiality Agreement provided that, a Person who within the last twelve months that has entered into a confidentiality agreement with the Company relating to a purchase of, or business combination with, the Company shall not be required to enter into a new or revised confidentiality agreement if such confidentiality agreement remains in effect with a term of at least twelve (12) months and does not prohibit th
+
+> erein as an "Adverse Recommendation Change") or (ii) approve, authorize, cause or permit the Company or any Company Subsidiary to enter into, any letter of intent, term sheet, memorandum of understanding, agreement in principle, acquisition agreement, option agreement, merger agreement, joint venture agreement, partnership agreement or other agreement relating to any Acquisition Proposal, other than a confidentiality agreement entered into in compliance with Section 5.02(a)(II)(x) (an "Acquisition Agreement"), or resolve, agree or publicly propose to take any such action. Notwithstanding the f
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+SECTION 8.02. Effect of Termination. (b) The Company shall pay to Parent a fee of $54,330,000 (the "Termination Fee") if: (B) within 12 months of such termination the Company or any of its Subsidiaries enters into an Acquisition Agreement with respect to any Acquisition Proposal or any Acquisition Proposal is consummated
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
 ## f7208523e7c0
 
 ## Question
@@ -4925,6 +10774,301 @@ The system produced no finding for this case.
 ## Gold span (supplied for the evidence-sufficiency dimension ONLY)
 
 Section 2.1 Consideration. (a) At the Effective Time, by virtue of the Merger and without any action on the part of Nicolet, the Company, or the holder of any shares of Company Common Stock, each share of Company Common Stock issued and outstanding immediately prior to the Effective Time will be converted, subject to the election and allocation procedures in Section 2.3 and the fractional share procedures in Section 2.5, into the right to receive either: (i) 0.48 fully paid and nonassessable shares (the "Exchange Ratio") of Nicolet Common Stock (the "Per Share Stock Consideration"), or (ii) Cash in the amount of $37.18 per share (the "Per Share Cash Consideration").
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## f731e2de1256
+
+## Question
+
+Which jurisdiction governs the Target's ten largest customer contracts?
+
+## Options
+
+(free-form; no fixed option list for this question)
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `search_agreement`
+
+args: `{'query': 'ten largest customer contracts'}`
+
+section refs: 3.17, 3.17, 4.9, 3.5, 3.17
+
+> eir Affiliates (other than the Company) or immediate family members (other than offer letters that can be terminated at will without severance obligations and Contracts pursuant to Company Options); (xii) that is with any Governmental Authority under which payments in excess of $1,000,000 were received by the Company in the most recently completed fiscal year; (xiii) pursuant to which the Company or any Company Subsidiaries has continuing guarantee, "earn-out" or similar contingent payment obligations (other than indemnification or performance guarantee obligations provided for in the ordinary
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> Section 4.9 Certain Arrangements. There are no Contracts or commitments to enter into Contracts between Parent, Merger Subsidiary or any of their Affiliates, on the one hand, and any director, officer or employee of the Company or any of the Company Subsidiaries, on the other hand. 
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+### Step 2: `search_agreement`
+
+args: `{'query': 'governing law jurisdiction customer contracts'}`
+
+section refs: 8.5, 3.17, ARTICLE VII, 3.1, 3.5
+
+> Section 8.5 Applicable Law; Jurisdiction. (a) THIS AGREEMENT SHALL BE INTERPRETED, CONSTRUED AND GOVERNED BY AND IN ACCORDANCE WITH THE LAWS OF THE STATE OF DELAWARE, REGARDLESS OF THE LAWS THAT MIGHT OTHERWISE GOVERN UNDER APPLICABLE CONFLICTS OF LAW PRINCIPLES. The parties hereto hereby irrevocably submit to the personal jurisdiction of the Court of Chancery of the State of Delaware or, if such Court of Chancery shall lack subject matter jurisdiction, the federal courts of the United States of America located in the County of New Castle, Delaware, solely in respect of the interpretation and 
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> d neither Parent nor the Company shall have received a standard form letter from the Federal Trade Commission ("FTC") Bureau of Competition, in the form announced and disclosed by the FTC Bureau of Competition on August 3, 2021 and the Parties shall not have been notified by the FTC that the underlying investigation has been closed or otherwise resolved. (c) No Legal Prohibition. No Governmental Authority of competent jurisdiction shall have enacted, issued, promulgated, entered, enforced or deemed applicable to the Merger any applicable Law, or issued or granted any Order (whether temporary, 
+
+> Section 3.1 Organization. Each of the Company and the Subsidiaries of the Company (the "Company Subsidiaries") (i) is a corporation, limited liability company, limited partnership or other legal entity duly organized, validly existing and (ii) where applicable, in good standing under the Laws of the jurisdiction of its organization (to the extent the "good standing" concept is applicable in the case of any jurisdiction outside the United States), except where the failure to be in good standing (to the extent applicable) would not reasonably be expected to have a Company Material Adverse Effect
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+### Step 3: `search_agreement`
+
+args: `{'query': 'ten largest'}`
+
+section refs: 8.13, 8.13, 8.13, 8.13, 8.13
+
+>  locators, web site addresses and domain names (collectively, "Domain Names"); (vii) any similar, corresponding or equivalent rights to any of the foregoing; and (viii) any registrations of or applications to register any of the foregoing. "IT Assets" means all computers (including, servers, firewalls, workstations, desktops, laptops and handheld devices), Software, websites, hardware, networks, firmware, middleware, routers, hubs, switches, data communications lines, data storage devices, information security and telecommunications capabilities, data centers, operating systems and all other i
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+> rnmental Authority entered into in the ordinary course with respect to Company Products. "Legal Proceeding" means any action, suit, litigation, arbitration, proceeding (including any civil, criminal, administrative, investigative or appellate proceeding), hearing, inquiry, audit, examination or investigation commenced, brought, conducted or heard by or before, or otherwise involving, any court or other Governmental Authority or any arbitrator or arbitration panel. "Licensed Intellectual Property" means all of the Intellectual Property Rights owned by a third party that is licensed to the Compa
+
+> osing or (b) the amount per Preferred Share equal to the amount which would have been payable to each Preferred Share had each Preferred Share been converted into Company Common Stock prior to the Closing. "COVID-19" means SARS-CoV-2 or COVID-19, and all evolutions, variations or mutations thereof. "COVID-19 Measures" means any quarantine, "shelter in place," "stay at home," workforce reduction, reduced capacity, social distancing, shut down, closure, sequester, safety or any other guideline, recommendation, law, order or directive promulgated by any Governmental Authority, including the Cente
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+### Step 4: `search_agreement`
+
+args: `{'query': 'customer contracts'}`
+
+section refs: 3.17, 3.5, 3.17, 3.17, 4.9
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> eir Affiliates (other than the Company) or immediate family members (other than offer letters that can be terminated at will without severance obligations and Contracts pursuant to Company Options); (xii) that is with any Governmental Authority under which payments in excess of $1,000,000 were received by the Company in the most recently completed fiscal year; (xiii) pursuant to which the Company or any Company Subsidiaries has continuing guarantee, "earn-out" or similar contingent payment obligations (other than indemnification or performance guarantee obligations provided for in the ordinary
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+> Section 4.9 Certain Arrangements. There are no Contracts or commitments to enter into Contracts between Parent, Merger Subsidiary or any of their Affiliates, on the one hand, and any director, officer or employee of the Company or any of the Company Subsidiaries, on the other hand. 
+
+### Step 5: `search_agreement`
+
+args: `{'query': 'largest customer'}`
+
+section refs: 8.13, 8.13, 8.13, 8.13, 8.13
+
+> ersonally identifiable information" or "personal information" under any Privacy and Data Security Requirement, (ii) any information that, alone or in combination with other information, can reasonably be used to identify an individual natural person or relating to an identified or identifiable natural person, directly or indirectly, including name, a unique identification number, government-issued identifier (including Social Security number and driver's license number), physical address, gender and date of birth and (iii) individually identifiable health information constituting "protected he
+
+> ools and kits, templates, menus, analytics and tracking tools, compilers, libraries, version control systems, operating systems, including any and all software implementations of algorithms, models and methodologies for any of the foregoing, whether in Source Code, Object Code or other form, (ii) databases and compilations, including any and all data and collections of data, whether machine readable or otherwise, (iii) descriptions, flow-charts and other work product used to design, plan, organize and develop any of the foregoing and (iv) all user documentation, including user manuals and trai
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+>  to by the Company, any Company Subsidiary or any Entity with which the Company or any Company Subsidiary is considered a single employer under Section 414(b), (c) or (m) of the Code (a "Company ERISA Affiliate") with respect to any current or former employee, officer or director of the Company or any of the Company Subsidiaries or any beneficiary or dependent thereof or with respect to which the Company, any of the Company Subsidiaries or any Company ERISA Affiliate would reasonably be expected to have any material liability. "Company Equity Appreciation Right" means equity appreciation right
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+### Step 6: `search_agreement`
+
+args: `{'query': 'governing law contracts'}`
+
+section refs: 3.17, 3.5, 8.13, 3.17, 8.5
+
+> Section 3.17 Material Contracts. (a) Except for this Agreement, Section 3.17 of the Company Disclosure Letter sets forth a list as of the Agreement Date of each Contract to which the Company or any of the Company Subsidiaries is a party to or bound by (other than a Contract solely between or among the Company and its wholly owned Company Subsidiaries) (each of the following Contracts being a "Company Material Contract"): (i) that would be required to be filed by the Company as a "material contract" pursuant to Item 601(b)(10) of Regulation S-K promulgated by the SEC; (ii) is with a related per
+
+> r any Contract (none of which is a liability for a breach thereof); provided that, with respect to Company Material Contracts in effect on the Agreement Date, such Contract was made available to Parent prior to the Agreement Date and, with respect to Contracts entered into subsequent to the Agreement Date, such Contract was entered into in accordance with Section 5.2, or (v) liabilities that would not reasonably be expected to be, individually or in the aggregate, material to the Company and the Company Subsidiaries, taken as a whole. (d) The Company maintains, and at all times since January 1
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+> mpany or the Company Subsidiaries during the fiscal year ended December 31, 2020; (vii) any Contract containing any grant of any license or covenant not to assert relating to or under Intellectual Property Rights (A) by the Company or any Company Subsidiary to a third party or (B) by a third party to the Company or any Company Subsidiary, excluding licenses of non-customized off-the-shelf Software commercially available on standard terms for an annual fee of no more than $100,000; (viii) that contains (A) any covenant that purports to materially limit or otherwise restrict the ability of the C
+
+> Section 8.5 Applicable Law; Jurisdiction. (a) THIS AGREEMENT SHALL BE INTERPRETED, CONSTRUED AND GOVERNED BY AND IN ACCORDANCE WITH THE LAWS OF THE STATE OF DELAWARE, REGARDLESS OF THE LAWS THAT MIGHT OTHERWISE GOVERN UNDER APPLICABLE CONFLICTS OF LAW PRINCIPLES. The parties hereto hereby irrevocably submit to the personal jurisdiction of the Court of Chancery of the State of Delaware or, if such Court of Chancery shall lack subject matter jurisdiction, the federal courts of the United States of America located in the County of New Castle, Delaware, solely in respect of the interpretation and 
+
+### Step 7: `search_agreement`
+
+args: `{'query': 'customer'}`
+
+section refs: 8.13, 8.13, 8.13, 8.13, 3.14
+
+> y or its Subsidiary), (b) other indebtedness of such Person evidenced by credit agreements, notes, bonds, indentures, securities, debentures or similar Contracts to any Person, and (c) any obligations in respect of letters of credit and bankers' acceptances (other than letters of credit used as security for leases) and all indebtedness of another Person referred to in clauses (a) through (c) above guaranteed by such Person. "Intellectual Property Rights" means any and all statutory and/or common law rights throughout the world in, arising out of, or associated with any of the following: (i) al
+
+> ayable or that are being contested in good faith by appropriate proceedings; (ii) Liens for Taxes that are not due and payable or that are being contested in good faith by appropriate proceedings and for which adequate reserves have been established in the Company's consolidated financial statements in accordance with GAAP and disclosed to Parent; (iii) minor defects or irregularities in title, easements, rights-of-way, covenants, restrictions, and other, similar Liens that would not, individually or in the aggregate, reasonably be expected to materially impair the value of or continued use an
+
+> ersonally identifiable information" or "personal information" under any Privacy and Data Security Requirement, (ii) any information that, alone or in combination with other information, can reasonably be used to identify an individual natural person or relating to an identified or identifiable natural person, directly or indirectly, including name, a unique identification number, government-issued identifier (including Social Security number and driver's license number), physical address, gender and date of birth and (iii) individually identifiable health information constituting "protected he
+
+>  locators, web site addresses and domain names (collectively, "Domain Names"); (vii) any similar, corresponding or equivalent rights to any of the foregoing; and (viii) any registrations of or applications to register any of the foregoing. "IT Assets" means all computers (including, servers, firewalls, workstations, desktops, laptops and handheld devices), Software, websites, hardware, networks, firmware, middleware, routers, hubs, switches, data communications lines, data storage devices, information security and telecommunications capabilities, data centers, operating systems and all other i
+
+> tered (i) any Personal Data related to the business of the Company or the Company Subsidiaries or (ii) any IT Assets that Process Personal Data related to the business of the Company or the Company Subsidiaries, its respective Personal Data processors, customers, subcontractors or vendors, or any other Persons on its behalf. Neither the Company nor the Company Subsidiaries has notified or, as of the date hereof, plans to notify, either voluntarily or as required by any Privacy and Data Security Requirements any affected individual, any third party, any Governmental Authority or the media of an
+
+### Step 8: `search_agreement`
+
+args: `{}`
+
+section refs: 3.13, 5.2, 8.7, ARTICLE I, 8.13
+
+> Section 3.13 Regulatory Matters. (a) Since January 1, 2018, except as would not reasonably be expected to be material to the Company and the Company Subsidiaries, taken as a whole, (i) the Company and the Company Subsidiaries have in effect all necessary and applicable Regulatory Permits (including, for the avoidance of doubt, all Investigational New Drug Applications (INDs), New Drug Applications (NDAs) and Biologics License Applications (BLAs) (or their foreign equivalents) required by any Health Authority to permit the conduct of their respective businesses as currently conducted), (ii) all
+
+> Section 5.2 Operation of the Company's Business. (a) Except (i) as expressly contemplated, required or permitted by this Agreement, (ii) as required by applicable Law, (iii) as set forth in Section 5.2(a) or Section 5.2(b) of the Company Disclosure Letter, (iv) as consented to in writing by Parent (such consent not to be unreasonably withheld, conditioned or delayed) or (v) for any actions taken reasonably and in good faith in response to any COVID-19 Measure or COVID-19, during the Interim Period, the Company shall and shall cause the Company Subsidiaries to: (A) ensure that it conducts its a
+
+> Section 8.7 Non-Reliance. (a) Parent and Merger Subsidiary hereby acknowledge and agree (each for itself and on behalf of its Affiliates and Representatives) that, as of the Agreement Date, Parent, Merger Subsidiary and their respective Affiliates and Representatives (a) have received full access to (i) such books and records, facilities, equipment, contracts and other assets of the Company that Parent and Merger Subsidiary and their respective Affiliates and Representatives, as of the Agreement Date, have requested to review and (ii) the electronic data room hosted by the Company in connectio
+
+> ARTICLE I THE MERGER 
+
+> y have the force of Law), or any arbitrator, court or tribunal of competent jurisdiction. "Governmental Authorization" means any: (a) permit, license, certificate, franchise, permission, variance, clearance, registration, qualification or authorization issued, granted, given or otherwise made available by or under the authority of any Governmental Authority or pursuant to any Law; or (b) right under any Contract with any Governmental Authority. "Hazardous Materials" means any waste, material, or substance that is listed, regulated or defined under any Environmental Law and includes any polluta
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
+
+
+**Score:** reasoning=__ evidence=__ trajectory=__ professional=__
+
+## f7dd155277cb
+
+## Question
+
+What percentage-of-assets threshold does the Superior Proposal definition require for an asset-deal alternative?
+
+## Options
+
+- Greater than 50% but not "all or substantially all"
+- 50%
+- "All or substantially all"
+- Less than 50%
+
+## Status
+
+CAP_HIT
+
+## Trajectory
+
+### Step 1: `lookup_defined_term`
+
+args: `{'term': 'Superior Proposal'}`
+
+(tool result text not recorded)
+
+### Step 2: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 3: `search_agreement`
+
+args: `{'query': '"Acquisition Proposal" means'}`
+
+section refs: 5.3, 5.3, 8.13, 5.3, ARTICLE VIII
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+> s Section 3.16 Interim Period Section 5.1 Leased Real Property Section 3.18(b) Legal Restraint Section 6.1(c) Merger Consideration Section 1.2(a) Merger Subsidiary Preamble Merger Recitals Notice Period Section 5.3(e)(ii) Parent Employee Benefit Plan Section 5.13(c) Parent Preamble Permits Section 3.12(c) Preferred Stock Merger Consideration Section 1.2(d) Proxy Statement Section 5.4 SEC Section 3.5(a) Stockholders Meeting Section 5.5 Surviving Corporation Section 1.1(a) Termination Date Section 7.1(b) Transaction Litigation Section 5.11 Uncertificated Shares Section 1.3(a) Willful Breach Sect
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> ent that (A) this Agreement is terminated pursuant to Section 7.1(c), (B) following the execution of this Agreement and prior to the time at which a vote is taken on the adoption of this Agreement at the Stockholders Meeting (or an adjournment or postponement thereof) an offer or proposal for a Competing Acquisition Transaction is publicly announced or shall become publicly known and is not publicly withdrawn prior to the Stockholders Meeting and (C) within twelve (12) months following the termination of this Agreement pursuant to Section 7.1(c), the foregoing Competing Acquisition Transaction
+
+### Step 4: `get_section`
+
+args: `{'section_ref': 'Section 1.2'}`
+
+section refs: 1.2
+
+> Section 1.2 Conversion of Shares of Capital Stock. At the Effective Time, by virtue of the Merger and without any further action on the part of Parent, Merger Subsidiary, the Company or any holder of any shares of Company Common Stock, any holder of any shares of Convertible Preferred Stock or any shares of capital stock of Merger Subsidiary or Parent: (a) except as otherwise provided in Section 1.2(b), Section 1.2(c) or 
+
+### Step 5: `search_agreement`
+
+args: `{'query': '"Acquisition Transaction" means any transaction or series of related transactions (other than the Transactions) involving: (i) any acquisition or purchase by any Person, directly or indirectly, of more than fifteen percent (15%) of any class of outstanding voting or equity securities of the Company, or any tender offer (including a self-tender offer) or exchange offer that, if consummated, would result in any Person or group of Persons beneficially owning more than fifteen percent (15%) of any class of outstanding voting or equity securities of the Company; (ii) any merger, consolidation, business combination, recapitalization, liquidation, dissolution or similar transaction involving the Company; or (iii) any sale, lease, exchange, transfer, license or other disposition of assets of the Company or any Company Subsidiary (including capital stock of any Company Subsidiary) representing fifteen percent (15%) or more of the consolidated assets, revenues or net income of the Company and the Company Subsidiaries, taken as a whole.'}`
+
+section refs: 8.13, ARTICLE VIII, 8.13, ARTICLE VIII, 8.13
+
+> s Section 3.16 Interim Period Section 5.1 Leased Real Property Section 3.18(b) Legal Restraint Section 6.1(c) Merger Consideration Section 1.2(a) Merger Subsidiary Preamble Merger Recitals Notice Period Section 5.3(e)(ii) Parent Employee Benefit Plan Section 5.13(c) Parent Preamble Permits Section 3.12(c) Preferred Stock Merger Consideration Section 1.2(d) Proxy Statement Section 5.4 SEC Section 3.5(a) Stockholders Meeting Section 5.5 Surviving Corporation Section 1.1(a) Termination Date Section 7.1(b) Transaction Litigation Section 5.11 Uncertificated Shares Section 1.3(a) Willful Breach Sect
+
+> g) as a result of the material breach of the Company's covenants and agreements set forth in Section 5.3, (B) any Person shall have publicly disclosed an offer or proposal for a Competing Acquisition Proposal after the date hereof and shall not have publicly withdrawn such offer or proposal for a Competing Acquisition Proposal prior to (1) in the case of this Agreement being subsequently terminated pursuant to Section 7.1(b), the date that is two (2) Business Days prior to the Termination Date or (2) in the case of this Agreement being subsequently terminated pursuant to Section 7.1(g), the ti
+
+> idation, share exchange, business combination, joint venture, recapitalization, reorganization or other similar transaction involving the Company and any Person; or (iii) any sale, lease, exchange, transfer or other disposition to any Person of more than fifteen percent (15%) of the consolidated assets, revenue or net income of the Company and the Company Subsidiaries (with assets being measured by the fair market value thereof); provided that, for the avoidance of doubt, all references to "Person" in this definition shall include any "group" as defined pursuant to Section 13(d) of the Exchang
+
+> ent that (A) this Agreement is terminated pursuant to Section 7.1(c), (B) following the execution of this Agreement and prior to the time at which a vote is taken on the adoption of this Agreement at the Stockholders Meeting (or an adjournment or postponement thereof) an offer or proposal for a Competing Acquisition Transaction is publicly announced or shall become publicly known and is not publicly withdrawn prior to the Stockholders Meeting and (C) within twelve (12) months following the termination of this Agreement pursuant to Section 7.1(c), the foregoing Competing Acquisition Transaction
+
+> vi) of this definition, to the extent such event, effect, occurrence, fact, circumstance, condition or change disproportionately affects the Company relative to other participants in the industries or geographies in which the Company operates or the economy generally, as applicable. "Company Option" means an option to purchase shares of Company Common Stock pursuant to a Stock Plan. "Company Plan" means any Company Employee Benefit Plan or Company Employee Agreement. ________________ "Company Product(s)" means any and all products that currently are in development, marketed, offered, sold, lic
+
+### Step 6: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means any bona fide written offer'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 8.13
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+> s Section 3.16 Interim Period Section 5.1 Leased Real Property Section 3.18(b) Legal Restraint Section 6.1(c) Merger Consideration Section 1.2(a) Merger Subsidiary Preamble Merger Recitals Notice Period Section 5.3(e)(ii) Parent Employee Benefit Plan Section 5.13(c) Parent Preamble Permits Section 3.12(c) Preferred Stock Merger Consideration Section 1.2(d) Proxy Statement Section 5.4 SEC Section 3.5(a) Stockholders Meeting Section 5.5 Surviving Corporation Section 1.1(a) Termination Date Section 7.1(b) Transaction Litigation Section 5.11 Uncertificated Shares Section 1.3(a) Willful Breach Sect
+
+### Step 7: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means"'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> lity Agreement (it being understood that such confidentiality agreement need not contain a standstill provision or otherwise prohibit the making, or amendment, of an Acquisition Proposal and that does not prohibit the Company from providing any information to Parent or otherwise prohibit the Company from complying with its obligations under this Section 5.3 (any confidentiality agreement satisfying the criteria of this clause (y) being an "Acceptable Confidentiality Agreement")) and (z) the Company promptly (and in any event within twenty-four (24) hours thereafter) makes available to Parent a
+
+### Step 8: `search_agreement`
+
+args: `{'query': '"Superior Proposal" means" "Acquisition Proposal"'}`
+
+section refs: 5.3, 5.3, 5.3, 5.3, 5.3
+
+> tutes a Superior Proposal or is reasonably likely to result in a Superior Proposal and (C) in the case referred to in clause (iii) above, the Company Board determines in good faith that such Acquisition Proposal is a Superior Proposal. 39 ________________ (c) Notice of Acquisition Proposals. The Company agrees that it will promptly (and, in any event, within twenty-four (24) hours) notify Parent (i) if any proposals or offers with respect to an Acquisition Proposal are received by the Company, (ii) if any information is requested from the Company in connection with an Acquisition Proposal and 
+
+> ment Date that did not result from a violation of Section 5.3 and the Company Board determines in good faith (after consultation with the Company's outside legal and financial advisors) based on the information then available that such Acquisition Proposal constitutes a Superior Proposal or (2) in response to a Company Intervening Event, in either case of (1) or (2), only if the Company Board determines in good faith that the failure to take such action would be inconsistent with the directors' fiduciary duties under applicable Law and (y) if the Company Board is permitted to make a Change of 
+
+> ve, adopt or recommend (publicly or otherwise) an Acquisition Proposal, (C) fail to include the Company Board Recommendation in the Proxy Statement, (D) fail to recommend, in a solicitation/recommendation statement on Schedule 14D-9, against any Acquisition Proposal that is a tender offer or exchange offer subject to Regulation 14D promulgated under the Exchange Act (other than any tender offer or exchange offer by Parent or Merger Subsidiary) within ten (10) Business Days after the commencement (within the meaning of Rule 14d-2 under the Exchange Act) of such tender offer or exchange offer or
+
+> eemed a Change of Recommendation); 40 ________________ (iii) the Company shall have, during the Notice Period negotiated with Parent and its Representatives in good faith (to the extent Parent desires to negotiate) to make such adjustments in the terms and conditions of this Agreement such that (A) the failure to take such action would no longer be inconsistent with the directors' fiduciary duties under applicable Law and (B) with respect to any such action to be taken in connection with an Acquisition Proposal, such Acquisition Proposal ceases to constitute a Superior Proposal; provided, howe
+
+> Section 5.3 Acquisition Proposals. (a) No Solicitation. From the Agreement Date until the earlier of the Effective Time and the termination of this Agreement in accordance with Article VII, and except as permitted by this Section 5.3, the Company shall not, and shall cause the Company Subsidiaries and its and their respective directors and officers not to, and shall direct other Representatives not to, directly or indirectly: (i) initiate, solicit or knowingly encourage or knowingly facilitate any inquiries or the making of any proposal or offer that constitutes, or would reasonably be expecte
+
+## Finding
+
+The system produced no finding for this case.
+
+## Gold span (supplied for the evidence-sufficiency dimension ONLY)
+
+No expert-annotated span is recorded for this case.
 
 
 **Score:** reasoning=__ evidence=__ trajectory=__ professional=__

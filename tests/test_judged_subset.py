@@ -87,8 +87,23 @@ def test_ranking_is_a_permutation_with_no_duplicates():
 
 
 def test_three_variants_recorded():
+    """M6 extension: the three M5 variant ids are still present, and there is
+    exactly one variant per completed (non-reused) model in
+    data/reports/pareto_manifest.json -- n_traces == n_cases * len(variants)
+    in every case (spec deliverable 3).
+    """
+    from dealpoint.config import PARETO_MANIFEST_PATH
+
     payload = json.loads(JUDGED_SUBSET_PATH.read_text(encoding="utf-8"))
     variants = payload["variants"]
-    assert len(variants) == 3
     variant_ids = {v["variant_id"] for v in variants}
-    assert variant_ids == {"A\u0040haiku", "D\u0040haiku", "D\u0040glm"}
+    assert {"A\u0040haiku", "D\u0040haiku", "D\u0040glm"} <= variant_ids
+
+    n_completed_pareto_models = 0
+    if PARETO_MANIFEST_PATH.exists():
+        manifest = json.loads(PARETO_MANIFEST_PATH.read_text(encoding="utf-8"))
+        n_completed_pareto_models = sum(
+            1 for e in manifest if not e.get("reused") and e.get("results_path")
+        )
+    assert len(variants) == 3 + n_completed_pareto_models
+    assert payload["n_traces"] == payload["n_cases"] * len(variants)

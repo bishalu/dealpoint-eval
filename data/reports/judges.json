@@ -33,28 +33,24 @@
   ],
   "correlation_with_grounded_accuracy": {
     "evidence": {
-      "caveat": "n < 30 (25); correlation is under-powered.",
-      "n": 25,
-      "pearson": 0.4811252243246882,
-      "spearman": 0.46522129178056904
+      "n": 48,
+      "pearson": 0.4968275423500662,
+      "spearman": 0.42040715868343176
     },
     "professional": {
-      "caveat": "n < 30 (25); correlation is under-powered.",
-      "n": 25,
-      "pearson": 0.3700064349504775,
-      "spearman": 0.3499711969715185
+      "n": 48,
+      "pearson": 0.378998976113394,
+      "spearman": 0.3563293874919645
     },
     "reasoning": {
-      "caveat": "n < 30 (25); correlation is under-powered.",
-      "n": 25,
-      "pearson": 0.35634832254989923,
-      "spearman": 0.3293661808456066
+      "n": 48,
+      "pearson": 0.31518222734965157,
+      "spearman": 0.2838445400671935
     },
     "trajectory": {
-      "caveat": "n < 30 (25); correlation is under-powered.",
-      "n": 25,
-      "pearson": -0.05947886892886085,
-      "spearman": -0.03025472797321851
+      "n": 48,
+      "pearson": 0.015921225599434503,
+      "spearman": -0.019874319670401073
     }
   },
   "decisions": [
@@ -82,18 +78,23 @@
       "decision": "Mean-of-judges is rounded to the nearest integer for kappa only, not for Spearman.",
       "id": "D5",
       "reason": "Weighted Cohen's kappa is defined on integer ratings; the mean of three judges is not one. Spearman rho uses the raw mean; kappa uses round() of it (Python's round-half-to-even)."
+    },
+    {
+      "decision": "M6 extended the judged subset from 3 variants (54 traces, 162 calls) to 3 + k variants, one per completed Pareto sweep model.",
+      "id": "D6",
+      "reason": "M6 spec deliverable 3 requires the M5 harness to judge arm D at every completed Pareto model on the same 18-case judged subset, so results are comparable to the three M5 variants. The 18-case universe, its ranking and its subset_hash are unchanged (fixed before any M6 run); only `variants` grows, in pareto_manifest.json order."
     }
   ],
-  "generated_at": "2026-09-05T16:46:45.291996+00:00",
-  "git_sha7": "e65f3e7",
+  "generated_at": "2026-09-05T20:47:32.212848+00:00",
+  "git_sha7": "3fcdae7",
   "human_calibration": "pending",
   "human_calibration_errors": [],
   "judged_subset": {
     "n_cases": 18,
-    "n_judge_calls": 162,
-    "n_traces": 54,
+    "n_judge_calls": 324,
+    "n_traces": 108,
     "path": "data/eval/judged_subset.json",
-    "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.",
+    "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.\n5. M6 (model cost/quality Pareto experiment) appended one variant per completed Pareto sweep model, read from data/reports/pareto_manifest.json in manifest order, variant_id = f'D@{short}' where short is the model id's last path segment. The 18-case list, its ranking and its subset_hash were fixed BEFORE any M6 run and are unchanged by this addendum; no case was chosen from any model's output.",
     "seed": 42,
     "subset_hash": "5918ef10a7e6",
     "variants": [
@@ -114,6 +115,24 @@
         "model": "z-ai/glm-5.3-flash",
         "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_D_D_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl",
         "variant_id": "D@glm"
+      },
+      {
+        "arm": "D",
+        "model": "deepseek/deepseek-v4-flash",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7.jsonl",
+        "variant_id": "D@deepseek-v4-flash"
+      },
+      {
+        "arm": "D",
+        "model": "qwen/qwen3.7-flash",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
+        "variant_id": "D@qwen3.7-flash"
+      },
+      {
+        "arm": "D",
+        "model": "google/gemini-3.1-flash-lite",
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7.jsonl",
+        "variant_id": "D@gemini-3.1-flash-lite"
       }
     ]
   },
@@ -123,7 +142,7 @@
       "family": "ByteDance",
       "model": "bytedance-seed/seed-2.0-mini",
       "n_failed": 0,
-      "n_scored": 54,
+      "n_scored": 108,
       "price_basis": "live",
       "prompt_usd_per_token": 1e-07,
       "substituted_for": null
@@ -133,7 +152,7 @@
       "family": "Mistral",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "n_failed": 0,
-      "n_scored": 54,
+      "n_scored": 108,
       "price_basis": "live",
       "prompt_usd_per_token": 7.5e-08,
       "substituted_for": null
@@ -143,130 +162,130 @@
       "family": "NVIDIA",
       "model": "nvidia/nemotron-3-super-120b-a12b",
       "n_failed": 0,
-      "n_scored": 54,
+      "n_scored": 108,
       "price_basis": "live",
       "prompt_usd_per_token": 8.5e-08,
       "substituted_for": null
     }
   ],
-  "n_judge_rows": 162,
+  "n_judge_rows": 324,
   "n_judge_rows_failed": 0,
-  "n_judge_rows_ok": 162,
+  "n_judge_rows_ok": 324,
   "pairwise_judge_agreement": {
     "evidence": [
       {
-        "exact_agreement": 0.5925925925925926,
+        "exact_agreement": 0.6574074074074074,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
-        "mean_abs_diff": 0.6296296296296297,
-        "n": 54,
-        "qwk": 0.7906976744186047,
-        "spearman": 0.8197810493475168
+        "mean_abs_diff": 0.49074074074074076,
+        "n": 108,
+        "qwk": 0.8513491414554375,
+        "spearman": 0.8895236211520042
       },
       {
-        "exact_agreement": 0.6296296296296297,
+        "exact_agreement": 0.6851851851851852,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.6666666666666666,
-        "n": 54,
-        "qwk": 0.7678132678132679,
-        "spearman": 0.8398467686071499
+        "mean_abs_diff": 0.4722222222222222,
+        "n": 108,
+        "qwk": 0.8556149732620321,
+        "spearman": 0.9065425638529646
       },
       {
-        "exact_agreement": 0.8518518518518519,
+        "exact_agreement": 0.8888888888888888,
         "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.2962962962962963,
-        "n": 54,
-        "qwk": 0.8875203767433436,
-        "spearman": 0.8893170632536234
+        "mean_abs_diff": 0.2037037037037037,
+        "n": 108,
+        "qwk": 0.9279254401104591,
+        "spearman": 0.9297970151857194
       }
     ],
     "professional": [
       {
-        "exact_agreement": 0.48148148148148145,
+        "exact_agreement": 0.5462962962962963,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
-        "mean_abs_diff": 0.5555555555555556,
-        "n": 54,
-        "qwk": 0.8837042354630295,
-        "spearman": 0.8027876511143648
+        "mean_abs_diff": 0.49074074074074076,
+        "n": 108,
+        "qwk": 0.8991263363605012,
+        "spearman": 0.8407489694006454
       },
       {
-        "exact_agreement": 0.5370370370370371,
+        "exact_agreement": 0.5648148148148148,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.6851851851851852,
-        "n": 54,
-        "qwk": 0.7423117709437963,
-        "spearman": 0.6564435491861086
+        "mean_abs_diff": 0.5833333333333334,
+        "n": 108,
+        "qwk": 0.816264552049941,
+        "spearman": 0.765207057512728
       },
       {
-        "exact_agreement": 0.7037037037037037,
+        "exact_agreement": 0.7685185185185185,
         "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.5,
-        "n": 54,
-        "qwk": 0.8263399693721286,
-        "spearman": 0.8298082332145268
+        "mean_abs_diff": 0.37037037037037035,
+        "n": 108,
+        "qwk": 0.88301329394387,
+        "spearman": 0.8738152837677502
       }
     ],
     "reasoning": [
       {
-        "exact_agreement": 0.5925925925925926,
+        "exact_agreement": 0.6388888888888888,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
-        "mean_abs_diff": 0.5,
-        "n": 54,
-        "qwk": 0.8878410239137757,
-        "spearman": 0.7962077367905136
+        "mean_abs_diff": 0.46296296296296297,
+        "n": 108,
+        "qwk": 0.8856956769518847,
+        "spearman": 0.8263062473723263
       },
       {
         "exact_agreement": 0.7222222222222222,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.5555555555555556,
-        "n": 54,
-        "qwk": 0.7588516746411483,
-        "spearman": 0.7000192382526974
+        "mean_abs_diff": 0.4537037037037037,
+        "n": 108,
+        "qwk": 0.8362109192720486,
+        "spearman": 0.7904985984912706
       },
       {
-        "exact_agreement": 0.7222222222222222,
+        "exact_agreement": 0.7592592592592593,
         "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.3888888888888889,
-        "n": 54,
-        "qwk": 0.901160966426106,
-        "spearman": 0.8889264715086157
+        "mean_abs_diff": 0.32407407407407407,
+        "n": 108,
+        "qwk": 0.925597474823388,
+        "spearman": 0.9004131739904901
       }
     ],
     "trajectory": [
       {
-        "exact_agreement": 0.3333333333333333,
+        "exact_agreement": 0.35185185185185186,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "mistralai/mistral-small-3.2-24b-instruct",
-        "mean_abs_diff": 0.6666666666666666,
-        "n": 54,
-        "qwk": 0.5216535433070866,
-        "spearman": 0.6246765176800336
+        "mean_abs_diff": 0.7037037037037037,
+        "n": 108,
+        "qwk": 0.5380577427821522,
+        "spearman": 0.6725696947839723
       },
       {
-        "exact_agreement": 0.5925925925925926,
+        "exact_agreement": 0.5648148148148148,
         "judge_a": "bytedance-seed/seed-2.0-mini",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.5185185185185185,
-        "n": 54,
-        "qwk": 0.6333333333333333,
-        "spearman": 0.6735137894187514
+        "mean_abs_diff": 0.5370370370370371,
+        "n": 108,
+        "qwk": 0.6673114119922631,
+        "spearman": 0.7011529593346507
       },
       {
-        "exact_agreement": 0.42592592592592593,
+        "exact_agreement": 0.39814814814814814,
         "judge_a": "mistralai/mistral-small-3.2-24b-instruct",
         "judge_b": "nvidia/nemotron-3-super-120b-a12b",
-        "mean_abs_diff": 0.6296296296296297,
-        "n": 54,
-        "qwk": 0.5833333333333333,
-        "spearman": 0.8371537183777864
+        "mean_abs_diff": 0.6481481481481481,
+        "n": 108,
+        "qwk": 0.6245763448335795,
+        "spearman": 0.8626316388799488
       }
     ]
   },
@@ -275,21 +294,29 @@
     "evidence": {
       "by_judge": {
         "bytedance-seed/seed-2.0-mini": {
-          "mean": 2.4444444444444446,
-          "n": 54
+          "mean": 2.3703703703703702,
+          "n": 108
         },
         "mistralai/mistral-small-3.2-24b-instruct": {
-          "mean": 2.740740740740741,
-          "n": 54
+          "mean": 2.6944444444444446,
+          "n": 108
         },
         "nvidia/nemotron-3-super-120b-a12b": {
-          "mean": 2.962962962962963,
-          "n": 54
+          "mean": 2.7685185185185186,
+          "n": 108
         }
       },
       "by_variant": {
         "A@haiku": {
           "mean": 2.9259259259259256,
+          "n": 18
+        },
+        "D@deepseek-v4-flash": {
+          "mean": 2.3703703703703707,
+          "n": 18
+        },
+        "D@gemini-3.1-flash-lite": {
+          "mean": 2.7222222222222223,
           "n": 18
         },
         "D@glm": {
@@ -299,29 +326,41 @@
         "D@haiku": {
           "mean": 2.6666666666666665,
           "n": 18
+        },
+        "D@qwen3.7-flash": {
+          "mean": 2.425925925925926,
+          "n": 18
         }
       },
-      "mean_of_judges": 2.716049382716049,
-      "n": 54
+      "mean_of_judges": 2.611111111111111,
+      "n": 108
     },
     "professional": {
       "by_judge": {
         "bytedance-seed/seed-2.0-mini": {
-          "mean": 2.888888888888889,
-          "n": 54
+          "mean": 2.7314814814814814,
+          "n": 108
         },
         "mistralai/mistral-small-3.2-24b-instruct": {
-          "mean": 3.2962962962962963,
-          "n": 54
+          "mean": 3.0925925925925926,
+          "n": 108
         },
         "nvidia/nemotron-3-super-120b-a12b": {
-          "mean": 2.9444444444444446,
-          "n": 54
+          "mean": 2.888888888888889,
+          "n": 108
         }
       },
       "by_variant": {
         "A@haiku": {
           "mean": 3.907407407407407,
+          "n": 18
+        },
+        "D@deepseek-v4-flash": {
+          "mean": 2.611111111111111,
+          "n": 18
+        },
+        "D@gemini-3.1-flash-lite": {
+          "mean": 3.2777777777777777,
           "n": 18
         },
         "D@glm": {
@@ -331,29 +370,41 @@
         "D@haiku": {
           "mean": 2.592592592592593,
           "n": 18
+        },
+        "D@qwen3.7-flash": {
+          "mean": 2.4074074074074074,
+          "n": 18
         }
       },
-      "mean_of_judges": 3.04320987654321,
-      "n": 54
+      "mean_of_judges": 2.9043209876543212,
+      "n": 108
     },
     "reasoning": {
       "by_judge": {
         "bytedance-seed/seed-2.0-mini": {
-          "mean": 3.0555555555555554,
-          "n": 54
+          "mean": 2.8055555555555554,
+          "n": 108
         },
         "mistralai/mistral-small-3.2-24b-instruct": {
-          "mean": 3.185185185185185,
-          "n": 54
+          "mean": 3.009259259259259,
+          "n": 108
         },
         "nvidia/nemotron-3-super-120b-a12b": {
-          "mean": 2.9444444444444446,
-          "n": 54
+          "mean": 2.888888888888889,
+          "n": 108
         }
       },
       "by_variant": {
         "A@haiku": {
           "mean": 3.814814814814815,
+          "n": 18
+        },
+        "D@deepseek-v4-flash": {
+          "mean": 2.5740740740740744,
+          "n": 18
+        },
+        "D@gemini-3.1-flash-lite": {
+          "mean": 3.2037037037037037,
           "n": 18
         },
         "D@glm": {
@@ -363,29 +414,41 @@
         "D@haiku": {
           "mean": 2.6666666666666665,
           "n": 18
+        },
+        "D@qwen3.7-flash": {
+          "mean": 2.4444444444444446,
+          "n": 18
         }
       },
-      "mean_of_judges": 3.0617283950617287,
-      "n": 54
+      "mean_of_judges": 2.9012345679012346,
+      "n": 108
     },
     "trajectory": {
       "by_judge": {
         "bytedance-seed/seed-2.0-mini": {
-          "mean": 3.3703703703703702,
-          "n": 54
+          "mean": 3.25,
+          "n": 108
         },
         "mistralai/mistral-small-3.2-24b-instruct": {
-          "mean": 3.5185185185185186,
-          "n": 54
+          "mean": 3.509259259259259,
+          "n": 108
         },
         "nvidia/nemotron-3-super-120b-a12b": {
-          "mean": 3.0,
-          "n": 54
+          "mean": 2.9537037037037037,
+          "n": 108
         }
       },
       "by_variant": {
         "A@haiku": {
           "mean": 3.6481481481481484,
+          "n": 18
+        },
+        "D@deepseek-v4-flash": {
+          "mean": 3.0555555555555554,
+          "n": 18
+        },
+        "D@gemini-3.1-flash-lite": {
+          "mean": 3.388888888888889,
           "n": 18
         },
         "D@glm": {
@@ -395,22 +458,28 @@
         "D@haiku": {
           "mean": 3.111111111111111,
           "n": 18
+        },
+        "D@qwen3.7-flash": {
+          "mean": 3.0925925925925926,
+          "n": 18
         }
       },
-      "mean_of_judges": 3.2962962962962963,
-      "n": 54
+      "mean_of_judges": 3.2376543209876547,
+      "n": 108
     }
   },
   "rubric_version": "cfda9f8cc401",
   "spend": {
     "absolute_usd": 1.2,
     "assumed_input_tokens_per_call": 8000,
-    "envelope_headroom_after_m5": 1.128715,
-    "envelope_realized_usd": 2.871285,
+    "envelope_headroom_after_m5": 0.38606,
+    "envelope_headroom_after_m6": 0.38606,
+    "envelope_realized_usd": 3.61394,
     "envelope_usd": 4.0,
     "est_basis": "tokens_per_call x live",
     "est_usd": 0.12852,
-    "measured_input_tokens_per_call": 4102.6,
+    "m6_realized_usd": 0.742655,
+    "measured_input_tokens_per_call": 4510.9,
     "realized_usd": 0.110038,
     "target_usd": 0.6
   },

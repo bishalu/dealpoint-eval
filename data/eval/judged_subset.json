@@ -41,8 +41,8 @@
     "contract_99__redacted_q06": 0
   },
   "n_cases": 18,
-  "n_judge_calls": 162,
-  "n_traces": 54,
+  "n_judge_calls": 324,
+  "n_traces": 108,
   "rank": {
     "contract_103__q10": 13,
     "contract_103__redacted_q08": 12,
@@ -63,7 +63,7 @@
     "contract_99__q11": 3,
     "contract_99__redacted_q06": 1
   },
-  "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.",
+  "rule": "1. Universe: the 18 case_ids of test_subset_v1.json tranche_1 -- the only tranche for which both M5 Haiku variants have completed traces on disk (data/reports/four_arm_manifest.json, git_sha7 e3ee9cc). tranche_1 is exactly 1 test case per question (12) + 4 redacted + 2 out_of_scope.\n2. All 18 are judged. Recorded factory-latitude decision (D1): the spec's 12-case one-per-question default cannot satisfy the same spec's floor that counterfactuals stay in; tranche_1 is the smallest set that satisfies both, and the 6 extra cases cost ~$0.05.\n3. Ordering (deterministic, seeded, fixed BEFORE any judge call, computed only from the frozen M4.1 v2 agent results -- never from any judge output): ascending by (disagreement_class, sha256(f'{SEED}:{case_id}')), where disagreement_class is 0 when arm A @ anthropic/claude-haiku-4.5 and arm D @ anthropic/claude-haiku-4.5 produced different answer strings -- a missing finding counting as the distinct value '<no finding>' -- and 1 otherwise. SEED = 42 from dealpoint.config. The ordering exists so that any later budget-forced trim takes a deterministic prefix; it does not exclude anything here.\n4. Variants judged: A @ anthropic/claude-haiku-4.5 and D @ anthropic/claude-haiku-4.5 (spec deliverable 4), plus D @ z-ai/glm-5.3-flash (spec, 'Judge trio': judge the default and GLM in M5). 18 cases x 3 variants = 54 traces; 54 x 3 judges = 162 calls.\n5. M6 (model cost/quality Pareto experiment) appended one variant per completed Pareto sweep model, read from data/reports/pareto_manifest.json in manifest order, variant_id = f'D@{short}' where short is the model id's last path segment. The 18-case list, its ranking and its subset_hash were fixed BEFORE any M6 run and are unchanged by this addendum; no case was chosen from any model's output.",
   "seed": 42,
   "source_subset": "test_subset_v1",
   "source_tranche": 1,
@@ -86,7 +86,25 @@
       "model": "z-ai/glm-5.3-flash",
       "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_D_D_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl",
       "variant_id": "D@glm"
+    },
+    {
+      "arm": "D",
+      "model": "deepseek/deepseek-v4-flash",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "arm": "D",
+      "model": "qwen/qwen3.7-flash",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "arm": "D",
+      "model": "google/gemini-3.1-flash-lite",
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7.jsonl",
+      "variant_id": "D@gemini-3.1-flash-lite"
     }
   ],
-  "version": "v1"
+  "version": "v2"
 }

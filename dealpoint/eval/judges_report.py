@@ -81,6 +81,20 @@ DECISIONS: tuple[dict, ...] = (
             "round-half-to-even)."
         ),
     },
+    {
+        "id": "D6",
+        "decision": (
+            "M6 extended the judged subset from 3 variants (54 traces, 162 calls) to "
+            "3 + k variants, one per completed Pareto sweep model."
+        ),
+        "reason": (
+            "M6 spec deliverable 3 requires the M5 harness to judge arm D at every completed "
+            "Pareto model on the same 18-case judged subset, so results are comparable to the "
+            "three M5 variants. The 18-case universe, its ranking and its subset_hash are "
+            "unchanged (fixed before any M6 run); only `variants` grows, in "
+            "pareto_manifest.json order."
+        ),
+    },
 )
 
 BRIEF_DIFFERENCES: tuple[dict, ...] = (

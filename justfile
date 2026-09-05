@@ -178,6 +178,24 @@ calibration:
 gate-m5:
     uv run pytest -m "gate_m5 and not needs_network and not needs_model" -q
 
+# ── dealpoint (M6 model cost/quality Pareto experiment) ─────────────────────
+
+# M6: verify the Pareto slate at run time (2 dev cases per candidate, METERED)
+pareto-slate *ARGS:
+    uv run python -m dealpoint.eval.pareto_slate "$@"
+
+# M6: verify the Pareto slate (probes), then sweep arm D per model (METERED)
+pareto-sweep *ARGS:
+    uv run python -m dealpoint.eval.pareto_sweep "$@"
+
+# M6: regenerate data/reports/pareto.json + pareto.md + pareto.svg + README block
+pareto-report:
+    uv run python -m dealpoint.eval.pareto_report
+
+# milestone 6 acceptance gates only, offline
+gate-m6:
+    uv run pytest -m "gate_m6 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

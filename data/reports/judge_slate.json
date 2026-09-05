@@ -7,7 +7,7 @@
       "ok": true,
       "prompt_usd_per_token": 7.5e-08,
       "smoke_input_tokens": 1350,
-      "smoke_output_tokens": 53
+      "smoke_output_tokens": 82
     },
     {
       "completion_usd_per_token": 4e-07,
@@ -25,10 +25,10 @@
       "ok": true,
       "prompt_usd_per_token": 1e-07,
       "smoke_input_tokens": 1403,
-      "smoke_output_tokens": 71
+      "smoke_output_tokens": 62
     }
   ],
   "price_basis": "live",
   "substitutions": [],
-  "verified_at": "2026-09-05T16:36:52.559425+00:00"
+  "verified_at": "2026-09-05T20:46:25.244679+00:00"
 }

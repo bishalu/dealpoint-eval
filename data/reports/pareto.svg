@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+<rect x="0" y="0" width="640" height="420" fill="white"/>
+<text x="320.00" y="20" font-size="14" text-anchor="middle">Model cost/quality Pareto (M6) -- x: $/case (log10), y: grounded_accuracy</text>
+<line x1="60" y1="360.00" x2="580.00" y2="360.00" stroke="black"/>
+<line x1="60" y1="60.00" x2="60" y2="360.00" stroke="black"/>
+<polyline points="60.00,169.09 160.26,152.31" fill="none" stroke="#1a7f37" stroke-width="1.5"/>
+<circle cx="580.0" cy="172.5" r="12.32" fill="white" stroke="#555555" stroke-width="1.5"/>
+<text x="594.32" y="175.50" font-size="9">claude-haiku-4.5</text>
+<circle cx="160.26" cy="152.31" r="12.08" fill="#1a7f37" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="174.34" y="155.31" font-size="9">deepseek-v4-flash</text>
+<circle cx="285.26" cy="170.53" r="9.2" fill="white" stroke="#555555" stroke-width="1.5"/>
+<text x="296.46" y="173.53" font-size="9">gemini-3.1-flash-lite</text>
+<circle cx="60.0" cy="169.09" r="10.35" fill="#1a7f37" stroke="#1a7f37" stroke-width="1.5"/>
+<text x="72.35" y="172.09" font-size="9">qwen3.7-flash</text>
+<circle cx="189.15" cy="165.88" r="18.0" fill="white" stroke="#555555" stroke-width="1.5"/>
+<text x="209.15" y="168.88" font-size="9">glm-5.3-flash</text>
+<text x="60" y="410" font-size="9">marker radius ~ median latency (min 4px, max 18px at 30604.0 ms)</text>
+</svg>

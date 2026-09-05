@@ -1,0 +1,60 @@
+[
+  {
+    "arm": "D",
+    "est_basis": "ledger:measured(arm,model)",
+    "est_usd": 0.071113,
+    "git_sha7": "3fcdae7",
+    "index_version": "e2b4a2b97561",
+    "leg": "pareto",
+    "milestone": "m6",
+    "model": "deepseek/deepseek-v4-flash",
+    "n_cases": 32,
+    "rank": 1,
+    "realized_usd": 0.072193,
+    "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7.jsonl",
+    "reused": false,
+    "summary_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7_summary.json"
+  },
+  {
+    "arm": "D",
+    "est_basis": "ledger:measured(arm,model)",
+    "est_usd": 0.0348,
+    "git_sha7": "3fcdae7",
+    "index_version": "e2b4a2b97561",
+    "leg": "pareto",
+    "milestone": "m6",
+    "model": "qwen/qwen3.7-flash",
+    "n_cases": 32,
+    "rank": 2,
+    "realized_usd": 0.03517,
+    "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
+    "reused": false,
+    "summary_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7_summary.json"
+  },
+  {
+    "arm": "D",
+    "est_basis": "ledger:measured(arm,model)",
+    "est_usd": 0.235727,
+    "git_sha7": "3fcdae7",
+    "index_version": "e2b4a2b97561",
+    "leg": "pareto",
+    "milestone": "m6",
+    "model": "google/gemini-3.1-flash-lite",
+    "n_cases": 32,
+    "rank": 3,
+    "realized_usd": 0.176955,
+    "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7.jsonl",
+    "reused": false,
+    "summary_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7_summary.json"
+  },
+  {
+    "arm": "D",
+    "est_basis": "ledger:measured(arm,model)",
+    "est_usd": 0.411693,
+    "judge_reserve_usd": 0.021274,
+    "leg": "pareto",
+    "model": "openai/gpt-5.6-luna-pro",
+    "reused": false,
+    "status": "stopped (stop-floor)"
+  }
+]

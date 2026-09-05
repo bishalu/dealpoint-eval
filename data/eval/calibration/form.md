@@ -139,21 +139,33 @@ Worked example:
 }
 ```
 
-## Suggested minimum set (12 packets, deterministic: first 4 by subset rank per variant)
+## Suggested minimum set (24 packets, deterministic: first 4 by subset rank per variant)
 
 Scoring more than these 12 is welcome and there is no upper bound imposed; this is only a deterministic starting point, not a cap.
 
 - `00ffcebe096a`
+- `01de6203baeb`
+- `0370079fdb90`
+- `0939c5133331`
 - `0f0ddb6b0896`
+- `20854b65189a`
 - `257db09a639b`
 - `308fa879e656`
 - `31aa8adabacf`
 - `32ed6171807c`
 - `32fc075d8413`
+- `398be705a6ca`
 - `40ea3e574ac0`
+- `57652b548046`
+- `5b65980d9ad6`
 - `790521a3adab`
+- `7e0d928a44af`
+- `9cdf994eba15`
 - `aff954956d71`
 - `b36644f0d8db`
+- `b5946568a23b`
+- `b8dca4c22077`
+- `e9a11bb3de12`
 - `ea3c64c7fa8d`
 
 ## Blinding limitations

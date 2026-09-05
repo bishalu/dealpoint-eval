@@ -1,0 +1,496 @@
+{
+  "brief_differences": [
+    {
+      "difference": "Brief section 2.6 designs the full benchmark over the complete test + counterfactual sets; this milestone runs the 32-case frozen subset (18 at Haiku), budget-scaled, per the engineer's 2026-09-04 instruction.",
+      "id": 1,
+      "topic": "scale"
+    },
+    {
+      "difference": "Brief section 6 acceptance 6 asks for the model experiment to be complete for >= 4 of the brief's 5 named models (Sonnet 5 default, Opus 5 ceiling, Haiku, a Gemini Flash-class model, one open-weight model). This run covers 3 of those 5 (Haiku, a Gemini Flash-class model, an open-weight model) -- Sonnet 5 and Opus 5 are both absent -- while completing 5 models overall by adding qwen/qwen3.7-flash and z-ai/glm-5.3-flash to the cheap tier.",
+      "id": 2,
+      "topic": "model_count"
+    },
+    {
+      "difference": "The reported Pareto frontier is a frontier of the cheap tier only: no ceiling model (Sonnet 5, Opus 5, or Grok 4.3) was measured this run, so a stronger, more expensive model could sit above every point on this frontier. The frontier and every dominance/tie judgement in this report are scoped to the models actually completed.",
+      "id": 3,
+      "topic": "ceiling"
+    }
+  ],
+  "budget_scaled": true,
+  "budget_scaled_note": "32-case frozen subset per model (18 at Haiku); not the brief's full-scale design.",
+  "caveats": [
+    "Judged quality is secondary and model-judged; it is never objective truth.",
+    "The reported frontier is a frontier of the cheap tier; no ceiling model was run.",
+    "Scores are not comparable to the MAUD leaderboard (this task is document -> (answer, citation); MAUD's published task is span -> answer)."
+  ],
+  "comparability": {
+    "haiku_n_cases": 18,
+    "note": "Haiku's arm-D result is 18 cases (tranche_1); every other model's is 32. Any Haiku-vs-other comparison is over the 18 cases they share and is never compared to a 32-case mean without saying so.",
+    "others_n_cases": 32
+  },
+  "decisions": [
+    {
+      "decision": "Haiku and z-ai/glm-5.3-flash are reused from M4/M4.1's frozen arm-D results, never re-run.",
+      "id": "PD1",
+      "reason": "Spec deliverable 1: reuse, do not re-run."
+    },
+    {
+      "decision": "The open-weight slot is deepseek/deepseek-v4-flash, not the spec's named deepseek/deepseek-v3.2.",
+      "id": "PD2",
+      "reason": "The engineer's 2026-09-04 'Slate and judges' instruction ranks deepseek/deepseek-v4-flash ahead of deepseek-v3.2 in the candidate slate, and it is cheaper per case: deepseek-v4-flash is $0.08358/M input, $0.16716/M output vs deepseek-v3.2's $0.269/M input, $0.400/M output (live prices, 2026-09-05) -- roughly 3x cheaper per token both ways."
+    },
+    {
+      "decision": "No ceiling anchor (anthropic/claude-sonnet-5, x-ai/grok-4.3) was run.",
+      "id": "PD3",
+      "reason": "Neither anchor fit the remaining envelope even on the reduced 18-case judged subset: claude-sonnet-5 is estimated at ~$0.869 for 18 cases and x-ai/grok-4.3 at ~$0.478 for 18 cases (2026-09-05 live prices), against a total M1-M6 envelope of $4.00 with a $3.90 stop-floor -- headroom the sweep and judging legs of the cheap tier had already largely consumed by the time either anchor would have started."
+    }
+  ],
+  "frontier": {
+    "models": [
+      "qwen/qwen3.7-flash",
+      "deepseek/deepseek-v4-flash"
+    ],
+    "rule": "Minimise realised $/case, maximise grounded_accuracy. A point is dominated iff another has x<=x' and y>=y' with at least one strict inequality. Exact ties on both axes keep the lexicographically-smallest model id.",
+    "x": "usd_per_case",
+    "y": "grounded_accuracy"
+  },
+  "generated_at": "2026-09-05T22:13:28.459396+00:00",
+  "git_sha7": "75e2d39",
+  "held_fixed": {
+    "arm": "D",
+    "index_version": "e2b4a2b97561",
+    "n_cases": 32,
+    "sentence": "Arm D is held fixed (frozen index, skill, tools, cases); only the model varies.",
+    "skill_version": "f8d255cc169b",
+    "subset": "test_subset_v1"
+  },
+  "models": {
+    "anthropic/claude-haiku-4.5": {
+      "abstain_recall": {
+        "mean": 0.0,
+        "n": 6
+      },
+      "answer_correct": {
+        "mean": 0.625,
+        "n": 8
+      },
+      "cap_hit": {
+        "mean": 0.5,
+        "n": 18
+      },
+      "citation_gold_overlap": {
+        "mean": 1.0,
+        "n": 8
+      },
+      "completion_usd_per_token": null,
+      "est_basis": "ledger:measured(arm,model)",
+      "est_usd": 0.673436,
+      "execution_failed": {
+        "mean": 0.05555555555555555,
+        "n": 18
+      },
+      "family": null,
+      "frontier": false,
+      "frontier_note": "dominated",
+      "grounded_accuracy": {
+        "mean": 0.625,
+        "n": 8
+      },
+      "judged_quality": {
+        "evidence": {
+          "mean": 2.6666666666666665,
+          "n": 54
+        },
+        "label": "model-judged, secondary, never objective truth",
+        "overall": {
+          "mean": 2.759259259259259,
+          "n": 216
+        },
+        "professional": {
+          "mean": 2.5925925925925926,
+          "n": 54
+        },
+        "reasoning": {
+          "mean": 2.6666666666666665,
+          "n": 54
+        },
+        "secondary": true,
+        "trajectory": {
+          "mean": 3.111111111111111,
+          "n": 54
+        },
+        "variant_id": "D@haiku"
+      },
+      "latency_median_ms": 18195.0,
+      "latency_p90_ms": 63379.0,
+      "n_cases": 18,
+      "price_basis": "reused (M4/M4.1)",
+      "prompt_usd_per_token": null,
+      "rank": 0,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
+      "reused": true,
+      "skill_adherence": {
+        "mean": 0.7148148148148148,
+        "n": 18
+      },
+      "total_usd": 0.824328,
+      "usd_per_case": 0.045795999999999996
+    },
+    "deepseek/deepseek-v4-flash": {
+      "abstain_recall": {
+        "mean": 0.0,
+        "n": 8
+      },
+      "answer_correct": {
+        "mean": 1.0,
+        "n": 13
+      },
+      "cap_hit": {
+        "mean": 0.5,
+        "n": 32
+      },
+      "citation_gold_overlap": {
+        "mean": 0.6428571428571429,
+        "n": 14
+      },
+      "completion_usd_per_token": 1.6772e-07,
+      "est_basis": "ledger:measured(arm,model)",
+      "est_usd": 0.071113,
+      "execution_failed": {
+        "mean": 0.0625,
+        "n": 32
+      },
+      "family": "DeepSeek",
+      "frontier": true,
+      "grounded_accuracy": {
+        "mean": 0.6923076923076923,
+        "n": 13
+      },
+      "judged_quality": {
+        "evidence": {
+          "mean": 2.3703703703703702,
+          "n": 54
+        },
+        "label": "model-judged, secondary, never objective truth",
+        "overall": {
+          "mean": 2.6527777777777777,
+          "n": 216
+        },
+        "professional": {
+          "mean": 2.611111111111111,
+          "n": 54
+        },
+        "reasoning": {
+          "mean": 2.574074074074074,
+          "n": 54
+        },
+        "secondary": true,
+        "trajectory": {
+          "mean": 3.0555555555555554,
+          "n": 54
+        },
+        "variant_id": "D@deepseek-v4-flash"
+      },
+      "latency_median_ms": 17671.0,
+      "latency_p90_ms": 24678.0,
+      "n_cases": 32,
+      "price_basis": "ledger:measured(arm,model)",
+      "prompt_usd_per_token": 8.386e-08,
+      "rank": 1,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_deepseek_deepseek-v4-flash_D_deepseek_deepseek-v4-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "reused": false,
+      "skill_adherence": {
+        "mean": 0.6686011904761905,
+        "n": 32
+      },
+      "total_usd": 0.072193,
+      "usd_per_case": 0.00225603685125
+    },
+    "google/gemini-3.1-flash-lite": {
+      "abstain_recall": {
+        "mean": 0.375,
+        "n": 8
+      },
+      "answer_correct": {
+        "mean": 0.75,
+        "n": 20
+      },
+      "cap_hit": {
+        "mean": 0.21875,
+        "n": 32
+      },
+      "citation_gold_overlap": {
+        "mean": 0.6666666666666666,
+        "n": 21
+      },
+      "completion_usd_per_token": 1.5e-06,
+      "est_basis": "ledger:measured(arm,model)",
+      "est_usd": 0.235727,
+      "execution_failed": {
+        "mean": 0.0,
+        "n": 32
+      },
+      "family": "Google",
+      "frontier": false,
+      "frontier_note": "dominated",
+      "grounded_accuracy": {
+        "mean": 0.631578947368421,
+        "n": 19
+      },
+      "judged_quality": {
+        "evidence": {
+          "mean": 2.7222222222222223,
+          "n": 54
+        },
+        "label": "model-judged, secondary, never objective truth",
+        "overall": {
+          "mean": 3.1481481481481484,
+          "n": 216
+        },
+        "professional": {
+          "mean": 3.2777777777777777,
+          "n": 54
+        },
+        "reasoning": {
+          "mean": 3.2037037037037037,
+          "n": 54
+        },
+        "secondary": true,
+        "trajectory": {
+          "mean": 3.388888888888889,
+          "n": 54
+        },
+        "variant_id": "D@gemini-3.1-flash-lite"
+      },
+      "latency_median_ms": 11361.0,
+      "latency_p90_ms": 18954.0,
+      "n_cases": 32,
+      "price_basis": "ledger:measured(arm,model)",
+      "prompt_usd_per_token": 2.5e-07,
+      "rank": 3,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_google_gemini-3.1-flash-lite_D_google_gemini-3.1-flash-lite_e2b4a2b97561_3fcdae7.jsonl",
+      "reused": false,
+      "skill_adherence": {
+        "mean": 0.6518601190476191,
+        "n": 32
+      },
+      "total_usd": 0.176955,
+      "usd_per_case": 0.00552984921875
+    },
+    "qwen/qwen3.7-flash": {
+      "abstain_recall": {
+        "mean": 0.0,
+        "n": 8
+      },
+      "answer_correct": {
+        "mean": 0.9090909090909091,
+        "n": 11
+      },
+      "cap_hit": {
+        "mean": 0.5,
+        "n": 32
+      },
+      "citation_gold_overlap": {
+        "mean": 0.6363636363636364,
+        "n": 11
+      },
+      "completion_usd_per_token": 1.3e-07,
+      "est_basis": "ledger:measured(arm,model)",
+      "est_usd": 0.0348,
+      "execution_failed": {
+        "mean": 0.15625,
+        "n": 32
+      },
+      "family": "Alibaba",
+      "frontier": true,
+      "grounded_accuracy": {
+        "mean": 0.6363636363636364,
+        "n": 11
+      },
+      "judged_quality": {
+        "evidence": {
+          "mean": 2.425925925925926,
+          "n": 54
+        },
+        "label": "model-judged, secondary, never objective truth",
+        "overall": {
+          "mean": 2.5925925925925926,
+          "n": 216
+        },
+        "professional": {
+          "mean": 2.4074074074074074,
+          "n": 54
+        },
+        "reasoning": {
+          "mean": 2.4444444444444446,
+          "n": 54
+        },
+        "secondary": true,
+        "trajectory": {
+          "mean": 3.0925925925925926,
+          "n": 54
+        },
+        "variant_id": "D@qwen3.7-flash"
+      },
+      "latency_median_ms": 13890.0,
+      "latency_p90_ms": 17228.0,
+      "n_cases": 32,
+      "price_basis": "ledger:measured(arm,model)",
+      "prompt_usd_per_token": 3e-08,
+      "rank": 2,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
+      "reused": false,
+      "skill_adherence": {
+        "mean": 0.5911458333333334,
+        "n": 32
+      },
+      "total_usd": 0.03517,
+      "usd_per_case": 0.0010990668125
+    },
+    "z-ai/glm-5.3-flash": {
+      "abstain_recall": {
+        "mean": 0.125,
+        "n": 8
+      },
+      "answer_correct": {
+        "mean": 0.65,
+        "n": 20
+      },
+      "cap_hit": {
+        "mean": 0.15625,
+        "n": 32
+      },
+      "citation_gold_overlap": {
+        "mean": 0.8333333333333334,
+        "n": 18
+      },
+      "completion_usd_per_token": null,
+      "est_basis": "ledger:measured(arm,model)",
+      "est_usd": 0.086601,
+      "execution_failed": {
+        "mean": 0.15625,
+        "n": 32
+      },
+      "family": null,
+      "frontier": false,
+      "frontier_note": "dominated",
+      "grounded_accuracy": {
+        "mean": 0.6470588235294118,
+        "n": 17
+      },
+      "judged_quality": {
+        "evidence": {
+          "mean": 2.5555555555555554,
+          "n": 54
+        },
+        "label": "model-judged, secondary, never objective truth",
+        "overall": {
+          "mean": 2.7546296296296298,
+          "n": 216
+        },
+        "professional": {
+          "mean": 2.6296296296296298,
+          "n": 54
+        },
+        "reasoning": {
+          "mean": 2.7037037037037037,
+          "n": 54
+        },
+        "secondary": true,
+        "trajectory": {
+          "mean": 3.1296296296296298,
+          "n": 54
+        },
+        "variant_id": "D@glm"
+      },
+      "latency_median_ms": 30604.0,
+      "latency_p90_ms": 54579.0,
+      "n_cases": 32,
+      "price_basis": "reused (M4/M4.1)",
+      "prompt_usd_per_token": null,
+      "rank": 0,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_D_D_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl",
+      "reused": true,
+      "skill_adherence": {
+        "mean": 0.6462797619047619,
+        "n": 32
+      },
+      "total_usd": 0.088812,
+      "usd_per_case": 0.002775360859375
+    }
+  },
+  "not_run": [
+    {
+      "model": "anthropic/claude-opus-5",
+      "reason": "not run (budget) -- spec deliverable 1 names Opus as out of budget for this milestone; at $5/M in, $25/M out it would cost more alone than this milestone's entire remaining envelope."
+    },
+    {
+      "model": "openai/gpt-5.6-luna-pro",
+      "reason": "started, not completed (stop-floor) -- see partial_runs"
+    },
+    {
+      "model": "meta-llama/llama-4-maverick",
+      "reason": "not run (budget/stop-floor)"
+    },
+    {
+      "model": "xiaomi/mimo-v2.5",
+      "reason": "not run (budget/stop-floor)"
+    },
+    {
+      "model": "minimax/minimax-m2.5",
+      "reason": "not run (budget/stop-floor)"
+    },
+    {
+      "model": "moonshotai/kimi-k2.5",
+      "reason": "not run (budget/stop-floor)"
+    },
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "reason": "not run (budget/stop-floor)"
+    },
+    {
+      "model": "x-ai/grok-4.3",
+      "reason": "not run (budget/stop-floor)"
+    }
+  ],
+  "partial_runs": [
+    {
+      "model": "google/gemini-3.1-flash-lite",
+      "n_cases_attempted": 14,
+      "n_cases_completed": 0,
+      "realized_usd": 0.062627,
+      "reason": "superseded by the completed 32-case pass"
+    },
+    {
+      "model": "openai/gpt-5.6-luna-pro",
+      "n_cases_attempted": 21,
+      "n_cases_completed": 0,
+      "realized_usd": 0.28339,
+      "reason": "stopped (stop-floor)"
+    }
+  ],
+  "slate": {
+    "excluded": [],
+    "path": "/home/exedev/repos/dealpoint-eval/data/reports/pareto_slate.json",
+    "probe_spend_usd": 0.033902
+  },
+  "spend": {
+    "by_milestone": {
+      "m1": 0.41912,
+      "m2": 0.170014,
+      "m4": 0.751879,
+      "m4_1": 1.420234,
+      "m5": 0.110038,
+      "m6": 0.742655
+    },
+    "envelope_headroom": 0.38606,
+    "envelope_usd": 4.0,
+    "m6_judge_usd": 0.077565,
+    "m6_probe_usd": 0.034754,
+    "m6_realized_usd": 0.742655,
+    "m6_sweep_usd": 0.630336,
+    "target_usd": 1.0,
+    "total_realized_usd": 3.61394
+  },
+  "version": "v1"
+}

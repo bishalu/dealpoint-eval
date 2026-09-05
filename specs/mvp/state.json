@@ -642,7 +642,7 @@
         "b8bc8170",
         "7e66a4cd"
       ],
-      "attempts": 1,
+      "attempts": 2,
       "blocker": "",
       "commits": [
         "0dc2f94"
@@ -755,7 +755,7 @@
         "planner": "pi-claude-code-provider/opus"
       },
       "started_at": "2026-09-05T17:37:08.201+00:00",
-      "status": "failed",
+      "status": "running",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -788,11 +788,11 @@
       "versions": {}
     }
   },
-  "next_action": "corrective cycle for m6 (stale spend projection); then m7a",
+  "next_action": "m6 running in session 7e66a4cd (attempt 2)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
-    "cap_usd": 4.0,
+    "cap_usd": 6.0,
     "estimates": [
       {
         "at": "2026-09-04T20:25:37.195+00:00",
@@ -865,9 +865,17 @@
         "milestone": "m6",
         "ok": false,
         "session": "7e66a4cd"
+      },
+      {
+        "at": "2026-09-05T18:33:22.527+00:00",
+        "calls": 384,
+        "est_usd": 3.59166,
+        "milestone": "m6",
+        "ok": true,
+        "session": "7e66a4cd"
       }
     ],
     "realized_usd": 2.8713
   },
-  "updated_at": "2026-09-05T18:22:53.128+00:00"
+  "updated_at": "2026-09-05T18:33:22.527+00:00"
 }

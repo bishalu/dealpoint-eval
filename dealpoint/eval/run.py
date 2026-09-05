@@ -202,6 +202,8 @@ def run_eval_set(
     fake: bool = False,
     out_dir: Path | None = None,
     milestone_tag: str = "m2",
+    extra_context: dict | None = None,
+    client: object | None = None,
 ) -> dict:
     """Run one arm x model over (a slice of) one case set. Returns the summary dict.
 
@@ -216,6 +218,19 @@ def run_eval_set(
     and `case_set` is used only as a label for the output filename -- each
     row's own `case_set` field (from its source JSONL) still drives scoring
     (spec deliverable 4/6).
+
+    `extra_context` (M6, spec deliverable 1 "Metered-call discipline"): merged
+    into every per-case `client.context` dict on top of the runner's own
+    `arm`/`case_id`/`case_set`/`git_sha7` keys -- e.g.
+    `{"purpose": "probe", "probe_model": "..."}` for a slate-verification
+    probe, so the ledger records it as a probe rather than a case run.
+    Default `None` keeps every existing call site byte-identical.
+
+    `client` (M6, `dealpoint.eval.pareto_slate.probe_candidate`): a pre-built
+    client (real or `FakeClient`) to use instead of constructing one
+    internally -- lets a caller drive this exact code path offline with a
+    scripted `FakeClient`. Default `None` preserves the existing
+    `_build_client(fake, milestone_tag)` behaviour byte-for-byte.
     """
     from dealpoint.agent.loop import run_agent
     from dealpoint.agent.pipeline import run_pipeline
@@ -239,7 +254,7 @@ def run_eval_set(
         assert_within_cap(est_usd)
         _assert_within_milestone_absolute(est_usd)
 
-    client = _build_client(fake, milestone_tag)
+    client = client if client is not None else _build_client(fake, milestone_tag)
     retriever = _build_retriever(fake, arm)
 
     index_version = "offline" if fake else compute_index_version()
@@ -261,12 +276,15 @@ def run_eval_set(
             # `git_sha7` rides along as the stable per-run discriminator that
             # lets dealpoint.eval.spend.per_case_usd group repeated
             # executions of the same case_id correctly (spec deliverable 6).
-            client.context = {  # type: ignore[attr-defined]
+            case_context = {
                 "arm": arm,
                 "case_id": case["case_id"],
                 "case_set": case_set,
                 "git_sha7": sha7,
             }
+            if extra_context:
+                case_context.update(extra_context)
+            client.context = case_context  # type: ignore[attr-defined]
 
         try:
             document_id = resolve_document_id(case)

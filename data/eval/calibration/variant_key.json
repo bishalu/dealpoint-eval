@@ -1,15 +1,69 @@
 {
+  "00dcf6ba3b86": {
+    "arm": "D",
+    "case_id": "contract_4__q12",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
   "00ffcebe096a": {
     "arm": "D",
     "case_id": "contract_39__redacted_q05",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "0179fcfde7d8": {
+    "arm": "D",
+    "case_id": "contract_75__oos09",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "019a97bf7129": {
+    "arm": "D",
+    "case_id": "contract_103__redacted_q08",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "01ac22924b80": {
+    "arm": "D",
+    "case_id": "contract_32__q04",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "01de6203baeb": {
+    "arm": "D",
+    "case_id": "contract_144__q05",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "0370079fdb90": {
+    "arm": "D",
+    "case_id": "contract_39__redacted_q05",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "071c4f13acd4": {
     "arm": "D",
     "case_id": "contract_75__redacted_q07",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
+  },
+  "0939c5133331": {
+    "arm": "D",
+    "case_id": "contract_39__redacted_q05",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "096c93b7fd78": {
+    "arm": "D",
+    "case_id": "contract_75__oos09",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "0bb71d7e4a73": {
+    "arm": "D",
+    "case_id": "contract_39__q01",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
   },
   "0bf940c02f6c": {
     "arm": "A",
@@ -29,6 +83,24 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
   },
+  "0f73effee9aa": {
+    "arm": "D",
+    "case_id": "contract_32__q06",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "20854b65189a": {
+    "arm": "D",
+    "case_id": "contract_39__redacted_q05",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "219d406fe171": {
+    "arm": "D",
+    "case_id": "contract_103__redacted_q08",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "22be30e3e55e": {
     "arm": "D",
     "case_id": "contract_103__redacted_q08",
@@ -41,17 +113,35 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "244901d12f76": {
+    "arm": "D",
+    "case_id": "contract_75__redacted_q07",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "257db09a639b": {
     "arm": "D",
     "case_id": "contract_144__q05",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "277ca05c77e2": {
+    "arm": "D",
+    "case_id": "contract_14__oos04",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "2c1307dce765": {
     "arm": "D",
     "case_id": "contract_144__q09",
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
+  },
+  "2c8bbf68f5ab": {
+    "arm": "D",
+    "case_id": "contract_32__q06",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
   },
   "308fa879e656": {
     "arm": "D",
@@ -95,17 +185,47 @@
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
   },
+  "395a5a84db01": {
+    "arm": "D",
+    "case_id": "contract_14__q02",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "398be705a6ca": {
+    "arm": "D",
+    "case_id": "contract_144__q05",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "3ad7312556b5": {
     "arm": "D",
     "case_id": "contract_7__q07",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "3b3241d33194": {
+    "arm": "D",
+    "case_id": "contract_103__q10",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "3c2f5a208002": {
+    "arm": "D",
+    "case_id": "contract_32__q03",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "3f1932caac19": {
     "arm": "A",
     "case_id": "contract_4__q12",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
+  },
+  "3f3999fe9738": {
+    "arm": "D",
+    "case_id": "contract_103__q10",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
   },
   "40ea3e574ac0": {
     "arm": "D",
@@ -119,6 +239,36 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
   },
+  "4677d6bffa6f": {
+    "arm": "D",
+    "case_id": "contract_32__q06",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "467a807c6d9f": {
+    "arm": "D",
+    "case_id": "contract_32__q03",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "4d3e9974918d": {
+    "arm": "D",
+    "case_id": "contract_39__q01",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "57652b548046": {
+    "arm": "D",
+    "case_id": "contract_99__redacted_q06",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "5b65980d9ad6": {
+    "arm": "D",
+    "case_id": "contract_144__q05",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
   "5ef28b4ac41d": {
     "arm": "A",
     "case_id": "contract_32__q08",
@@ -130,6 +280,12 @@
     "case_id": "contract_103__redacted_q08",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
+  },
+  "6c917de1e740": {
+    "arm": "D",
+    "case_id": "contract_32__q04",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
   },
   "704c050588ea": {
     "arm": "D",
@@ -161,11 +317,41 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "7e0d928a44af": {
+    "arm": "D",
+    "case_id": "contract_99__redacted_q06",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "7e9616bd0780": {
+    "arm": "D",
+    "case_id": "contract_32__q04",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "808a4e97cb87": {
     "arm": "D",
     "case_id": "contract_144__q09",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
+  },
+  "82cf6f17bd8b": {
+    "arm": "D",
+    "case_id": "contract_144__q09",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "877f36deab78": {
+    "arm": "D",
+    "case_id": "contract_4__q12",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "8ac2e203f4f3": {
+    "arm": "D",
+    "case_id": "contract_39__q01",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
   },
   "8db2df62e04d": {
     "arm": "D",
@@ -185,17 +371,59 @@
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
   },
+  "900b6a983149": {
+    "arm": "D",
+    "case_id": "contract_14__q02",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "9163c425ca88": {
+    "arm": "D",
+    "case_id": "contract_103__redacted_q08",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "9199abf474ca": {
+    "arm": "D",
+    "case_id": "contract_32__q03",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "9535fb643ead": {
     "arm": "D",
     "case_id": "contract_75__oos09",
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
   },
+  "95c75c5bc1d8": {
+    "arm": "D",
+    "case_id": "contract_103__q10",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "95c91f882ce7": {
     "arm": "A",
     "case_id": "contract_32__q06",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
+  },
+  "9ac16ad9b93e": {
+    "arm": "D",
+    "case_id": "contract_144__q09",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "9c61c248b3bb": {
+    "arm": "D",
+    "case_id": "contract_14__q02",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
+  "9cdf994eba15": {
+    "arm": "D",
+    "case_id": "contract_99__redacted_q06",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
   },
   "a3ca53bd2ef6": {
     "arm": "D",
@@ -215,6 +443,12 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "aff73090bd9b": {
+    "arm": "D",
+    "case_id": "contract_32__q08",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "aff954956d71": {
     "arm": "D",
     "case_id": "contract_99__redacted_q06",
@@ -233,11 +467,53 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
   },
+  "b5946568a23b": {
+    "arm": "D",
+    "case_id": "contract_99__q11",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "b82f23b94fe0": {
+    "arm": "D",
+    "case_id": "contract_14__oos04",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "b8dca4c22077": {
+    "arm": "D",
+    "case_id": "contract_99__q11",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "b93457685f21": {
+    "arm": "D",
+    "case_id": "contract_7__q07",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
   "bb7a04d97925": {
     "arm": "D",
     "case_id": "contract_32__q03",
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
+  },
+  "bcb8fd6634ee": {
+    "arm": "D",
+    "case_id": "contract_4__q12",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "bdad5a71be5b": {
+    "arm": "D",
+    "case_id": "contract_7__q07",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "bfe8e4f1b6b8": {
+    "arm": "D",
+    "case_id": "contract_75__redacted_q07",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
   },
   "c782bc3279b4": {
     "arm": "A",
@@ -281,17 +557,41 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "D@haiku"
   },
+  "dab5815482ae": {
+    "arm": "D",
+    "case_id": "contract_7__q07",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
+  },
   "db26af4231f1": {
     "arm": "D",
     "case_id": "contract_75__redacted_q07",
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
   },
+  "e09718eaec33": {
+    "arm": "D",
+    "case_id": "contract_32__q08",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
+  "e2cf18975d55": {
+    "arm": "D",
+    "case_id": "contract_14__oos04",
+    "model": "deepseek/deepseek-v4-flash",
+    "variant_id": "D@deepseek-v4-flash"
+  },
   "e6da07dca0c4": {
     "arm": "A",
     "case_id": "contract_14__q02",
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
+  },
+  "e9a11bb3de12": {
+    "arm": "D",
+    "case_id": "contract_99__q11",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
   },
   "ea3c64c7fa8d": {
     "arm": "D",
@@ -317,10 +617,34 @@
     "model": "anthropic/claude-haiku-4.5",
     "variant_id": "A@haiku"
   },
+  "f1d688c4a4a0": {
+    "arm": "D",
+    "case_id": "contract_32__q08",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "f5ca12b6f461": {
+    "arm": "D",
+    "case_id": "contract_144__q09",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
   "f7208523e7c0": {
     "arm": "D",
     "case_id": "contract_39__q01",
     "model": "z-ai/glm-5.3-flash",
     "variant_id": "D@glm"
+  },
+  "f731e2de1256": {
+    "arm": "D",
+    "case_id": "contract_75__oos09",
+    "model": "qwen/qwen3.7-flash",
+    "variant_id": "D@qwen3.7-flash"
+  },
+  "f7dd155277cb": {
+    "arm": "D",
+    "case_id": "contract_75__redacted_q07",
+    "model": "google/gemini-3.1-flash-lite",
+    "variant_id": "D@gemini-3.1-flash-lite"
   }
 }
