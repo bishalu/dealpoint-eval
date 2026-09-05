@@ -496,11 +496,14 @@
       ],
       "attempts": 2,
       "blocker": "",
-      "commits": [],
-      "ended_at": "2026-09-05T13:19:17.597+00:00",
+      "commits": [
+        "568c82c",
+        "5c2a141"
+      ],
+      "ended_at": "2026-09-05T17:37:05.541+00:00",
       "exclusions": [],
       "id": "m5",
-      "last_failure": "session 36aa6aa2 exited 1 before recording \u2014 see adws/adw_data/sessions/868df245/m5_run1.log",
+      "last_failure": "",
       "metrics": {
         "caching_probe": {
           "cost_per_call_usd_after": 0.003092,
@@ -519,6 +522,7 @@
         "case_counts": {
           "counterfactual": 40,
           "dev": 58,
+          "judge_scores": 162,
           "test": 167
         },
         "chunk_report": {
@@ -535,6 +539,20 @@
         },
         "four_arm_v1_execution_defects": {
           "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark."
+        },
+        "judge_slate": {
+          "price_basis": "live",
+          "verified_at": "2026-09-05T16:36:52.559425+00:00"
+        },
+        "judges": {
+          "generated_at": "2026-09-05T16:46:45.291996+00:00",
+          "git_sha7": "e65f3e7",
+          "human_calibration": "pending",
+          "n_judge_rows": 162,
+          "n_judge_rows_failed": 0,
+          "n_judge_rows_ok": 162,
+          "pending_human_input": "score data/eval/calibration/form.md",
+          "rubric_version": "cfda9f8cc401"
         },
         "m0_1_oos_collisions": {
           "collision_window": 400
@@ -580,12 +598,17 @@
           "n_chunks": 12312,
           "n_documents": 50,
           "parser_version": "29cc01eda19b",
+          "rubric_version": "cfda9f8cc401",
           "skill_version": "f8d255cc169b"
         }
       },
-      "models": {},
+      "models": {
+        "builder": "pi-claude-code-provider/sonnet",
+        "documenter": "pi-claude-code-provider/haiku",
+        "reviewer": "pi-claude-code-provider/opus"
+      },
       "started_at": "2026-09-05T03:04:47.365+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -596,11 +619,27 @@
         "n_chunks": "12312",
         "n_documents": "50",
         "parser_version": "29cc01eda19b",
+        "rubric_version": "cfda9f8cc401",
         "skill_version": "f8d255cc169b"
       }
+    },
+    "m6": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m6",
+      "last_failure": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "",
+      "status": "pending",
+      "versions": {}
     }
   },
-  "next_action": "m5 running in session 36aa6aa2 (attempt 2)",
+  "next_action": "run m6",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -673,5 +712,5 @@
     ],
     "realized_usd": 2.7612
   },
-  "updated_at": "2026-09-05T15:28:24.223+00:00"
+  "updated_at": "2026-09-05T17:37:05.541+00:00"
 }
