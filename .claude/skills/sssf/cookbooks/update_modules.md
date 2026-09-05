@@ -16,6 +16,7 @@ Extend `adws/adw_modules/` with new low-level logic.
 | `agent_pi.py` | the Pi interface (v1) — non-interactive `pi -p --mode json`, JSONL stream tailed live, model resolved against `~/.pi/agent/models.json`; `--session-id` creates-or-continues, so running and continuing an agent are the same call |
 | `agent_cc.py` | the Claude Code interface — stubbed in v1, lands in v2 |
 | `gates.py` | validation gates over envelope claims |
+| `triage.py` | failure triage: classify a dead agent phase as infrastructure (provider timeout/error, context overflow, permission breach, empty response) or product, from the raised error plus the agent's raw stream; returns a `Triage` with class, evidence and remedy — see `references/operations.md` |
 | `changes.py` | deterministic change capture: resolve the base ref, `git diff` into `context_handoff/changes.diff`, adapt the `ChangeSet` into an envelope an agent can be handed |
 | `prompts.py` | load system/user prompt refs from config, render placeholders |
 | `session.py` | mint or join `adw_id`, maintain `agent_map.json`, create session dirs incl. `context_handoff/` |

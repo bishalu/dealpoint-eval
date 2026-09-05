@@ -445,3 +445,22 @@ class PiResult(BaseModel):
     # visualizer's context bar measures against `context_window`.
     context_tokens: int = 0
     context_window: int = 0         # 0 when the registry declares no ceiling
+
+
+# ── Failure triage ───────────────────────────────────────────────────────────
+
+class Triage(BaseModel):
+    """Why a phase died, decided by code from the evidence — and what to do about it.
+
+    `infra` failures (provider timeout, provider error, context overflow, permission
+    breach, empty response) are retried with a fresh agent session and never spend
+    a corrective cycle; `product` failures are the work, and the fix loop is for them.
+    See references/operations.md.
+    """
+
+    cls: str                        # "product" | "infra:provider_timeout" | "infra:context_overflow" | ...
+    infra: bool
+    agent: str
+    evidence: str
+    remedy: str
+    error_counts: dict[str, int] = Field(default_factory=dict)

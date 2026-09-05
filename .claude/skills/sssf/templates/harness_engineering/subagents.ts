@@ -225,13 +225,20 @@ export default function (pi: ExtensionAPI) {
 		state.model = model;
 		state.thinking = thinking;
 
+		// The roster writes models as provider/id and the pi CLI takes them as two flags —
+		// `--model provider/id` alone fails resolution ("not found") for every subagent.
+		const slash = model.indexOf("/");
+		const modelArgs = slash > 0
+			? ["--provider", model.slice(0, slash), "--model", model.slice(slash + 1)]
+			: ["--model", model];
+
 		return new Promise<void>((resolve) => {
 			const proc = spawn("pi", [
 				"--mode", "json",
 				"-p",
 				"--session", state.sessionFile,   // persistent session for /subcont resumption
 				"--no-extensions",
-				"--model", model,
+				...modelArgs,
 				"--tools", "read,bash,grep,find,ls",
 				"--thinking", thinking,
 				prompt,

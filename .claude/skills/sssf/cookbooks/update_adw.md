@@ -85,6 +85,24 @@ Three distinctions worth keeping straight:
 - **Phase retries vs. fix loops.** `retries=N` on `PhaseParams` re-attempts one agent phase's gate corrections, re-sent into the same session with its context intact. (Code-phase re-execution is not implemented in v1.) A fix loop is a *chain* of phases repeated — different agents, new envelopes each pass.
 - **The test phase succeeds when it runs and reports correctly.** A failing suite does not fail that phase; it fails the run, checked at the end. The runner did its job; the code didn't.
 
+## Failure triage and session rotation
+
+`retries=N` and the fix loop both re-enter the **same** session — right for gate corrections and malformed JSON, wrong for an infrastructure failure: a provider that killed a turn after five minutes, a context window that overflowed, a permission breach. Resuming that context reproduces the failure and burns the correction budget meant for real defects.
+
+Classify before you retry. `triage.classify(run, agent, error_text)` reads the raised error and the agent's `raw_output.jsonl` (pi's `stopReason`/`errorMessage` per turn, since the phase started) and returns a `Triage`:
+
+```python
+    except (RuntimeError, agents.GateFailure) as error:
+        tri = triage.classify(run, run.phases[-1].params.owner, str(error))
+        if tri.infra:                       # not the work — retry fresh, don't count it
+            run.forget_agent(agent)         # next call starts a new context window
+            ...                             # relaunch, bounded by your own MAX_INFRA_RETRIES
+        else:                               # the work — the corrective cycle is for this
+            ...
+```
+
+`run.forget_agent(name)` drops the agent's `agent_map.json` entry; the next `ph.call` mints a fresh session. Put what the fresh session needs on disk (`context_handoff/plan.md`, an evidence file, the recorded failure) and name it in the prompt. Operational limits (timeouts, context budgets) are in `references/operations.md`.
+
 ## Keep scripts thin
 
 An ADW is sequencing and acceptance — nothing else. The moment you are writing parsing, subprocess handling, retry mechanics, or a reusable predicate inside `adw_*.py`, it belongs in `adw_modules/`. See `update_modules.md`.
