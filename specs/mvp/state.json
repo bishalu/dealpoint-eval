@@ -645,13 +645,15 @@
       "attempts": 2,
       "blocker": "",
       "commits": [
-        "0dc2f94"
+        "0dc2f94",
+        "9c724d1",
+        "975c592"
       ],
-      "ended_at": "2026-09-05T18:22:53.128+00:00",
+      "ended_at": "2026-09-05T22:31:16.109+00:00",
       "exclusions": [],
       "id": "m6",
       "infra_retries": 0,
-      "last_failure": "The previous attempt stopped at the factory's pre-build spend gate on a stale projection ($3.59 for 384 calls from M2's `pareto` sweep definition priced at Haiku's mean cost/call) against the old $4.00 cap. That gate is now advisory; the cap is $6.00 and M6's absolute is $2.00, enforced by the runner at sweep time. The plan in this session stands (context_handoff/plan.md). Proceed with the full M6 spec: verify the slate on 2 dev cases, update `budget pareto` to model the real slate at each model's live price and measured tokens, run the cheap tier first, Sonnet/Grok anchors last and only with headroom.",
+      "last_failure": "",
       "last_failure_class": "",
       "metrics": {
         "caching_probe": {
@@ -671,7 +673,7 @@
         "case_counts": {
           "counterfactual": 40,
           "dev": 58,
-          "judge_scores": 162,
+          "judge_scores": 324,
           "test": 167
         },
         "chunk_report": {
@@ -691,15 +693,15 @@
         },
         "judge_slate": {
           "price_basis": "live",
-          "verified_at": "2026-09-05T16:36:52.559425+00:00"
+          "verified_at": "2026-09-05T20:46:25.244679+00:00"
         },
         "judges": {
-          "generated_at": "2026-09-05T16:46:45.291996+00:00",
-          "git_sha7": "e65f3e7",
+          "generated_at": "2026-09-05T20:47:32.212848+00:00",
+          "git_sha7": "3fcdae7",
           "human_calibration": "pending",
-          "n_judge_rows": 162,
+          "n_judge_rows": 324,
           "n_judge_rows_failed": 0,
-          "n_judge_rows_ok": 162,
+          "n_judge_rows_ok": 324,
           "pending_human_input": "score data/eval/calibration/form.md",
           "rubric_version": "cfda9f8cc401"
         },
@@ -730,6 +732,19 @@
           "case_selection_rule": "For each probed (model, arm), take the first 2 case_ids, in frozen-subset order (data/eval/test_subset_v1.json's case_ids list), whose v1 result row for that (model, arm) has record.status == 'EXECUTION_FAILED'. Resolved in code from the v1 result JSONL named in data/reports/four_arm_manifest_v1.json (falling back to the live four_arm_manifest.json before v1 preservation), never hard-coded. This is a diagnostic selection on a FROZEN subset -- it selects nothing that is reported as a headline result, and the v2 sweep (dealpoint.eval.four_arm_sweep) runs the whole subset regardless of what the probes found.",
           "notes": "'before' numbers are read from the v1 result JSONLs, not re-spent: v1's ExecutionRecord carried no failure_detail/raw_final_text field (that is the defect this milestone's deliverable 1 fixes), so every 'before' failure_detail_classes entry is synthesized from the coarser failure_reason and is labelled as such. 'after' rounds run the same 2 case_ids for real through the repaired harness and read the new failure_detail/finish_reasons fields directly off the written result rows."
         },
+        "pareto": {
+          "budget_scaled_note": "32-case frozen subset per model (18 at Haiku); not the brief's full-scale design.",
+          "generated_at": "2026-09-05T22:13:28.459396+00:00",
+          "git_sha7": "75e2d39",
+          "version": "v1"
+        },
+        "pareto_slate": {
+          "git_sha7": "3fcdae7",
+          "price_basis": "live",
+          "probe_n_cases": 2,
+          "probe_spend_usd": 0.033902,
+          "verified_at": "2026-09-05T19:56:47.172737+00:00"
+        },
         "tournament": {
           "fetch_k": 20,
           "k": 10,
@@ -752,10 +767,13 @@
         }
       },
       "models": {
-        "planner": "pi-claude-code-provider/opus"
+        "builder": "pi-claude-code-provider/sonnet",
+        "documenter": "pi-claude-code-provider/haiku",
+        "planner": "pi-claude-code-provider/opus",
+        "reviewer": "pi-claude-code-provider/opus"
       },
       "started_at": "2026-09-05T17:37:08.201+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -788,7 +806,7 @@
       "versions": {}
     }
   },
-  "next_action": "m6 running in session 7e66a4cd (attempt 2)",
+  "next_action": "run m7a",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -877,5 +895,5 @@
     ],
     "realized_usd": 2.8713
   },
-  "updated_at": "2026-09-05T18:33:22.527+00:00"
+  "updated_at": "2026-09-05T22:31:16.109+00:00"
 }
