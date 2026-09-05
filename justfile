@@ -148,6 +148,14 @@ subset:
 sweep-m4 *ARGS:
     uv run python -m dealpoint.eval.four_arm_sweep "$@"
 
+# M4.1: 2-case diagnostic probes (arm D@Haiku, arm A/B@GLM) -- before (free) + after (metered)
+probe-m4-1 *ARGS:
+    uv run python -m dealpoint.eval.probe_m4_1 "$@"
+
+# M4.1: v2 four-arm re-run after the harness repair (preserves v1 artefacts first)
+sweep-m4-1 *ARGS:
+    uv run python -m dealpoint.eval.four_arm_sweep --v2 "$@"
+
 # regenerate data/reports/four_arm.json + four_arm.md + README Results section
 report:
     uv run python -m dealpoint.eval.report

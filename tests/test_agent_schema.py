@@ -97,4 +97,15 @@ def test_validate_finding_json_unparseable():
     finding, err = validate_finding_json("not json at all", q)
     assert finding is None
     assert err is not None
-    assert "invalid JSON" in err
+    # M4.1: tolerant extraction (extract_json_object) runs first, so text
+    # with no JSON object at all now fails at that stage, not json.loads.
+    assert "no JSON object found in response" in err
+
+
+def test_validate_finding_json_truncated_json_still_fails():
+    """M4.1 spec deliverable 2/3: truncated/unbalanced JSON must still fail --
+    tolerant extraction never repairs a missing closing brace."""
+    q = QUESTION_BY_ID["q01"]
+    finding, err = validate_finding_json('{"answer": "All Cash", "evidence": [', q)
+    assert finding is None
+    assert err is not None

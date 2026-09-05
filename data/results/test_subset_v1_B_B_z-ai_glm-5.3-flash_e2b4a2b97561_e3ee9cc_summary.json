@@ -1,0 +1,115 @@
+{
+  "arm": "B",
+  "chunk_version": "8e5e8ba56765",
+  "ended_at": "2026-09-05T05:50:38.785514+00:00",
+  "est_basis": "ledger:measured(arm,model)",
+  "est_usd": 0.13938,
+  "git_sha7": "e3ee9cc",
+  "index_version": "e2b4a2b97561",
+  "majority_baseline": {
+    "overall": 0.0,
+    "q01": 0.0,
+    "q02": 0.0,
+    "q03": 0.0,
+    "q04": 0.0,
+    "q05": 0.0,
+    "q06": 0.0,
+    "q07": 0.0,
+    "q08": 0.0,
+    "q09": 0.0,
+    "q10": 0.0,
+    "q11": 0.0,
+    "q12": 0.0
+  },
+  "model": "z-ai/glm-5.3-flash",
+  "n_cases": 32,
+  "realized_usd": 0.077744,
+  "scores": {
+    "abstain_correct": {
+      "mean": 0.75,
+      "n": 32
+    },
+    "abstain_recall": {
+      "mean": 0.0,
+      "n": 8
+    },
+    "answer_correct": {
+      "mean": 0.6111111111111112,
+      "n": 18
+    },
+    "cap_hit": {
+      "mean": 0.4375,
+      "n": 32
+    },
+    "citation_gold_overlap": {
+      "mean": 0.8235294117647058,
+      "n": 17
+    },
+    "citation_verbatim": {
+      "mean": 0.8888888888888888,
+      "n": 18
+    },
+    "execution_failed": {
+      "mean": 0.0,
+      "n": 32
+    },
+    "fabrication": {
+      "mean": 0.1111111111111111,
+      "n": 18
+    },
+    "false_abstain": {
+      "mean": 0.0,
+      "n": 24
+    },
+    "gold_first_rank": {
+      "mean": 1.4285714285714286,
+      "n": 14
+    },
+    "gold_seen": {
+      "mean": 1.0,
+      "n": 24
+    },
+    "grounded_accuracy": {
+      "mean": 0.5882352941176471,
+      "n": 17
+    },
+    "input_tokens": {
+      "mean": 18996.21875,
+      "n": 32
+    },
+    "output_tokens": {
+      "mean": 899.09375,
+      "n": 32
+    },
+    "redacted_fabrication": {
+      "mean": 0.0,
+      "n": 1
+    },
+    "required_evidence_met": {
+      "mean": 1.0,
+      "n": 14
+    },
+    "skill_adherence": {
+      "mean": 0.6442708333333333,
+      "n": 32
+    },
+    "tool_calls": {
+      "mean": 5.375,
+      "n": 32
+    },
+    "usd": {
+      "mean": 0.00242948859375,
+      "n": 32
+    },
+    "wall_ms": {
+      "mean": 27416.46875,
+      "n": 32
+    }
+  },
+  "set": "test_subset_v1_B",
+  "started_at": "2026-09-05T05:36:01.237585+00:00",
+  "status_counts": {
+    "ANSWERED": 18,
+    "CAP_HIT": 14
+  }
+}

@@ -64,6 +64,53 @@ def api_exceptions() -> tuple[type[Exception], ...]:
         return (ApiError,)
 
 
+# M4.1 (spec deliverable 3): `response_format` capability per model, pinned.
+# Both models this project currently sends metered traffic to are verified
+# (2026-09-04/05) to support OpenRouter's `json_schema` response_format;
+# the table exists so a future non-Anthropic/non-GLM provider can be pinned
+# to the `json_object` fallback without touching call sites. Unknown models
+# default to `True` (try the strict schema first) -- the 400-message
+# downgrade in the agent loops is the safety net for a provider that
+# silently disagrees with this table.
+SUPPORTS_JSON_SCHEMA: dict[str, bool] = {
+    "anthropic/claude-haiku-4.5": True,
+    "z-ai/glm-5.3-flash": True,
+}
+DEFAULT_SUPPORTS_JSON_SCHEMA = True
+
+# A 400 whose message mentions one of these is a `response_format`-shape
+# rejection, not a generic bad request -- worth exactly one downgrade retry
+# to `{"type": "json_object"}` (spec deliverable 3).
+RESPONSE_FORMAT_ERROR_MARKERS: tuple[str, ...] = (
+    "response_format",
+    "json_schema",
+    "structured output",
+    "structured_outputs",
+)
+
+
+def response_format_for(model: str, question) -> dict:
+    """`finding_json_schema(question)` when `model` is pinned (or defaulted)
+    to support it, else `{"type": "json_object"}` -- the `json_schema` payload
+    itself is byte-identical to before (spec deliverable 3).
+    """
+    from dealpoint.agent.schema import finding_json_schema
+
+    if SUPPORTS_JSON_SCHEMA.get(model, DEFAULT_SUPPORTS_JSON_SCHEMA):
+        return finding_json_schema(question)
+    return {"type": "json_object"}
+
+
+def is_response_format_error(exc: BaseException) -> bool:
+    """Whether `exc` looks like a provider rejecting the `response_format`
+    shape (a 400 naming it), rather than an unrelated bad request."""
+    status_code = getattr(exc, "status_code", None)
+    if status_code is not None and status_code != 400:
+        return False
+    message = str(exc).lower()
+    return any(marker in message for marker in RESPONSE_FORMAT_ERROR_MARKERS)
+
+
 @dataclass(frozen=True)
 class ToolCallRequest:
     id: str

@@ -42,6 +42,13 @@ data/index/
 !data/reports/four_arm_manifest.json
 !data/reports/caching_probe.json
 !data/reports/dev_smoke_m4.json
+
+# dealpoint (M4.1 execution-reliability repair)
+!data/reports/four_arm_v1_execution_defects.json
+!data/reports/four_arm_v1_execution_defects.md
+!data/reports/four_arm_manifest_v1.json
+!data/reports/m4_1_probes.json
+!data/reports/m4_1_estimate_before_v2.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/

@@ -134,23 +134,37 @@ def _build_retriever(fake: bool, arm: str) -> Retriever:
 
     Arms A/B use the plain dense/offline retriever (unchanged since M2).
     Arms C/D use the frozen arm-C retriever (`dealpoint.config.ARM_C_RETRIEVER`).
+
+    M4.1 runner fix: the plain-dense path (`LazyRetriever`) and the hybrid
+    arm-C path each used to construct their OWN `DenseRetriever`, i.e. their
+    own `QdrantClient(path=INDEX_DIR)`. Qdrant local mode allows exactly one
+    open client per path, so a process that runs arm B (dense) and then arm
+    C/D (hybrid) -- or the reverse -- in the same run raised `RuntimeError:
+    ... already accessed by another instance` on the second construction,
+    surfacing as an `EXECUTION_FAILED` on the very first call of every case
+    in that leg. One shared `DenseRetriever` instance, cached under a
+    `_dense_impl` key, backs both paths now.
     """
     if fake:
         return OfflineChunkRetriever()
+
+    dense_impl_key = "_dense_impl"
+    dense_impl = _RETRIEVER_CACHE.get(dense_impl_key)
+    if dense_impl is None:
+        from dealpoint.corpus.retrievers import DenseRetriever
+
+        dense_impl = DenseRetriever()
+        _RETRIEVER_CACHE[dense_impl_key] = dense_impl
+
     if arm in ("C", "D"):
         key = "arm_c"
         if key in _RETRIEVER_CACHE:
             return _RETRIEVER_CACHE[key]
         from dealpoint.config import ARM_C_RETRIEVER
-        from dealpoint.corpus.retrievers import (
-            BM25Retriever,
-            DenseRetriever,
-            RetrieverConfig,
-            build_retriever,
-        )
+        from dealpoint.corpus.retrievers import BM25Retriever, RetrieverConfig, build_retriever
 
         retriever = build_retriever(
-            RetrieverConfig(**ARM_C_RETRIEVER), dense=DenseRetriever(), sparse=BM25Retriever()
+            RetrieverConfig(**ARM_C_RETRIEVER), dense=dense_impl, sparse=BM25Retriever()
         )
         _RETRIEVER_CACHE[key] = retriever
         return retriever
@@ -158,11 +172,8 @@ def _build_retriever(fake: bool, arm: str) -> Retriever:
     key = "dense"
     if key in _RETRIEVER_CACHE:
         return _RETRIEVER_CACHE[key]
-    from dealpoint.corpus.retrievers import LazyRetriever
-
-    retriever = LazyRetriever()
-    _RETRIEVER_CACHE[key] = retriever
-    return retriever
+    _RETRIEVER_CACHE[key] = dense_impl
+    return dense_impl
 
 
 def _select_cases(case_set: list[dict], cases_arg: str | None, limit: int | None) -> list[dict]:
@@ -285,6 +296,8 @@ def run_eval_set(
                     skill_block=skill_blk,
                 )
         except Exception as exc:  # noqa: BLE001 - one bad case must not kill the sweep
+            from dealpoint.agent._common import describe_exception
+
             finding = None
             doc = None
             record = ExecutionRecord(
@@ -298,8 +311,8 @@ def run_eval_set(
                 case_id=case.get("case_id", ""),
                 index_version=index_version,
                 chunk_version=chunk_ver,
+                failure_detail=describe_exception(exc),
             )
-            _ = exc  # recorded via failure_reason; not re-raised
 
         scores = score_case(case, finding, record, doc)
         status_counts[record.status] = status_counts.get(record.status, 0) + 1

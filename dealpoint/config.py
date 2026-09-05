@@ -119,16 +119,34 @@ EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 QDRANT_COLLECTION = "dealpoint_chunks"
 RETRIEVER_DEFAULT_K = 5
 
-MAX_TOOL_CALLS = 8  # brief §1.3 hard cap -> CAP_HIT
+MAX_TOOL_CALLS = 8  # brief §1.3 hard cap -> CAP_HIT -- NEVER raised (M4.1 spec deliverable 3)
 MAX_TOOL_RESULT_CHARS = 1500  # per tool result, section_ref preserved
+# M4.1 request-shape repair (specs/milestones/m4_1.md deliverable 3): the v1
+# ledger showed every one of the 21 GLM arm-A schema failures dying at
+# output_tokens == 1200 == 2 x the old MAX_TOKENS_FINAL (600) -- raised
+# uniformly for every arm and model, never a per-arm value.
+# MAX_TOKENS_TOOL_TURN stays at 300: the M4.1 probes (data/reports/
+# m4_1_probes.json) did not show tool-turn truncation losing tool calls or
+# forcing a premature finalization at either probed model, so it is left
+# alone per the spec's explicit "if the probes do not show it hurting, leave
+# it at 300 and say so" instruction.
 MAX_TOKENS_TOOL_TURN = 300
-MAX_TOKENS_FINAL = 600
+MAX_TOKENS_FINAL = 1200
 MAX_DEFINITION_CHARS = 6000  # ceiling on a returned defined-term block
 LLM_TEMPERATURE = 0
 API_MAX_RETRIES = 3  # API errors -> 3 retries w/ backoff
 SCHEMA_MAX_RETRIES = 1  # schema-invalid -> exactly one retry
 RATIONALE_MAX_WORDS = 80
 EVIDENCE_MAX_ITEMS = 3
+
+# M4.1: evidence-capture truncation limits (spec deliverable 1).
+FAILURE_DETAIL_MAX_CHARS = 300
+RAW_FINAL_TEXT_MAX_CHARS = 1500
+
+# M4.1: real exponential backoff base (spec deliverable 3, request shape --
+# the old 0.05 * 2^n backoff was not a real backoff). Tests monkeypatch this
+# down via tests/conftest.py so the offline suite stays fast.
+API_RETRY_BASE_DELAY_S = 1.0
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 MILESTONE_TAG = "m1"
@@ -230,4 +248,16 @@ TEST_SUBSET_V1_PATH = EVAL_DIR / "test_subset_v1.json"
 FOUR_ARM_JSON_PATH = REPORTS_DIR / "four_arm.json"
 FOUR_ARM_MD_PATH = REPORTS_DIR / "four_arm.md"
 README_PATH = REPO_ROOT / "README.md"
+
+# --- Milestone 4.1: execution-reliability repair and four-arm v2 re-run ----
+M4_1_MILESTONE_TAG = "m4_1"
+M4_1_TARGET_USD = 1.00   # the M4.1 allocation guide -- reported, not gated
+M4_1_MAX_USD = 1.50      # absolute per-milestone limit -- enforced
+
+# v1 artefacts preserved before any v2 write (spec deliverable 4).
+FOUR_ARM_V1_JSON_PATH = REPORTS_DIR / "four_arm_v1_execution_defects.json"
+FOUR_ARM_V1_MD_PATH = REPORTS_DIR / "four_arm_v1_execution_defects.md"
+FOUR_ARM_MANIFEST_V1_PATH = REPORTS_DIR / "four_arm_manifest_v1.json"
+
+M4_1_PROBES_JSON_PATH = REPORTS_DIR / "m4_1_probes.json"
 

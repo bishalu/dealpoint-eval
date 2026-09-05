@@ -11,13 +11,17 @@ from __future__ import annotations
 
 import time
 
-from dealpoint.agent._common import build_record, call_with_retries
+from dealpoint.agent._common import (
+    build_record,
+    call_with_response_format_downgrade,
+    call_with_retries,
+    describe_exception,
+)
 from dealpoint.agent.prompts import question_spec_block, system_prompt
 from dealpoint.agent.schema import (
     ExecutionRecord,
     Finding,
     TrajectoryStep,
-    finding_json_schema,
     validate_finding_json,
 )
 from dealpoint.agent.tools import (
@@ -33,6 +37,7 @@ from dealpoint.config import (
     MAX_TOKENS_FINAL,
     MAX_TOKENS_TOOL_TURN,
     MAX_TOOL_CALLS,
+    RAW_FINAL_TEXT_MAX_CHARS,
     RETRIEVER_DEFAULT_K,
     SCHEMA_MAX_RETRIES,
 )
@@ -101,6 +106,7 @@ def run_agent(
     total_cost = 0.0
     total_cached = total_cache_write = 0
     tool_call_count = 0
+    finish_reasons: list[str] = []
     schemas = tool_schemas()
 
     def _record(result) -> None:
@@ -110,8 +116,15 @@ def run_agent(
         total_cost += result.cost_usd
         total_cached += result.cached_tokens
         total_cache_write += result.cache_write_tokens
+        finish_reasons.append(result.finish_reason)
 
-    def _fail(status: str, failure_reason: str | None) -> tuple[None, ExecutionRecord]:
+    def _fail(
+        status: str,
+        failure_reason: str | None,
+        *,
+        failure_detail: str | None = None,
+        raw_final_text: str | None = None,
+    ) -> tuple[None, ExecutionRecord]:
         record = build_record(
             status=status,  # type: ignore[arg-type]
             failure_reason=failure_reason,  # type: ignore[arg-type]
@@ -127,6 +140,9 @@ def run_agent(
             arm=arm,
             case_id=case_id,
             index_version=index_version,
+            failure_detail=failure_detail,
+            raw_final_text=raw_final_text[:RAW_FINAL_TEXT_MAX_CHARS] if raw_final_text else None,
+            finish_reasons=finish_reasons,
         )
         return None, record
 
@@ -142,8 +158,8 @@ def run_agent(
                 max_tokens=MAX_TOKENS_TOOL_TURN,
                 temperature=LLM_TEMPERATURE,
             )
-        except Exception:  # noqa: BLE001 - any client failure -> EXECUTION_FAILED
-            return _fail("EXECUTION_FAILED", "api_error")
+        except Exception as exc:  # noqa: BLE001 - any client failure -> EXECUTION_FAILED
+            return _fail("EXECUTION_FAILED", "api_error", failure_detail=describe_exception(exc))
 
         _record(result)
 
@@ -153,7 +169,10 @@ def run_agent(
         messages.append(
             {
                 "role": "assistant",
-                "content": result.content,
+                # M4.1 (spec deliverable 3, request shape): several providers
+                # reject a null `content` field on an assistant message that
+                # carries `tool_calls` -- send "" instead of None.
+                "content": result.content if result.content is not None else "",
                 "tool_calls": [
                     {
                         "id": tc.id,
@@ -192,7 +211,7 @@ def run_agent(
     # --- finalization: dedicated structured-answer call, schema retry ----
     finding: Finding | None = None
     err: str | None = None
-    schema = finding_json_schema(question)
+    last_raw_text: str | None = None
     final_messages = list(messages)
     for attempt in range(SCHEMA_MAX_RETRIES + 1):
         if attempt > 0:
@@ -206,25 +225,33 @@ def run_agent(
                 }
             ]
         try:
-            result = call_with_retries(
+            result, _downgraded, downgrade_detail = call_with_response_format_downgrade(
                 client,
                 API_MAX_RETRIES,
                 messages=final_messages,
                 model=model,
-                response_format=schema,
+                question=question,
                 max_tokens=MAX_TOKENS_FINAL,
                 temperature=LLM_TEMPERATURE,
             )
-        except Exception:  # noqa: BLE001 - any client failure -> EXECUTION_FAILED
-            return _fail("EXECUTION_FAILED", "api_error")
+        except Exception as exc:  # noqa: BLE001 - any client failure -> EXECUTION_FAILED
+            return _fail("EXECUTION_FAILED", "api_error", failure_detail=describe_exception(exc))
 
         _record(result)
+        last_raw_text = result.content
         finding, err = validate_finding_json(result.content, question)
         if finding is not None:
             break
+        if downgrade_detail:
+            err = f"{err} ({downgrade_detail})" if err else downgrade_detail
 
     if finding is None:
-        return _fail("EXECUTION_FAILED", "schema_invalid_after_retry")
+        return _fail(
+            "EXECUTION_FAILED",
+            "schema_invalid_after_retry",
+            failure_detail=err,
+            raw_final_text=last_raw_text,
+        )
 
     status = "ABSTAINED" if finding.answer == "ABSTAIN" else "ANSWERED"
     record = build_record(
@@ -242,6 +269,7 @@ def run_agent(
         arm=arm,
         case_id=case_id,
         index_version=index_version,
+        finish_reasons=finish_reasons,
     )
     return finding, record
 

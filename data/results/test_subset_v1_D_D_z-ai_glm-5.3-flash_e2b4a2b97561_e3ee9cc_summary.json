@@ -1,0 +1,117 @@
+{
+  "arm": "D",
+  "chunk_version": "8e5e8ba56765",
+  "ended_at": "2026-09-05T06:21:07.521382+00:00",
+  "est_basis": "ledger:measured(arm,model)",
+  "est_usd": 0.086601,
+  "git_sha7": "e3ee9cc",
+  "index_version": "e2b4a2b97561",
+  "majority_baseline": {
+    "overall": 0.0,
+    "q01": 0.0,
+    "q02": 0.0,
+    "q03": 0.0,
+    "q04": 0.0,
+    "q05": 0.0,
+    "q06": 0.0,
+    "q07": 0.0,
+    "q08": 0.0,
+    "q09": 0.0,
+    "q10": 0.0,
+    "q11": 0.0,
+    "q12": 0.0
+  },
+  "model": "z-ai/glm-5.3-flash",
+  "n_cases": 32,
+  "realized_usd": 0.088812,
+  "scores": {
+    "abstain_correct": {
+      "mean": 0.75,
+      "n": 32
+    },
+    "abstain_recall": {
+      "mean": 0.125,
+      "n": 8
+    },
+    "answer_correct": {
+      "mean": 0.65,
+      "n": 20
+    },
+    "cap_hit": {
+      "mean": 0.15625,
+      "n": 32
+    },
+    "citation_gold_overlap": {
+      "mean": 0.8333333333333334,
+      "n": 18
+    },
+    "citation_verbatim": {
+      "mean": 0.65,
+      "n": 20
+    },
+    "execution_failed": {
+      "mean": 0.15625,
+      "n": 32
+    },
+    "fabrication": {
+      "mean": 0.35,
+      "n": 20
+    },
+    "false_abstain": {
+      "mean": 0.041666666666666664,
+      "n": 24
+    },
+    "gold_first_rank": {
+      "mean": 1.736842105263158,
+      "n": 19
+    },
+    "gold_seen": {
+      "mean": 1.0,
+      "n": 24
+    },
+    "grounded_accuracy": {
+      "mean": 0.6470588235294118,
+      "n": 17
+    },
+    "input_tokens": {
+      "mean": 22521.375,
+      "n": 32
+    },
+    "output_tokens": {
+      "mean": 1401.4375,
+      "n": 32
+    },
+    "redacted_fabrication": {
+      "mean": 1.0,
+      "n": 3
+    },
+    "required_evidence_met": {
+      "mean": 1.0,
+      "n": 14
+    },
+    "skill_adherence": {
+      "mean": 0.6462797619047619,
+      "n": 32
+    },
+    "tool_calls": {
+      "mean": 4.8125,
+      "n": 32
+    },
+    "usd": {
+      "mean": 0.002775360859375,
+      "n": 32
+    },
+    "wall_ms": {
+      "mean": 33117.71875,
+      "n": 32
+    }
+  },
+  "set": "test_subset_v1_D",
+  "started_at": "2026-09-05T06:03:27.538753+00:00",
+  "status_counts": {
+    "ABSTAINED": 2,
+    "ANSWERED": 20,
+    "CAP_HIT": 5,
+    "EXECUTION_FAILED": 5
+  }
+}

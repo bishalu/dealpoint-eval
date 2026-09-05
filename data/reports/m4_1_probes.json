@@ -1,0 +1,189 @@
+{
+  "case_selection_rule": "For each probed (model, arm), take the first 2 case_ids, in frozen-subset order (data/eval/test_subset_v1.json's case_ids list), whose v1 result row for that (model, arm) has record.status == 'EXECUTION_FAILED'. Resolved in code from the v1 result JSONL named in data/reports/four_arm_manifest_v1.json (falling back to the live four_arm_manifest.json before v1 preservation), never hard-coded. This is a diagnostic selection on a FROZEN subset -- it selects nothing that is reported as a headline result, and the v2 sweep (dealpoint.eval.four_arm_sweep) runs the whole subset regardless of what the probes found.",
+  "notes": "'before' numbers are read from the v1 result JSONLs, not re-spent: v1's ExecutionRecord carried no failure_detail/raw_final_text field (that is the defect this milestone's deliverable 1 fixes), so every 'before' failure_detail_classes entry is synthesized from the coarser failure_reason and is labelled as such. 'after' rounds run the same 2 case_ids for real through the repaired harness and read the new failure_detail/finish_reasons fields directly off the written result rows.",
+  "rounds": [
+    {
+      "git_sha7": "e3ee9cc",
+      "legs": [
+        {
+          "arm": "D",
+          "case_ids": [
+            "contract_7__q07",
+            "contract_32__q08"
+          ],
+          "execution_failed": 2,
+          "failure_detail_classes": {
+            "failure_reason=api_error (failure_detail: null -- the defect this milestone fixes)": 1,
+            "failure_reason=schema_invalid_after_retry (failure_detail: null -- the defect this milestone fixes)": 1
+          },
+          "failure_rate": 1.0,
+          "finish_reasons": {},
+          "model": "anthropic/claude-haiku-4.5",
+          "n": 2,
+          "realized_usd": 0.0539
+        },
+        {
+          "arm": "A",
+          "case_ids": [
+            "contract_32__q06",
+            "contract_32__q08"
+          ],
+          "execution_failed": 2,
+          "failure_detail_classes": {
+            "failure_reason=schema_invalid_after_retry (failure_detail: null -- the defect this milestone fixes)": 2
+          },
+          "failure_rate": 1.0,
+          "finish_reasons": {},
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.0021
+        },
+        {
+          "arm": "B",
+          "case_ids": [
+            "contract_32__q08",
+            "contract_39__q01"
+          ],
+          "execution_failed": 2,
+          "failure_detail_classes": {
+            "failure_reason=schema_invalid_after_retry (failure_detail: null -- the defect this milestone fixes)": 2
+          },
+          "failure_rate": 1.0,
+          "finish_reasons": {},
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.006291
+        }
+      ],
+      "round": "before",
+      "ts": "2026-09-05T04:57:21.751092+00:00"
+    },
+    {
+      "git_sha7": "e3ee9cc",
+      "legs": [
+        {
+          "arm": "D",
+          "case_ids": [
+            "contract_7__q07",
+            "contract_32__q08"
+          ],
+          "execution_failed": 1,
+          "failure_detail_classes": {
+            "schema validation failed: 2 validation errors for Finding\nanswer\n  Field required [type=missing, input_value={'section_ref': 'Section ...ries, taken as a whole'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nrationale\n  Field required [type=missing, input_value={'section_ref': 'Section ...ries, taken as a whole'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing": 1
+          },
+          "failure_rate": 0.5,
+          "finish_reasons": {
+            "length": 1,
+            "stop": 2,
+            "tool_calls": 11
+          },
+          "model": "anthropic/claude-haiku-4.5",
+          "n": 2,
+          "realized_usd": 0.087089,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl"
+        },
+        {
+          "arm": "A",
+          "case_ids": [
+            "contract_32__q06",
+            "contract_32__q08"
+          ],
+          "execution_failed": 2,
+          "failure_detail_classes": {
+            "RuntimeError: Storage folder /home/exedev/repos/dealpoint-eval/data/index is already accessed by another instance of Qdrant client. If you require concurrent access, use Qdrant server instead.": 2
+          },
+          "failure_rate": 1.0,
+          "finish_reasons": {},
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.0,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_A_A_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl"
+        },
+        {
+          "arm": "B",
+          "case_ids": [
+            "contract_32__q08",
+            "contract_39__q01"
+          ],
+          "execution_failed": 0,
+          "failure_detail_classes": {},
+          "failure_rate": 0.0,
+          "finish_reasons": {
+            "tool_calls": 15
+          },
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.00096,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_B_B_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl"
+        }
+      ],
+      "round": "after",
+      "ts": "2026-09-05T05:02:55.926062+00:00"
+    },
+    {
+      "git_sha7": "e3ee9cc",
+      "legs": [
+        {
+          "arm": "D",
+          "case_ids": [
+            "contract_7__q07",
+            "contract_32__q08"
+          ],
+          "execution_failed": 1,
+          "failure_detail_classes": {
+            "schema validation failed: 2 validation errors for Finding\nanswer\n  Field required [type=missing, input_value={'section_ref': 'Section ...ries, taken as a whole'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nrationale\n  Field required [type=missing, input_value={'section_ref': 'Section ...ries, taken as a whole'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing": 1
+          },
+          "failure_rate": 0.5,
+          "finish_reasons": {
+            "length": 1,
+            "stop": 2,
+            "tool_calls": 11
+          },
+          "model": "anthropic/claude-haiku-4.5",
+          "n": 2,
+          "provider_attribution": "Residual failure is the model's own malformed JSON (unescaped double-quotes inside a string value, not a harness parsing defect -- extract_json_object correctly finds the balanced-brace span but json.loads still rejects the invalid escaping inside it): schema validation failed: 2 validation errors for Finding\nanswer\n  Field required [type=missing, input_value={'section_ref': 'Section ...ries, taken as a whole'}, input_type=dict]\n    For further info",
+          "realized_usd": 0.087089,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl"
+        },
+        {
+          "arm": "A",
+          "case_ids": [
+            "contract_32__q06",
+            "contract_32__q08"
+          ],
+          "execution_failed": 0,
+          "failure_detail_classes": {},
+          "failure_rate": 0.0,
+          "finish_reasons": {
+            "stop": 2
+          },
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.000793,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_A_A_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl"
+        },
+        {
+          "arm": "B",
+          "case_ids": [
+            "contract_32__q08",
+            "contract_39__q01"
+          ],
+          "execution_failed": 0,
+          "failure_detail_classes": {},
+          "failure_rate": 0.0,
+          "finish_reasons": {
+            "length": 2,
+            "stop": 2,
+            "tool_calls": 6
+          },
+          "model": "z-ai/glm-5.3-flash",
+          "n": 2,
+          "realized_usd": 0.003263,
+          "results_path": "/home/exedev/repos/dealpoint-eval/data/results/m4_1_probe_B_B_z-ai_glm-5.3-flash_e2b4a2b97561_e3ee9cc.jsonl"
+        }
+      ],
+      "round": "after2",
+      "ts": "2026-09-05T05:12:33.012543+00:00"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "arms": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "basis": "ledger:measured(arm,model)",
+  "calls": 656,
+  "cases": 164,
+  "est_usd": 0.907372,
+  "legs": [
+    {
+      "arms": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "models": [
+        "z-ai/glm-5.3-flash"
+      ],
+      "n_cases": 32
+    },
+    {
+      "arms": [
+        "A",
+        "D"
+      ],
+      "models": [
+        "anthropic/claude-haiku-4.5"
+      ],
+      "n_cases": 18
+    }
+  ],
+  "model": [
+    "z-ai/glm-5.3-flash",
+    "anthropic/claude-haiku-4.5"
+  ],
+  "per_call_usd": 0.001383,
+  "per_case_usd": 0.005533,
+  "sweep": "four_arm"
+}

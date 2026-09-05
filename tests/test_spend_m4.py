@@ -21,6 +21,20 @@ def _write_ledger(path, rows: list[dict]) -> None:
             fh.write("\n")
 
 
+def _real_usd(path) -> float:
+    """Sum of `usd` over `path`'s ledger rows -- a tiny local reimplementation
+    used only to stub `dealpoint.eval.spend.realized_usd` in the milestone-
+    guard tests below, isolated from the repo's real spend ledger."""
+    total = 0.0
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            total += float(json.loads(line).get("usd", 0.0) or 0.0)
+    return round(total, 6)
+
+
 def test_per_case_usd_falls_back_to_corpus_tokens_when_model_has_no_rows(tmp_path, monkeypatch):
     """A model never seen in the ledger (e.g. a brand-new workhorse model)
     must not silently estimate $0.00 -- it falls back to the corpus-wide
@@ -86,7 +100,14 @@ def test_milestone_guard_noop_when_env_vars_absent(monkeypatch):
 def test_milestone_guard_raises_when_projected_exceeds_absolute(monkeypatch, tmp_path):
     ledger = tmp_path / "ledger.jsonl"
     _write_ledger(ledger, [{"usd": 2.0, "milestone_tag": "m4"}])
+    # M4.1: `_assert_within_milestone_absolute` calls `dealpoint.eval.spend.realized_usd()`
+    # with no arguments, so its `path` default (bound to `LEDGER_PATH` at import time, not
+    # re-read from `dealpoint.config.SPEND_LEDGER_PATH` on each call) is what actually runs --
+    # monkeypatching the config attribute alone does not reach it. Patching
+    # `dealpoint.eval.spend.realized_usd` itself is what isolates this test from the repo's
+    # real spend ledger.
     monkeypatch.setattr("dealpoint.config.SPEND_LEDGER_PATH", ledger)
+    monkeypatch.setattr("dealpoint.eval.spend.realized_usd", lambda path=ledger: _real_usd(ledger))
     monkeypatch.setenv("DEALPOINT_MILESTONE_ABSOLUTE_USD", "3.00")
     monkeypatch.setenv("DEALPOINT_MILESTONE_SPEND_START_USD", "0.0000")
     with pytest.raises(MilestoneSpendCapError):
@@ -97,6 +118,7 @@ def test_milestone_guard_passes_when_projected_within_absolute(monkeypatch, tmp_
     ledger = tmp_path / "ledger.jsonl"
     _write_ledger(ledger, [{"usd": 0.5, "milestone_tag": "m4"}])
     monkeypatch.setattr("dealpoint.config.SPEND_LEDGER_PATH", ledger)
+    monkeypatch.setattr("dealpoint.eval.spend.realized_usd", lambda path=ledger: _real_usd(ledger))
     monkeypatch.setenv("DEALPOINT_MILESTONE_ABSOLUTE_USD", "3.00")
     monkeypatch.setenv("DEALPOINT_MILESTONE_SPEND_START_USD", "0.0000")
     _assert_within_milestone_absolute(1.0)  # 0.5 + 1.0 <= 3.00, must not raise
@@ -110,6 +132,7 @@ def test_milestone_guard_measures_new_spend_since_baseline_not_since_zero(monkey
     ledger = tmp_path / "ledger.jsonl"
     _write_ledger(ledger, [{"usd": 2.5, "milestone_tag": "m1"}, {"usd": 0.1, "milestone_tag": "m4"}])
     monkeypatch.setattr("dealpoint.config.SPEND_LEDGER_PATH", ledger)
+    monkeypatch.setattr("dealpoint.eval.spend.realized_usd", lambda path=ledger: _real_usd(ledger))
     monkeypatch.setenv("DEALPOINT_MILESTONE_ABSOLUTE_USD", "3.00")
     monkeypatch.setenv("DEALPOINT_MILESTONE_SPEND_START_USD", "2.5000")
     # realized (2.6) - start (2.5) = 0.1 new spend so far; + 1.0 est = 1.1 <= 3.00

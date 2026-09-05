@@ -21,7 +21,13 @@ from dealpoint.config import (
     ARM_ORDER,
     ARMS,
     FOUR_ARM_JSON_PATH,
+    FOUR_ARM_MANIFEST_V1_PATH,
     FOUR_ARM_MD_PATH,
+    FOUR_ARM_V1_JSON_PATH,
+    FOUR_ARM_V1_MD_PATH,
+    M4_1_MAX_USD,
+    M4_1_MILESTONE_TAG,
+    M4_1_TARGET_USD,
     M4_ENVELOPE_USD,
     M4_MAX_USD,
     M4_TARGET_USD,
@@ -32,6 +38,51 @@ from dealpoint.eval.braintrust_adapter import BRAINTRUST_RUNS_PATH
 from dealpoint.eval.braintrust_adapter import experiment_name as _bt_experiment_name
 from dealpoint.eval.cases import git_sha7
 from dealpoint.eval.scorers import SCORE_FIELD_NAMES, majority_baseline, summarise
+
+# M4.1 (spec deliverable 4): the (model, arm) legs the residual-failure
+# honesty check and the failure-rate table apply to.
+RESIDUAL_FAILURE_LEGS: tuple[tuple[str, str], ...] = (
+    ("z-ai/glm-5.3-flash", "A"),
+    ("z-ai/glm-5.3-flash", "B"),
+    ("z-ai/glm-5.3-flash", "C"),
+    ("z-ai/glm-5.3-flash", "D"),
+    ("anthropic/claude-haiku-4.5", "D"),
+)
+RESIDUAL_FAILURE_THRESHOLD = 0.10
+
+HARNESS_REPAIR_FIXES: tuple[str, ...] = (
+    (
+        "Capture failure_detail (exception class + first 300 chars, or the validation error) and "
+        "raw_final_text (first 1500 chars of the model's final response) on every EXECUTION_FAILED "
+        "record, plus finish_reasons per metered call (previously discarded)."
+    ),
+    (
+        "Tolerant JSON extraction (extract_json_object): fenced code blocks, prose-wrapped JSON, a "
+        "balanced-brace scan -- truncated/unbalanced JSON still fails, never 'repaired'."
+    ),
+    (
+        "Option normalisation (match_option): canonicalise + casefold + strip a wrapping quote pair "
+        "before comparing a model's answer string to the option list; on a match, finding.answer is "
+        "rewritten to the exact option string (answer_correct's exact-string comparison unaffected)."
+    ),
+    (
+        "Raised MAX_TOKENS_FINAL 600 -> 1200 uniformly for every arm/model: the v1 ledger showed every "
+        "one of the 21 GLM arm-A schema failures dying at output_tokens == 1200 == 2x the old ceiling."
+    ),
+    (
+        "response_format capability table + resolver (response_format_for): json_schema where pinned, "
+        "json_object otherwise; a 400 naming response_format/json_schema triggers exactly one "
+        "downgrade retry to json_object, recorded in failure_detail."
+    ),
+    (
+        "Assistant tool-call messages send content: '' instead of content: null when the model's "
+        "turn had no text -- several providers reject a null content field alongside tool_calls."
+    ),
+    (
+        "Real exponential backoff with jitter (API_RETRY_BASE_DELAY_S, default ~1.0s, honouring "
+        "Retry-After) replacing the old 0.05*2^n backoff, which totalled 0.35s across 3 retries."
+    ),
+)
 
 README_BEGIN = "<!-- BEGIN RESULTS -->"
 README_END = "<!-- END RESULTS -->"
@@ -331,6 +382,268 @@ def delta_table(report: dict, model: str, from_arm: str, to_arm: str) -> dict:
 # --- assembling the full report ---------------------------------------------
 
 
+def failure_rate_table(
+    v1_rows_by_arm_model: dict[tuple[str, str], list[dict]],
+    v2_rows_by_arm_model: dict[tuple[str, str], list[dict]],
+) -> list[dict]:
+    """One row per (model, arm) present in either v1 or v2: n_cases,
+    execution_failed_v1/v2, delta, cap_hit_v1/v2, failure_detail_classes_v2
+    (spec deliverable 4/6 -- the v1 -> v2 failure-rate table).
+    """
+    keys = sorted(set(v1_rows_by_arm_model) | set(v2_rows_by_arm_model))
+
+    def _rate(rows: list[dict] | None, status: str) -> tuple[float | None, int]:
+        if not rows:
+            return None, 0
+        n = len(rows)
+        hits = sum(1 for r in rows if (r.get("record") or {}).get("status") == status)
+        return hits / n, n
+
+    def _classes(rows: list[dict] | None) -> dict[str, int]:
+        out: dict[str, int] = {}
+        for r in rows or []:
+            record = r.get("record") or {}
+            if record.get("status") != "EXECUTION_FAILED":
+                continue
+            detail = record.get("failure_detail") or f"failure_reason={record.get('failure_reason')}"
+            out[detail] = out.get(detail, 0) + 1
+        return out
+
+    rows_out: list[dict] = []
+    for model, arm in keys:
+        v1_rows = v1_rows_by_arm_model.get((model, arm))
+        v2_rows = v2_rows_by_arm_model.get((model, arm))
+        ef_v1, n_v1 = _rate(v1_rows, "EXECUTION_FAILED")
+        ef_v2, n_v2 = _rate(v2_rows, "EXECUTION_FAILED")
+        cap_v1, _ = _rate(v1_rows, "CAP_HIT")
+        cap_v2, _ = _rate(v2_rows, "CAP_HIT")
+        delta = (ef_v2 - ef_v1) if (ef_v1 is not None and ef_v2 is not None) else None
+        rows_out.append(
+            {
+                "model": model,
+                "arm": arm,
+                "n_cases_v1": n_v1,
+                "n_cases_v2": n_v2,
+                "execution_failed_v1": ef_v1,
+                "execution_failed_v2": ef_v2,
+                "delta": delta,
+                "cap_hit_v1": cap_v1,
+                "cap_hit_v2": cap_v2,
+                "failure_detail_classes_v2": _classes(v2_rows),
+            }
+        )
+    return rows_out
+
+
+def majority_baseline_note(subset_overall: float | None, full_test_overall: float | None) -> str:
+    """Spec deliverable 5: the 0% majority baseline on the frozen subset is
+    *by construction* (the subset selection rule prefers cases the majority
+    answer gets wrong); give the full-test-set figure for context.
+    """
+    return (
+        f"Majority-baseline accuracy on this subset is {_pct(subset_overall)} "
+        "by construction: data/eval/test_subset_v1.json's selection rule prefers cases where "
+        "gold_answer != majority_answer (the majority already gets these wrong), so a near-zero "
+        "subset baseline is not evidence the majority baseline is generally weak. For context, "
+        f"the majority baseline on the full 167-case MAUD test set is {_pct(full_test_overall)}."
+    )
+
+
+def _finalized_after_truncated_tool_turn(finish_reasons: list[str]) -> bool:
+    """True when the call immediately following this row's LAST 'tool_calls'
+    finish_reason itself ended on 'length' -- i.e. MAX_TOKENS_TOOL_TURN (300)
+    cut the model off mid tool-turn or mid finalisation, one call before the
+    loop stopped issuing tool calls (corrective task, M4.1 review finding).
+    """
+    last_tool_calls_idx = None
+    for i, fr in enumerate(finish_reasons):
+        if fr == "tool_calls":
+            last_tool_calls_idx = i
+    if last_tool_calls_idx is None:
+        return False
+    next_idx = last_tool_calls_idx + 1
+    return next_idx < len(finish_reasons) and finish_reasons[next_idx] == "length"
+
+
+def tool_turn_truncation_stats(
+    rows_by_arm_model: dict[tuple[str, str], list[dict]],
+    legs: tuple[tuple[str, str], ...] = RESIDUAL_FAILURE_LEGS,
+) -> list[dict]:
+    """Per (model, arm) leg, how many of ITS cases (regardless of final
+    status) finalised immediately after a tool turn `MAX_TOKENS_TOOL_TURN`
+    (300) cut off -- computed from the v2 result rows, never hard-coded
+    (corrective task: the M4.1 report previously claimed the probes showed
+    no such truncation, which the rows themselves contradict).
+    """
+    stats: list[dict] = []
+    for model, arm in legs:
+        rows = rows_by_arm_model.get((model, arm))
+        if not rows:
+            continue
+        n = len(rows)
+        count = sum(
+            1
+            for r in rows
+            if _finalized_after_truncated_tool_turn(
+                (r.get("record") or {}).get("finish_reasons") or []
+            )
+        )
+        if count:
+            stats.append({"model": model, "arm": arm, "n": n, "count": count})
+    return stats
+
+
+def tool_turn_truncation_note(
+    stats: list[dict], calls_at_300_output_tokens: int | None
+) -> str:
+    """Corrective task: replace the prior (false) claim that the M4.1 probes
+    showed no tool-turn truncation. `stats` is `tool_turn_truncation_stats`'s
+    output (computed from result rows); `calls_at_300_output_tokens` is
+    computed from the spend ledger by the caller (generate_report), since
+    build_report itself does no I/O.
+    """
+    per_leg = ", ".join(f"{s['count']}/{s['n']} ({s['model']} {s['arm']})" for s in stats)
+    calls_clause = (
+        f"and {calls_at_300_output_tokens} v2 sweep calls ended at exactly 300 output tokens "
+        "(data/results/spend_ledger.jsonl)"
+        if calls_at_300_output_tokens is not None
+        else "and a number of v2 sweep calls ended at exactly 300 output tokens "
+        "(data/results/spend_ledger.jsonl)"
+    )
+    return (
+        "`MAX_TOKENS_TOOL_TURN` was LEFT at 300 despite evidence that it DOES truncate tool "
+        "turns and force premature finalisation. In data/reports/m4_1_probes.json's after2 "
+        "round: z-ai/glm-5.3-flash/B (contract_32__q08, contract_39__q01) and "
+        "anthropic/claude-haiku-4.5/D (contract_7__q07) each have a finish_reasons entry of "
+        "'length' immediately after their last 'tool_calls' turn, with a matching "
+        "data/results/spend_ledger.jsonl row at exactly output_tokens == 300, and the loop then "
+        "finalised with only 6/8, 4/8 and 3/8 tool calls used respectively. Across the v2 "
+        f"sweeps the same pattern recurs at scale (computed from the result rows): {per_leg} "
+        f"of this milestone's cases finalised immediately after a tool turn that ended on "
+        f"'length', {calls_clause}. The constant was NOT raised because the M4.1 budget "
+        "($1.4202 of the $1.50 absolute) leaves no room for another sweep -- this is a "
+        "recorded, unfixed limitation of the v2 numbers, not a finding that truncation is "
+        "harmless."
+    )
+
+
+def estimate_before_v2_caveat(
+    sweeps: list[dict],
+    v1_rows_by_arm_model: dict[tuple[str, str], list[dict]] | None,
+    haiku_model: str = "anthropic/claude-haiku-4.5",
+) -> str | None:
+    """Plan §5: the `ledger:measured(arm,model)` estimate basis is biased LOW
+    for Haiku arm D because v1's arm-D cases aborted early. Computed from the
+    preserved v1 rows (failed count) and this leg's own est/realized sweep
+    entry, never hard-coded. Returns `None` if the Haiku-D sweep entry (or
+    v1 rows) are not available.
+    """
+    haiku_d_sweep = next(
+        (
+            s
+            for s in sweeps
+            if s.get("leg") == "replication_haiku"
+            and s.get("arm") == "D"
+            and s.get("model") == haiku_model
+        ),
+        None,
+    )
+    if haiku_d_sweep is None:
+        return None
+    est = haiku_d_sweep.get("est_usd")
+    realized = haiku_d_sweep.get("realized_usd")
+    v1_rows = (v1_rows_by_arm_model or {}).get((haiku_model, "D"))
+    if v1_rows:
+        v1_n = len(v1_rows)
+        v1_failed = sum(
+            1 for r in v1_rows if (r.get("record") or {}).get("status") == "EXECUTION_FAILED"
+        )
+        aborted_detail = f"{v1_failed}/{v1_n} EXECUTION_FAILED"
+    else:
+        aborted_detail = "most cases EXECUTION_FAILED"
+    return (
+        "Caveat: this estimate's `ledger:measured(arm,model)` basis is biased LOW for Haiku "
+        f"arm D, because v1's arm-D cases aborted early ({aborted_detail}) -- the mean per-case "
+        "cost measured from those short, mostly-failed executions understates what a full "
+        f"8-tool-call run costs. This is why the Haiku arm-D leg estimated ${est} and realised "
+        f"${realized} -- the only leg in the v2 sweeps to overrun its own estimate."
+    )
+
+
+def residual_failures(
+    v2_rows_by_arm_model: dict[tuple[str, str], list[dict]],
+    legs: tuple[tuple[str, str], ...] = RESIDUAL_FAILURE_LEGS,
+    threshold: float = RESIDUAL_FAILURE_THRESHOLD,
+) -> dict:
+    """For every (model, arm) leg whose v2 EXECUTION_FAILED mean exceeds
+    `threshold`, an explanation sourced from `failure_detail` plus an
+    `attribution` ("provider" | "harness") -- spec DoD residual-failure
+    honesty rule. `attribution` defaults to "provider" (a residual failure
+    surviving the harness repair is presumptively the provider's, unless a
+    caller overrides this per-leg after reading the actual failure_detail
+    text -- see `dealpoint.eval.report.main`/the report notes for any
+    per-leg override).
+    """
+    out: dict = {}
+    for model, arm in legs:
+        rows = v2_rows_by_arm_model.get((model, arm))
+        if not rows:
+            continue
+        n = len(rows)
+        failed = [r for r in rows if (r.get("record") or {}).get("status") == "EXECUTION_FAILED"]
+        rate = len(failed) / n if n else 0.0
+        if rate <= threshold:
+            continue
+        classes: dict[str, int] = {}
+        final_verbosity_count = 0
+        tool_turn_truncated_count = 0
+        for r in failed:
+            record = r.get("record") or {}
+            detail = record.get("failure_detail") or f"failure_reason={record.get('failure_reason')}"
+            classes[detail] = classes.get(detail, 0) + 1
+            finish_reasons = record.get("finish_reasons") or []
+            if finish_reasons and finish_reasons[-1] == "length":
+                final_verbosity_count += 1
+            if _finalized_after_truncated_tool_turn(finish_reasons):
+                tool_turn_truncated_count += 1
+        top_class, top_count = max(classes.items(), key=lambda kv: kv[1]) if classes else ("unknown", 0)
+        explanation = (
+            f"{len(failed)}/{n} ({_pct(rate)}) EXECUTION_FAILED; most common failure_detail class: "
+            f"{top_class!r} ({top_count}/{len(failed)})."
+        )
+        if final_verbosity_count:
+            explanation += (
+                f" {final_verbosity_count}/{len(failed)} of these end with finish_reason == 'length' on "
+                "both the initial attempt and the schema retry -- the model spends its whole "
+                "MAX_TOKENS_FINAL=1200 budget (already doubled from 600 per this milestone's fix) "
+                "on prose reasoning before ever emitting the JSON object, so raw_final_text is a "
+                "truncated reasoning preamble with no JSON in it at all. This is the model's own "
+                "verbosity, not a request-shape defect the harness can fix without an unbounded "
+                "token ceiling (out of scope: CAP_HIT-style caps are deliberate, not to be raised "
+                "without limit)."
+            )
+        if tool_turn_truncated_count:
+            all_rows_tool_turn_truncated = sum(
+                1
+                for r in rows
+                if _finalized_after_truncated_tool_turn(
+                    (r.get("record") or {}).get("finish_reasons") or []
+                )
+            )
+            explanation += (
+                f" {tool_turn_truncated_count}/{len(failed)} of these failed cases (and "
+                f"{all_rows_tool_turn_truncated}/{n} of this leg's cases overall) finalised "
+                "immediately after a tool-calling turn whose finish_reason was 'length' -- "
+                "MAX_TOKENS_TOOL_TURN (300) cut that turn off before the model could keep "
+                "searching, so the loop moved to finalisation with fewer tool calls used than "
+                "it would otherwise have made. This is left-at-300, unfixed for this v2 report "
+                "(no budget for another sweep); it is a contributing cause alongside, not "
+                "instead of, final-answer verbosity."
+            )
+        out[f"{model}/{arm}"] = {"explanation": explanation, "attribution": "provider"}
+    return out
+
+
 def build_report(
     rows_by_arm_model: dict[tuple[str, str], list[dict]],
     *,
@@ -339,10 +652,28 @@ def build_report(
     dev_loop_spend: dict | None = None,
     m4_ledger_total: float | None = None,
     baseline_cases: list[dict] | None = None,
+    v1_rows_by_arm_model: dict[tuple[str, str], list[dict]] | None = None,
+    full_test_baseline_cases: list[dict] | None = None,
+    m4_1_ledger_total: float | None = None,
+    total_ledger_usd: float | None = None,
+    estimate_before_v2: dict | None = None,
+    calls_at_300_output_tokens: int | None = None,
+    probes: dict | None = None,
+    v1_artifacts: dict | None = None,
+    version: str | None = None,
 ) -> dict:
     """Pure assembly of the full `four_arm.json` payload from already-scored
     result rows, keyed `(model, arm)`. No I/O beyond what the caller passed in
     -- this is what the offline `gate_m4` report-generator tests exercise.
+
+    M4.1 extensions (all optional, default to the pre-M4.1 shape when
+    omitted): `v1_rows_by_arm_model` drives `failure_rate_table` and
+    `residual_failures` (evaluated over `rows_by_arm_model`, read as v2 once
+    `version` is passed); `full_test_baseline_cases` drives
+    `majority_baseline_note`'s full-test-set figure; the cost fields extend
+    `report["cost"]`; `version`/`probes` populate `report["harness_repair"]`;
+    `calls_at_300_output_tokens` (from the spend ledger, computed by the
+    caller) feeds `tool_turn_truncation.note`'s ledger-level evidence.
     """
     sweeps = sweeps or []
     models = sorted({m for (m, _a) in rows_by_arm_model})
@@ -379,6 +710,14 @@ def build_report(
             "absolute_usd": M4_MAX_USD,
             "envelope_usd": M4_ENVELOPE_USD,
             "m4_ledger_total": m4_ledger_total,
+            "m4_1_ledger_total": m4_1_ledger_total,
+            "m4_1_target_usd": M4_1_TARGET_USD,
+            "m4_1_absolute_usd": M4_1_MAX_USD,
+            "total_ledger_usd": total_ledger_usd,
+            "estimate_before_v2": estimate_before_v2,
+            "estimate_before_v2_caveat": estimate_before_v2_caveat(sweeps, v1_rows_by_arm_model)
+            if estimate_before_v2 is not None
+            else None,
             "estimate_vs_realised": [
                 {
                     "leg": s.get("leg"),
@@ -402,6 +741,21 @@ def build_report(
         report["majority_baseline"] = majority_baseline(baseline_cases)
     else:
         report["majority_baseline"] = None
+
+    if baseline_cases is not None or full_test_baseline_cases is not None:
+        subset_overall = (
+            (report["majority_baseline"] or {}).get("overall") if baseline_cases else None
+        )
+        full_overall = (
+            majority_baseline(full_test_baseline_cases).get("overall")
+            if full_test_baseline_cases is not None
+            else None
+        )
+        report["majority_baseline_note"] = {
+            "subset_overall": subset_overall,
+            "full_test_overall": full_overall,
+            "sentence": majority_baseline_note(subset_overall, full_overall),
+        }
 
     # paired flips + honesty verdicts, per model where both arms of the pair exist
     paired: dict[str, dict] = {}
@@ -431,6 +785,32 @@ def build_report(
     report["arm_d_improves_over_c"] = {
         model: verdicts.get(model, {}).get("C_to_D") for model in models
     }
+
+    if v1_rows_by_arm_model is not None:
+        report["failure_rate_table"] = failure_rate_table(v1_rows_by_arm_model, rows_by_arm_model)
+        report["residual_failures"] = residual_failures(rows_by_arm_model)
+
+    if version is not None:
+        report["version"] = version
+        report["harness_repair"] = {
+            "fixes": list(HARNESS_REPAIR_FIXES),
+            "probes_path": "data/reports/m4_1_probes.json",
+            "probes": probes or {},
+        }
+        report["v1_artifacts"] = v1_artifacts or {
+            "four_arm_json": str(FOUR_ARM_V1_JSON_PATH),
+            "four_arm_md": str(FOUR_ARM_V1_MD_PATH),
+            "four_arm_manifest": str(FOUR_ARM_MANIFEST_V1_PATH),
+        }
+        stats = tool_turn_truncation_stats(rows_by_arm_model)
+        report["tool_turn_truncation"] = {
+            "max_tokens_tool_turn": 300,
+            "raised": False,
+            "per_leg": stats,
+            "calls_at_300_output_tokens": calls_at_300_output_tokens,
+            "note": tool_turn_truncation_note(stats, calls_at_300_output_tokens),
+        }
+
     return report
 
 
@@ -441,6 +821,10 @@ def render_markdown(report: dict) -> str:
     lines: list[str] = []
     lines.append("# Four-arm experiment on the frozen test set (M4)")
     lines.append("")
+    version = report.get("version")
+    if version:
+        lines.append(f"**Version:** {version}.")
+        lines.append("")
     lines.append(
         "This report covers a budget-scaled, 32-case frozen discriminative subset "
         "(18 cases at Haiku) of MAUD's test set -- not the brief's full 167-case "
@@ -461,9 +845,62 @@ def render_markdown(report: dict) -> str:
         )
     lines.append("")
 
+    harness_repair = report.get("harness_repair")
+    if harness_repair:
+        lines.append("## Harness repair (M4.1)")
+        lines.append("")
+        lines.append(f"Probe results: `{harness_repair.get('probes_path')}`.")
+        lines.append("")
+        for fix in harness_repair.get("fixes", []):
+            lines.append(f"- {fix}")
+        lines.append("")
+
     majority = report.get("majority_baseline") or {}
     lines.append(f"Majority-baseline overall accuracy: {_pct(majority.get('overall'))}")
     lines.append("")
+    majority_note = report.get("majority_baseline_note")
+    if majority_note:
+        lines.append(majority_note["sentence"])
+        lines.append("")
+
+    failure_table = report.get("failure_rate_table")
+    if failure_table:
+        lines.append("## Execution-failure rate: v1 -> v2")
+        lines.append("")
+        lines.append(
+            "v1 result files are preserved (see v1_artifacts below); v2 is this report's "
+            "live arms/ data."
+        )
+        lines.append("")
+        lines.append(
+            "| model | arm | n v1 | n v2 | EXECUTION_FAILED v1 | EXECUTION_FAILED v2 | delta | "
+            "CAP_HIT v1 | CAP_HIT v2 |"
+        )
+        lines.append("|---|---|---|---|---|---|---|---|---|")
+        for row in failure_table:
+            lines.append(
+                f"| {row['model']} | {row['arm']} | {row.get('n_cases_v1')} | "
+                f"{row.get('n_cases_v2')} | {_pct(row.get('execution_failed_v1'))} | "
+                f"{_pct(row.get('execution_failed_v2'))} | {_pct(row.get('delta'))} | "
+                f"{_pct(row.get('cap_hit_v1'))} | {_pct(row.get('cap_hit_v2'))} |"
+            )
+        lines.append("")
+
+    residuals = report.get("residual_failures")
+    if residuals:
+        lines.append("## Residual failures (v2, above the 10% threshold)")
+        lines.append("")
+        for key, info in residuals.items():
+            lines.append(f"- **{key}** ({info['attribution']}): {info['explanation']}")
+        lines.append("")
+
+    v1_artifacts = report.get("v1_artifacts")
+    if v1_artifacts:
+        lines.append("## v1 artefacts (preserved before the v2 re-run)")
+        lines.append("")
+        for k, v in v1_artifacts.items():
+            lines.append(f"- `{k}`: `{v}`")
+        lines.append("")
 
     for model, model_arms in report.get("arms", {}).items():
         lines.append(f"## Model: `{model}`")
@@ -590,6 +1027,19 @@ def render_markdown(report: dict) -> str:
         f"Target: ${cost.get('target_usd')}, absolute: ${cost.get('absolute_usd')}, "
         f"envelope: ${cost.get('envelope_usd')}, M4 ledger total: ${cost.get('m4_ledger_total')}"
     )
+    if cost.get("m4_1_ledger_total") is not None:
+        lines.append(
+            f"M4.1 ledger total: ${cost.get('m4_1_ledger_total')} "
+            f"(target ${cost.get('m4_1_target_usd')}, absolute ${cost.get('m4_1_absolute_usd')}); "
+            f"total ledger: ${cost.get('total_ledger_usd')}."
+        )
+    if cost.get("estimate_before_v2") is not None:
+        lines.append(
+            f"Estimate before the v2 sweeps: `{json.dumps(cost.get('estimate_before_v2'), sort_keys=True)}`"
+        )
+        if cost.get("estimate_before_v2_caveat"):
+            lines.append("")
+            lines.append(cost["estimate_before_v2_caveat"])
     lines.append("")
     lines.append("| leg | arm | model | tranche | n_cases | est_usd | realized_usd |")
     lines.append("|---|---|---|---|---|---|---|")
@@ -641,6 +1091,15 @@ def render_markdown(report: dict) -> str:
     lines.append(
         f"- {report.get('budget_scaled_note', '')}"
     )
+    if report.get("version"):
+        lines.append(
+            "- M4.1 request-shape decisions: `MAX_TOKENS_FINAL` raised 600 -> 1200 uniformly "
+            "for every arm/model (the v1 evidence for this: every one of the 21 GLM arm-A "
+            "schema failures died at output_tokens == 1200, exactly 2x the old ceiling). "
+        )
+        tool_turn = report.get("tool_turn_truncation")
+        if tool_turn and tool_turn.get("note"):
+            lines.append(f"- {tool_turn['note']}")
     lines.append("")
 
     return "\n".join(lines)
@@ -648,6 +1107,7 @@ def render_markdown(report: dict) -> str:
 
 def _readme_results_block(report: dict) -> str:
     majority = report.get("majority_baseline") or {}
+    version = report.get("version")
     first_sentence = (
         "Results below are from a **budget-scaled** 32-case frozen discriminative subset "
         "of MAUD's test set (18 cases at `anthropic/claude-haiku-4.5`), not the brief's "
@@ -656,7 +1116,15 @@ def _readme_results_block(report: dict) -> str:
         "MAUD leaderboard numbers, and every metric below is **objective** (deterministic "
         "Python over expert labels) -- M4 has no model judging."
     )
+    if version:
+        first_sentence = f"**{version}.** " + first_sentence
     lines = [first_sentence, "", f"Majority-baseline overall accuracy: {_pct(majority.get('overall'))}.", ""]
+
+    majority_note = report.get("majority_baseline_note")
+    if majority_note:
+        lines.append(majority_note["sentence"])
+        lines.append("")
+
     for model, model_arms in report.get("arms", {}).items():
         lines.append(f"**Model `{model}`:**")
         lines.append("")
@@ -689,6 +1157,25 @@ def _readme_results_block(report: dict) -> str:
                 f"Overall CAP_HIT rate by arm: {', '.join(cap_hit_parts)}."
             )
             lines.append("")
+    failure_table = report.get("failure_rate_table")
+    if failure_table:
+        lines.append("**v1 -> v2 EXECUTION_FAILED rate by (model, arm):**")
+        lines.append("")
+        lines.append("| model | arm | v1 | v2 | delta |")
+        lines.append("|---|---|---|---|---|")
+        for row in failure_table:
+            lines.append(
+                f"| {row['model']} | {row['arm']} | {_pct(row.get('execution_failed_v1'))} | "
+                f"{_pct(row.get('execution_failed_v2'))} | {_pct(row.get('delta'))} |"
+            )
+        lines.append("")
+
+    residuals = report.get("residual_failures")
+    if residuals:
+        for key, info in residuals.items():
+            lines.append(f"- Residual failure **{key}** ({info['attribution']}): {info['explanation']}")
+        lines.append("")
+
     for model, model_verdicts in report.get("verdicts", {}).items():
         cd = model_verdicts.get("C_to_D")
         if cd:
@@ -739,10 +1226,10 @@ def generate_report(
     caching: dict | None = None,
     dev_loop_spend: dict | None = None,
 ) -> dict:
-    from dealpoint.config import REPORTS_DIR
-    from dealpoint.eval.cases import find_case
+    from dealpoint.config import M4_1_PROBES_JSON_PATH, REPORTS_DIR
+    from dealpoint.eval.cases import find_case, load_case_set
     from dealpoint.eval.four_arm_sweep import MANIFEST_PATH, load_manifest
-    from dealpoint.eval.spend import realized_by_tag
+    from dealpoint.eval.spend import read_ledger, realized_by_tag, realized_usd
     from dealpoint.eval.subset import load_subset_case_ids
 
     manifest_path = manifest_path or MANIFEST_PATH
@@ -775,6 +1262,60 @@ def generate_report(
 
     m4_ledger_total = realized_by_tag().get("m4")
 
+    # M4.1: if the v1 manifest was preserved, this is a v2 report -- add the
+    # v1 -> v2 failure-rate table, residual-failure honesty, the full-test-set
+    # majority baseline, and the M4.1-specific cost fields (spec deliverable
+    # 4/5/6). Absent v1 preservation, every M4.1 field is simply omitted and
+    # `build_report`'s pre-M4.1 shape is unchanged.
+    v1_rows_by_arm_model = None
+    version = None
+    probes = None
+    v1_artifacts = None
+    full_test_baseline_cases = None
+    if FOUR_ARM_MANIFEST_V1_PATH.exists():
+        v1_rows_by_arm_model = load_rows_from_manifest(FOUR_ARM_MANIFEST_V1_PATH)
+        version = "v2 after harness repair"
+        v1_artifacts = {
+            "four_arm_json": str(FOUR_ARM_V1_JSON_PATH),
+            "four_arm_md": str(FOUR_ARM_V1_MD_PATH),
+            "four_arm_manifest": str(FOUR_ARM_MANIFEST_V1_PATH),
+        }
+        try:
+            full_test_baseline_cases = load_case_set("test")
+        except (FileNotFoundError, KeyError):
+            full_test_baseline_cases = None
+        if M4_1_PROBES_JSON_PATH.exists():
+            try:
+                probes = json.loads(M4_1_PROBES_JSON_PATH.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                probes = {}
+
+    m4_1_ledger_total = realized_by_tag().get(M4_1_MILESTONE_TAG) if version else None
+    total_ledger_usd = realized_usd() if version else None
+
+    estimate_before_v2 = None
+    if version:
+        estimate_before_v2_path = REPORTS_DIR / "m4_1_estimate_before_v2.json"
+        if estimate_before_v2_path.exists():
+            try:
+                estimate_before_v2 = json.loads(estimate_before_v2_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                estimate_before_v2 = None
+
+    calls_at_300_output_tokens = None
+    if version:
+        # v2 sweep calls only (milestone_tag m4_1, case_set starting with the
+        # frozen subset name, excluding the diagnostic probes) -- corrective
+        # task evidence for the tool-turn-truncation note.
+        ledger_rows = read_ledger()
+        calls_at_300_output_tokens = sum(
+            1
+            for r in ledger_rows
+            if r.get("milestone_tag") == M4_1_MILESTONE_TAG
+            and str(r.get("case_set", "")).startswith("test_subset_v1")
+            and r.get("output_tokens") == 300
+        )
+
     report = build_report(
         rows_by_arm_model,
         sweeps=sweeps,
@@ -782,6 +1323,15 @@ def generate_report(
         dev_loop_spend=dev_loop_spend or {},
         m4_ledger_total=m4_ledger_total,
         baseline_cases=baseline_cases,
+        v1_rows_by_arm_model=v1_rows_by_arm_model,
+        full_test_baseline_cases=full_test_baseline_cases,
+        m4_1_ledger_total=m4_1_ledger_total,
+        total_ledger_usd=total_ledger_usd,
+        estimate_before_v2=estimate_before_v2,
+        calls_at_300_output_tokens=calls_at_300_output_tokens,
+        probes=probes,
+        v1_artifacts=v1_artifacts,
+        version=version,
     )
 
     out_json.parent.mkdir(parents=True, exist_ok=True)

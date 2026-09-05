@@ -66,3 +66,15 @@ def test_readme_results_block_matches_four_arm_json():
         cd = model_verdicts.get("C_to_D")
         if cd:
             assert cd["sentence"] in block
+
+    # M4.1: once the report has been re-run as v2, the README block carries
+    # the version line, the v1->v2 failure-rate figures per rendered
+    # (model, arm), and the majority-baseline-by-construction sentence.
+    if report.get("version") == "v2 after harness repair":
+        assert "v2 after harness repair" in block
+        for row in report.get("failure_rate_table", []):
+            assert _pct(row.get("execution_failed_v1")) in block
+            assert _pct(row.get("execution_failed_v2")) in block
+        note = report.get("majority_baseline_note") or {}
+        if note.get("sentence"):
+            assert note["sentence"] in block

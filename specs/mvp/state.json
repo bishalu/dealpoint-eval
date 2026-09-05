@@ -375,7 +375,9 @@
       ],
       "attempts": 1,
       "blocker": "",
-      "commits": [],
+      "commits": [
+        "e3ee9cc"
+      ],
       "ended_at": "",
       "exclusions": [],
       "id": "m4_1",
@@ -433,9 +435,17 @@
         "milestone": "m4",
         "ok": true,
         "session": "f0eb3bd2"
+      },
+      {
+        "at": "2026-09-05T03:38:00.802+00:00",
+        "calls": 656,
+        "est_usd": 0.734307,
+        "milestone": "m4_1",
+        "ok": true,
+        "session": "6dba4606"
       }
     ],
-    "realized_usd": 0.5454
+    "realized_usd": 1.2973
   },
-  "updated_at": "2026-09-05T03:09:21.782+00:00"
+  "updated_at": "2026-09-05T03:38:00.802+00:00"
 }
