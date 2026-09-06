@@ -7573,7 +7573,7 @@
       {
         "arm": "D",
         "est_usd": 0.086601,
-        "experiment_name": "D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+        "experiment_name": "judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
         "leg": "headline_glm",
         "model": "z-ai/glm-5.3-flash",
         "n_cases": 32,
@@ -7583,7 +7583,7 @@
       {
         "arm": "A",
         "est_usd": 0.060393,
-        "experiment_name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+        "experiment_name": "judged-A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
         "leg": "replication_haiku",
         "model": "anthropic/claude-haiku-4.5",
         "n_cases": 18,
@@ -7593,7 +7593,7 @@
       {
         "arm": "D",
         "est_usd": 0.673436,
-        "experiment_name": "D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+        "experiment_name": "judged-D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
         "leg": "replication_haiku",
         "model": "anthropic/claude-haiku-4.5",
         "n_cases": 18,
@@ -7606,7 +7606,7 @@
     "m4_1_target_usd": 1.0,
     "m4_ledger_total": 0.751879,
     "target_usd": 1.5,
-    "total_ledger_usd": 2.761247
+    "total_ledger_usd": 3.713288
   },
   "deltas": {
     "anthropic/claude-haiku-4.5": {
@@ -8475,7 +8475,7 @@
       "arm": "D",
       "est_basis": "ledger:measured(arm,model)",
       "est_usd": 0.086601,
-      "experiment_name": "D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "experiment_name": "judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
       "git_sha7": "e3ee9cc",
       "index_version": "e2b4a2b97561",
       "leg": "headline_glm",
@@ -8492,7 +8492,7 @@
       "arm": "A",
       "est_basis": "ledger:measured(arm,model)",
       "est_usd": 0.060393,
-      "experiment_name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+      "experiment_name": "judged-A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
       "git_sha7": "e3ee9cc",
       "index_version": "e2b4a2b97561",
       "leg": "replication_haiku",
@@ -8509,7 +8509,7 @@
       "arm": "D",
       "est_basis": "ledger:measured(arm,model)",
       "est_usd": 0.673436,
-      "experiment_name": "D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+      "experiment_name": "judged-D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
       "git_sha7": "e3ee9cc",
       "index_version": "e2b4a2b97561",
       "leg": "replication_haiku",
@@ -8625,11 +8625,12 @@
     "chunk_version": "8e5e8ba56765",
     "dataset_version": "81ed82cd7552",
     "embedding_model": "BAAI/bge-small-en-v1.5",
-    "git_sha7": "e3ee9cc",
+    "git_sha7": "b9eac78",
     "index_version": "e2b4a2b97561",
     "n_chunks": 12312,
     "n_documents": 50,
     "parser_version": "29cc01eda19b",
+    "rubric_version": "cfda9f8cc401",
     "skill_version": "f8d255cc169b"
   }
 }

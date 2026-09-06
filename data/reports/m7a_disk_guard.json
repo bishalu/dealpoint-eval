@@ -1,0 +1,38 @@
+{
+  "floor_bytes": 500000000,
+  "measured_at": "2026-09-05T00:00:00+00:00",
+  "groups": [
+    {
+      "group": "rag-lab",
+      "free_before_bytes": 1257095168,
+      "free_after_bytes": 1254531072,
+      "packages_added": [
+        "aiohappyeyeballs", "aiohttp", "aiosignal", "aiosqlite", "banks",
+        "cloudpickle", "colorama", "dataclasses-json", "defusedxml", "deprecated",
+        "dirtyjson", "filetype", "frozenlist", "greenlet", "griffe", "griffecli",
+        "griffelib", "jinja2", "joblib", "llama-index-core", "llama-index-instrumentation",
+        "llama-index-retrievers-bm25", "llama-index-workflows", "markupsafe",
+        "marshmallow", "multidict", "mypy-extensions", "nest-asyncio", "networkx",
+        "nltk", "platformdirs", "propcache", "pystemmer", "regex", "setuptools",
+        "sqlalchemy", "tenacity", "tiktoken", "tinytag", "typing-inspect", "yarl"
+      ],
+      "within_guard": true
+    },
+    {
+      "group": "deepeval",
+      "free_before_bytes": 1254473728,
+      "free_after_bytes": 1252827136,
+      "packages_added": [
+        "annotated-doc", "backoff", "click", "deepeval", "distro", "execnet",
+        "markdown-it-py", "mdurl", "opentelemetry-api", "opentelemetry-sdk",
+        "opentelemetry-semantic-conventions", "posthog", "prompt-toolkit",
+        "pydantic-settings", "pyfiglet", "pytest-asyncio", "pytest-repeat",
+        "pytest-rerunfailures", "pytest-xdist", "questionary", "rich",
+        "shellingham", "tabulate", "typer", "wcwidth", "wheel"
+      ],
+      "within_guard": true
+    }
+  ],
+  "within_guard": true,
+  "notes": "Re-measured with `uv pip install --dry-run` before touching the live environment, per the milestone spec (specs/milestones/m7a.md, \"Budget and disk\"). Both groups installed within the 500 MB floor with substantial headroom (final free: ~1.25 GB). `.venv` grew from 340 MB to 451 MB. Neither group pulled torch/transformers/nvidia wheels. The visualizer node_modules (146 MB) was left untouched."
+}

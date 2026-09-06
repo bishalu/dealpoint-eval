@@ -794,7 +794,9 @@
       ],
       "attempts": 1,
       "blocker": "",
-      "commits": [],
+      "commits": [
+        "b9eac78"
+      ],
       "ended_at": "",
       "exclusions": [],
       "id": "m7a",
@@ -893,9 +895,17 @@
         "milestone": "m6",
         "ok": true,
         "session": "7e66a4cd"
+      },
+      {
+        "at": "2026-09-05T22:46:23.560+00:00",
+        "calls": 0,
+        "est_usd": 0.0,
+        "milestone": "m7a",
+        "ok": true,
+        "session": "488479df"
       }
     ],
-    "realized_usd": 2.8713
+    "realized_usd": 3.6139
   },
-  "updated_at": "2026-09-05T22:31:20.706+00:00"
+  "updated_at": "2026-09-05T22:46:23.560+00:00"
 }

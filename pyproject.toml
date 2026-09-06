@@ -14,6 +14,11 @@ dependencies = [
 agent = ["openai", "braintrust"]
 retrieval = ["qdrant-client[fastembed]", "bm25s"]
 api = ["fastapi", "uvicorn"]
+# M7a: LlamaIndex RAG lab (retriever composition, native RAG evaluation,
+# synthetic-query generation) -- optional, disk-guarded (specs/milestones/m7a.md).
+rag-lab = ["llama-index-core", "llama-index-retrievers-bm25"]
+# M7a: DeepEval independent agent-evaluation cross-check -- optional, disk-guarded.
+deepeval = ["deepeval"]
 
 [dependency-groups]
 dev = [

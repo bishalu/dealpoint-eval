@@ -1125,11 +1125,20 @@ def _readme_results_block(report: dict) -> str:
         lines.append(majority_note["sentence"])
         lines.append("")
 
+    # README results block (engineer's instruction, 2026-09-05): per model, a
+    # table of arms with grounded_accuracy shown as "x% (k of n scored)", plus
+    # the majority-baseline note above -- and NOTHING else. No
+    # execution-failure/cap-hit line, no v1-vs-v2 table, no residual-failure
+    # bullets, no per-arm verdict sentences: those diagnostics stay, complete
+    # and honest, in data/reports/four_arm.md and four_arm.json, which the
+    # prose immediately below links explicitly. The README is an
+    # introduction for readers who do not know the project; the reports are
+    # the record.
     for model, model_arms in report.get("arms", {}).items():
         lines.append(f"**Model `{model}`:**")
         lines.append("")
-        lines.append("| arm | n_cases | n_scored | grounded_accuracy |")
-        lines.append("|---|---|---|---|")
+        lines.append("| arm | grounded_accuracy |")
+        lines.append("|---|---|")
         for arm in ARM_ORDER:
             data = model_arms.get(arm)
             if not data:
@@ -1138,48 +1147,17 @@ def _readme_results_block(report: dict) -> str:
             n_cases = data["n_cases"]
             n_scored = o["grounded_accuracy"]["n"]
             lines.append(
-                f"| {arm} | {n_cases} | {n_scored} | "
-                f"{_pct(o['grounded_accuracy']['mean'])} ({n_scored}/{n_cases}) |"
-            )
-        lines.append("")
-        exec_failed_parts = []
-        cap_hit_parts = []
-        for arm in ARM_ORDER:
-            data = model_arms.get(arm)
-            if not data:
-                continue
-            o = data["overall"]
-            exec_failed_parts.append(f"{arm}={_pct(o['execution_failed']['mean'])}")
-            cap_hit_parts.append(f"{arm}={_pct(o['cap_hit']['mean'])}")
-        if exec_failed_parts:
-            lines.append(
-                f"Overall EXECUTION_FAILED rate by arm: {', '.join(exec_failed_parts)}. "
-                f"Overall CAP_HIT rate by arm: {', '.join(cap_hit_parts)}."
-            )
-            lines.append("")
-    failure_table = report.get("failure_rate_table")
-    if failure_table:
-        lines.append("**v1 -> v2 EXECUTION_FAILED rate by (model, arm):**")
-        lines.append("")
-        lines.append("| model | arm | v1 | v2 | delta |")
-        lines.append("|---|---|---|---|---|")
-        for row in failure_table:
-            lines.append(
-                f"| {row['model']} | {row['arm']} | {_pct(row.get('execution_failed_v1'))} | "
-                f"{_pct(row.get('execution_failed_v2'))} | {_pct(row.get('delta'))} |"
+                f"| {arm} | {_pct(o['grounded_accuracy']['mean'])} "
+                f"({n_scored} of {n_cases} scored) |"
             )
         lines.append("")
 
-    residuals = report.get("residual_failures")
-    if residuals:
-        for key, info in residuals.items():
-            lines.append(f"- Residual failure **{key}** ({info['attribution']}): {info['explanation']}")
-        lines.append("")
-
-    for model, model_verdicts in report.get("verdicts", {}).items():
-        cd = model_verdicts.get("C_to_D")
-        if cd:
-            lines.append(f"- {cd['sentence']}")
+    lines.append(
+        "Full diagnostics -- execution-failure/cap-hit rates, the v1-vs-v2 comparison, "
+        "residual-failure attribution, per-arm verdicts -- are in "
+        "[`data/reports/four_arm.md`](data/reports/four_arm.md) and "
+        "[`data/reports/four_arm.json`](data/reports/four_arm.json)."
+    )
     return "\n".join(lines)
 
 

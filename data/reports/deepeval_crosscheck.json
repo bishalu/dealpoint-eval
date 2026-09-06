@@ -1,0 +1,2407 @@
+{
+  "brief_differences": [
+    {
+      "difference": "Brief section 3 lists DeepEval under 'Not used' and section 4 excludes it outright. M7a's authority line amends section 4 as of 2026-09-05; the classification field this module produces is the mechanism by which that amendment is tested rather than assumed -- REMOVE_NO_ADDED_SIGNAL is a legitimate outcome of this cross-check, not a foregone conclusion.",
+      "id": 1,
+      "topic": "deepeval_brief_exclusion"
+    },
+    {
+      "difference": "Brief section 4 excludes dual tracing paths. DeepEval ships OpenTelemetry and posthog telemetry. This module opts out of DeepEval telemetry (DEEPEVAL_TELEMETRY_OPT_OUT=1) before any import, never logs to a second trace store, and writes results only to local JSON plus deepeval/-namespaced Braintrust scores -- Braintrust remains primary observability.",
+      "id": 2,
+      "topic": "dual_tracing_risk"
+    },
+    {
+      "difference": "The judged subset is 18 cases x 6 variants (108 traces), not the brief section 2.5's 40 x 6; human calibration is n=0 ('pending'), not the brief's 30 hand-scored traces. Already recorded in judges.json; restated here because every DeepEval<->human comparison in this report is 'pending'.",
+      "id": 3,
+      "topic": "scale_inherited"
+    }
+  ],
+  "classification": "KEEP_OPTIONAL_ANALYSIS",
+  "classification_rationale": "DeepEval task_completion correlates moderately with grounded_accuracy (rho=0.381, n=42) -- plausible as a secondary cross-check but not strong enough evidence to call it a core diagnostic.",
+  "comparisons": {
+    "vs_deterministic": {
+      "max_tool_calls": 8,
+      "n_at_or_over_tool_cap": 41,
+      "task_completion_vs_grounded_accuracy": {
+        "n": 42,
+        "spearman": 0.3814307332915905
+      },
+      "tool_correctness_vs_required_evidence_met": {
+        "n": 54
+      }
+    },
+    "vs_human": {
+      "n": 0,
+      "status": "pending",
+      "step_efficiency_vs_human_trajectory_quality": "pending",
+      "task_completion_vs_human": "pending"
+    },
+    "vs_judge": {
+      "step_efficiency_vs_judge_trajectory": {
+        "n": 108,
+        "spearman": -0.009681525404957505
+      },
+      "task_completion_vs_judge_reasoning": {
+        "n": 108,
+        "spearman": 0.8423373253364367
+      }
+    }
+  },
+  "decisions": [],
+  "disagreements": [],
+  "framework_versions": {
+    "bm25s": "0.3.11",
+    "braintrust": "0.37.0",
+    "deepeval": "4.2.1",
+    "fastembed": "0.8.0",
+    "git_sha7": "b9eac78",
+    "llama-index-core": "0.14.24",
+    "llama-index-retrievers-bm25": "0.8.0",
+    "openai": "3.8.0",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "qdrant-client": "1.19.0"
+  },
+  "metrics": {
+    "omitted_rag_metrics": [
+      {
+        "name": "FaithfulnessMetric",
+        "reason": "Measures whether the answer is supported by retrieved context using an LLM judge over paraphrased claims -- weaker than exact-quote gold-span overlap, which is expert-labelled and character-exact."
+      },
+      {
+        "name": "AnswerRelevancyMetric",
+        "reason": "Measures topical relevance of the answer to the question -- already implied by answer_correct against the fixed MAUD option list, and less precise for a closed-option-set task."
+      },
+      {
+        "name": "ContextualPrecisionMetric",
+        "reason": "Measures whether relevant context is ranked above irrelevant context -- the M7a LlamaIndex RAG lab (li_rag_eval.json) already answers this directly against the same gold-span truth, at retriever granularity."
+      },
+      {
+        "name": "ContextualRecallMetric",
+        "reason": "Measures whether all needed context was retrieved -- same duplication concern as ContextualPrecisionMetric; the RAG lab's hit_rate/mrr already cover this against gold spans."
+      }
+    ],
+    "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+    "step_efficiency_geval_criteria": "Given the number and kind of tool calls in the trajectory (input) and the final outcome (actual_output), judge whether the agent reached its answer efficiently: penalise redundant or repeated searches, reward reaching a correct or honest abstain answer in few steps, and penalise hitting the 8-call cap without a resolved answer.",
+    "step_efficiency_geval_criteria_hash": "befc63f450cebd6e",
+    "used": [
+      "task_completion",
+      "tool_correctness",
+      "argument_correctness",
+      "step_efficiency"
+    ]
+  },
+  "per_trace_scores": [
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'query' does not align with the question about 'constructive knowledge,' focusing instead on 'actual knowledge after due inquiry,' which is not a complete match for the requested definition.",
+        "score": 0.0
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching the agreement, but it did not provide a definitive answer or further analysis to determine whether the definition includes constructive knowledge or is limited to actual knowledge.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with no ambiguity in the question or options provided. The tool calls are also correct, making this a strong and accurate argument.",
+        "score": 1.0
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome identified a specific option but did not provide any reasoning or context for why 'Other forward-looking standard' was chosen, nor did it explain what the forward-looking standard in the Material Adverse Effect definition is.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'query' does not explicitly match the provided options, making the tool call incorrect.",
+        "score": 0.0
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for the definition of 'Knowledge' in the agreement, but it did not provide a clear answer regarding whether the definition includes constructive knowledge or is limited to actual knowledge. The outcome is partially relevant but does not fully achieve the desired task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to determine the correct answer. No tool calls were needed, and the question is straightforward.",
+        "score": 1.0
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identifies the absence of a specific carve-out for stockholder litigation in the Material Adverse Effect definition, which aligns well with the task. However, it does not provide additional context or analysis, which could slightly improve the completeness of the response.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'k' does not align with the requirement to search for the ten largest contracts, and the query lacks clarity on the jurisdiction aspect.",
+        "score": 0.0
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not identify the jurisdiction governing the Target's ten largest customer contracts, which was the desired task. Instead, it abstained and provided a statement that the agreement does not address the task, failing to achieve the objective.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'k' is irrelevant, and the query lacks refinement or specific parameters to extract the required percentage.",
+        "score": 0.0
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not achieve the desired task at all, as it failed to provide any meaningful information or analysis regarding the percentage of the Target's revenue from customer contracts with change-of-control termination rights.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, allowing for precise tool calls and accurate reasoning. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation, so no inefficiencies could be assessed.",
+        "score": 1.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the governing standard ('Reasonable standard') and cited the relevant section (6.9(a)), which aligns well with the task. However, it did not provide additional context or details about the standard, which could have improved the completeness of the response.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input query does not align with the specific question about the 'efforts standard' governing the target's ordinary-course-of-business covenant. The query is too broad and fails to mention key terms like 'efforts standard' or the provided options, making it unclear and incomplete.",
+        "score": 0.0
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the type of covenant (flat covenant) but did not provide the specific efforts standard governing the target's ordinary-course-of-business covenant, which was the core requirement of the task.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with no ambiguity in the question or options provided. The tool calls are also correct, making this a perfect score.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome identified a specific option but did not provide any reasoning or context for why 'Other forward-looking standard' was chosen, nor did it explain what the other options were or why they were not selected.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'query' is too broad and does not precisely match the context or phrasing of the question, making it unclear how to extract the correct answer from the given options.",
+        "score": 0.0
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not address the core task of determining whether the Intervening Event definition requires the event or its consequences to be unknown. Instead, it only reported a failure to find the definition.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for the tool to process the request accurately. No incorrect tool calls were identified, and the question is precise with well-defined options.",
+        "score": 1.0
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by providing the exact percentage threshold required for an asset-deal alternative under the Superior Proposal definition.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, directly asking for a specific threshold percentage related to the Superior Proposal definition. There are no incorrect tool calls or ambiguities in the input.",
+        "score": 1.0
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to find the required threshold by searching for the definition but did not provide any concrete information or alternative approach to determine the percentage-of-assets threshold. The task was not fully achieved.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the input parameter 'query' is too broad and does not precisely match the context or phrasing of the question, making it unclear how to extract the correct answer from the given options.",
+        "score": 0.0
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to find the definition but failed to provide any meaningful answer, which does not align with the task of determining the requirement for the event or its consequences to be unknown as of signing.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['search_agreement']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with relevant options for evaluating fiduciary duties in the context of an unsolicited proposal. The options are comprehensive and logically aligned with the question, ensuring a high level of correctness.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome does not provide a clear or accurate standard for the target board's fiduciary duties under the no-shop's fiduciary exception. The response is vague and does not align with the specific legal or fiduciary standard required for such a scenario.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for a precise tool call. There are no incorrect tool calls or ambiguities in the input.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a straightforward question with defined options, making it easy to understand and process.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified relevant terms related to the termination fee and public disclosure, but it did not provide a clear determination of whether the acquisition proposal must have been publicly disclosed to trigger the termination fee during the tail period.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome accurately identifies the form of consideration (Mixed Cash/Stock: Election) and provides specific details about the options and conditions. However, it does not explicitly state whether this is the final form or if further details are needed, which slightly reduces the alignment with the task.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the tool calls are correct. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately identifying that the negative interim operating covenant carves out actions required by COVID-19/pandemic measures.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "A@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for the definition of 'Knowledge' in the agreement but failed to produce any findings, indicating a lack of success in achieving the task.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and correctly structured, with no incorrect tool calls or ambiguities. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any information related to the task, which was to determine the percentage-of-assets threshold for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for the definition but failed to provide any findings or conclusions. The task required determining whether the event or its consequences were unknown as of signing, which was not achieved.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with relevant options, making it easy to understand and evaluate the correct standard for fiduciary duties in the given scenario.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the tool call correctly identifies the context of matching a competing offer, but the reference to section '6.1' is not justified by the input question, which focuses on the time period. The score reflects partial correctness in addressing the core question.",
+        "score": 0.75
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a straightforward question with defined options, making it easy to understand and process.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified relevant sections and clauses, which is a good start, but it did not provide specific details or reasoning to fully justify the conclusion of 'Yes'. A more thorough analysis or citation of the relevant clauses would improve the outcome.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome accurately identifies the form of consideration (Mixed Cash/Stock: Election consideration) and provides specific details (0.48 Nicolet shares or $37.18 cash per share) along with the election mechanism. However, it does not explicitly state whether this fully addresses all aspects of the task, such as potential implications or additional considerations, hence the slight deduction.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is clear and well-structured, but the lack of an input parameter in the tool calls prevents a perfect score.",
+        "score": 0.75
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@haiku"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is clear and relevant, but the tool calls missed providing an input parameter and searched for an unrelated term, which slightly reduced the correctness.",
+        "score": 0.75
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search the agreement for relevant definitions but failed to produce any findings, indicating a lack of success in achieving the task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input query is well-structured and directly addresses the forward-looking standard in the Material Adverse Effect definition, but the score isn't higher due to the repeated mention of the same reason for incorrect tool calls, which slightly reduces the overall correctness.",
+        "score": 0.75
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not provide any output or analysis, so it did not achieve the task of identifying the forward-looking standard in the Material Adverse Effect definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the options provided are well-defined and relevant to the question.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately identifying the definition of 'Knowledge' in the agreement as 'actual knowledge' and confirming the absence of 'constructive knowledge.'",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the input is partially relevant to the Material Adverse Effect definition but lacks specific input parameters and is not directly tied to stockholder litigation arising from the merger agreement.",
+        "score": 0.5
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not provide any analysis or finding regarding whether the Material Adverse Effect definition carves out stockholder litigation arising from the merger agreement, thus failing to address the task.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system failed to identify the jurisdiction governing the Target's ten largest customer contracts, as it produced no findings.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Parasail', 'is_byok': False, 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'DeepInfra', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any information or results related to the task, which was to determine the percentage of Target's revenue from customer contracts with change-of-control termination rights.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.80 because the input is clear and well-structured, but the lack of an input parameter for the tool call prevents a perfect score.",
+        "score": 0.8
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified relevant clauses and a specific section for analysis, which is a good start. However, it did not provide a clear determination of the standard governing the target's liability, which was the core task.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.38 because the input lacks specific parameters and is too broad, failing to clearly address the 'ordinary-course-of-business covenant' in a focused manner.",
+        "score": 0.375
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly and precisely identified the forward-looking standard in the Material Adverse Effect definition as 'Would (reasonably) be expected to', which perfectly aligns with the desired task.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with well-defined options, making it easy to understand and evaluate.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for the tool to process the request accurately. No incorrect tool calls were identified, and the question is precise with well-defined options.",
+        "score": 1.0
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by correctly identifying the 50% threshold required for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is relevant to the Superior Proposal definition, but the query could be more precise to avoid ambiguity in tool calls.",
+        "score": 0.875
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified relevant sections and clauses but did not provide the specific percentage-of-assets threshold required for the Superior Proposal definition, which was the core task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with well-defined options, making it easy to understand and evaluate.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system correctly identified the definition of an Intervening Event, but the response did not provide additional context or explanation from the agreement clauses, which would have improved the alignment with the task.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with relevant options for evaluating fiduciary duties in the context of an unsolicited proposal. The options are comprehensive and logically aligned with the question, making it easy to assess the correct standard.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identifies a relevant standard ('Reasonably likely/expected breach') but does not fully articulate the specific fiduciary duties or the nuanced application of the no-shop's fiduciary exception in this context.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for a precise tool call. There are no incorrect tool calls or ambiguities in the input.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with a straightforward question and unambiguous options. There are no tool call issues or ambiguities to lower the score.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified relevant terms related to termination fees and public disclosure, but it did not provide a clear determination or analysis of whether the acquisition proposal must be publicly disclosed to trigger the termination fee during the tail period.",
+        "score": 0.6
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for relevant information but did not provide any concrete findings or conclusions about the form of consideration target stockholders receive in the merger.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with a straightforward question and unambiguous options. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by correctly identifying the carve-out for COVID-19/pandemic measures and providing a rationale based on the agreement.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@glm"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the options provided are well-defined and relevant to the question.",
+        "score": 1.0
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for the definition of 'Knowledge' in the agreement but did not find any relevant results, which means it did not fully determine whether the agreement's definition includes constructive knowledge.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is well-structured and clearly asks about the forward-looking standard in the Material Adverse Effect definition, but the tool call could be more precise by avoiding irrelevant searches like Article I, which slightly reduces the score.",
+        "score": 0.875
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not provide any output or analysis, so it did not achieve the task of identifying the forward-looking standard in the Material Adverse Effect definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the options provided are well-defined and relevant to the question. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system accurately identified the relevant terms and correctly determined that the agreement defines 'Knowledge' as 'actual knowledge' and excludes constructive knowledge. However, it did not provide additional context or examples to fully explain the distinction, which could have enhanced the response.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is clear and specific, but the query could be refined to explicitly mention the 'carve out' for stockholder litigation to ensure full precision.",
+        "score": 0.875
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task at all, as the system failed to produce any finding or analysis regarding the Material Adverse Effect definition and its carve-out for stockholder litigation.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the tool calls failed to include the 'Target' company, the 'ten largest' requirement, and the 'governing law' aspect in the query, leading to incomplete or incorrect searches.",
+        "score": 0.0
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to identify the jurisdictions but failed to find any relevant results, which does not achieve the desired task of identifying the governing jurisdictions for the Target's ten largest customer contracts.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is clear and well-structured, but the lack of provided input parameters in the tool calls prevents a higher score.",
+        "score": 0.75
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any information or data to address the task, which was to determine the percentage of Target's revenue from specific customer contracts.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.83 because the input is clear and well-structured, but the lack of a specified input parameter in the tool calls slightly reduces the score.",
+        "score": 0.8333333333333334
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any relevant information or findings regarding the standard governing the target's liability for a no-shop breach committed by its non-officer/director representatives. The task was not achieved at all.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. The query is precise, and the options are logically presented, which helps in accurately determining the correct tool calls or actions needed.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to locate the relevant section but did not identify the specific standard governing the ordinary-course-of-business covenant, which is the core requirement of the task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is well-structured and clear, but the tool call could be more precise by avoiding overly generic references like '9.11' to better target the Material Adverse Effect definition.",
+        "score": 0.75
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the present-tense standard 'has' but did not address the forward-looking standards 'would' or 'could' as requested in the task. The response was partially relevant but did not fully answer the question.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.80 because the input is well-structured and relevant to the question, but the unrelated tool call about 'Company Board' recommendation change slightly detracts from the focus on the 'Intervening Event' definition.",
+        "score": 0.8
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task of determining whether the Intervening Event definition requires the event or its consequences to be unknown. Instead, it only reported the absence of the term in the agreement, which does not align with the task's requirements.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.67 because the input correctly identifies the context of the 'Superior Proposal' definition, but the tool call incorrectly references 'Acquisition Proposal,' which is irrelevant. The input itself is well-structured and clear, but the tool call's misalignment with the question lowers the score.",
+        "score": 0.6666666666666666
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined objective and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by correctly identifying the 50% threshold required for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.62 because the tool calls included irrelevant terms and unjustified section references, which detract from the accuracy of the argument. However, the input is clear and well-structured, allowing for a reasonable foundation to build upon.",
+        "score": 0.625
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for relevant definitions but failed to provide the specific percentage-of-assets threshold required for an asset-deal alternative under the Superior Proposal definition.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is well-structured and clear, but the score isn't higher due to the missing input parameter mentioned in the reasons.",
+        "score": 0.875
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for the definition but failed to provide any meaningful output or analysis. The task required determining whether the event or its consequences must be unknown as of signing, which was not addressed.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.71 because the input is well-structured and clear, but the lack of provided input parameters in the tool calls prevents a higher score.",
+        "score": 0.7142857142857143
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identifies the standard as 'Reasonably likely/expected breach' of fiduciary duties, which aligns with the task. However, it does not provide additional context or explanation, which could have improved the alignment.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for a precise tool call. There are no incorrect tool calls or ambiguities in the input.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a straightforward question with defined options, making it easy to understand and process.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system correctly identified the key legal requirement regarding the termination fee tail trigger, but did not provide additional context or examples to fully explain the reasoning behind the determination.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for relevant information but failed to produce any findings, thus not achieving the desired outcome.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the tool calls are correct, with no identified issues. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately determining that the negative interim operating covenant carves out actions required by COVID-19/pandemic measures, as confirmed by the specific section (Section 6.01).",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the options provided are well-defined and relevant to the question. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for definitions but did not provide any findings, which means it did not fully address whether the agreement's definition of Knowledge includes constructive knowledge. The outcome is partially relevant but does not achieve the desired task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with no incorrect tool calls or ambiguities. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not provide any output or analysis, so it did not achieve the task of identifying the forward-looking standard in the Material Adverse Effect definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.29 because the tool calls introduced irrelevant terms and unjustified section references, and no input parameter was provided. However, the score is not zero as the question about 'constructive knowledge' aligns with the original query.",
+        "score": 0.2857142857142857
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately determining that the agreement's definition of Knowledge excludes constructive knowledge and only includes actual knowledge.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is well-structured and clear, but the query could be more precise in addressing the specific legal nuances of stockholder litigation carve-outs in the Material Adverse Effect definition.",
+        "score": 0.875
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task at all, as it produced no finding or analysis regarding whether the Material Adverse Effect definition carves out stockholder litigation arising from the merger agreement.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the input specifies a clear context (jurisdiction and customer contracts) but lacks precision in defining 'largest' (e.g., by revenue, value, or other metrics). The tool calls could be improved by refining the query parameters to avoid ambiguity.",
+        "score": 0.5
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to identify the jurisdictions but failed to produce any findings, indicating a lack of success in achieving the task.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.88 because the input is mostly correct, but it could be higher if it included the 'revenue percentage' detail, which is a key part of the original question.",
+        "score": 0.875
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any information or results related to the task, which was to determine the percentage of Target's revenue from customer contracts with change-of-control termination rights.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, allowing for precise tool calls and accurate reasoning. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for relevant agreements and sections but failed to produce any findings, which means it did not achieve the task of determining the standard governing the target's liability for a no-shop breach.",
+        "score": 0.2
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.78 because the input is clear and relevant, but it could be improved by specifying a parameter or narrowing the query to better align with the 'ordinary-course-of-business' covenant.",
+        "score": 0.7777777777777778
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately identifying the specific efforts standard ('Commercially reasonable efforts') and its location in the agreement (Section 5.2(a)).",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the input is clear and well-structured, but the lack of a provided parameter in the tool calls prevents a higher score.",
+        "score": 0.5
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task at all, as it failed to identify the forward-looking standard used in the Material Adverse Effect definition from the given options.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['lookup_defined_term', 'get_section']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input correctly focuses on the 'Intervening Event' definition, but the tool calls incorrectly introduced unrelated terms like 'Material Adverse Effect' and 'Change in Circumstance', which are not relevant to the question. The score reflects the accurate alignment with the question despite these irrelevant tool calls.",
+        "score": 0.75
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not address the core task of determining whether the Intervening Event definition requires the event or its consequences to be unknown as of signing. It only performed a search without providing any relevant analysis or findings.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the tool call incorrectly focused on 'Acquisition Proposal' instead of the relevant 'Superior Proposal' definition, but it still partially addressed the input by considering the asset-deal threshold.",
+        "score": 0.5
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by correctly identifying the 50% threshold required for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['lookup_defined_term', 'lookup_defined_term']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and correctly structured, with no incorrect tool calls or ambiguities. Well done!",
+        "score": 1.0
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not provide any information or results related to the task, which was to determine the percentage-of-assets threshold for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for definitions and relevant sections, but it did not provide a clear answer or conclusion regarding whether the Intervening Event definition requires the event or its consequences to be unknown as of signing. The outcome lacks a definitive finding, which is essential for the task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "RateLimitError: Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'DeepInfra', 'is_byok': False, 'provider_error_code': 'engine_overloaded', 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing', 'previous_errors': [{'code': 429, 'message': 'Provider returned error', 'provider_name': 'Parasail', 'raw': 'mistralai/mistral-small-3.2-24b-instruct is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations'}]}}, 'user_id': 'user_3IpEJMqfNfE9Hvdxv4nf2n8E0hV'}",
+        "score": null
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for a precise tool call. There are no incorrect tool calls or ambiguities in the input.",
+        "score": 1.0
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a straightforward question with defined options, making it easy to understand and process.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome provided no information or analysis regarding the task, which was to determine whether an acquisition proposal must be publicly disclosed or made known to trigger the termination fee during the tail period. The system failed to address the task at all.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the form of consideration as 'Mixed Cash/Stock: Election,' which aligns with the task. However, it did not provide additional details or context about how target stockholders receive this consideration, which would have fully addressed the task.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.60 because the input is clear and well-structured, but the lack of provided input parameters in the tool calls prevents a higher score.",
+        "score": 0.6
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by accurately identifying the specific section and language in the agreement that carves out COVID-19/pandemic measures from the negative interim operating covenant.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and the options provided are well-defined and relevant to the question. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_39__redacted_q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for relevant terms but failed to produce any findings, indicating a lack of success in achieving the task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, with no ambiguity in the question or the provided options. The tool calls are also correct, making this a perfect score.",
+        "score": 1.0
+      },
+      "case_id": "contract_99__redacted_q06",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system did not provide any output or results, so it did not achieve the task of identifying the forward-looking standard in the Material Adverse Effect definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.33 because the tool calls are partially relevant but not fully aligned with the agreement's definition of 'Knowledge'. The input query is clear, but the tool calls focus on irrelevant aspects, reducing the score.",
+        "score": 0.3333333333333333
+      },
+      "case_id": "contract_144__q05",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by clearly identifying that the agreement's definition of 'Knowledge' is limited to 'actual knowledge' and explicitly excludes 'constructive knowledge.'",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to determine the correct tool calls. Great job!",
+        "score": 1.0
+      },
+      "case_id": "contract_99__q11",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task at all, as the system failed to produce any finding or analysis regarding the Material Adverse Effect definition and its relation to stockholder litigation.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.00 because the tool calls are too broad and vague, failing to specify the 'Target's ten largest customer contracts' as required by the input.",
+        "score": 0.0
+      },
+      "case_id": "contract_75__oos09",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system identified a governing law for a different agreement (merger agreement) but did not find or specify the jurisdiction for the ten largest customer contracts as requested. The outcome does not fully align with the task.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides all necessary details for the tool to process the request accurately. No incorrect tool calls were identified, and the input is well-formulated.",
+        "score": 1.0
+      },
+      "case_id": "contract_14__oos04",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system searched the agreement but did not provide a percentage or any quantitative analysis, which was the core requirement of the task. It only confirmed the absence of disclosure, not the actual percentage.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.67 because the input is clear and well-structured, but the lack of a specified input parameter in the tool calls prevents a higher score.",
+        "score": 0.6666666666666666
+      },
+      "case_id": "contract_14__q02",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the 'reasonable best efforts' standard but did not provide additional context or details about how this standard applies to the target's liability for no-shop breaches by non-officer/director representatives.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.38 because the input query is too broad and lacks specificity regarding the 'ordinary-course-of-business covenant' or the efforts standard. The section reference '5.2' is also not justified or explained, which further reduces the score.",
+        "score": 0.375
+      },
+      "case_id": "contract_32__q04",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to search for relevant terms but did not identify the efforts standard governing the target's ordinary-course-of-business covenant. The outcome does not align well with the task as it did not provide any of the specified options or a clear conclusion.",
+        "score": 0.3
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is well-structured and relevant, but the tool call could be improved by ensuring all section references are directly tied to the Material Adverse Effect definition.",
+        "score": 0.75
+      },
+      "case_id": "contract_32__q06",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identifies the absence of a forward-looking standard in the given definition but does not explicitly compare or contrast it with alternatives like 'would' or 'could' as requested in the task.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.75 because the input is well-structured and clear, but the query 'Intervening' is too broad, which could lead to ambiguity in tool calls. The options provided are precise and relevant, but the initial query could be refined for better accuracy.",
+        "score": 0.75
+      },
+      "case_id": "contract_32__q08",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for the definition and relevant provisions, but it did not directly determine whether the event or its consequences must be unknown as of signing. The outcome is partially relevant but does not fully answer the specific question posed in the task.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the tool calls incorrectly focused on 'Acquisition Proposal' instead of the relevant 'Superior Proposal' definition, but the input clearly specifies the correct context for evaluation.",
+        "score": 0.5
+      },
+      "case_id": "contract_7__q07",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by directly providing the required percentage-of-assets threshold for the asset-deal alternative in the Superior Proposal definition.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: Incomplete tool usage: missing tools [ToolCall(\n    name=\"lookup_defined_term\",\n    type=\"FUNCTION\"\n), ToolCall(\n    name=\"search_agreement\",\n    type=\"FUNCTION\"\n)]; expected ['search_agreement', 'lookup_defined_term'], called ['lookup_defined_term', 'lookup_defined_term', 'lookup_defined_term', 'lookup_defined_term']. See more details above.\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 0.5
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.38 because the tool calls were not aligned with the question about the Superior Proposal definition, focusing on irrelevant or incomplete queries instead of directly addressing the asset-deal threshold. However, the input was clear and well-structured, which is why the score is not lower.",
+        "score": 0.375
+      },
+      "case_id": "contract_75__redacted_q07",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome did not address the task at all, as it failed to determine the percentage-of-assets threshold required for an asset-deal alternative in the Superior Proposal definition.",
+        "score": 0.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with well-defined options, making it easy to understand and evaluate.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__redacted_q08",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The system attempted to address the task by searching for the definition, but it did not provide a clear answer regarding whether the event or its consequences must be unknown as of signing. The outcome was inconclusive.",
+        "score": 0.5
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement', 'lookup_defined_term'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a precise question with relevant options for evaluating fiduciary duties in the context of an unsolicited proposal. The options are comprehensive and logically aligned with the question, making it easy to assess the correct standard.",
+        "score": 1.0
+      },
+      "case_id": "contract_103__q10",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome partially aligns with the task by identifying a relevant standard, but it does not fully capture the nuanced legal context or the specific fiduciary exception under the no-shop clause. The term 'Reasonably likely/expected breach' is a plausible interpretation but lacks precision in the legal framework.",
+        "score": 0.7
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the query is not specific enough to precisely address the scenario of matching a competing offer before a potential board recommendation change, but it still captures the core intent of the question.",
+        "score": 0.5
+      },
+      "case_id": "contract_32__q03",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly matches the desired task by accurately identifying the 3-business-day period for the acquirer to match a competing offer before the target board may change its recommendation.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear, well-structured, and provides a straightforward question with defined options, making it easy to understand and process.",
+        "score": 1.0
+      },
+      "case_id": "contract_144__q09",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without a defined task and execution steps.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by providing a clear 'Yes' answer and a detailed rationale that directly addresses the conditions under which the termination fee is triggered during the tail period, as specified in the agreement.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 1.00 because the input is clear and well-structured, making it easy to understand the question and the provided options. No tool calls were incorrect, so the score is maximized.",
+        "score": 1.0
+      },
+      "case_id": "contract_39__q01",
+      "step_efficiency": {
+        "reason": "No task or trace was provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome correctly identified the form of consideration as 'Mixed Cash/Stock: Election,' which aligns well with the task. However, it did not provide additional context or details about the election process, which could have improved the response.",
+        "score": 0.9
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "argument_correctness": {
+        "reason": "The score is 0.50 because the query 'conduct of business pending the closing' is somewhat related but not a precise match for the specific question about COVID-19/pandemic measures. It partially addresses the topic but lacks the necessary specificity to fully align with the input.",
+        "score": 0.5
+      },
+      "case_id": "contract_4__q12",
+      "step_efficiency": {
+        "reason": "No task or trace provided for evaluation. Efficiency cannot be assessed without input.",
+        "score": 0.0
+      },
+      "step_efficiency_basis": "deepeval-native:StepEfficiencyMetric",
+      "task_completion": {
+        "reason": "The actual outcome perfectly aligns with the desired task by confirming the presence of a carve-out for COVID-19/pandemic measures and providing specific references to the agreement's text.",
+        "score": 1.0
+      },
+      "tool_correctness": {
+        "reason": "[\n\t Tool Calling Reason: All expected tools ['search_agreement'] were called (order not considered).\n\t Tool Selection Reason: No available tools were provided to assess tool selection criteria\n]\n",
+        "score": 1.0
+      },
+      "variant_id": "D@gemini-3.1-flash-lite"
+    }
+  ],
+  "resolved_evaluator": {
+    "family": "Mistral",
+    "model": "mistralai/mistral-small-3.2-24b-instruct",
+    "policy_checked": true,
+    "price_basis": "live",
+    "source": "judge_slate.json (verified judges, non-candidate-family)"
+  },
+  "schema_version": 1,
+  "spend": {
+    "m7a_ledger_before": 3.713288,
+    "n_traces": 108
+  },
+  "subset": {
+    "case_ids": [
+      "contract_39__redacted_q05",
+      "contract_99__redacted_q06",
+      "contract_144__q05",
+      "contract_99__q11",
+      "contract_75__oos09",
+      "contract_14__oos04",
+      "contract_14__q02",
+      "contract_32__q04",
+      "contract_32__q06",
+      "contract_32__q08",
+      "contract_7__q07",
+      "contract_75__redacted_q07",
+      "contract_103__redacted_q08",
+      "contract_103__q10",
+      "contract_32__q03",
+      "contract_144__q09",
+      "contract_39__q01",
+      "contract_4__q12"
+    ],
+    "n_traces": 108,
+    "variants": [
+      "A@haiku",
+      "D@haiku",
+      "D@glm",
+      "D@deepseek-v4-flash",
+      "D@qwen3.7-flash",
+      "D@gemini-3.1-flash-lite"
+    ]
+  }
+}

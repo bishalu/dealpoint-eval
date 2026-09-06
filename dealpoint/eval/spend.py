@@ -147,6 +147,50 @@ SWEEP_DEFS: dict[str, dict] = {
 }
 
 
+def _resolve_m7a_deepeval_model() -> str:
+    """The model `m7a`'s DeepEval leg prices, resolved from the verified judge
+    slate on disk (never hardcoded -- spec section 2/section 4.1), falling back to
+    the first named `JUDGE_TRIO_MODELS` entry when `judge_slate.json` is
+    absent or unreadable.
+    """
+    from dealpoint.config import JUDGE_SLATE_PATH
+
+    try:
+        payload = json.loads(JUDGE_SLATE_PATH.read_text(encoding="utf-8"))
+        for judge in payload.get("judges", []):
+            if judge.get("ok") and judge.get("model"):
+                return judge["model"]
+    except (OSError, json.JSONDecodeError, KeyError):
+        pass
+    return JUDGE_TRIO_MODELS[0]
+
+
+# M7a (spec section 1/2, "Budget and disk"): two legs, both priced by the
+# `tokens_per_call` shape (neither is agent-case shaped -- same reasoning the
+# `judges` leg above already documents).
+#   1. synthetic-query generation: <=2 questions per gold-bearing dev chunk
+#      (~148 gold-bearing (chunk, case) pairs measured; deduped by chunk_id),
+#      one generation call per chunk at the cheap workhorse.
+#   2. DeepEval: one evaluator call per (trace, metric) over the 18-case
+#      judged subset x 6 already-judged variants = 108 traces, 4 metrics.
+SWEEP_DEFS["m7a"] = {
+    "legs": [
+        {
+            "arms": [],
+            "models": ["z-ai/glm-5.3-flash"],
+            "n_cases": 148,
+            "tokens_per_call": {"input": 2200, "output": 220},
+        },
+        {
+            "arms": [],
+            "models": [_resolve_m7a_deepeval_model()],
+            "n_cases": 108 * 4,
+            "tokens_per_call": {"input": 3400, "output": 160},
+        },
+    ],
+}
+
+
 class SpendCapError(RuntimeError):
     """Raised when a sweep may not proceed: the cap is unset, unparseable, or exceeded."""
 

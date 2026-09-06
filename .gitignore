@@ -61,6 +61,17 @@ data/index/
 !data/reports/pareto.svg
 !data/reports/pareto_slate.json
 !data/reports/pareto_manifest.json
+
+# dealpoint (M7a framework roles)
+!data/reports/li_rag_eval.json
+!data/reports/li_rag_eval.md
+!data/reports/deepeval_crosscheck.json
+!data/reports/deepeval_crosscheck.md
+!data/reports/btql_investigations.json
+!data/reports/representative_cases.json
+!data/reports/braintrust_sync.json
+!data/reports/framework_versions.json
+!data/reports/m7a_disk_guard.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/

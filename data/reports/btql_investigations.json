@@ -1,0 +1,453 @@
+[
+  {
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | filter: metadata.reasoning_type is not null | limit: 50",
+    "executed_at": "2026-09-06T02:11:21.047065+00:00",
+    "id": 1,
+    "notes": null,
+    "question": "Which cases did a later search_agreement call surface gold evidence that the first search missed?",
+    "row_count": 32,
+    "rows": [
+      {
+        "arm": "A",
+        "id": "7b6931f8-d414-4756-9692-e2adb1425cc1",
+        "input": "contract_14__redacted_q10",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30",
+        "input": "contract_6__redacted_q09",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "220d7076-f1d0-4b26-b3ab-424ef5935873",
+        "input": "contract_4__q04",
+        "rt": "structured"
+      },
+      {
+        "arm": "A",
+        "id": "3b8c0484-480a-416f-8140-3cee7b59494a",
+        "input": "contract_99__q03",
+        "rt": "numeric"
+      },
+      {
+        "arm": "A",
+        "id": "1c99bae9-8208-4249-886a-6a42b0c55713",
+        "input": "contract_103__q02",
+        "rt": "direct"
+      },
+      {
+        "arm": "A",
+        "id": "1b80af7e-dd39-4b0f-8c48-0625e3122f16",
+        "input": "contract_77__q01",
+        "rt": "direct"
+      },
+      {
+        "arm": "A",
+        "id": "a46a6c32-a346-4eb9-92de-debc21dd0bd8",
+        "input": "contract_77__q12",
+        "rt": "carve-out"
+      },
+      {
+        "arm": "A",
+        "id": "a5efc6e6-5ca8-41da-949f-288e6a2456b4",
+        "input": "contract_39__q11",
+        "rt": "carve-out"
+      },
+      {
+        "arm": "A",
+        "id": "69292c18-0217-4848-acae-4862536b260e",
+        "input": "contract_14__q10",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "152700e9-9a7a-44e4-b7f2-4f0004c4c30d",
+        "input": "contract_39__q09",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "2b3467f9-e866-43de-b824-7b5adf0c7657",
+        "input": "contract_103__q08",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "e1b1c65d-78ca-4a25-8f2f-6bff86b01549",
+        "input": "contract_39__q07",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "7a59f5b0-766f-4a8e-9ebb-a26c65f4291f",
+        "input": "contract_6__q06",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "2ee567d3-7fa5-4d2f-8ba0-ca814baf8d9c",
+        "input": "contract_128__q05",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "2e2cddfc-493a-4943-a7be-d41a32de1326",
+        "input": "contract_14__oos04",
+        "rt": "out-of-scope"
+      },
+      {
+        "arm": "A",
+        "id": "6e0f239c-b92c-460f-b803-11ae5b188e40",
+        "input": "contract_75__oos09",
+        "rt": "out-of-scope"
+      },
+      {
+        "arm": "A",
+        "id": "bad657d3-df09-4ac0-93e6-78802fa60d0e",
+        "input": "contract_103__redacted_q08",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "3919ba81-55d1-4b9a-aead-370c504f5b90",
+        "input": "contract_75__redacted_q07",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "45ed5087-ccf0-4fb7-a1ed-aa2a23a5427a",
+        "input": "contract_99__redacted_q06",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "14759ce8-284b-424a-a414-0c06c6506702",
+        "input": "contract_39__redacted_q05",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "a0a56453-c61e-498a-a029-3e5040774a0d",
+        "input": "contract_32__q04",
+        "rt": "structured"
+      },
+      {
+        "arm": "A",
+        "id": "a5431368-66ac-4111-a402-f689c7cdcc6b",
+        "input": "contract_32__q03",
+        "rt": "numeric"
+      },
+      {
+        "arm": "A",
+        "id": "1e2cf74b-125e-460e-a8b7-11ac44be1577",
+        "input": "contract_14__q02",
+        "rt": "direct"
+      },
+      {
+        "arm": "A",
+        "id": "a5618e1e-0fa0-4d58-b4ab-7b700b663c26",
+        "input": "contract_39__q01",
+        "rt": "direct"
+      },
+      {
+        "arm": "A",
+        "id": "b3248863-608e-4f3f-8206-1e621abd14b0",
+        "input": "contract_4__q12",
+        "rt": "carve-out"
+      },
+      {
+        "arm": "A",
+        "id": "fda725c7-6cd6-4b75-a552-0719468128e1",
+        "input": "contract_99__q11",
+        "rt": "carve-out"
+      },
+      {
+        "arm": "A",
+        "id": "703770f5-fac8-43d2-9e1f-8ba2fcb2190a",
+        "input": "contract_103__q10",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "acc59493-f273-42aa-ae9c-598057f20ed4",
+        "input": "contract_144__q09",
+        "rt": "cross-ref"
+      },
+      {
+        "arm": "A",
+        "id": "81ead9d2-e8db-4349-99fa-430f45e4cd09",
+        "input": "contract_32__q08",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "31c2396e-69c0-41f5-9fdd-f5b09839e3f4",
+        "input": "contract_7__q07",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "00ee97c0-b3d4-46db-9636-796921c73b1c",
+        "input": "contract_32__q06",
+        "rt": "defined-term"
+      },
+      {
+        "arm": "A",
+        "id": "42e8dc05-437f-418d-868f-79ba0f230fa4",
+        "input": "contract_144__q05",
+        "rt": "defined-term"
+      }
+    ],
+    "title": "Retrieval rescue"
+  },
+  {
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.model as model, metadata.arm as arm | measures: count(1) as n",
+    "executed_at": "2026-09-06T02:11:21.614601+00:00",
+    "id": 2,
+    "notes": null,
+    "question": "EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.",
+    "row_count": 1,
+    "rows": [
+      {
+        "arm": "A",
+        "model": "z-ai/glm-5.3-flash",
+        "n": 32
+      }
+    ],
+    "title": "Failure attribution"
+  },
+  {
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type as rt | measures: count(1) as n",
+    "executed_at": "2026-09-06T02:11:21.749020+00:00",
+    "id": 3,
+    "notes": null,
+    "question": "grounded_accuracy by reasoning_type (direct, numeric, structured, defined-term, cross-ref, carve-out).",
+    "row_count": 7,
+    "rows": [
+      {
+        "n": 4,
+        "rt": "carve-out"
+      },
+      {
+        "n": 4,
+        "rt": "direct"
+      },
+      {
+        "n": 12,
+        "rt": "defined-term"
+      },
+      {
+        "n": 2,
+        "rt": "out-of-scope"
+      },
+      {
+        "n": 2,
+        "rt": "structured"
+      },
+      {
+        "n": 6,
+        "rt": "cross-ref"
+      },
+      {
+        "n": 2,
+        "rt": "numeric"
+      }
+    ],
+    "title": "Reasoning slices"
+  },
+  {
+    "btql": "from: experiment('judge-A@haiku') | select: id, metadata | limit: 50",
+    "executed_at": "2026-09-06T02:11:21.905865+00:00",
+    "id": 4,
+    "notes": null,
+    "question": "Traces where deepeval/ and obj/ scores disagree.",
+    "row_count": 1,
+    "rows": [
+      {
+        "id": "f1c713f3-5093-44d2-8fa2-bf79134bbe63",
+        "metadata": {
+          "arm": "A",
+          "case_type": null,
+          "framework_versions": {
+            "bm25s": "0.3.11",
+            "braintrust": "0.37.0",
+            "deepeval": "4.2.1",
+            "fastembed": "0.8.0",
+            "git_sha7": "b9eac78",
+            "llama-index-core": "0.14.24",
+            "llama-index-retrievers-bm25": "0.8.0",
+            "openai": "3.8.0",
+            "pydantic": "2.13.5",
+            "python": "3.12.3",
+            "qdrant-client": "1.19.0"
+          },
+          "git_sha": "b9eac78",
+          "index_version": null,
+          "model": "anthropic/claude-haiku-4.5",
+          "reasoning_type": null,
+          "retriever": "dense",
+          "skill_version": "f8d255cc169b",
+          "stage": "eval",
+          "variant_id": "A@haiku"
+        }
+      }
+    ],
+    "title": "DeepEval disagreement"
+  },
+  {
+    "btql": "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model as model | measures: count(1) as n",
+    "executed_at": "2026-09-06T02:11:22.449129+00:00",
+    "id": 5,
+    "notes": null,
+    "question": "Cost per correct answer by model, across the M6 Pareto experiments.",
+    "row_count": 1,
+    "rows": [
+      {
+        "model": "anthropic/claude-haiku-4.5",
+        "n": 1
+      }
+    ],
+    "title": "Model economics"
+  },
+  {
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm as arm | limit: 50",
+    "executed_at": "2026-09-06T02:11:22.820062+00:00",
+    "id": 6,
+    "notes": null,
+    "question": "Tool calls vs outcome -- does more searching correlate with a worse result?",
+    "row_count": 32,
+    "rows": [
+      {
+        "arm": "A",
+        "id": "7b6931f8-d414-4756-9692-e2adb1425cc1"
+      },
+      {
+        "arm": "A",
+        "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30"
+      },
+      {
+        "arm": "A",
+        "id": "220d7076-f1d0-4b26-b3ab-424ef5935873"
+      },
+      {
+        "arm": "A",
+        "id": "3b8c0484-480a-416f-8140-3cee7b59494a"
+      },
+      {
+        "arm": "A",
+        "id": "1c99bae9-8208-4249-886a-6a42b0c55713"
+      },
+      {
+        "arm": "A",
+        "id": "1b80af7e-dd39-4b0f-8c48-0625e3122f16"
+      },
+      {
+        "arm": "A",
+        "id": "a46a6c32-a346-4eb9-92de-debc21dd0bd8"
+      },
+      {
+        "arm": "A",
+        "id": "a5efc6e6-5ca8-41da-949f-288e6a2456b4"
+      },
+      {
+        "arm": "A",
+        "id": "69292c18-0217-4848-acae-4862536b260e"
+      },
+      {
+        "arm": "A",
+        "id": "152700e9-9a7a-44e4-b7f2-4f0004c4c30d"
+      },
+      {
+        "arm": "A",
+        "id": "2b3467f9-e866-43de-b824-7b5adf0c7657"
+      },
+      {
+        "arm": "A",
+        "id": "e1b1c65d-78ca-4a25-8f2f-6bff86b01549"
+      },
+      {
+        "arm": "A",
+        "id": "7a59f5b0-766f-4a8e-9ebb-a26c65f4291f"
+      },
+      {
+        "arm": "A",
+        "id": "2ee567d3-7fa5-4d2f-8ba0-ca814baf8d9c"
+      },
+      {
+        "arm": "A",
+        "id": "2e2cddfc-493a-4943-a7be-d41a32de1326"
+      },
+      {
+        "arm": "A",
+        "id": "6e0f239c-b92c-460f-b803-11ae5b188e40"
+      },
+      {
+        "arm": "A",
+        "id": "bad657d3-df09-4ac0-93e6-78802fa60d0e"
+      },
+      {
+        "arm": "A",
+        "id": "3919ba81-55d1-4b9a-aead-370c504f5b90"
+      },
+      {
+        "arm": "A",
+        "id": "45ed5087-ccf0-4fb7-a1ed-aa2a23a5427a"
+      },
+      {
+        "arm": "A",
+        "id": "14759ce8-284b-424a-a414-0c06c6506702"
+      },
+      {
+        "arm": "A",
+        "id": "a0a56453-c61e-498a-a029-3e5040774a0d"
+      },
+      {
+        "arm": "A",
+        "id": "a5431368-66ac-4111-a402-f689c7cdcc6b"
+      },
+      {
+        "arm": "A",
+        "id": "1e2cf74b-125e-460e-a8b7-11ac44be1577"
+      },
+      {
+        "arm": "A",
+        "id": "a5618e1e-0fa0-4d58-b4ab-7b700b663c26"
+      },
+      {
+        "arm": "A",
+        "id": "b3248863-608e-4f3f-8206-1e621abd14b0"
+      },
+      {
+        "arm": "A",
+        "id": "fda725c7-6cd6-4b75-a552-0719468128e1"
+      },
+      {
+        "arm": "A",
+        "id": "703770f5-fac8-43d2-9e1f-8ba2fcb2190a"
+      },
+      {
+        "arm": "A",
+        "id": "acc59493-f273-42aa-ae9c-598057f20ed4"
+      },
+      {
+        "arm": "A",
+        "id": "81ead9d2-e8db-4349-99fa-430f45e4cd09"
+      },
+      {
+        "arm": "A",
+        "id": "31c2396e-69c0-41f5-9fdd-f5b09839e3f4"
+      },
+      {
+        "arm": "A",
+        "id": "00ee97c0-b3d4-46db-9636-796921c73b1c"
+      },
+      {
+        "arm": "A",
+        "id": "42e8dc05-437f-418d-868f-79ba0f230fa4"
+      }
+    ],
+    "title": "Trajectory inefficiency"
+  }
+]

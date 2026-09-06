@@ -2,6 +2,14 @@
 JSON (spec DoD: "a test compares the numbers"). Skips cleanly if the report
 has not been generated yet (same convention as `tests/conftest.py`), but
 must NOT skip once `four_arm.json` exists.
+
+M7a (engineer's instruction, 2026-09-05): the README block now shows, per
+model, a table of arms with grounded_accuracy as "x% (k of n scored)" plus
+the one-line majority-baseline note -- and nothing else. The
+execution-failure/cap-hit line, the v1-vs-v2 table, the residual-failure
+bullets and the per-arm verdict sentences are asserted ABSENT here; they
+stay, complete and honest, in data/reports/four_arm.md and four_arm.json,
+which the README links to.
 """
 
 from __future__ import annotations
@@ -13,7 +21,7 @@ import pytest
 
 from dealpoint.config import ARM_ORDER, FOUR_ARM_JSON_PATH, README_PATH
 
-pytestmark = pytest.mark.gate_m4
+pytestmark = [pytest.mark.gate_m4, pytest.mark.gate_m7]
 
 
 def _pct(x):
@@ -46,6 +54,10 @@ def test_readme_results_block_matches_four_arm_json():
     majority = report.get("majority_baseline") or {}
     assert _pct(majority.get("overall")) in block
 
+    majority_note = report.get("majority_baseline_note")
+    if majority_note and majority_note.get("sentence"):
+        assert majority_note["sentence"] in block
+
     for model, model_arms in report.get("arms", {}).items():
         for arm in ARM_ORDER:
             data = model_arms.get(arm)
@@ -55,26 +67,21 @@ def test_readme_results_block_matches_four_arm_json():
             n_cases = data["n_cases"]
             grounded = _pct(data["overall"]["grounded_accuracy"]["mean"])
             assert grounded in block, f"{model}/{arm} grounded_accuracy {grounded} missing from README"
-            assert str(n_cases) in block
-            # corrective task #6: the scored-n denominator must accompany
-            # every rendered grounded_accuracy percentage.
-            assert f"({n_scored}/{n_cases})" in block, (
-                f"{model}/{arm} missing scored-n ({n_scored}/{n_cases}) next to its percentage"
+            assert f"({n_scored} of {n_cases} scored)" in block, (
+                f"{model}/{arm} missing scored-n ({n_scored} of {n_cases} scored) "
+                "next to its percentage"
             )
 
-    for model, model_verdicts in report.get("verdicts", {}).items():
+    # M7a: these diagnostics must NOT appear in the README block -- they stay
+    # in data/reports/four_arm.md and four_arm.json instead.
+    assert "EXECUTION_FAILED rate by arm" not in block
+    assert "v1 -> v2" not in block
+    assert "Residual failure" not in block
+    for model_verdicts in report.get("verdicts", {}).values():
         cd = model_verdicts.get("C_to_D")
-        if cd:
-            assert cd["sentence"] in block
+        if cd and cd.get("sentence"):
+            assert cd["sentence"] not in block
 
-    # M4.1: once the report has been re-run as v2, the README block carries
-    # the version line, the v1->v2 failure-rate figures per rendered
-    # (model, arm), and the majority-baseline-by-construction sentence.
-    if report.get("version") == "v2 after harness repair":
-        assert "v2 after harness repair" in block
-        for row in report.get("failure_rate_table", []):
-            assert _pct(row.get("execution_failed_v1")) in block
-            assert _pct(row.get("execution_failed_v2")) in block
-        note = report.get("majority_baseline_note") or {}
-        if note.get("sentence"):
-            assert note["sentence"] in block
+    # The README must link to the full reports.
+    assert "data/reports/four_arm.md" in block
+    assert "data/reports/four_arm.json" in block

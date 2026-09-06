@@ -15,6 +15,7 @@ from dealpoint.eval.spend import (
     SWEEP_DEFS,
     estimate,
     read_ledger,
+    realized_by_tag,
     realized_usd,
 )
 
@@ -57,10 +58,21 @@ def test_estimate_pareto_is_nonzero_and_within_cap():
     assert realized_usd() + data["est_usd"] <= cap
 
 
+M1_M6_TAGS = ("m1", "m2", "m3", "m4", "m4_1", "m5", "m6")
+
+
 def test_realized_usd_within_envelope():
-    """DoD (spec, verbatim): total realised OpenRouter spend across M1-M6 is
-    <= $4.00, asserted from the ledger."""
-    assert realized_usd() <= 4.00
+    """DoD (M6 spec, verbatim): total realised OpenRouter spend across M1-M6 is
+    <= $4.00, asserted from the ledger. Scoped to the M1-M6 milestone tags
+    (decision recorded 2026-09-05, M7a) so a later milestone's spend cannot
+    retroactively falsify M6's own DoD claim -- M7a's ledger discipline is
+    asserted separately in tests/test_spend_m7.py against the $6.00 global
+    cap. This keeps M6's claim exactly as strong as it was measured, rather
+    than either weakening the envelope (raising 4.00) or making the test
+    fail for a reason that has nothing to do with M6."""
+    by_tag = realized_by_tag()
+    m1_m6 = round(sum(by_tag.get(t, 0.0) for t in M1_M6_TAGS), 6)
+    assert m1_m6 <= 4.00
 
 
 def test_every_m6_ledger_row_names_an_in_slate_model():

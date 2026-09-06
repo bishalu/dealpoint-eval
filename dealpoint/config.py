@@ -291,3 +291,25 @@ PARETO_SLATE_PATH = REPORTS_DIR / "pareto_slate.json"
 PARETO_MANIFEST_PATH = REPORTS_DIR / "pareto_manifest.json"
 PARETO_PROBE_N_CASES = 2
 
+# --- Milestone 7a: framework roles (LlamaIndex, DeepEval, Braintrust sync) --
+M7A_MILESTONE_TAG = "m7a"
+M7A_TARGET_USD = 1.00     # soft target -- reported, not gated
+M7A_MAX_USD = 2.50        # absolute per-milestone limit -- enforced
+GLOBAL_ENVELOPE_USD = 6.00
+RAG_SYNTH_MODEL_ENV = "RAG_SYNTH_MODEL"
+DEEPEVAL_MODEL_ENV = "DEEPEVAL_MODEL"
+LI_RAG_EVAL_JSON_PATH = REPORTS_DIR / "li_rag_eval.json"
+LI_RAG_EVAL_MD_PATH = REPORTS_DIR / "li_rag_eval.md"
+SYNTHETIC_DEV_QUERIES_PATH = EVAL_DIR / "synthetic_dev_queries.jsonl"
+DEEPEVAL_CROSSCHECK_JSON_PATH = REPORTS_DIR / "deepeval_crosscheck.json"
+DEEPEVAL_CROSSCHECK_MD_PATH = REPORTS_DIR / "deepeval_crosscheck.md"
+BTQL_INVESTIGATIONS_PATH = REPORTS_DIR / "btql_investigations.json"
+REPRESENTATIVE_CASES_PATH = REPORTS_DIR / "representative_cases.json"
+BRAINTRUST_SYNC_PATH = REPORTS_DIR / "braintrust_sync.json"
+FRAMEWORK_VERSIONS_PATH = REPORTS_DIR / "framework_versions.json"
+M7A_DISK_GUARD_PATH = REPORTS_DIR / "m7a_disk_guard.json"
+M7A_REVIEW_SET_N = 12
+M7A_MAX_SCORES_PER_CASE = 12
+M7A_MAX_SUBSET_FOR_WIDE_SCORES = 60
+M7A_DISK_FLOOR_BYTES = 500_000_000
+

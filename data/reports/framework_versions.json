@@ -1,0 +1,13 @@
+{
+  "bm25s": "0.3.11",
+  "braintrust": "0.37.0",
+  "deepeval": "4.2.1",
+  "fastembed": "0.8.0",
+  "git_sha7": "b9eac78",
+  "llama-index-core": "0.14.24",
+  "llama-index-retrievers-bm25": "0.8.0",
+  "openai": "3.8.0",
+  "pydantic": "2.13.5",
+  "python": "3.12.3",
+  "qdrant-client": "1.19.0"
+}

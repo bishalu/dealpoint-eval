@@ -196,6 +196,32 @@ pareto-report:
 gate-m6:
     uv run pytest -m "gate_m6 and not needs_network and not needs_model" -q
 
+# ── dealpoint (M7a framework roles) ─────────────────────────────────────────
+
+# M7a: LlamaIndex RAG lab -- native eval on canonical dev retrieval + synthetic-query study
+li-rag-eval *ARGS:
+    uv run python -m dealpoint.rag_lab.report "$@"
+
+# M7a: generate the frozen synthetic dev query set (METERED, cheap workhorse)
+synth-queries *ARGS:
+    uv run python -m dealpoint.rag_lab.synthetic "$@"
+
+# M7a: DeepEval independent cross-check on the judged subset (METERED)
+deepeval-crosscheck *ARGS:
+    uv run python -m dealpoint.eval.deepeval_adapter "$@"
+
+# M7a: recreate every Braintrust artifact from Git/local sources; idempotent
+braintrust-sync *ARGS:
+    uv run python -m dealpoint.eval.braintrust_sync "$@"
+
+# M7a: run the six BTQL investigations and save results
+btql *ARGS:
+    uv run python -m dealpoint.eval.btql "$@"
+
+# milestone 7 acceptance gates only, offline
+gate-m7:
+    uv run pytest -m "gate_m7 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

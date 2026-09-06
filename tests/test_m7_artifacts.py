@@ -1,0 +1,134 @@
+"""M7a gate: every DoD artifact exists with a `.gitignore` allowlist entry,
+frozen-integrity assertions hold, and `docs/demo-walkthrough.md` names only
+paths that actually resolve on disk (spec DoD, "walkthrough reproducibility").
+
+Every test skips cleanly rather than fails when a metered artifact has not
+been produced yet, matching `test_readme_results.py`/`test_spend_m6.py`.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+
+import pytest
+
+from dealpoint.config import (
+    ARM_C_RETRIEVER,
+    BTQL_INVESTIGATIONS_PATH,
+    DEEPEVAL_CROSSCHECK_JSON_PATH,
+    DEEPEVAL_CROSSCHECK_MD_PATH,
+    FRAMEWORK_VERSIONS_PATH,
+    LI_RAG_EVAL_JSON_PATH,
+    LI_RAG_EVAL_MD_PATH,
+    REPO_ROOT,
+    REPRESENTATIVE_CASES_PATH,
+    TEST_SUBSET_V1_PATH,
+    TOURNAMENT_JSON_PATH,
+    VERSIONS_JSON_PATH,
+)
+
+pytestmark = pytest.mark.gate_m7
+
+M7A_REPORT_PATHS = (
+    LI_RAG_EVAL_JSON_PATH,
+    LI_RAG_EVAL_MD_PATH,
+    DEEPEVAL_CROSSCHECK_JSON_PATH,
+    DEEPEVAL_CROSSCHECK_MD_PATH,
+    BTQL_INVESTIGATIONS_PATH,
+    REPRESENTATIVE_CASES_PATH,
+    FRAMEWORK_VERSIONS_PATH,
+)
+
+
+def _gitignore_text() -> str:
+    return (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+
+def test_every_m7a_report_path_has_a_gitignore_allowlist_line():
+    gitignore = _gitignore_text()
+    for path in M7A_REPORT_PATHS:
+        rel = path.relative_to(REPO_ROOT).as_posix()
+        assert f"!{rel}" in gitignore, f"{rel} missing its !allowlist line in .gitignore"
+
+
+def test_framework_versions_json_exists_and_has_expected_keys():
+    if not FRAMEWORK_VERSIONS_PATH.exists():
+        pytest.skip("framework_versions.json not generated yet")
+    payload = json.loads(FRAMEWORK_VERSIONS_PATH.read_text(encoding="utf-8"))
+    assert "python" in payload
+    assert "git_sha7" in payload
+
+
+def test_li_rag_eval_frozen_assertions_match_disk():
+    if not LI_RAG_EVAL_JSON_PATH.exists():
+        pytest.skip("li_rag_eval.json not generated yet; run `just li-rag-eval`")
+    report = json.loads(LI_RAG_EVAL_JSON_PATH.read_text(encoding="utf-8"))
+    fa = report["frozen_assertions"]
+
+    versions = json.loads(VERSIONS_JSON_PATH.read_text(encoding="utf-8"))
+    assert fa["chunk_version"] == versions["chunk_version"] == "8e5e8ba56765"
+    assert fa["index_version"] == versions["index_version"] == "e2b4a2b97561"
+
+    test_subset_hash = hashlib.sha256(TEST_SUBSET_V1_PATH.read_bytes()).hexdigest()
+    assert fa["test_subset_v1_sha256"] == test_subset_hash
+
+    tournament_hash = hashlib.sha256(TOURNAMENT_JSON_PATH.read_bytes()).hexdigest()
+    assert fa["tournament_json_sha256"] == tournament_hash
+
+    assert ARM_C_RETRIEVER["name"] == "hybrid_rrf"
+
+
+def test_deepeval_crosscheck_has_one_of_three_classifications():
+    if not DEEPEVAL_CROSSCHECK_JSON_PATH.exists():
+        pytest.skip("deepeval_crosscheck.json not generated yet")
+    report = json.loads(DEEPEVAL_CROSSCHECK_JSON_PATH.read_text(encoding="utf-8"))
+    assert report["classification"] in (
+        "KEEP_CORE_DIAGNOSTIC",
+        "KEEP_OPTIONAL_ANALYSIS",
+        "REMOVE_NO_ADDED_SIGNAL",
+    )
+    assert report["resolved_evaluator"]["model"]
+
+
+def test_btql_investigations_has_six_entries():
+    if not BTQL_INVESTIGATIONS_PATH.exists():
+        pytest.skip("btql_investigations.json not generated yet")
+    entries = json.loads(BTQL_INVESTIGATIONS_PATH.read_text(encoding="utf-8"))
+    assert len(entries) == 6
+    for e in entries:
+        assert "row_count" in e
+        assert "btql" in e
+
+
+def test_demo_walkthrough_exists_with_role_diagram():
+    path = REPO_ROOT / "docs" / "demo-walkthrough.md"
+    if not path.exists():
+        pytest.skip("docs/demo-walkthrough.md not written yet")
+    text = path.read_text(encoding="utf-8")
+    assert "custom Python" in text
+    assert "LlamaIndex" in text
+    assert "DeepEval" in text
+    assert "Braintrust" in text
+    assert "benchmark truth" in text
+
+
+def test_demo_walkthrough_named_artifacts_resolve_on_disk():
+    """Mechanised version of the reviewer's \"walkthrough reproducibility\"
+    check: every backtick-quoted path under data/, docs/ or specs/ that the
+    walkthrough names must exist on disk.
+    """
+    path = REPO_ROOT / "docs" / "demo-walkthrough.md"
+    if not path.exists():
+        pytest.skip("docs/demo-walkthrough.md not written yet")
+    text = path.read_text(encoding="utf-8")
+
+    candidates = set(re.findall(r"`((?:data|docs|specs)/[^`]+)`", text))
+    missing = []
+    for rel in candidates:
+        # strip any trailing punctuation a sentence might have glued on
+        clean_rel = rel.rstrip(".,;:")
+        if not (REPO_ROOT / clean_rel).exists():
+            missing.append(clean_rel)
+    assert not missing, f"demo-walkthrough.md names paths that do not exist: {missing}"

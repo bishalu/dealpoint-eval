@@ -46,39 +46,21 @@ Majority-baseline accuracy on this subset is 0.0% by construction: data/eval/tes
 
 **Model `anthropic/claude-haiku-4.5`:**
 
-| arm | n_cases | n_scored | grounded_accuracy |
-|---|---|---|---|
-| A | 18 | 10 | 50.0% (10/18) |
-| D | 18 | 8 | 62.5% (8/18) |
-
-Overall EXECUTION_FAILED rate by arm: A=0.0%, D=5.6%. Overall CAP_HIT rate by arm: A=0.0%, D=50.0%.
+| arm | grounded_accuracy |
+|---|---|
+| A | 50.0% (10 of 18 scored) |
+| D | 62.5% (8 of 18 scored) |
 
 **Model `z-ai/glm-5.3-flash`:**
 
-| arm | n_cases | n_scored | grounded_accuracy |
-|---|---|---|---|
-| A | 32 | 17 | 76.5% (17/32) |
-| B | 32 | 17 | 58.8% (17/32) |
-| C | 32 | 21 | 66.7% (21/32) |
-| D | 32 | 17 | 64.7% (17/32) |
+| arm | grounded_accuracy |
+|---|---|
+| A | 76.5% (17 of 32 scored) |
+| B | 58.8% (17 of 32 scored) |
+| C | 66.7% (21 of 32 scored) |
+| D | 64.7% (17 of 32 scored) |
 
-Overall EXECUTION_FAILED rate by arm: A=25.0%, B=0.0%, C=0.0%, D=15.6%. Overall CAP_HIT rate by arm: A=0.0%, B=43.8%, C=31.2%, D=15.6%.
-
-**v1 -> v2 EXECUTION_FAILED rate by (model, arm):**
-
-| model | arm | v1 | v2 | delta |
-|---|---|---|---|---|
-| anthropic/claude-haiku-4.5 | A | 5.6% | 0.0% | -5.6% |
-| anthropic/claude-haiku-4.5 | D | 88.9% | 5.6% | -83.3% |
-| z-ai/glm-5.3-flash | A | 65.6% | 25.0% | -40.6% |
-| z-ai/glm-5.3-flash | B | 18.8% | 0.0% | -18.8% |
-| z-ai/glm-5.3-flash | C | 12.5% | 0.0% | -12.5% |
-| z-ai/glm-5.3-flash | D | 34.4% | 15.6% | -18.8% |
-
-- Residual failure **z-ai/glm-5.3-flash/A** (provider): 8/32 (25.0%) EXECUTION_FAILED; most common failure_detail class: 'empty response content' (4/8). 8/8 of these end with finish_reason == 'length' on both the initial attempt and the schema retry -- the model spends its whole MAX_TOKENS_FINAL=1200 budget (already doubled from 600 per this milestone's fix) on prose reasoning before ever emitting the JSON object, so raw_final_text is a truncated reasoning preamble with no JSON in it at all. This is the model's own verbosity, not a request-shape defect the harness can fix without an unbounded token ceiling (out of scope: CAP_HIT-style caps are deliberate, not to be raised without limit).
-- Residual failure **z-ai/glm-5.3-flash/D** (provider): 5/32 (15.6%) EXECUTION_FAILED; most common failure_detail class: 'empty response content' (4/5). 5/5 of these end with finish_reason == 'length' on both the initial attempt and the schema retry -- the model spends its whole MAX_TOKENS_FINAL=1200 budget (already doubled from 600 per this milestone's fix) on prose reasoning before ever emitting the JSON object, so raw_final_text is a truncated reasoning preamble with no JSON in it at all. This is the model's own verbosity, not a request-shape defect the harness can fix without an unbounded token ceiling (out of scope: CAP_HIT-style caps are deliberate, not to be raised without limit). 5/5 of these failed cases (and 27/32 of this leg's cases overall) finalised immediately after a tool-calling turn whose finish_reason was 'length' -- MAX_TOKENS_TOOL_TURN (300) cut that turn off before the model could keep searching, so the loop moved to finalisation with fewer tool calls used than it would otherwise have made. This is left-at-300, unfixed for this v2 report (no budget for another sweep); it is a contributing cause alongside, not instead of, final-answer verbosity.
-
-- At z-ai/glm-5.3-flash, arm D does NOT improve grounded_accuracy over arm C (66.7% -> 64.7%, delta -2.0%). See adherence, fabrication, abstention, trajectory and efficiency deltas below instead.
+Full diagnostics -- execution-failure/cap-hit rates, the v1-vs-v2 comparison, residual-failure attribution, per-arm verdicts -- are in [`data/reports/four_arm.md`](data/reports/four_arm.md) and [`data/reports/four_arm.json`](data/reports/four_arm.json).
 <!-- END RESULTS -->
 
 `just report` regenerates this section from the result files. The test subset deliberately favours questions where the most common answer is wrong, so the majority baseline reads 0% by construction. The sample is small, deliberately, because the whole evaluation ran on a few dollars of API credit: read the direction of a difference, not its second decimal. Full tables with every metric are in `data/reports/`.
@@ -96,6 +78,20 @@ Search runs locally on Qdrant with small open embeddings and BM25 keyword matchi
 A requirements brief, `specs/grilled-product-brief.md`, was written first and has been the authority since. A small software factory under `adws/` then built the project milestone by milestone: a planning model writes a plan, a coding model implements it, deterministic checks run the tests, and a reviewing model rules on every acceptance item before a documenter writes up the milestone in `docs/milestones/`. An outer loop moves from one milestone to the next and stops for a person only when there is a real decision to make.
 
 Traces of the factory's own runs are in Braintrust under `sssf-dealpoint`; the evaluation experiments are under `dealpoint-eval`. The local result files in `data/results/` and the reports in `data/reports/` are the permanent record.
+
+### Framework roles
+
+Four different tools do four different jobs, and none of them stand in for another:
+
+```
+custom Python  --> benchmark truth      (parser, canonical offsets, MAUD gold spans, scorers)
+LlamaIndex     --> RAG lab / RAG eval   (retriever composition, RetrieverEvaluator, synthetic queries)
+DeepEval       --> independent agent-eval cross-check (task completion, tool correctness, step efficiency)
+Braintrust     --> traces / experiments / comparison (surface, not source of truth)
+local reports + Git --> permanent evidence (data/reports/, data/results/, specs/)
+```
+
+MAUD gold-span overlap is the only thing that ever decides a winner. LlamaIndex evaluates and generates synthetic queries against that same truth (`data/reports/li_rag_eval.md`); DeepEval cross-checks the agent traces the same fixed judged subset saw (`data/reports/deepeval_crosscheck.md`); Braintrust holds the traces and experiment comparisons, recreated from Git/local sources by `just braintrust-sync`. See `docs/demo-walkthrough.md` for a guided tour and `docs/braintrust-queries.md` for the BTQL investigations run against it.
 
 ## Try it
 
@@ -118,6 +114,10 @@ Running `just data` twice changes no committed file, and a test checks that. Any
 - `data/reports/four_arm.md` has the full comparison of the four versions
 - `data/reports/tournament.md` has the search-engine tournament
 - `data/reports/judges.md` has the judge panel and its agreement statistics
+- `data/reports/li_rag_eval.md` has the LlamaIndex RAG lab's native evaluation and synthetic-query study
+- `data/reports/deepeval_crosscheck.md` has the DeepEval independent agent-eval cross-check
+- `docs/demo-walkthrough.md` is a guided tour through datasets, RAG lab, agent systems, traces, scorers and economics
+- `docs/braintrust-queries.md` has the six BTQL investigations, exact queries and results
 - `specs/grilled-product-brief.md` is the requirements document
 
 ## Scope

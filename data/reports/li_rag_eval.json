@@ -1,0 +1,219 @@
+{
+  "brief_differences": [
+    {
+      "difference": "Brief section 3 allows LlamaIndex 'only behind the Retriever interface'; section 4 excludes LlamaIndex agents/workflows. M7a additionally uses it for framework-native evaluation (RetrieverEvaluator) and synthetic-query generation (DatasetGenerator). Agents/workflows remain excluded -- neither is used anywhere in this module. M3 measured LlamaIndex and declined it for retrieval composition (tournament.json's llamaindex.adopted: false, 178 MB reason); M7a adopts it for a different purpose (evaluation/synthesis, not composition) -- the earlier decision is superseded for that purpose only, not reversed for retrieval itself.",
+      "id": 1,
+      "topic": "llamaindex_scope"
+    },
+    {
+      "difference": "tests/test_spend_m6.py::test_realized_usd_within_envelope originally asserted realized_usd() (the WHOLE ledger) <= 4.00. Once M7a's own ledger rows exist that assertion would go false for a reason having nothing to do with M6. Repaired to sum only the M1-M6 milestone tags via the existing realized_by_tag() helper, which keeps M6's own claim exactly as strong as it was measured, rather than either weakening the envelope (raising 4.00, which the spec explicitly forbids) or leaving a spurious cross-milestone failure. M7a's own ledger discipline is asserted separately in tests/test_spend_m7.py against the $6.00 global cap.",
+      "id": 2,
+      "topic": "m6_envelope_test_scoping"
+    }
+  ],
+  "cause_rule": "Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'reranking' when the config carries a rerank_model AND the pre-rerank fused ranking's hit/miss differs from the post-rerank ranking's hit/miss at the same k; 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other four labels -- typically the retrieved list and expected_ids simply differ).",
+  "decisions": [
+    {
+      "decision": "tests/test_spend_m6.py's envelope assertion scoped to M1-M6 tags via realized_by_tag() rather than the whole ledger; see brief_differences[1].",
+      "id": 1,
+      "topic": "m6_envelope_test_scoping"
+    }
+  ],
+  "disagreement_summary": {
+    "li_hit_maud_miss": 0,
+    "maud_hit_li_miss": 0,
+    "note": "Near-zero disagreement is expected and reported plainly, not manufactured: expected_ids for the LlamaIndex RetrieverEvaluator ARE the project's gold-bearing chunk ids (dealpoint.rag_lab.evaluate.gold_bearing_chunk_ids uses the exact same overlap_chars/MIN_GOLD_OVERLAP_CHARS rule as dealpoint.eval.tournament._first_hit_rank), so the two metrics differ only where k-truncation or multi-hit averaging bites."
+  },
+  "disagreements": [],
+  "framework_versions": {
+    "bm25s": "0.3.11",
+    "braintrust": "0.37.0",
+    "deepeval": "4.2.1",
+    "fastembed": "0.8.0",
+    "git_sha7": "b9eac78",
+    "llama-index-core": "0.14.24",
+    "llama-index-retrievers-bm25": "0.8.0",
+    "openai": "3.8.0",
+    "pydantic": "2.13.5",
+    "python": "3.12.3",
+    "qdrant-client": "1.19.0"
+  },
+  "frozen_assertions": {
+    "chunk_version": "8e5e8ba56765",
+    "index_version": "e2b4a2b97561",
+    "test_subset_v1_sha256": "37b9e61a55f96c00f23b192f826c86241151581b2383b5563665af06255bd19c",
+    "tournament_json_sha256": "5277f1d9a795d9cc0632d5c4635ac8d4a203487b4b92a5773e2b208e5040d748"
+  },
+  "generated_from": {
+    "case_set": "dev",
+    "chunk_version": "8e5e8ba56765",
+    "dataset_version": "81ed82cd7552",
+    "git_sha7": "b9eac78",
+    "index_version": "e2b4a2b97561",
+    "n_cases": 58
+  },
+  "ranking_agreement": {
+    "hit_rate_vs_hit_at_5": {
+      "li_hit_rate_by_config": {
+        "bm25": 0.8620689655172413,
+        "dense": 0.8103448275862069,
+        "hybrid_rrf": 0.9137931034482759,
+        "hybrid_rrf_rerank": 0.9137931034482759,
+        "multi_query_fusion": 0.8275862068965517,
+        "multi_query_fusion_rerank": 0.8793103448275862
+      },
+      "obj_hit_at_5_by_config": {
+        "bm25": 0.8620689655172413,
+        "dense": 0.8103448275862069,
+        "hybrid_rrf": 0.9137931034482759,
+        "hybrid_rrf_rerank": 0.9137931034482759,
+        "multi_query_fusion": 0.8275862068965517,
+        "multi_query_fusion_rerank": 0.8793103448275862
+      },
+      "spearman": 1.0
+    },
+    "mrr_vs_mrr": {
+      "li_mrr_by_config": {
+        "bm25": 0.6635057471264368,
+        "dense": 0.6206896551724138,
+        "hybrid_rrf": 0.7244252873563218,
+        "hybrid_rrf_rerank": 0.7227011494252873,
+        "multi_query_fusion": 0.678448275862069,
+        "multi_query_fusion_rerank": 0.7126436781609196
+      },
+      "obj_mrr_by_config": {
+        "bm25": 0.6635057471264368,
+        "dense": 0.6206896551724138,
+        "hybrid_rrf": 0.7244252873563218,
+        "hybrid_rrf_rerank": 0.7227011494252873,
+        "multi_query_fusion": 0.678448275862069,
+        "multi_query_fusion_rerank": 0.7126436781609196
+      },
+      "spearman": 1.0
+    }
+  },
+  "retrievers": {
+    "bm25": {
+      "li": {
+        "hit_rate": 0.8620689655172413,
+        "mrr": 0.6635057471264368,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.8620689655172413,
+        "gold_span_hit_at_5": 0.8620689655172413,
+        "gold_span_mrr": 0.6635057471264368,
+        "n": 58
+      }
+    },
+    "dense": {
+      "li": {
+        "hit_rate": 0.8103448275862069,
+        "mrr": 0.6206896551724138,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.8103448275862069,
+        "gold_span_hit_at_5": 0.8103448275862069,
+        "gold_span_mrr": 0.6206896551724138,
+        "n": 58
+      }
+    },
+    "hybrid_rrf": {
+      "li": {
+        "hit_rate": 0.9137931034482759,
+        "mrr": 0.7244252873563218,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.9137931034482759,
+        "gold_span_hit_at_5": 0.9137931034482759,
+        "gold_span_mrr": 0.7244252873563218,
+        "n": 58
+      }
+    },
+    "hybrid_rrf_rerank": {
+      "li": {
+        "hit_rate": 0.9137931034482759,
+        "mrr": 0.7227011494252873,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.9137931034482759,
+        "gold_span_hit_at_5": 0.9137931034482759,
+        "gold_span_mrr": 0.7227011494252873,
+        "n": 58
+      }
+    },
+    "multi_query_fusion": {
+      "li": {
+        "hit_rate": 0.8275862068965517,
+        "mrr": 0.678448275862069,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.8275862068965517,
+        "gold_span_hit_at_5": 0.8275862068965517,
+        "gold_span_mrr": 0.678448275862069,
+        "n": 58
+      }
+    },
+    "multi_query_fusion_rerank": {
+      "li": {
+        "hit_rate": 0.8793103448275862,
+        "mrr": 0.7126436781609196,
+        "n": 58
+      },
+      "obj": {
+        "gold_span_hit_at_10": 0.8793103448275862,
+        "gold_span_hit_at_5": 0.8793103448275862,
+        "gold_span_mrr": 0.7126436781609196,
+        "n": 58
+      }
+    }
+  },
+  "schema_version": 1,
+  "synthetic": {
+    "file_sha256": "c0b69cbc952c948fe816521a0a927c792b8477d3174b8a2eeefccdff004bb882",
+    "generator": "llama_index.core.evaluation.dataset_generation.DatasetGenerator",
+    "generator_version": "num_questions_per_chunk=2",
+    "model": "z-ai/glm-5.3-flash",
+    "n_chunks": 73,
+    "n_queries": 106,
+    "prompt_hash": "93801419e0abfb5b",
+    "results": {
+      "bm25": {
+        "li_hit_rate": 0.9056603773584906,
+        "n": 106,
+        "obj_hit_at_5": 0.9245283018867925
+      },
+      "dense": {
+        "li_hit_rate": 0.8867924528301887,
+        "n": 106,
+        "obj_hit_at_5": 0.9339622641509434
+      },
+      "hybrid_rrf": {
+        "li_hit_rate": 0.9433962264150944,
+        "n": 106,
+        "obj_hit_at_5": 0.9716981132075472
+      },
+      "hybrid_rrf_rerank": {
+        "li_hit_rate": 0.9622641509433962,
+        "n": 106,
+        "obj_hit_at_5": 0.9811320754716981
+      },
+      "multi_query_fusion": {
+        "li_hit_rate": 0.9433962264150944,
+        "n": 106,
+        "obj_hit_at_5": 0.9716981132075472
+      },
+      "multi_query_fusion_rerank": {
+        "li_hit_rate": 0.9622641509433962,
+        "n": 106,
+        "obj_hit_at_5": 0.9811320754716981
+      }
+    },
+    "verdict": "Frozen winner `hybrid_rrf` stays strong under the synthetic query distribution: li_hit_rate=0.9433962264150944 vs dense=0.8867924528301887."
+  },
+  "worked_examples": []
+}

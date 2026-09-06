@@ -1,0 +1,41 @@
+{
+  "rule": "Six categories, each a deterministic predicate over a stored canonical result row: 'successful_direct' = grounded_accuracy is True and reasoning_type == 'direct' and tool_calls <= 2; 'retrieval_rescue' = grounded_accuracy is True and (gold_first_rank is None or gold_first_rank > 1) and >= 2 search_agreement steps; 'defined_term_cross_ref' = required_evidence is not None and a lookup_defined_term or get_section step exists; 'inefficient_trajectory' = cap_hit is True, or tool_calls >= 6 with grounded_accuracy is not True; 'wrong_answer' = answer_correct is False; 'abstention_counterfactual' = case_set == 'counterfactual' and record.status == 'ABSTAINED'. Ties broken by ascending sha256(f'{SEED}:{case_id}:{variant_id}') (dealpoint.eval.subset._seeded_key's convention).",
+  "selections": [
+    {
+      "case_id": "contract_0__q01",
+      "category": "successful_direct",
+      "experiment_name": null,
+      "variant_id": "D@openai/gpt-5.6-luna-pro"
+    },
+    {
+      "case_id": "contract_0__q01",
+      "category": "retrieval_rescue",
+      "experiment_name": null,
+      "variant_id": "C@z-ai/glm-5.3-flash"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "category": "defined_term_cross_ref",
+      "experiment_name": null,
+      "variant_id": "D@anthropic/claude-haiku-4.5"
+    },
+    {
+      "case_id": "contract_99__q03",
+      "category": "inefficient_trajectory",
+      "experiment_name": null,
+      "variant_id": "D@qwen/qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_144__q09",
+      "category": "wrong_answer",
+      "experiment_name": null,
+      "variant_id": "A@anthropic/claude-haiku-4.5"
+    },
+    {
+      "case_id": "contract_75__oos09",
+      "category": "abstention_counterfactual",
+      "experiment_name": null,
+      "variant_id": "A@anthropic/claude-haiku-4.5"
+    }
+  ]
+}

@@ -326,7 +326,7 @@ Note (honesty, spec §3): arm A lacks several tools rules 2/3/4/6 need, so its a
 ## Cost: estimate vs realised
 
 Target: $1.5, absolute: $3.0, envelope: $4.0, M4 ledger total: $0.751879
-M4.1 ledger total: $1.420234 (target $1.0, absolute $1.5); total ledger: $2.761247.
+M4.1 ledger total: $1.420234 (target $1.0, absolute $1.5); total ledger: $3.713288.
 Estimate before the v2 sweeps: `{"arms": ["A", "B", "C", "D"], "basis": "ledger:measured(arm,model)", "calls": 656, "cases": 164, "est_usd": 0.907372, "legs": [{"arms": ["A", "B", "C", "D"], "models": ["z-ai/glm-5.3-flash"], "n_cases": 32}, {"arms": ["A", "D"], "models": ["anthropic/claude-haiku-4.5"], "n_cases": 18}], "model": ["z-ai/glm-5.3-flash", "anthropic/claude-haiku-4.5"], "per_call_usd": 0.001383, "per_case_usd": 0.005533, "sweep": "four_arm"}`
 
 Caveat: this estimate's `ledger:measured(arm,model)` basis is biased LOW for Haiku arm D, because v1's arm-D cases aborted early (16/18 EXECUTION_FAILED) -- the mean per-case cost measured from those short, mostly-failed executions understates what a full 8-tool-call run costs. This is why the Haiku arm-D leg estimated $0.673436 and realised $0.824328 -- the only leg in the v2 sweeps to overrun its own estimate.

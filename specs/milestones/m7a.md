@@ -118,6 +118,11 @@ note. Nothing else in the README block: no execution-failure, cap-hit, or v1-vs-
 per-arm verdict sentences. Those diagnostics stay, complete and honest, in `data/reports/four_arm.md`
 and `four_arm.json`, which the README links to. Update `tests/test_readme_results.py` to the new block
 shape. The README is an introduction for readers who do not know the project; the reports are the record.
+The same rule applies to the `<!-- BEGIN PARETO -->` block M6 added: per-model table of grounded accuracy
+"x% (k of n scored)" and $/case only; move "Not run", "Partially run", "Comparability note", "Spend",
+"Recorded decisions", "Brief-vs-spec differences" and "Caveats" out of the README into `data/reports/pareto.md`
+(they stay complete there); place both generated blocks under the README's "Latest numbers" heading; update
+`tests/test_readme_pareto.py` to the new shape.
 
 ## Definition of done (`gate_m7`; add the marker)
 - [ ] Optional dependency groups installed within the disk guard; `framework_versions` recorded.

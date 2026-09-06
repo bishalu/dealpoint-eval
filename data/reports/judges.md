@@ -3,7 +3,7 @@
 These are **model-judged secondary scores, budget-scaled**, and are never presented as objective truth. Human calibration is **pending** unless stated otherwise below.
 
 `rubric_version`: `cfda9f8cc401`  
-`git_sha7`: `75e2d39`
+`git_sha7`: `b9eac78`
 
 ## Judged subset
 
@@ -66,9 +66,9 @@ These are **model-judged secondary scores, budget-scaled**, and are never presen
 {
   "absolute_usd": 1.2,
   "assumed_input_tokens_per_call": 8000,
-  "envelope_headroom_after_m5": 0.38606,
-  "envelope_headroom_after_m6": 0.38606,
-  "envelope_realized_usd": 3.61394,
+  "envelope_headroom_after_m5": 0.286712,
+  "envelope_headroom_after_m6": 0.286712,
+  "envelope_realized_usd": 3.713288,
   "envelope_usd": 4.0,
   "est_basis": "tokens_per_call x live",
   "est_usd": 0.12852,
