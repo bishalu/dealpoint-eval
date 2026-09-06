@@ -64,6 +64,8 @@ SEQUENCE: list[MilestoneSpec] = [
                   spend_gate=True,
                   budget_argv=["uv", "run", "python", "-m", "dealpoint.eval.budget", "m7a"],
                   absolute_usd=2.50),
+    MilestoneSpec(id="m7b", title="Braintrust cockpit and the multi-judge demo (reproducible layer)",
+                  spec_path="specs/milestones/m7b.md", gate_marker="gate_m7b"),
 ]
 
 # Exit codes shared by both ADWs, so the parent can branch without parsing prose.

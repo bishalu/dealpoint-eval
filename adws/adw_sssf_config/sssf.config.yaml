@@ -2,11 +2,12 @@
 # v1 runs the Pi coding agent only; coding_agent: claude_code arrives in v2.
 defaults:
   coding_agent: pi
-  model: pi-claude-code-provider/sonnet   # provider/id — a bare pattern is ambiguous across providers
-  # Every model is served by the operator's authenticated Claude Code subscription via
-  # the pi-claude-code-provider extension. `fable` is available on that provider but is
-  # deliberately UNASSIGNED: it is reserved for manual escalation (an exceptional final
-  # architecture or review pass), invoked by hand, never as a roster default.
+  model: claude-bridge/claude-sonnet-5   # provider/id — a bare pattern is ambiguous across providers
+  # Every model is served by the operator's Claude subscription via the pi-claude-bridge
+  # extension (Agent SDK: persistent session, streaming, resume). Switched from
+  # pi-claude-code-provider on 2026-09-06: that provider relaunched Claude Code per turn
+  # and cost about a minute a turn on m7a. `fable` stays UNASSIGNED: reserved for manual
+  # escalation, invoked by hand, never as a roster default.
   thinking: medium                 # off | minimal | low | medium | high | xhigh | max
   harness_engineering: []          # pi extensions loaded into the harness (-e)
   # Roster-wide allowlist; any agent may override with its own list.
@@ -48,7 +49,7 @@ observability:
 
 agents:
   - name: planner
-    model: pi-claude-code-provider/opus
+    model: claude-bridge/claude-opus-5
     thinking: high
     color: "#a78bfa"                 # optional hex — the agent's lane color in the visualizer
     purpose: Turn a request into a plan the builder can implement without asking questions.
@@ -72,8 +73,8 @@ agents:
       - subagent_remove
 
   - name: builder
-    model: pi-claude-code-provider/sonnet
-    thinking: high
+    model: claude-bridge/claude-sonnet-5
+    thinking: medium               # high cost a minute a turn on m7a; medium for the builder
     color: "#22d3ee"
     purpose: Implement the plan exactly; report every changed file in the envelope.
     prompt_engineering:
@@ -89,9 +90,26 @@ agents:
       - bash
       - edit
       - write
+      - mcp_braintrust_list_recent_objects          # Braintrust MCP via pi-mcp-extension (~/.pi/agent/mcp.json). Read tools verify; create/test tools prototype only — persistent objects are made by braintrust_cockpit.py (m7b spec)
+      - mcp_braintrust_resolve_object
+      - mcp_braintrust_sql_query
+      - mcp_braintrust_summarize_experiment
+      - mcp_braintrust_generate_permalink
+      - mcp_braintrust_search_docs
+      - mcp_braintrust_list_monitoring_views
+      - mcp_braintrust_get_monitoring_view
+      - mcp_braintrust_get_project_settings
+      - mcp_braintrust_test_facet_on_trace
+      - mcp_braintrust_test_preprocessor_on_trace
+      - mcp_braintrust_test_evaluator
+      - mcp_braintrust_create_monitoring_view
+      - mcp_braintrust_update_monitoring_view
+      - mcp_braintrust_new_pattern
+      - mcp_braintrust_search_patterns
+      - mcp_braintrust_create_facet
 
   - name: scout
-    model: pi-claude-code-provider/haiku
+    model: claude-bridge/claude-haiku-4-5
     thinking: low
     color: "#fbbf24"
     purpose: Find and report where things live; change nothing.
@@ -113,12 +131,21 @@ agents:
       - subagent_continue
       - subagent_list
       - subagent_remove
+      - mcp_braintrust_list_recent_objects          # Braintrust MCP, read-only
+      - mcp_braintrust_resolve_object
+      - mcp_braintrust_sql_query
+      - mcp_braintrust_summarize_experiment
+      - mcp_braintrust_generate_permalink
+      - mcp_braintrust_search_docs
+      - mcp_braintrust_list_monitoring_views
+      - mcp_braintrust_get_monitoring_view
+      - mcp_braintrust_get_project_settings
 
   # No tester agent: running the suite is a known command, so it is a kind="code"
   # phase over adw_modules/quality.py. See SKILL.md hard rule 8.
 
   - name: reviewer
-    model: pi-claude-code-provider/opus
+    model: claude-bridge/claude-opus-5
     thinking: high
     color: "#fb7185"
     purpose: Confirm that what was built is what was asked for; change nothing.
@@ -134,9 +161,18 @@ agents:
       - ls
       - bash
       - write
+      - mcp_braintrust_list_recent_objects          # Braintrust MCP, read-only: verify the manifest against what exists
+      - mcp_braintrust_resolve_object
+      - mcp_braintrust_sql_query
+      - mcp_braintrust_summarize_experiment
+      - mcp_braintrust_generate_permalink
+      - mcp_braintrust_search_docs
+      - mcp_braintrust_list_monitoring_views
+      - mcp_braintrust_get_monitoring_view
+      - mcp_braintrust_get_project_settings
 
   - name: documenter
-    model: pi-claude-code-provider/haiku
+    model: claude-bridge/claude-haiku-4-5
     thinking: low
     color: "#e879f9"
     purpose: Write up the change that was just made, from the diff; document only.
