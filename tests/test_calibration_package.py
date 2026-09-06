@@ -157,6 +157,12 @@ def test_just_calibration_run_twice_is_byte_identical(tmp_path, dataset_availabl
     json_out2 = tmp_path / "judges2.json"
     monkeypatch.setattr(cfg, "JUDGES_JSON_PATH", json_out1)
     monkeypatch.setattr(calib_mod, "JUDGES_JSON_PATH", json_out1)
+    # main() also renders judges.md; without this the suite rewrote the real
+    # data/reports/judges.md (git_sha7 line) on every run, which the factory's
+    # write gate then attributed to whichever agent ran the tests.
+    if hasattr(cfg, "JUDGES_MD_PATH"):
+        monkeypatch.setattr(cfg, "JUDGES_MD_PATH", tmp_path / "judges.md")
+    monkeypatch.setattr(calib_mod, "JUDGES_MD_PATH", tmp_path / "judges.md")
 
     calib_mod.main([])
     first = (out_dir / "packets.jsonl").read_bytes()

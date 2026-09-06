@@ -16,6 +16,18 @@ from dealpoint.llm.client import FakeClient, ScriptedToolCall, ScriptedTurn
 
 pytestmark = pytest.mark.gate_m6
 
+
+@pytest.fixture(autouse=True)
+def _results_in_tmp(tmp_path, monkeypatch):
+    """`verify_slate(..., fake=True)` drives `run_eval_set` with its default
+    `out_dir`, which is the real `data/results/`. Without this the suite left
+    `pareto_probe_<model>_..._offline_<sha>.jsonl` files in the repo on every
+    run, which the factory's write gate then attributed to whichever agent
+    ran the tests. Point the writer at tmp_path instead."""
+    import dealpoint.eval.run as run_mod
+
+    monkeypatch.setattr(run_mod, "RESULTS_DIR", tmp_path / "results")
+
 _MODELS = [c["model"] for c in PARETO_CANDIDATES]
 
 
