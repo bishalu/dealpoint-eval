@@ -72,7 +72,9 @@ data/index/
 !data/reports/braintrust_sync.json
 !data/reports/framework_versions.json
 !data/reports/m7a_disk_guard.json
+!data/reports/synthetic_generation_run.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/
 .claude/skills/sssf/apps/visualizer/dist/
+.bt/

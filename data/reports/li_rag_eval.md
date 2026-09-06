@@ -1,6 +1,6 @@
 # M7a -- LlamaIndex RAG lab: native evaluation on canonical dev retrieval
 
-Case set: `dev` (58 cases), chunk_version=`8e5e8ba56765`, index_version=`e2b4a2b97561`, git_sha7=`b9eac78`
+Case set: `dev` (58 cases), chunk_version=`8e5e8ba56765`, index_version=`e2b4a2b97561`, git_sha7=`ebfc41d`
 
 LlamaIndex owns retriever composition/evaluation and the synthetic-query study; MAUD gold-span overlap remains benchmark truth. LlamaIndex node ids never replace it.
 
@@ -35,6 +35,40 @@ Cause rule:
 
 Generator: `llama_index.core.evaluation.dataset_generation.DatasetGenerator` (num_questions_per_chunk=2), model=`z-ai/glm-5.3-flash`, n_chunks=73, n_queries=106, prompt_hash=`93801419e0abfb5b`
 
+Total realized cost: $0.015215
+
+Calibration/estimate provenance:
+```json
+{
+  "calibration": {
+    "n_sample": 3,
+    "projected_usd": 0.00066,
+    "realized_usd": 0.000463,
+    "rows": [
+      {
+        "chunk_id": "contract_0:14952-16848",
+        "n_questions": 0
+      },
+      {
+        "chunk_id": "contract_0:16612-18504",
+        "n_questions": 2
+      },
+      {
+        "chunk_id": "contract_0:18272-20171",
+        "n_questions": 1
+      }
+    ]
+  },
+  "estimate": {
+    "basis": "live",
+    "est_usd": 0.02486,
+    "model": "z-ai/glm-5.3-flash",
+    "n_chunks": 113,
+    "per_call_usd": 0.00021999999999999998
+  }
+}
+```
+
 Verdict: Frozen winner `hybrid_rrf` stays strong under the synthetic query distribution: li_hit_rate=0.9433962264150944 vs dense=0.8867924528301887.
 
 | config | li/hit_rate (synthetic) | obj/hit@5 (synthetic) |
@@ -65,4 +99,5 @@ Verdict: Frozen winner `hybrid_rrf` stays strong under the synthetic query distr
 
 - **llamaindex_scope**: Brief section 3 allows LlamaIndex 'only behind the Retriever interface'; section 4 excludes LlamaIndex agents/workflows. M7a additionally uses it for framework-native evaluation (RetrieverEvaluator) and synthetic-query generation (DatasetGenerator). Agents/workflows remain excluded -- neither is used anywhere in this module. M3 measured LlamaIndex and declined it for retrieval composition (tournament.json's llamaindex.adopted: false, 178 MB reason); M7a adopts it for a different purpose (evaluation/synthesis, not composition) -- the earlier decision is superseded for that purpose only, not reversed for retrieval itself.
 - **m6_envelope_test_scoping**: tests/test_spend_m6.py::test_realized_usd_within_envelope originally asserted realized_usd() (the WHOLE ledger) <= 4.00. Once M7a's own ledger rows exist that assertion would go false for a reason having nothing to do with M6. Repaired to sum only the M1-M6 milestone tags via the existing realized_by_tag() helper, which keeps M6's own claim exactly as strong as it was measured, rather than either weakening the envelope (raising 4.00, which the spec explicitly forbids) or leaving a spurious cross-milestone failure. M7a's own ledger discipline is asserted separately in tests/test_spend_m7.py against the $6.00 global cap.
+- **score_budget**: Brief section 2.7 caps Braintrust logging at <= 6 scores/case. M7a permits <= 12 scores/case on subsets <= 60 cases as a ceiling, not a target, with M4/M6 sweeps still logging exactly six -- enforced at sync time by dealpoint.eval.braintrust_sync.assert_score_budget.
 

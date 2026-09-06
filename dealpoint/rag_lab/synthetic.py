@@ -23,7 +23,12 @@ import time
 from datetime import UTC, datetime
 from pathlib import Path
 
-from dealpoint.config import RAG_SYNTH_MODEL_ENV, SYNTHETIC_DEV_QUERIES_PATH, WORKHORSE_MODEL
+from dealpoint.config import (
+    RAG_SYNTH_MODEL_ENV,
+    SYNTHETIC_DEV_QUERIES_PATH,
+    SYNTHETIC_GENERATION_RUN_PATH,
+    WORKHORSE_MODEL,
+)
 from dealpoint.corpus.chunks import Chunk, chunk_document
 from dealpoint.corpus.document import load_document
 from dealpoint.eval.cases import resolve_document_id
@@ -185,6 +190,136 @@ def estimate_synthetic_cost(chunk_entries: list[dict]) -> dict:
     }
 
 
+def _ledger_rows(path=None) -> list[dict]:
+    from dealpoint.config import SPEND_LEDGER_PATH
+    from dealpoint.eval.spend import read_ledger
+
+    return read_ledger(path or SPEND_LEDGER_PATH)
+
+
+def backfill_row_costs(rows: list[dict], ledger_rows: list[dict]) -> tuple[list[dict], dict]:
+    """Attribute realized ledger spend to already-frozen synthetic-query rows,
+    without any new spend (spec section 1.B: \"generator id/version/prompt
+    hash/cost\").
+
+    Pure function. `rows` are the frozen query rows (each carries `chunk_id`
+    and a shared `ts` -- every row in one `generate_synthetic_set` run gets
+    the SAME `ts`, stamped once at the start of that run's write loop).
+    `ledger_rows` are pre-filtered to `milestone_tag == \"m7a\"` and
+    `purpose == \"synthetic_query\"`.
+
+    Matching rule (documented, deterministic): the frozen rows' shared `ts`
+    is the cutoff for \"this run\"; among ledger rows for a `chunk_id` with
+    ledger `ts >= cutoff`, the earliest one is the call that generated this
+    run's questions for that chunk (the main generation loop calls each
+    chunk exactly once, in sorted order, so its ledger row's `ts` is >= the
+    run's start `ts`). A chunk's realized cost is divided evenly across the
+    number of rows kept from it in the frozen file. A chunk_id with no
+    matching ledger row after the cutoff gets `usd: None` -- never coerced
+    to 0.
+    """
+    if not rows:
+        return [], {"matched_chunks": 0, "unmatched_chunks": [], "total_usd": 0.0}
+
+    cutoff = min(r["ts"] for r in rows)
+    candidates: dict[str, list[dict]] = {}
+    for lr in ledger_rows:
+        cid = lr.get("chunk_id")
+        if not cid or lr.get("ts", "") < cutoff:
+            continue
+        candidates.setdefault(cid, []).append(lr)
+
+    chunk_usd: dict[str, float] = {}
+    for cid, matches in candidates.items():
+        matches.sort(key=lambda r: r["ts"])
+        chunk_usd[cid] = float(matches[0]["usd"])
+
+    n_kept_by_chunk: dict[str, int] = {}
+    for r in rows:
+        n_kept_by_chunk[r["chunk_id"]] = n_kept_by_chunk.get(r["chunk_id"], 0) + 1
+
+    new_rows: list[dict] = []
+    unmatched: set[str] = set()
+    total_usd = 0.0
+    for r in rows:
+        cid = r["chunk_id"]
+        usd = chunk_usd.get(cid)
+        new_row = dict(r)
+        if usd is None:
+            new_row["usd"] = None
+            unmatched.add(cid)
+        else:
+            per_q = round(usd / n_kept_by_chunk[cid], 6)
+            new_row["usd"] = per_q
+            total_usd += per_q
+        new_rows.append(new_row)
+
+    return new_rows, {
+        "matched_chunks": len(chunk_usd),
+        "unmatched_chunks": sorted(unmatched),
+        "total_usd": round(total_usd, 6),
+    }
+
+
+def backfill_costs_on_disk(
+    queries_path: Path = SYNTHETIC_DEV_QUERIES_PATH,
+    ledger_path=None,
+) -> dict:
+    """Backfill `usd` into the already-frozen `synthetic_dev_queries.jsonl`
+    on disk, from the ledger, with NO new spend. Rewrites the file (same
+    rows, same order, `usd` added) and returns a summary including the
+    recomputed `file_sha256`.
+    """
+    from dealpoint.config import SPEND_LEDGER_PATH
+
+    rows: list[dict] = []
+    with open(queries_path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+
+    ledger = _ledger_rows(ledger_path or SPEND_LEDGER_PATH)
+    synth_ledger_rows = [
+        r for r in ledger if r.get("milestone_tag") == "m7a" and r.get("purpose") == "synthetic_query"
+    ]
+    new_rows, summary = backfill_row_costs(rows, synth_ledger_rows)
+
+    with open(queries_path, "w", encoding="utf-8") as fh:
+        fh.writelines(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n" for row in new_rows)
+
+    file_hash = hashlib.sha256(queries_path.read_bytes()).hexdigest()
+    summary["file_sha256"] = file_hash
+    summary["n_rows"] = len(new_rows)
+    return summary
+
+
+def write_generation_run_record(result: dict, path: Path = SYNTHETIC_GENERATION_RUN_PATH) -> None:
+    """Persist the calibration/estimate/cost provenance from one
+    `generate_synthetic_set` run so `dealpoint.rag_lab.report` can surface it
+    in `li_rag_eval.json`'s `synthetic` sidecar without ever re-running the
+    (metered) generation.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "generator": result.get("generator"),
+        "generator_version": result.get("generator_version"),
+        "prompt_hash": result.get("prompt_hash"),
+        "model": result.get("model"),
+        "n_chunks": result.get("n_chunks"),
+        "n_queries": result.get("n_queries"),
+        "calibration": result.get("calibration"),
+        "estimate": result.get("estimate"),
+        "total_usd": result.get("total_usd"),
+        "file_sha256": result.get("file_sha256"),
+        "out_path": result.get("out_path"),
+        "generated_at": result.get("generated_at"),
+    }
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, indent=2, sort_keys=True, ensure_ascii=False)
+        fh.write("\n")
+
+
 def run_calibration(client, llm, chunk_entries: list[dict], n: int = 3) -> dict:
     """Generate on a <=3-chunk calibration sample; compare projected vs realised."""
     from dealpoint.eval.spend import realized_usd
@@ -238,8 +373,11 @@ def generate_synthetic_set(
     model = synth_model()
     ts = datetime.now(UTC).isoformat()
 
+    from dealpoint.eval.spend import realized_usd as _realized_usd
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
     rows_written = 0
+    written_rows: list[dict] = []
     with open(out_path, "w", encoding="utf-8") as fh:
         for entry in chunk_entries:
             client.context = {
@@ -248,8 +386,16 @@ def generate_synthetic_set(
                 "chunk_id": entry["chunk_id"],
                 "case_id": entry["case_id"],
             }
+            before_call = _realized_usd()
             questions = _generate_for_chunk(llm, entry)
+            after_call = round(_realized_usd() - before_call, 6)
+            n_kept = len(questions)
             for q in questions:
+                # usd (spec section 1.B, "generator id/version/prompt hash/
+                # cost"): this chunk's single generation call cost, split
+                # evenly across the questions kept from it. `None` only if
+                # the ledger somehow recorded no delta for this call.
+                per_q_usd = round(after_call / n_kept, 6) if n_kept else None
                 row = {
                     "query_id": hashlib.sha256(f"{entry['chunk_id']}|{q}".encode()).hexdigest()[:16],
                     "question": q,
@@ -261,14 +407,17 @@ def generate_synthetic_set(
                     "generator_version": GENERATOR_VERSION,
                     "prompt_hash": generator_ph,
                     "model": model,
+                    "usd": per_q_usd,
                     "ts": ts,
                 }
                 fh.write(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n")
+                written_rows.append(row)
                 rows_written += 1
 
     file_hash = hashlib.sha256(out_path.read_bytes()).hexdigest()
+    total_usd = round(sum(r["usd"] for r in written_rows if r["usd"] is not None), 6)
 
-    return {
+    result = {
         "generator": GENERATOR_ID,
         "generator_version": GENERATOR_VERSION,
         "prompt_hash": generator_ph,
@@ -277,10 +426,13 @@ def generate_synthetic_set(
         "n_queries": rows_written,
         "calibration": calibration,
         "estimate": full_estimate,
+        "total_usd": total_usd,
         "file_sha256": file_hash,
         "out_path": str(out_path),
         "generated_at": ts,
     }
+    write_generation_run_record(result)
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:

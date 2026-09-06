@@ -467,6 +467,47 @@ def compare_to_judge(deepeval_scores: list[dict], judge_means_by_trace: dict) ->
     }
 
 
+DISAGREEMENT_METRIC_NAME = "task_completion_vs_grounded_accuracy"
+
+
+def find_disagreements(per_trace_scores: list[dict], det_by_row: list[dict]) -> list[dict]:
+    """Traces where DeepEval and the deterministic signal disagree.
+
+    Pure function, no I/O, no model calls: `per_trace_scores[i]` and
+    `det_by_row[i]` MUST refer to the same trace (same index -- callers pass
+    the parallel lists `main()` already builds).
+
+    Rule (minimum, per spec): `task_completion >= 0.5` with
+    `grounded_accuracy is False`, or `task_completion <= 0.5` with
+    `grounded_accuracy is True`. `None` on either side is never coerced --
+    such traces are skipped entirely, not counted as agreement OR
+    disagreement.
+    """
+    disagreements: list[dict] = []
+    for score_row, det_row in zip(per_trace_scores, det_by_row, strict=True):
+        tc = (score_row.get("task_completion") or {}).get("score")
+        ga = det_row.get("grounded_accuracy")
+        if tc is None or ga is None:
+            continue
+        if tc >= 0.5 and ga is False:
+            direction = "deepeval_pass_deterministic_fail"
+        elif tc <= 0.5 and ga is True:
+            direction = "deepeval_fail_deterministic_pass"
+        else:
+            continue
+        disagreements.append(
+            {
+                "case_id": score_row.get("case_id"),
+                "variant_id": score_row.get("variant_id"),
+                "metric": DISAGREEMENT_METRIC_NAME,
+                "deepeval_score": tc,
+                "deterministic_score": ga,
+                "direction": direction,
+            }
+        )
+    return disagreements
+
+
 def compare_to_human() -> dict:
     """Human comparison: `data/eval/calibration/human_scores.jsonl` is 0
     bytes -- every cell here is `"pending"`, n=0, never fabricated.
@@ -563,6 +604,16 @@ BRIEF_DIFFERENCES = [
             "every DeepEval<->human comparison in this report is 'pending'."
         ),
     },
+    {
+        "id": 4,
+        "topic": "score_budget",
+        "difference": (
+            "Brief section 2.7 caps Braintrust logging at <= 6 scores/case. M7a permits "
+            "<= 12 scores/case on subsets <= 60 cases as a ceiling, not a target, with M4/M6 "
+            "sweeps still logging exactly six -- enforced at sync time by "
+            "dealpoint.eval.braintrust_sync.assert_score_budget."
+        ),
+    },
 ]
 
 
@@ -628,6 +679,19 @@ def render_markdown(report: dict) -> str:
     lines.append("")
     lines.append("## Comparisons\n")
     lines.append(f"```json\n{json.dumps(report.get('comparisons', {}), indent=2, sort_keys=True)}\n```\n")
+    disagreements = report.get("disagreements", [])
+    lines.append(f"## Disagreement cases ({len(disagreements)})\n")
+    if not disagreements:
+        lines.append("None found (or none computable -- both sides require a non-None value).")
+    else:
+        lines.append("| case_id | variant_id | metric | deepeval_score | deterministic_score | direction |")
+        lines.append("|---|---|---|---|---|---|")
+        for d in disagreements:
+            lines.append(
+                f"| {d['case_id']} | {d['variant_id']} | {d['metric']} | "
+                f"{d['deepeval_score']} | {d['deterministic_score']} | {d['direction']} |"
+            )
+    lines.append("")
     lines.append(f"## Classification: `{report.get('classification')}`\n")
     lines.append(report.get("classification_rationale", ""))
     lines.append("")
@@ -729,6 +793,7 @@ def main(argv: list[str] | None = None) -> int:
         "vs_judge": compare_to_judge(per_trace_scores, judge_means_by_trace),
         "vs_human": compare_to_human(),
     }
+    disagreements = find_disagreements(per_trace_scores, det_by_row)
 
     before = realized_usd()
     spend = {
@@ -741,7 +806,7 @@ def main(argv: list[str] | None = None) -> int:
         subset={"case_ids": case_ids, "variants": [v["variant_id"] for v in variants], "n_traces": n_traces},
         per_trace_scores=per_trace_scores,
         comparisons=comparisons,
-        disagreements=[],
+        disagreements=disagreements,
         spend=spend,
         framework_versions=framework_versions(),
     )

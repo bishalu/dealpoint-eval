@@ -3,7 +3,7 @@
 These are **model-judged secondary scores, budget-scaled**, and are never presented as objective truth. Human calibration is **pending** unless stated otherwise below.
 
 `rubric_version`: `cfda9f8cc401`  
-`git_sha7`: `b9eac78`
+`git_sha7`: `ebfc41d`
 
 ## Judged subset
 

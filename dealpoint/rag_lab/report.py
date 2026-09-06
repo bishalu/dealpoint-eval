@@ -19,6 +19,7 @@ from dealpoint.config import (
     LI_RAG_EVAL_JSON_PATH,
     LI_RAG_EVAL_MD_PATH,
     SYNTHETIC_DEV_QUERIES_PATH,
+    SYNTHETIC_GENERATION_RUN_PATH,
     TEST_SUBSET_V1_PATH,
     TOURNAMENT_JSON_PATH,
 )
@@ -62,6 +63,16 @@ BRIEF_DIFFERENCES = [
             "either weakening the envelope (raising 4.00, which the spec explicitly forbids) "
             "or leaving a spurious cross-milestone failure. M7a's own ledger discipline is "
             "asserted separately in tests/test_spend_m7.py against the $6.00 global cap."
+        ),
+    },
+    {
+        "id": 3,
+        "topic": "score_budget",
+        "difference": (
+            "Brief section 2.7 caps Braintrust logging at <= 6 scores/case. M7a permits "
+            "<= 12 scores/case on subsets <= 60 cases as a ceiling, not a target, with M4/M6 "
+            "sweeps still logging exactly six -- enforced at sync time by "
+            "dealpoint.eval.braintrust_sync.assert_score_budget."
         ),
     },
 ]
@@ -244,6 +255,21 @@ def render_markdown(report: dict) -> str:
             f"n_queries={synth.get('n_queries')}, prompt_hash=`{synth.get('prompt_hash')}`"
         )
         lines.append("")
+        total_usd = synth.get("total_usd")
+        total_usd_str = f"${total_usd:.6f}" if total_usd is not None else "n/a"
+        lines.append(f"Total realized cost: {total_usd_str}")
+        if synth.get("cost_note"):
+            lines.append("")
+            lines.append(synth["cost_note"])
+        calibration = synth.get("calibration")
+        estimate = synth.get("estimate")
+        if calibration or estimate:
+            lines.append("")
+            lines.append("Calibration/estimate provenance:")
+            lines.append(
+                f"```json\n{json.dumps({'calibration': calibration, 'estimate': estimate}, indent=2, sort_keys=True)}\n```"
+            )
+        lines.append("")
         lines.append(f"Verdict: {synth.get('verdict', 'n/a')}")
         results = synth.get("results")
         if results:
@@ -330,6 +356,28 @@ def main(argv: list[str] | None = None) -> int:
             dense=dense, sparse=sparse, variants_by_query=variants_by_query, scorer=scorer
         )
         first_row = synth_rows[0] if synth_rows else {}
+
+        generation_run = {}
+        if SYNTHETIC_GENERATION_RUN_PATH.exists():
+            try:
+                generation_run = json.loads(
+                    SYNTHETIC_GENERATION_RUN_PATH.read_text(encoding="utf-8")
+                )
+            except (OSError, json.JSONDecodeError):
+                generation_run = {}
+
+        # total_usd: prefer the persisted generation-run record (which the
+        # metered run / cost backfill wrote); fall back to summing the rows
+        # on disk so a manually-backfilled file (no run record yet) still
+        # reports a real total rather than silently omitting it.
+        row_usd_values: list[float] = [
+            float(r["usd"]) for r in synth_rows if r.get("usd") is not None
+        ]
+        total_usd = generation_run.get("total_usd")
+        if total_usd is None and row_usd_values:
+            total_usd = round(sum(row_usd_values), 6)
+        n_rows_missing_usd = sum(1 for r in synth_rows if r.get("usd") is None)
+
         synthetic = {
             "generator": first_row.get("generator"),
             "generator_version": first_row.get("generator_version"),
@@ -340,7 +388,16 @@ def main(argv: list[str] | None = None) -> int:
             "file_sha256": _sha256_file(SYNTHETIC_DEV_QUERIES_PATH),
             "results": synth_eval["results"],
             "verdict": synth_eval["verdict"],
+            "calibration": generation_run.get("calibration"),
+            "estimate": generation_run.get("estimate"),
+            "total_usd": total_usd,
+            "n_rows_missing_usd": n_rows_missing_usd,
         }
+        if n_rows_missing_usd:
+            synthetic["cost_note"] = (
+                f"{n_rows_missing_usd} of {len(synth_rows)} rows have no matching ledger "
+                "spend row for their generating chunk_id and carry usd: null."
+            )
 
     report = build_report(
         per_config,

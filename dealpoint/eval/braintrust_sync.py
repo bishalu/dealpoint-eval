@@ -393,24 +393,45 @@ def _agent_experiment_plans() -> list[dict]:
     return plans
 
 
+def _judge_score_row(case_id: str, arm: str | None, model: str | None, dims: dict) -> dict:
+    """One judge-experiment row, its `scores` dict already in the shape
+    `common_metadata`/`_log_scores_for_row` expect (bare dimension names --
+    `score_namespace` maps them to `judge/...`).
+    """
+    return {"case_id": case_id, "arm": arm, "model": model, "scores": dims}
+
+
 def _eval_experiment_plans() -> list[dict]:
-    """Judge-panel and DeepEval experiments, tagged `stage=eval`."""
+    """Judge-panel and DeepEval experiments, tagged `stage=eval`, carrying
+    REAL per-trace scores (not placeholder rows) so BTQL investigations #3/#4
+    have something to query.
+    """
     from dealpoint.config import DEEPEVAL_CROSSCHECK_JSON_PATH, JUDGED_SUBSET_PATH
 
     plans: list[dict] = []
     if Path(JUDGED_SUBSET_PATH).exists():
         payload = json.loads(Path(JUDGED_SUBSET_PATH).read_text(encoding="utf-8"))
-        n_cases = len(payload.get("case_ids", []))
+        case_ids = payload.get("case_ids", [])
+        n_cases = len(case_ids)
+        judge_rows = _load_jsonl(_judge_scores_path())
         for variant in payload.get("variants", []):
+            variant_id = variant["variant_id"]
+            rows = []
+            for cid in case_ids:
+                packet_id = _packet_id_for(cid, variant_id)
+                dims = _mean_judge_dims_for_packet(judge_rows, packet_id)
+                rows.append(
+                    _judge_score_row(cid, variant.get("arm"), variant.get("model"), dims)
+                )
             plans.append(
                 {
-                    "name": f"judge-{variant['variant_id']}",
+                    "name": f"judge-{variant_id}",
                     "stage": "eval",
                     "tags": ["stage=eval"],
                     "n_cases": n_cases,
                     "score_names": ["judge/reasoning", "judge/evidence", "judge/trajectory", "judge/professional"],
-                    "rows": [{"case_id": None, "arm": variant.get("arm"), "model": variant.get("model")}],
-                    "metadata": {"variant_id": variant["variant_id"]},
+                    "rows": rows,
+                    "metadata": {"variant_id": variant_id},
                 }
             )
 
@@ -419,7 +440,27 @@ def _eval_experiment_plans() -> list[dict]:
             payload = json.loads(DEEPEVAL_CROSSCHECK_JSON_PATH.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             payload = {}
-        n_traces = payload.get("subset", {}).get("n_traces", 0)
+        per_trace_scores = payload.get("per_trace_scores", [])
+        n_traces = payload.get("subset", {}).get("n_traces", len(per_trace_scores))
+
+        det_by_case = _deterministic_scores_by_case_variant()
+        rows = []
+        for pts in per_trace_scores:
+            case_id = pts.get("case_id")
+            variant_id = pts.get("variant_id")
+            scores: dict = {}
+            for metric_name in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
+                v = (pts.get(metric_name) or {}).get("score")
+                if v is not None:
+                    scores[metric_name] = v
+            det = det_by_case.get((case_id, variant_id)) or {}
+            if det.get("grounded_accuracy") is not None:
+                scores["obj/grounded_accuracy"] = det["grounded_accuracy"]
+            rows.append({"case_id": case_id, "arm": None, "model": None, "scores": scores})
+
+        if not rows:
+            rows = [{"case_id": None, "arm": None, "model": None}]
+
         plans.append(
             {
                 "name": "deepeval-crosscheck",
@@ -431,12 +472,58 @@ def _eval_experiment_plans() -> list[dict]:
                     "deepeval/tool_correctness",
                     "deepeval/argument_correctness",
                     "deepeval/step_efficiency",
+                    "obj/grounded_accuracy",
                 ],
-                "rows": [{"case_id": None, "arm": None, "model": None}],
+                "rows": rows,
                 "metadata": {},
             }
         )
     return plans
+
+
+def _judge_scores_path():
+    from dealpoint.config import JUDGE_SCORES_PATH
+
+    return JUDGE_SCORES_PATH
+
+
+def _packet_id_for(case_id: str, variant_id: str) -> str:
+    from dealpoint.eval.blinding import _packet_id
+
+    return _packet_id(case_id, variant_id)
+
+
+def _mean_judge_dims_for_packet(judge_rows: list[dict], packet_id: str) -> dict:
+    dims = ("reasoning", "evidence", "trajectory", "professional")
+    out: dict = {}
+    for dim in dims:
+        vals = [
+            r[dim]
+            for r in judge_rows
+            if r.get("packet_id") == packet_id and r.get("ok", True) and r.get(dim) is not None
+        ]
+        if vals:
+            out[dim] = sum(vals) / len(vals)
+    return out
+
+
+def _deterministic_scores_by_case_variant() -> dict[tuple[str, str], dict]:
+    """`(case_id, variant_id) -> {score_name: value}`, read from the M5
+    judged subset's result files -- the same rows DeepEval scored.
+    """
+    from dealpoint.config import JUDGED_SUBSET_PATH
+
+    if not Path(JUDGED_SUBSET_PATH).exists():
+        return {}
+    payload = json.loads(Path(JUDGED_SUBSET_PATH).read_text(encoding="utf-8"))
+    out: dict[tuple[str, str], dict] = {}
+    for variant in payload.get("variants", []):
+        variant_id = variant["variant_id"]
+        for row in _load_jsonl(variant["results_path"]):
+            case_id = row.get("case_id")
+            if case_id:
+                out[(case_id, variant_id)] = row.get("scores") or {}
+    return out
 
 
 def _economics_experiment_plans() -> list[dict]:
@@ -620,7 +707,7 @@ def representative_cases() -> dict:
                 if category is None:
                     continue
                 variant_id = f"{row.get('arm')}@{row.get('model')}"
-                candidates_by_category.setdefault(category, []).append((path.name, row, variant_id))
+                candidates_by_category.setdefault(category, []).append((str(path), row, variant_id))
 
     selections: list[dict] = []
     categories = (
@@ -638,7 +725,7 @@ def representative_cases() -> dict:
                 {"category": category, "case_id": None, "variant_id": None, "experiment_name": None, "note": "no candidate found"}
             )
             continue
-        _, best_row, best_variant = min(
+        best_path, best_row, best_variant = min(
             ((p, r, v) for p, r, v in candidates),
             key=lambda t: _seeded_key(t[1]["case_id"], t[2]),
         )
@@ -648,6 +735,7 @@ def representative_cases() -> dict:
                 "case_id": best_row["case_id"],
                 "variant_id": best_variant,
                 "experiment_name": None,
+                "results_path": best_path,
             }
         )
 
@@ -697,6 +785,140 @@ def review_set(n: int = M7A_REVIEW_SET_N) -> list[dict]:
     return ordered[:n]
 
 
+# --- scorers / prompts / parameters -------------------------------------
+
+SCORER_PLAN: tuple[dict, ...] = (
+    {"name": "grounded_accuracy", "threshold": 1.0},
+    {"name": "answer_correct", "threshold": 1.0},
+    {"name": "citation_verbatim", "threshold": 1.0},
+    {"name": "citation_gold_overlap", "threshold": 1.0},
+    {"name": "required_evidence_met", "threshold": 1.0},
+    # skill_adherence is a fraction, not a boolean -- no invented threshold
+    # (spec section 3(c): "thresholds only on the booleans").
+    {"name": "skill_adherence", "threshold": None},
+)
+
+
+def scorer_plan() -> list[dict]:
+    """Braintrust scorer registrations: name, canonical import path, threshold.
+
+    Each entry names the exact `dealpoint.eval.scorers` function the real
+    scorer handler imports and calls -- never a re-implementation.
+    """
+    return [
+        {
+            "name": s["name"],
+            "slug": s["name"].replace("_", "-"),
+            "import_path": f"dealpoint.eval.scorers.{s['name']}",
+            "threshold": s["threshold"],
+        }
+        for s in SCORER_PLAN
+    ]
+
+
+def _make_scorer_handler(fn_name: str):
+    """A Braintrust-shaped scorer handler that imports and calls the named
+    canonical `dealpoint.eval.scorers` function -- never a re-implementation.
+
+    Braintrust scorer handlers see `(input, output, expected, metadata)`;
+    the canonical scorers take `(case, finding, record, canonical_text)`.
+    The bridge reconstructs those from `output` (the replayed row: the same
+    shape `dealpoint.eval.braintrust_adapter._row_to_eval_case` already
+    produces) and `metadata` (which carries `case_id`).
+    """
+
+    def handler(input=None, output=None, expected=None, metadata=None):
+        import dealpoint.eval.scorers as scorers_mod
+        from dealpoint.agent.schema import ExecutionRecord, Finding
+        from dealpoint.corpus.document import load_document
+        from dealpoint.eval.cases import find_case, resolve_document_id
+
+        fn = getattr(scorers_mod, fn_name)
+        payload = output or {}
+        finding_payload = payload.get("finding")
+        record_payload = payload.get("record") or {"status": "EXECUTION_FAILED"}
+        case_id = (metadata or {}).get("case_id") or payload.get("case_id")
+        if not case_id:
+            return None
+        case = find_case(case_id)
+        doc = load_document(resolve_document_id(case))
+        finding = Finding.model_validate(finding_payload) if finding_payload else None
+        record = ExecutionRecord.model_validate(record_payload)
+        if fn_name in ("required_evidence_met", "skill_adherence"):
+            return fn(case, finding, record, doc.text, doc=doc)
+        return fn(case, finding, record, doc.text)
+
+    handler.__name__ = fn_name
+    return handler
+
+
+def prompt_plan() -> list[dict]:
+    """Base agent instructions, arm-D skill injection, judge rubric -- each
+    with its source hash. Canonical ownership stays in Git; this is a mirror.
+    """
+    from dealpoint.agent.prompts import system_prompt
+    from dealpoint.agent.skill import load_skill, skill_version
+    from dealpoint.eval.rubric import rubric_text, rubric_version
+
+    return [
+        {
+            "name": "agent-base-system-prompt",
+            "slug": "agent-base-system-prompt",
+            "content": system_prompt(),
+            "source_hash": hashlib.sha256(system_prompt().encode("utf-8")).hexdigest()[:12],
+            "version_label": None,
+        },
+        {
+            "name": "agent-arm-d-skill-injection",
+            "slug": "agent-arm-d-skill-injection",
+            "content": load_skill(),
+            "source_hash": skill_version(),
+            "version_label": f"skill_version {skill_version()}",
+        },
+        {
+            "name": "judge-calibrated-rubric",
+            "slug": "judge-calibrated-rubric",
+            "content": rubric_text(),
+            "source_hash": rubric_version(),
+            "version_label": f"rubric_version {rubric_version()}",
+        },
+    ]
+
+
+def parameters_schema() -> dict:
+    """One compact versioned schema of non-secret runtime parameters, built
+    by EXPOSING existing config (never re-declaring it).
+    """
+    from dealpoint.config import ARM_C_RETRIEVER, ARMS, MAX_TOOL_CALLS, RETRIEVER_DEFAULT_K
+
+    return {
+        "version": 1,
+        "arms": ARMS,
+        "arm_c_retriever": ARM_C_RETRIEVER,
+        "top_k": RETRIEVER_DEFAULT_K,
+        "max_tool_calls": MAX_TOOL_CALLS,
+        "dataset_split": ["dev", "test", "counterfactual"],
+        "mode": ["fake", "live"],
+    }
+
+
+# --- tools decision (documented, no stubs) -----------------------------
+
+TOOLS_DECISION = {
+    "exposed": False,
+    "reason": (
+        "search_agreement/get_section/lookup_defined_term each need the 68 MB "
+        "Qdrant index (data/index/), the 64 MB derived canonical corpus "
+        "(data/derived/) and fastembed's ONNX embedding weights loaded "
+        "in-process. None of this can run inside Braintrust's function "
+        "execution environment without duplicating this project's entire "
+        "index/data layer -- exactly what the no-bloat rule and the brief's "
+        "'no second tracing/data architecture' guidance forbid. Documented "
+        "decision, not an omission; no placeholder stubs are shipped."
+    ),
+}
+
+
 # --- sync driver ---------------------------------------------------------
 
 
@@ -712,14 +934,35 @@ def _init_experiment(client, name: str):
         return client.init_experiment(project=PROJECT, experiment=name)
 
 
+def _log_scores_for_row(row: dict) -> dict:
+    """Namespace a stored row's `scores` dict through `score_namespace`,
+    keeping only the names Braintrust can log as scores (numeric/bool,
+    never None -- None-valued scores are dropped, not coerced to 0/False).
+    """
+    scores = row.get("scores") or {}
+    out: dict = {}
+    for name, value in scores.items():
+        if value is None:
+            continue
+        if isinstance(value, bool):
+            numeric = 1.0 if value else 0.0
+        elif isinstance(value, int | float):
+            numeric = float(value)
+        else:
+            continue
+        out[score_namespace(name)] = numeric
+    return out
+
+
 def sync(client, *, dry_run: bool = False) -> dict:
     """Recreate every artifact from Git/local sources. Idempotent: re-running
-    finds existing datasets/experiments by name rather than duplicating.
+    finds existing datasets/experiments/scorers/prompts/parameters by name
+    rather than duplicating.
 
     `client` is either the real `braintrust` module (imported by the caller)
     or a fake test double exposing `init_dataset`/`init_experiment`/
-    `start_span`/`log`. With `dry_run=True` (or a fake client) no network
-    call happens; the full mapping still runs.
+    `start_span`/`log`/`projects`. With `dry_run=True` (or a fake client) no
+    network call happens; the full mapping still runs.
     """
     plan = experiment_plan()
     datasets_created = []
@@ -740,7 +983,7 @@ def sync(client, *, dry_run: bool = False) -> dict:
             experiment.log(
                 input=row.get("case_id") or exp_plan["name"],
                 output=row.get("model") or "n/a",
-                scores={},
+                scores=_log_scores_for_row(row),
                 metadata=metadata,
                 tags=exp_plan["tags"],
             )
@@ -748,6 +991,7 @@ def sync(client, *, dry_run: bool = False) -> dict:
             experiment.flush()
         experiments_created.append(exp_plan["name"])
 
+    # --- replay representative traces from their ACTUAL stored rows ------
     rep_cases = representative_cases()
     replayed_traces = 0
     for selection in rep_cases["selections"]:
@@ -762,17 +1006,46 @@ def sync(client, *, dry_run: bool = False) -> dict:
         except (KeyError, FileNotFoundError):
             doc = None
             case = {}
-        # a minimal row shape sufficient for log_hierarchy's replay
-        row = {"case_id": selection["case_id"], "scores": {}, "record": {"trajectory": []}}
+
+        results_path = selection.get("results_path")
+        row = None
+        if results_path:
+            for r in _load_jsonl(results_path):
+                if r.get("case_id") == selection["case_id"]:
+                    row = r
+                    break
+        if row is None:
+            # No stored row found (e.g. offline/fixture data) -- fall back
+            # to an empty-trajectory row rather than crashing; this never
+            # invents a model call, only degrades what gets replayed.
+            row = {"case_id": selection["case_id"], "scores": {}, "record": {"trajectory": []}}
+
         hierarchy = log_hierarchy(row, case, doc)
-        span = client.start_span(name=hierarchy["name"])
-        if hasattr(span, "log"):
-            span.log(metadata={"case_id": selection["case_id"]})
-        if hasattr(span, "end"):
-            span.end()
+        _emit_span_tree(client, hierarchy)
         replayed_traces += 1
 
+    # --- scorers / prompts / parameters -----------------------------------
+    scorers_result = _sync_scorers(client)
+    prompts_result = _sync_prompts(client)
+    parameters_result = _sync_parameters(client)
+
+    # --- 12-trace blinded review set: pushed as a scoreable dataset -------
     reviews = review_set()
+    review_dataset = client.init_dataset(project=PROJECT, name="maud-dealpoint-review-set")
+    for packet in reviews:
+        review_dataset.insert(
+            input=packet["packet_id"],
+            expected=None,
+            metadata={
+                "case_id": packet["case_id"],
+                "variant_id": packet["variant_id"],
+                "reasoning_type": packet["reasoning_type"],
+                "status": packet["status"],
+                "human_score": packet["human_score"],
+            },
+        )
+    if hasattr(review_dataset, "flush"):
+        review_dataset.flush()
 
     result = {
         "datasets": datasets_created,
@@ -780,13 +1053,136 @@ def sync(client, *, dry_run: bool = False) -> dict:
         "n_experiments": len(experiments_created),
         "representative_cases": rep_cases,
         "replayed_traces": replayed_traces,
+        "review_set": {"n": len(reviews), "dataset": "maud-dealpoint-review-set"},
         "review_set_n": len(reviews),
+        "scorers": scorers_result,
+        "prompts": prompts_result,
+        "parameters": parameters_result,
+        "tools": TOOLS_DECISION,
         "score_budget_ok": True,
         "framework_versions": _framework_versions_dict(),
         "synced_at": datetime.now(UTC).isoformat(),
         "dry_run": dry_run,
     }
     return result
+
+
+def _emit_span_tree(client, node: dict, parent_span=None) -> None:
+    """Recursively emit `node` (from `log_hierarchy`) as nested spans on
+    `client`/`parent_span`. Zero model calls -- every field comes from the
+    already-built hierarchy dict.
+    """
+    name = node.get("name", "span")
+    log_kwargs: dict = {}
+    if "case_id" in node:
+        log_kwargs["metadata"] = {"case_id": node["case_id"]}
+    if "span" in node:
+        log_kwargs.setdefault("metadata", {})
+        log_kwargs["metadata"]["span"] = node["span"]
+    if "finding" in node:
+        log_kwargs.setdefault("metadata", {})
+        log_kwargs["metadata"]["finding"] = node["finding"]
+    if "provenance" in node:
+        log_kwargs["scores"] = {
+            score_namespace(k): v
+            for k, v in (node["provenance"].get("obj") or {}).items()
+            if v is not None and isinstance(v, bool | int | float)
+        }
+
+    if parent_span is not None and hasattr(parent_span, "start_span"):
+        span = parent_span.start_span(name=name)
+    else:
+        span = client.start_span(name=name)
+
+    if hasattr(span, "log") and log_kwargs:
+        span.log(**log_kwargs)
+
+    for child in node.get("children", []):
+        _emit_span_tree(client, child, parent_span=span)
+
+    if hasattr(span, "end"):
+        span.end()
+
+
+def _sync_scorers(client) -> dict:
+    """Register the canonical scorers as Braintrust functions, idempotently.
+
+    Uses `client.projects.create(name=...).scorers.create(...)` when the
+    real SDK shape is available (a `braintrust` module); a fake test double
+    exposes the simpler `register_scorer(name, ...)` shape instead.
+    """
+    plan = scorer_plan()
+    if hasattr(client, "projects"):
+        project = client.projects.create(name=PROJECT)
+        created = []
+        for s in plan:
+            handler = _make_scorer_handler(s["name"])
+            kwargs: dict = {
+                "name": s["name"],
+                "slug": s["slug"],
+                "handler": handler,
+                "parameters": {"input": object, "output": object, "expected": object, "metadata": object},
+                "if_exists": "replace",
+            }
+            project.scorers.create(**kwargs)
+            created.append(s["slug"])
+        return {"registered": created, "n": len(created), "plan": plan}
+    # fake test double
+    registered = []
+    for s in plan:
+        client.register_scorer(name=s["slug"], import_path=s["import_path"], threshold=s["threshold"])
+        registered.append(s["slug"])
+    return {"registered": registered, "n": len(registered), "plan": plan}
+
+
+def _sync_prompts(client) -> dict:
+    """Mirror the base agent instructions, arm-D skill, and judge rubric as
+    Braintrust prompts, each carrying its source hash.
+    """
+    plan = prompt_plan()
+    if hasattr(client, "projects"):
+        project = client.projects.create(name=PROJECT)
+        created = []
+        for p in plan:
+            project.prompts.create(
+                name=p["name"],
+                slug=p["slug"],
+                prompt=p["content"],
+                model="z-ai/glm-5.3-flash",
+                if_exists="replace",
+                metadata={"source_hash": p["source_hash"], "version_label": p["version_label"]},
+            )
+            created.append(p["slug"])
+        return {"registered": created, "n": len(created), "plan": [{k: v for k, v in p.items() if k != "content"} for p in plan]}
+    registered = []
+    for p in plan:
+        client.register_prompt(name=p["slug"], source_hash=p["source_hash"])
+        registered.append(p["slug"])
+    return {"registered": registered, "n": len(registered), "plan": [{k: v for k, v in p.items() if k != "content"} for p in plan]}
+
+
+def _sync_parameters(client) -> dict:
+    """Register the one compact versioned parameter schema."""
+    schema = parameters_schema()
+    if hasattr(client, "projects"):
+        from pydantic import create_model
+
+        project = client.projects.create(name=PROJECT)
+        ParamsModel = create_model(
+            "DealpointRuntimeParameters",
+            top_k=(int, schema["top_k"]),
+            max_tool_calls=(int, schema["max_tool_calls"]),
+        )
+        project.parameters.create(
+            name="dealpoint-runtime-parameters",
+            slug="dealpoint-runtime-parameters",
+            schema={"parameters": ParamsModel},
+            if_exists="replace",
+            metadata=schema,
+        )
+        return {"registered": ["dealpoint-runtime-parameters"], "schema": schema}
+    client.register_parameters(name="dealpoint-runtime-parameters", schema=schema)
+    return {"registered": ["dealpoint-runtime-parameters"], "schema": schema}
 
 
 def _record_sync_run(entry: dict, path: Path = BRAINTRUST_SYNC_PATH) -> None:

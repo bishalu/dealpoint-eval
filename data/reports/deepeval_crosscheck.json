@@ -14,6 +14,11 @@
       "difference": "The judged subset is 18 cases x 6 variants (108 traces), not the brief section 2.5's 40 x 6; human calibration is n=0 ('pending'), not the brief's 30 hand-scored traces. Already recorded in judges.json; restated here because every DeepEval<->human comparison in this report is 'pending'.",
       "id": 3,
       "topic": "scale_inherited"
+    },
+    {
+      "difference": "Brief section 2.7 caps Braintrust logging at <= 6 scores/case. M7a permits <= 12 scores/case on subsets <= 60 cases as a ceiling, not a target, with M4/M6 sweeps still logging exactly six -- enforced at sync time by dealpoint.eval.braintrust_sync.assert_score_budget.",
+      "id": 4,
+      "topic": "score_budget"
     }
   ],
   "classification": "KEEP_OPTIONAL_ANALYSIS",
@@ -48,13 +53,150 @@
     }
   },
   "decisions": [],
-  "disagreements": [],
+  "disagreements": [
+    {
+      "case_id": "contract_32__q04",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_32__q06",
+      "deepeval_score": 0.5,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_144__q09",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_39__q01",
+      "deepeval_score": 0.9,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_144__q09",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_39__q01",
+      "deepeval_score": 0.9,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_32__q06",
+      "deepeval_score": 1.0,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@glm"
+    },
+    {
+      "case_id": "contract_103__q10",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@glm"
+    },
+    {
+      "case_id": "contract_32__q06",
+      "deepeval_score": 0.5,
+      "deterministic_score": true,
+      "direction": "deepeval_fail_deterministic_pass",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_144__q09",
+      "deepeval_score": 0.9,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_4__q12",
+      "deepeval_score": 1.0,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_32__q03",
+      "deepeval_score": 1.0,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_39__q01",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_4__q12",
+      "deepeval_score": 1.0,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_32__q06",
+      "deepeval_score": 0.7,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_144__q09",
+      "deepeval_score": 1.0,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_39__q01",
+      "deepeval_score": 0.9,
+      "deterministic_score": false,
+      "direction": "deepeval_pass_deterministic_fail",
+      "metric": "task_completion_vs_grounded_accuracy",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    }
+  ],
   "framework_versions": {
     "bm25s": "0.3.11",
     "braintrust": "0.37.0",
     "deepeval": "4.2.1",
     "fastembed": "0.8.0",
-    "git_sha7": "b9eac78",
+    "git_sha7": "ebfc41d",
     "llama-index-core": "0.14.24",
     "llama-index-retrievers-bm25": "0.8.0",
     "openai": "3.8.0",

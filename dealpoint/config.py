@@ -301,6 +301,12 @@ DEEPEVAL_MODEL_ENV = "DEEPEVAL_MODEL"
 LI_RAG_EVAL_JSON_PATH = REPORTS_DIR / "li_rag_eval.json"
 LI_RAG_EVAL_MD_PATH = REPORTS_DIR / "li_rag_eval.md"
 SYNTHETIC_DEV_QUERIES_PATH = EVAL_DIR / "synthetic_dev_queries.jsonl"
+# Persisted calibration/estimate provenance from the one metered
+# `generate_synthetic_set` run (spec section 1.B: "generator id/version/
+# prompt hash/cost") -- written by dealpoint.rag_lab.synthetic each time it
+# actually generates, so dealpoint.rag_lab.report never has to re-run the
+# (metered) generation to know what it cost.
+SYNTHETIC_GENERATION_RUN_PATH = REPORTS_DIR / "synthetic_generation_run.json"
 DEEPEVAL_CROSSCHECK_JSON_PATH = REPORTS_DIR / "deepeval_crosscheck.json"
 DEEPEVAL_CROSSCHECK_MD_PATH = REPORTS_DIR / "deepeval_crosscheck.md"
 BTQL_INVESTIGATIONS_PATH = REPORTS_DIR / "btql_investigations.json"
