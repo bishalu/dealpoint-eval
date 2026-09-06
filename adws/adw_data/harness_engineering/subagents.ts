@@ -237,7 +237,8 @@ export default function (pi: ExtensionAPI) {
 				"--mode", "json",
 				"-p",
 				"--session", state.sessionFile,   // persistent session for /subcont resumption
-				"--no-extensions",
+				// Extensions stay ON: on a roster served by an extension provider (pi-claude-code-provider),
+				// `--no-extensions` strips the provider itself and every subagent dies with "Unknown provider".
 				...modelArgs,
 				"--tools", "read,bash,grep,find,ls",
 				"--thinking", thinking,
