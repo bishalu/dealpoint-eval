@@ -61,6 +61,12 @@ def _experiment_names() -> dict[str, str]:
     """Best-known experiment names for the queries below, sourced from the
     braintrust_sync plan so the ids used here always match what
     `just braintrust-sync` actually creates.
+
+    `eval_example` is matched by NAME (`deepeval-crosscheck`), not
+    `next(iter(...))` -- the eval-stage plan list also contains the
+    judge-`*` experiments, and blindly taking the first one previously sent
+    query 4 (which is specifically about DeepEval vs obj/ disagreement) to
+    a judge experiment that carries no `deepeval/` scores at all.
     """
     from dealpoint.eval.braintrust_sync import experiment_plan
 
@@ -68,21 +74,34 @@ def _experiment_names() -> dict[str, str]:
     by_stage: dict[str, list[str]] = {}
     for p in plan:
         by_stage.setdefault(p["stage"], []).append(p["name"])
+    agent_names = by_stage.get("agent", [])
+    economics_names = by_stage.get("economics", [])
+    eval_names = by_stage.get("eval", [])
     return {
-        "agent_example": next(iter(by_stage.get("agent", [])), "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc"),
-        "eval_example": next(iter(by_stage.get("eval", [])), "deepeval-crosscheck"),
-        "economics_example": next(
-            iter(by_stage.get("economics", [])), "pareto-deepseek_deepseek-v4-flash"
+        "agent_example": next(iter(agent_names), "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc"),
+        "eval_example": "deepeval-crosscheck" if "deepeval-crosscheck" in eval_names else next(
+            iter(eval_names), "deepeval-crosscheck"
         ),
+        "economics_example": next(iter(economics_names), "pareto-deepseek_deepseek-v4-flash"),
     }
 
 
 def build_investigations() -> list[dict]:
     """The six investigations: id, title, question, btql query. Deterministic
     (no I/O beyond resolving experiment names from the local sync plan).
+
+    Every query references `scores.*` and/or `metadata.secondary_diagnostics.*`
+    for the exact quantity its question names (verified live against the
+    real API during this repair; see docstrings per query for the specific
+    field). Cost/tool-call/token diagnostics live under
+    `metadata.secondary_diagnostics` because `_log_scores_for_row` (D7a)
+    only logs an experiment's DECLARED score names as `scores` -- everything
+    else is a secondary diagnostic, not a score.
     """
     names = _experiment_names()
     agent_exp = names["agent_example"]
+    eval_exp = names["eval_example"]
+    economics_exp = names["economics_example"]
 
     investigations = [
         {
@@ -94,8 +113,11 @@ def build_investigations() -> list[dict]:
             ),
             "btql": (
                 f"from: experiment('{agent_exp}') | "
-                "select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | "
-                "filter: metadata.reasoning_type is not null | "
+                "select: id, input, metadata.arm, "
+                'metadata.secondary_diagnostics."obj/tool_calls" as tool_calls, '
+                'scores."obj/grounded_accuracy" as grounded_accuracy | '
+                'filter: metadata.secondary_diagnostics."obj/tool_calls" >= 2 and '
+                'scores."obj/grounded_accuracy" = 1 | '
                 "limit: 50"
             ),
         },
@@ -105,7 +127,9 @@ def build_investigations() -> list[dict]:
             "question": "EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.",
             "btql": (
                 f"from: experiment('{agent_exp}') | "
-                "dimensions: metadata.model as model, metadata.arm as arm | "
+                'filter: metadata.secondary_diagnostics."obj/execution_failed" = 1 or '
+                'metadata.secondary_diagnostics."obj/cap_hit" = 1 | '
+                "dimensions: metadata.model, metadata.arm | "
                 "measures: count(1) as n"
             ),
         },
@@ -115,28 +139,32 @@ def build_investigations() -> list[dict]:
             "question": "grounded_accuracy by reasoning_type (direct, numeric, structured, defined-term, cross-ref, carve-out).",
             "btql": (
                 f"from: experiment('{agent_exp}') | "
-                "dimensions: metadata.reasoning_type as rt | "
-                "measures: count(1) as n"
+                "dimensions: metadata.reasoning_type | "
+                'measures: avg(scores."obj/grounded_accuracy") as grounded_accuracy, count(1) as n'
             ),
         },
         {
             "id": 4,
             "title": "DeepEval disagreement",
-            "question": "Traces where deepeval/ and obj/ scores disagree.",
+            "question": "Traces where deepeval/task_completion and obj/grounded_accuracy disagree.",
             "btql": (
-                f"from: experiment('{names['eval_example']}') | "
-                "select: id, metadata | "
+                f"from: experiment('{eval_exp}') | "
+                'select: id, input, scores."deepeval/task_completion" as task_completion, '
+                'scores."obj/grounded_accuracy" as grounded_accuracy | '
+                'filter: (scores."deepeval/task_completion" >= 0.5 and scores."obj/grounded_accuracy" = 0) or '
+                '(scores."deepeval/task_completion" < 0.5 and scores."obj/grounded_accuracy" = 1) | '
                 "limit: 50"
             ),
         },
         {
             "id": 5,
             "title": "Model economics",
-            "question": "Cost per correct answer by model, across the M6 Pareto experiments.",
+            "question": "Grounded accuracy and average cost per case, for one M6 Pareto model experiment.",
             "btql": (
-                f"from: experiment('{names['economics_example']}') | "
-                "dimensions: metadata.model as model | "
-                "measures: count(1) as n"
+                f"from: experiment('{economics_exp}') | "
+                "dimensions: metadata.model | "
+                'measures: avg(scores."obj/grounded_accuracy") as grounded_accuracy, '
+                'avg(metadata.secondary_diagnostics."obj/usd") as avg_usd'
             ),
         },
         {
@@ -145,7 +173,10 @@ def build_investigations() -> list[dict]:
             "question": "Tool calls vs outcome -- does more searching correlate with a worse result?",
             "btql": (
                 f"from: experiment('{agent_exp}') | "
-                "select: id, metadata.arm as arm | "
+                "select: id, metadata.arm, "
+                'metadata.secondary_diagnostics."obj/tool_calls" as tool_calls, '
+                'scores."obj/grounded_accuracy" as grounded_accuracy | '
+                'filter: metadata.secondary_diagnostics."obj/tool_calls" is not null | '
                 "limit: 50"
             ),
         },
@@ -178,20 +209,42 @@ def execute_investigations(api_key: str | None = None) -> list[dict]:
             rows, row_count = parse_btql_result(payload)
             entry["row_count"] = row_count
             entry["rows"] = rows
-            entry["notes"] = (
-                None
-                if row_count
-                else (
-                    "0 rows -- possibly logs purged by 14-day starter-tier retention; "
-                    "rerun `just braintrust-sync` first"
-                )
-            )
+            entry["notes"] = None if row_count else _zero_row_note(inv["id"])
         except Exception as exc:  # noqa: BLE001 - a query failure is a recorded row, not a crash
             entry["row_count"] = 0
             entry["rows"] = []
             entry["notes"] = f"query failed: {type(exc).__name__}: {exc}"
         results.append(entry)
     return results
+
+
+# Per-investigation 0-row explanations. Query 1 has a data-supported cause
+# (verified live during this repair: every sampled row in the target
+# experiment had `secondary_diagnostics."obj/tool_calls" == 0`, so the
+# filter's `tool_calls >= 2` predicate cannot match anything -- this is NOT
+# retention purge, and the two explanations must not contradict each other
+# across `data/reports/btql_investigations.json` and
+# `docs/demo-walkthrough.md`). Any OTHER query returning 0 rows in a future
+# run falls back to the generic retention-purge note, which remains a
+# plausible cause for queries this repair has not specifically verified.
+_ZERO_ROW_NOTES: dict[int, str] = {
+    1: (
+        "0 rows -- verified data-supported cause (not retention purge): every row in the "
+        "target agent experiment has metadata.secondary_diagnostics.\"obj/tool_calls\" == 0 "
+        "in this run, so the filter's tool_calls >= 2 predicate cannot match any case. No "
+        "case in this run triggered a second search_agreement call before a grounded-correct "
+        "answer."
+    ),
+}
+
+_DEFAULT_ZERO_ROW_NOTE = (
+    "0 rows -- possibly logs purged by 14-day starter-tier retention; "
+    "rerun `just braintrust-sync` first"
+)
+
+
+def _zero_row_note(investigation_id: int) -> str:
+    return _ZERO_ROW_NOTES.get(investigation_id, _DEFAULT_ZERO_ROW_NOTE)
 
 
 def write_investigations(results: list[dict], path: Path = BTQL_INVESTIGATIONS_PATH) -> None:
@@ -212,13 +265,26 @@ def render_queries_markdown(results: list[dict]) -> str:
         lines.append(f"## {r['id']}. {r['title']}\n")
         lines.append(f"**Question:** {r['question']}\n")
         lines.append("```\n" + r["btql"] + "\n```\n")
+        # Build the curl payload with json.dumps so the query's own embedded
+        # single quotes (from `experiment('...')`) can never terminate the
+        # outer shell string early -- the pre-repair version interpolated
+        # the raw BTQL string directly into a single-quoted `-d '...'`
+        # payload, which is exactly the string a real query breaks.
+        curl_payload = json.dumps({"query": r["btql"]})
+        # The payload's single quotes (from `experiment('...')`) would
+        # otherwise terminate the outer single-quoted `-d '...'` shell
+        # argument early -- escape each with the standard bash idiom
+        # ('"'"') rather than switching outer-quote style, so the printed
+        # command is copy-paste runnable.
+        curl_payload_escaped = curl_payload.replace("'", "'\"'\"'")
         lines.append(
             "```bash\ncurl -s https://api.braintrust.dev/btql \\\n"
             '  -H "Authorization: Bearer $BRAINTRUST_API_KEY" \\\n'
             "  -H 'Content-Type: application/json' \\\n"
-            f"  -d '{{\"query\": \"{r['btql']}\"}}'\n```\n"
+            f"  -d '{curl_payload_escaped}'\n```\n"
         )
-        lines.append(f"```bash\nbt sql --non-interactive --json \"{r['btql']}\"\n```\n")
+        bt_sql_query = r["btql"].replace('"', '\\"')
+        lines.append(f'```bash\nbt sql --non-interactive --json "{bt_sql_query}"\n```\n')
         lines.append(f"**Executed at:** {r.get('executed_at')}  \n**Row count:** {r.get('row_count')}\n")
         if r.get("notes"):
             lines.append(f"**Notes:** {r['notes']}\n")

@@ -39,11 +39,12 @@ def dry_run_install(extra: str) -> str:
     return (result.stdout or "") + (result.stderr or "")
 
 
-def record_guard(entries: list[dict], path=M7A_DISK_GUARD_PATH) -> dict:
+def record_guard(entries: list[dict], path=M7A_DISK_GUARD_PATH, install_time_observation: dict | None = None) -> dict:
     payload = {
         "floor_bytes": M7A_DISK_FLOOR_BYTES,
-        "measured_at": datetime.now(UTC).isoformat(),
         "groups": entries,
+        "install_time_observation": install_time_observation,
+        "measured_at": datetime.now(UTC).isoformat(),
         "within_guard": all(e["within_guard"] for e in entries),
     }
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -54,11 +55,45 @@ def record_guard(entries: list[dict], path=M7A_DISK_GUARD_PATH) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Record the guard for groups already installed (measured by hand, see
-    docs/milestones/m7a.md for the exact sequence run).
+    """Re-measure the disk guard for the already-installed optional groups.
+
+    Both groups are already installed, so `uv pip install --dry-run` reports
+    them as already satisfied -- that is recorded honestly under
+    `re_measured_at` per group, alongside the dry-run stdout/stderr. The
+    original install-time free-space deltas (measured 2026-09-05, before
+    either group was installed) are kept separately under
+    `install_time_observation` rather than being passed off as this
+    measurement.
     """
-    print(json.dumps({"free_bytes_now": free_bytes()}, indent=2))
-    return 0
+    entries = []
+    for group in ("rag-lab", "deepeval"):
+        free_before = free_bytes()
+        output = dry_run_install(group)
+        free_after = free_bytes()
+        entries.append(
+            {
+                "dry_run_output": output.strip(),
+                "free_after_bytes": free_after,
+                "free_before_bytes": free_before,
+                "group": group,
+                "re_measured_at": datetime.now(UTC).isoformat(),
+                "within_guard": min(free_before, free_after) >= M7A_DISK_FLOOR_BYTES,
+            }
+        )
+    install_time_observation = {
+        "note": (
+            "Deltas measured 2026-09-05 during the original live install, before "
+            "either optional group was present. `.venv` grew from 340 MB to 451 MB "
+            "across both groups combined; neither pulled torch/transformers/nvidia "
+            "wheels. Kept for historical record only -- see each group's "
+            "`re_measured_at` entry above for the current (already-installed) state."
+        ),
+        "rag_lab": {"free_after_bytes": 1254531072, "free_before_bytes": 1257095168},
+        "deepeval": {"free_after_bytes": 1252827136, "free_before_bytes": 1254473728},
+    }
+    payload = record_guard(entries, install_time_observation=install_time_observation)
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if payload["within_guard"] else 1
 
 
 if __name__ == "__main__":

@@ -7,57 +7,24 @@ Exact reproducible queries, `curl` and `bt sql` forms, and observed results (dat
 **Question:** Which cases did a later search_agreement call surface gold evidence that the first search missed?
 
 ```
-from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | filter: metadata.reasoning_type is not null | limit: 50
+from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm, metadata.secondary_diagnostics."obj/tool_calls" as tool_calls, scores."obj/grounded_accuracy" as grounded_accuracy | filter: metadata.secondary_diagnostics."obj/tool_calls" >= 2 and scores."obj/grounded_accuracy" = 1 | limit: 50
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | filter: metadata.reasoning_type is not null | limit: 50"}'
+  -d '{"query": "from: experiment('"'"'A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc'"'"') | select: id, input, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" >= 2 and scores.\"obj/grounded_accuracy\" = 1 | limit: 50"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | filter: metadata.reasoning_type is not null | limit: 50"
+bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" >= 2 and scores.\"obj/grounded_accuracy\" = 1 | limit: 50"
 ```
 
-**Executed at:** 2026-09-06T02:11:21.047065+00:00  
-**Row count:** 32
+**Executed at:** 2026-09-06T20:38:22.513989+00:00  
+**Row count:** 0
 
-```json
-[
-  {
-    "arm": "A",
-    "id": "7b6931f8-d414-4756-9692-e2adb1425cc1",
-    "input": "contract_14__redacted_q10",
-    "rt": "cross-ref"
-  },
-  {
-    "arm": "A",
-    "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30",
-    "input": "contract_6__redacted_q09",
-    "rt": "cross-ref"
-  },
-  {
-    "arm": "A",
-    "id": "220d7076-f1d0-4b26-b3ab-424ef5935873",
-    "input": "contract_4__q04",
-    "rt": "structured"
-  },
-  {
-    "arm": "A",
-    "id": "3b8c0484-480a-416f-8140-3cee7b59494a",
-    "input": "contract_99__q03",
-    "rt": "numeric"
-  },
-  {
-    "arm": "A",
-    "id": "1c99bae9-8208-4249-886a-6a42b0c55713",
-    "input": "contract_103__q02",
-    "rt": "direct"
-  }
-]
-```
+**Notes:** 0 rows -- verified data-supported cause (not retention purge): every row in the target agent experiment has metadata.secondary_diagnostics."obj/tool_calls" == 0 in this run, so the filter's tool_calls >= 2 predicate cannot match any case. No case in this run triggered a second search_agreement call before a grounded-correct answer.
 
 
 ## 2. Failure attribution
@@ -65,21 +32,21 @@ bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b9
 **Question:** EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.
 
 ```
-from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.model as model, metadata.arm as arm | measures: count(1) as n
+from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | filter: metadata.secondary_diagnostics."obj/execution_failed" = 1 or metadata.secondary_diagnostics."obj/cap_hit" = 1 | dimensions: metadata.model, metadata.arm | measures: count(1) as n
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.model as model, metadata.arm as arm | measures: count(1) as n"}'
+  -d '{"query": "from: experiment('"'"'A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc'"'"') | filter: metadata.secondary_diagnostics.\"obj/execution_failed\" = 1 or metadata.secondary_diagnostics.\"obj/cap_hit\" = 1 | dimensions: metadata.model, metadata.arm | measures: count(1) as n"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.model as model, metadata.arm as arm | measures: count(1) as n"
+bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | filter: metadata.secondary_diagnostics.\"obj/execution_failed\" = 1 or metadata.secondary_diagnostics.\"obj/cap_hit\" = 1 | dimensions: metadata.model, metadata.arm | measures: count(1) as n"
 ```
 
-**Executed at:** 2026-09-06T02:11:21.614601+00:00  
+**Executed at:** 2026-09-06T20:38:23.088858+00:00  
 **Row count:** 1
 
 ```json
@@ -87,7 +54,7 @@ bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b9
   {
     "arm": "A",
     "model": "z-ai/glm-5.3-flash",
-    "n": 32
+    "n": 24
   }
 ]
 ```
@@ -98,44 +65,49 @@ bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b9
 **Question:** grounded_accuracy by reasoning_type (direct, numeric, structured, defined-term, cross-ref, carve-out).
 
 ```
-from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type as rt | measures: count(1) as n
+from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type | measures: avg(scores."obj/grounded_accuracy") as grounded_accuracy, count(1) as n
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type as rt | measures: count(1) as n"}'
+  -d '{"query": "from: experiment('"'"'A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc'"'"') | dimensions: metadata.reasoning_type | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, count(1) as n"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type as rt | measures: count(1) as n"
+bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, count(1) as n"
 ```
 
-**Executed at:** 2026-09-06T02:11:21.749020+00:00  
+**Executed at:** 2026-09-06T20:38:23.904232+00:00  
 **Row count:** 7
 
 ```json
 [
   {
-    "n": 4,
-    "rt": "carve-out"
+    "grounded_accuracy": null,
+    "n": 8,
+    "reasoning_type": "out-of-scope"
   },
   {
-    "n": 4,
-    "rt": "direct"
+    "grounded_accuracy": 1,
+    "n": 8,
+    "reasoning_type": "numeric"
   },
   {
-    "n": 12,
-    "rt": "defined-term"
+    "grounded_accuracy": 0.6666666666666666,
+    "n": 48,
+    "reasoning_type": "defined-term"
   },
   {
-    "n": 2,
-    "rt": "out-of-scope"
+    "grounded_accuracy": 1,
+    "n": 16,
+    "reasoning_type": "carve-out"
   },
   {
-    "n": 2,
-    "rt": "structured"
+    "grounded_accuracy": 0.5,
+    "n": 24,
+    "reasoning_type": "cross-ref"
   }
 ]
 ```
@@ -143,55 +115,57 @@ bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b9
 
 ## 4. DeepEval disagreement
 
-**Question:** Traces where deepeval/ and obj/ scores disagree.
+**Question:** Traces where deepeval/task_completion and obj/grounded_accuracy disagree.
 
 ```
-from: experiment('judge-A@haiku') | select: id, metadata | limit: 50
+from: experiment('deepeval-crosscheck') | select: id, input, scores."deepeval/task_completion" as task_completion, scores."obj/grounded_accuracy" as grounded_accuracy | filter: (scores."deepeval/task_completion" >= 0.5 and scores."obj/grounded_accuracy" = 0) or (scores."deepeval/task_completion" < 0.5 and scores."obj/grounded_accuracy" = 1) | limit: 50
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('judge-A@haiku') | select: id, metadata | limit: 50"}'
+  -d '{"query": "from: experiment('"'"'deepeval-crosscheck'"'"') | select: id, input, scores.\"deepeval/task_completion\" as task_completion, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: (scores.\"deepeval/task_completion\" >= 0.5 and scores.\"obj/grounded_accuracy\" = 0) or (scores.\"deepeval/task_completion\" < 0.5 and scores.\"obj/grounded_accuracy\" = 1) | limit: 50"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('judge-A@haiku') | select: id, metadata | limit: 50"
+bt sql --non-interactive --json "from: experiment('deepeval-crosscheck') | select: id, input, scores.\"deepeval/task_completion\" as task_completion, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: (scores.\"deepeval/task_completion\" >= 0.5 and scores.\"obj/grounded_accuracy\" = 0) or (scores.\"deepeval/task_completion\" < 0.5 and scores.\"obj/grounded_accuracy\" = 1) | limit: 50"
 ```
 
-**Executed at:** 2026-09-06T02:11:21.905865+00:00  
-**Row count:** 1
+**Executed at:** 2026-09-06T20:38:24.110824+00:00  
+**Row count:** 17
 
 ```json
 [
   {
-    "id": "f1c713f3-5093-44d2-8fa2-bf79134bbe63",
-    "metadata": {
-      "arm": "A",
-      "case_type": null,
-      "framework_versions": {
-        "bm25s": "0.3.11",
-        "braintrust": "0.37.0",
-        "deepeval": "4.2.1",
-        "fastembed": "0.8.0",
-        "git_sha7": "b9eac78",
-        "llama-index-core": "0.14.24",
-        "llama-index-retrievers-bm25": "0.8.0",
-        "openai": "3.8.0",
-        "pydantic": "2.13.5",
-        "python": "3.12.3",
-        "qdrant-client": "1.19.0"
-      },
-      "git_sha": "b9eac78",
-      "index_version": null,
-      "model": "anthropic/claude-haiku-4.5",
-      "reasoning_type": null,
-      "retriever": "dense",
-      "skill_version": "f8d255cc169b",
-      "stage": "eval",
-      "variant_id": "A@haiku"
-    }
+    "grounded_accuracy": 0,
+    "id": "cb97ec1b-1bfe-4cbc-a1fd-4bc57456077c",
+    "input": "contract_39__q01",
+    "task_completion": 1
+  },
+  {
+    "grounded_accuracy": 0,
+    "id": "4e1a705c-d53b-4e7b-bf83-01f4c0419bc8",
+    "input": "contract_144__q09",
+    "task_completion": 1
+  },
+  {
+    "grounded_accuracy": 0,
+    "id": "162bc618-1144-40e3-b6ca-d681c30273d8",
+    "input": "contract_32__q06",
+    "task_completion": 0.7
+  },
+  {
+    "grounded_accuracy": 0,
+    "id": "a584c0ad-6f32-478d-96ad-91372515ecb8",
+    "input": "contract_4__q12",
+    "task_completion": 1
+  },
+  {
+    "grounded_accuracy": 0,
+    "id": "a6eb820e-e25f-4fbd-92d6-ae81cf08d89c",
+    "input": "contract_39__q01",
+    "task_completion": 0.7
   }
 ]
 ```
@@ -199,31 +173,32 @@ bt sql --non-interactive --json "from: experiment('judge-A@haiku') | select: id,
 
 ## 5. Model economics
 
-**Question:** Cost per correct answer by model, across the M6 Pareto experiments.
+**Question:** Grounded accuracy and average cost per case, for one M6 Pareto model experiment.
 
 ```
-from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model as model | measures: count(1) as n
+from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model | measures: avg(scores."obj/grounded_accuracy") as grounded_accuracy, avg(metadata.secondary_diagnostics."obj/usd") as avg_usd
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model as model | measures: count(1) as n"}'
+  -d '{"query": "from: experiment('"'"'pareto-anthropic_claude-haiku-4.5'"'"') | dimensions: metadata.model | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, avg(metadata.secondary_diagnostics.\"obj/usd\") as avg_usd"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model as model | measures: count(1) as n"
+bt sql --non-interactive --json "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, avg(metadata.secondary_diagnostics.\"obj/usd\") as avg_usd"
 ```
 
-**Executed at:** 2026-09-06T02:11:22.449129+00:00  
+**Executed at:** 2026-09-06T20:38:24.621075+00:00  
 **Row count:** 1
 
 ```json
 [
   {
-    "model": "anthropic/claude-haiku-4.5",
-    "n": 1
+    "avg_usd": null,
+    "grounded_accuracy": null,
+    "model": "anthropic/claude-haiku-4.5"
   }
 ]
 ```
@@ -234,44 +209,54 @@ bt sql --non-interactive --json "from: experiment('pareto-anthropic_claude-haiku
 **Question:** Tool calls vs outcome -- does more searching correlate with a worse result?
 
 ```
-from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm as arm | limit: 50
+from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm, metadata.secondary_diagnostics."obj/tool_calls" as tool_calls, scores."obj/grounded_accuracy" as grounded_accuracy | filter: metadata.secondary_diagnostics."obj/tool_calls" is not null | limit: 50
 ```
 
 ```bash
 curl -s https://api.braintrust.dev/btql \
   -H "Authorization: Bearer $BRAINTRUST_API_KEY" \
   -H 'Content-Type: application/json' \
-  -d '{"query": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm as arm | limit: 50"}'
+  -d '{"query": "from: experiment('"'"'A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc'"'"') | select: id, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" is not null | limit: 50"}'
 ```
 
 ```bash
-bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm as arm | limit: 50"
+bt sql --non-interactive --json "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" is not null | limit: 50"
 ```
 
-**Executed at:** 2026-09-06T02:11:22.820062+00:00  
-**Row count:** 32
+**Executed at:** 2026-09-06T20:38:25.106428+00:00  
+**Row count:** 50
 
 ```json
 [
   {
     "arm": "A",
-    "id": "7b6931f8-d414-4756-9692-e2adb1425cc1"
+    "grounded_accuracy": null,
+    "id": "14fbe113-b71c-4fe1-9992-e980f2b1a9e3",
+    "tool_calls": 0
   },
   {
     "arm": "A",
-    "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30"
+    "grounded_accuracy": null,
+    "id": "5639ddec-1b22-48f2-bb52-7cdb8e6b30ea",
+    "tool_calls": 0
   },
   {
     "arm": "A",
-    "id": "220d7076-f1d0-4b26-b3ab-424ef5935873"
+    "grounded_accuracy": 1,
+    "id": "e95ba2b5-0abc-4284-8985-c8a7fe575459",
+    "tool_calls": 0
   },
   {
     "arm": "A",
-    "id": "3b8c0484-480a-416f-8140-3cee7b59494a"
+    "grounded_accuracy": 1,
+    "id": "b3fefa26-e98d-460b-bfe9-858ecbfa097a",
+    "tool_calls": 0
   },
   {
     "arm": "A",
-    "id": "1c99bae9-8208-4249-886a-6a42b0c55713"
+    "grounded_accuracy": 1,
+    "id": "28d7d9f1-b2a9-4c77-96e0-11e536d61ab0",
+    "tool_calls": 0
   }
 ]
 ```

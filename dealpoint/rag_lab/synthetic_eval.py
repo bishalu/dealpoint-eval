@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import json
 
-from dealpoint.config import SYNTHETIC_DEV_QUERIES_PATH
+from dealpoint.config import SYNTHETIC_DEV_QUERIES_PATH, TOURNAMENT_JSON_PATH
 from dealpoint.corpus.chunks import chunk_document
 from dealpoint.corpus.document import load_document
 from dealpoint.corpus.retrievers import Retriever, Scorer, build_retriever
@@ -80,7 +80,7 @@ def evaluate_synthetic_set(
             "n": n,
         }
 
-    winner_name = "hybrid_rrf"
+    winner_name = json.loads(TOURNAMENT_JSON_PATH.read_text(encoding="utf-8"))["winner"]["config"]
     winner_result = results.get(winner_name, {})
     winner_hit = winner_result.get("li_hit_rate")
     dense_hit = results.get("dense", {}).get("li_hit_rate")

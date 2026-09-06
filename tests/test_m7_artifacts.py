@@ -22,6 +22,8 @@ from dealpoint.config import (
     FRAMEWORK_VERSIONS_PATH,
     LI_RAG_EVAL_JSON_PATH,
     LI_RAG_EVAL_MD_PATH,
+    M7A_DISK_FLOOR_BYTES,
+    M7A_DISK_GUARD_PATH,
     REPO_ROOT,
     REPRESENTATIVE_CASES_PATH,
     TEST_SUBSET_V1_PATH,
@@ -39,6 +41,7 @@ M7A_REPORT_PATHS = (
     BTQL_INVESTIGATIONS_PATH,
     REPRESENTATIVE_CASES_PATH,
     FRAMEWORK_VERSIONS_PATH,
+    M7A_DISK_GUARD_PATH,
 )
 
 
@@ -59,6 +62,24 @@ def test_framework_versions_json_exists_and_has_expected_keys():
     payload = json.loads(FRAMEWORK_VERSIONS_PATH.read_text(encoding="utf-8"))
     assert "python" in payload
     assert "git_sha7" in payload
+
+
+def test_disk_guard_was_written_by_record_guard():
+    if not M7A_DISK_GUARD_PATH.exists():
+        pytest.skip("m7a_disk_guard.json not generated yet; run `just disk-guard`")
+    raw = M7A_DISK_GUARD_PATH.read_text(encoding="utf-8")
+    payload = json.loads(raw)
+
+    # record_guard() writes with sort_keys=True and a trailing newline.
+    assert raw == json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    assert list(json.loads(raw).keys()) == sorted(json.loads(raw).keys())
+
+    assert payload["floor_bytes"] == M7A_DISK_FLOOR_BYTES
+    assert payload["measured_at"] != "2026-09-05T00:00:00+00:00"
+    assert payload["within_guard"] is True
+    for group in payload["groups"]:
+        assert "re_measured_at" in group
+        assert min(group["free_before_bytes"], group["free_after_bytes"]) >= M7A_DISK_FLOOR_BYTES
 
 
 def test_li_rag_eval_frozen_assertions_match_disk():
@@ -90,6 +111,45 @@ def test_deepeval_crosscheck_has_one_of_three_classifications():
         "REMOVE_NO_ADDED_SIGNAL",
     )
     assert report["resolved_evaluator"]["model"]
+
+
+def test_deepeval_crosscheck_run_quality_not_silently_degraded():
+    if not DEEPEVAL_CROSSCHECK_JSON_PATH.exists():
+        pytest.skip("deepeval_crosscheck.json not generated yet")
+    report = json.loads(DEEPEVAL_CROSSCHECK_JSON_PATH.read_text(encoding="utf-8"))
+
+    n_traces = report["subset"]["n_traces"]
+    assert len(report["per_trace_scores"]) == n_traces
+
+    coverage = report["coverage"]
+    for name in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
+        assert name in coverage
+        c = coverage[name]
+        assert c["n_scored"] + c["n_null"] == n_traces
+        # a coverage floor: every metric must have a non-null score on a stated
+        # majority of traces, so a silently-degraded run (e.g. step_efficiency's
+        # pre-repair 93/108 nulls) fails the gate instead of passing it.
+        assert c["n_scored"] > n_traces / 2, f"{name} scored on only {c['n_scored']}/{n_traces} traces"
+
+    step_eff_scores = {
+        row["step_efficiency"]["score"] for row in report["per_trace_scores"] if row["step_efficiency"]["score"] is not None
+    }
+    assert len(step_eff_scores) > 1, "step_efficiency shows no variation -- looks degraded"
+
+    assert report["resolved_evaluator"].get("provider")
+    assert report["resolved_evaluator"].get("deepeval_version")
+
+    vs_judge = report["comparisons"]["vs_judge"]
+    for val in vs_judge.values():
+        assert val["n"] <= n_traces
+
+    assert report["decisions"], "decisions must not be empty"
+    assert any("judge-trio" in d["decision"] or "independence" in d["topic"] for d in report["decisions"])
+
+    spend = report["spend"]
+    assert "m7a_realized_usd" in spend
+    assert "deepeval_realized_usd" in spend
+    assert "global_realized_usd" in spend
 
 
 def test_btql_investigations_has_six_entries():

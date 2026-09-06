@@ -91,3 +91,63 @@ def test_looks_like_question_filters_markdown_headers():
     assert not _looks_like_question("# Quiz Questions")
     assert not _looks_like_question("**Question 1:**")
     assert _looks_like_question("What form of consideration is used by the Company?")
+
+
+def test_frozen_synthetic_dev_queries_file_matches_provenance():
+    import hashlib
+
+    from dealpoint.config import LI_RAG_EVAL_JSON_PATH, SYNTHETIC_DEV_QUERIES_PATH
+    from dealpoint.eval.cases import load_case_set
+
+    if not SYNTHETIC_DEV_QUERIES_PATH.exists():
+        pytest.skip("synthetic_dev_queries.jsonl not frozen yet")
+
+    rows = [
+        json.loads(line)
+        for line in SYNTHETIC_DEV_QUERIES_PATH.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    assert rows, "frozen synthetic query file is empty"
+
+    dev_chunk_ids: set[str] = set()
+    for case in load_case_set("dev"):
+        from dealpoint.corpus.chunks import chunk_document
+        from dealpoint.corpus.document import load_document
+        from dealpoint.eval.cases import resolve_document_id
+
+        doc_id = resolve_document_id(case)
+        dev_chunk_ids.update(c.chunk_id for c in chunk_document(load_document(doc_id)))
+
+    counts: dict[str, int] = {}
+    for row in rows:
+        assert row["chunk_id"] in dev_chunk_ids, f"{row['chunk_id']} is not a dev chunk"
+        for key in ("generator", "generator_version", "prompt_hash", "model"):
+            assert row.get(key), f"row missing {key}"
+        counts[row["chunk_id"]] = counts.get(row["chunk_id"], 0) + 1
+    assert all(n <= 2 for n in counts.values()), "more than 2 questions for some chunk"
+
+    file_hash = hashlib.sha256(SYNTHETIC_DEV_QUERIES_PATH.read_bytes()).hexdigest()
+    if LI_RAG_EVAL_JSON_PATH.exists():
+        report = json.loads(LI_RAG_EVAL_JSON_PATH.read_text(encoding="utf-8"))
+        synth = report.get("synthetic") or {}
+        if synth.get("file_sha256"):
+            assert synth["file_sha256"] == file_hash
+
+
+def test_li_rag_eval_covers_all_frozen_configs_plus_native():
+    from dealpoint.config import LI_RAG_EVAL_JSON_PATH
+
+    if not LI_RAG_EVAL_JSON_PATH.exists():
+        pytest.skip("li_rag_eval.json not generated yet; run `just li-rag-eval`")
+    report = json.loads(LI_RAG_EVAL_JSON_PATH.read_text(encoding="utf-8"))
+    retrievers = report["retrievers"]
+    expected = {
+        "dense",
+        "bm25",
+        "hybrid_rrf",
+        "hybrid_rrf_rerank",
+        "multi_query_fusion",
+        "multi_query_fusion_rerank",
+        "li_native_bm25",
+    }
+    assert expected <= set(retrievers.keys())

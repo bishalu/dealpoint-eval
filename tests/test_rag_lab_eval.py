@@ -56,21 +56,15 @@ def _synthetic_case_and_doc():
     return doc, chunks
 
 
-def test_classify_disagreement_reranking():
-    from dealpoint.rag_lab.evaluate import classify_disagreement
+def test_classify_disagreement_reranking_not_emitted():
+    """'reranking' is deliberately not in CAUSE_VOCAB (evaluate.py's module
+    docstring on the constant explains why): the pipeline never computes a
+    pre-rerank ranking to compare against, so the label would describe a
+    rule the code cannot apply.
+    """
+    from dealpoint.rag_lab.evaluate import CAUSE_VOCAB
 
-    config = RetrieverConfig(name="x", kind="hybrid_rrf", rerank_model="fake-model")
-    _doc, chunks = _synthetic_case_and_doc()
-    cause = classify_disagreement(
-        config=config,
-        expected_ids=["doc_x:0-100"],
-        retrieved_ids=["doc_x:0-100"],
-        chunks=chunks,
-        golds=[(0, 100)],
-        rerank_would_hit=True,
-        current_hit=False,
-    )
-    assert cause == "reranking"
+    assert "reranking" not in CAUSE_VOCAB
 
 
 def test_classify_disagreement_partial_overlap():
@@ -153,3 +147,44 @@ def test_assert_versions_match_raises_on_mismatch(tmp_path, monkeypatch):
     )
     with pytest.raises(RuntimeError):
         assert_versions_match(versions_path=bad_versions)
+
+
+def test_li_rag_eval_obj_metrics_match_frozen_tournament():
+    """obj/ hit@5, hit@10 and MRR must reproduce tournament.json exactly for
+    every frozen M3 config -- evaluate_retriever_obj always retrieves at
+    TOURNAMENT_K regardless of the LI-side k it is called alongside."""
+    from dealpoint.config import LI_RAG_EVAL_JSON_PATH, TOURNAMENT_JSON_PATH
+
+    if not LI_RAG_EVAL_JSON_PATH.exists():
+        pytest.skip("li_rag_eval.json not generated yet; run `just li-rag-eval`")
+
+    report = json.loads(LI_RAG_EVAL_JSON_PATH.read_text(encoding="utf-8"))
+    tournament = json.loads(TOURNAMENT_JSON_PATH.read_text(encoding="utf-8"))
+
+    for name, frozen in tournament["results"].items():
+        canonical = frozen["canonical"]
+        obj = report["retrievers"][name]["obj"]
+        assert obj["gold_span_hit_at_5"] == pytest.approx(canonical["hit_at_5"])
+        assert obj["gold_span_hit_at_10"] == pytest.approx(canonical["hit_at_10"])
+        assert obj["gold_span_mrr"] == pytest.approx(canonical["mrr"])
+
+
+def test_li_rag_eval_disagreements_are_non_empty_with_causes():
+    from dealpoint.config import LI_RAG_EVAL_JSON_PATH
+
+    if not LI_RAG_EVAL_JSON_PATH.exists():
+        pytest.skip("li_rag_eval.json not generated yet; run `just li-rag-eval`")
+
+    report = json.loads(LI_RAG_EVAL_JSON_PATH.read_text(encoding="utf-8"))
+    disagreements = report["disagreements"]
+    assert len(disagreements) > 0, "expected real disagreements from li_native_bm25"
+    directions = {d["direction"] for d in disagreements}
+    assert directions, "no disagreement directions recorded"
+    for d in disagreements:
+        assert d["cause"] in (
+            "chunk_identity",
+            "partial_overlap",
+            "duplicate_relevant_chunks",
+            "section_boundary",
+        )
+    assert len(report["worked_examples"]) >= 1

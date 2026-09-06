@@ -21,19 +21,26 @@ from dealpoint.eval.scorers import MIN_GOLD_OVERLAP_CHARS, gold_ranges, overlap_
 Range = tuple[int, int]
 
 # Fixed disagreement-cause vocabulary (spec section 3.2).
+#
+# "reranking" is deliberately absent. The spec lists it as a candidate cause
+# label, but `find_disagreements` never computes a pre-rerank ranking to
+# compare against (that would require threading the fused-but-unreranked
+# chunk list through `evaluate_retriever_obj`/`evaluate_retriever_li`, which
+# neither function currently exposes), so `classify_disagreement`'s
+# `rerank_would_hit`/`current_hit` parameters are never supplied by any
+# caller and the branch that would emit "reranking" is unreachable outside a
+# unit test. Describing a rule the pipeline cannot apply would misrepresent
+# the evidence, so the label is dropped rather than left as dead code path.
 CAUSE_VOCAB: tuple[str, ...] = (
     "chunk_identity",
     "partial_overlap",
     "duplicate_relevant_chunks",
     "section_boundary",
-    "reranking",
 )
 
 CAUSE_RULE_TEXT = (
     "Deterministic disagreement-cause rule, applied in this priority order to a "
     "disagreeing (case, config, direction): "
-    "'reranking' when the config carries a rerank_model AND the pre-rerank fused "
-    "ranking's hit/miss differs from the post-rerank ranking's hit/miss at the same k; "
     "'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by "
     f"0 < overlap < MIN_GOLD_OVERLAP_CHARS ({MIN_GOLD_OVERLAP_CHARS}) chars; "
     "'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each "
@@ -42,8 +49,10 @@ CAUSE_RULE_TEXT = (
     "'section_boundary' when a single gold span is covered (any overlap > 0) by chunks "
     "carrying more than one distinct section_ref; "
     "'chunk_identity' otherwise (the default: the two metrics disagree for a reason not "
-    "captured by the other four labels -- typically the retrieved list and expected_ids "
-    "simply differ)."
+    "captured by the other three labels -- typically the retrieved list and expected_ids "
+    "simply differ). A 'reranking' label was considered (spec section 3.2) but is not "
+    "emitted: the pipeline never computes the pre-rerank ranking needed to detect it, so "
+    "including it would describe a rule this code cannot actually apply."
 )
 
 
@@ -163,6 +172,63 @@ def evaluate_retriever_li(
     }
 
 
+def evaluate_native_bm25_li(
+    cases: list[dict],
+    *,
+    k: int = 5,
+) -> dict:
+    """Evaluate a genuinely native `llama_index.retrievers.bm25.BM25Retriever`
+    (see `dealpoint.rag_lab.adapters.build_native_bm25_retriever`) with
+    LlamaIndex's own `RetrieverEvaluator`, over the same canonical chunks and
+    the same `expected_ids` rule as `evaluate_retriever_li`.
+
+    Unlike `evaluate_retriever_li` (which wraps the project's own bm25s
+    ranking), this retriever's tokenizer and scoring are entirely
+    LlamaIndex's -- so its disagreements against `obj/` are real, not
+    guaranteed-zero by construction.
+    """
+    from llama_index.core.evaluation import RetrieverEvaluator
+
+    from dealpoint.eval.cases import resolve_document_id
+    from dealpoint.rag_lab.adapters import build_native_bm25_retriever
+
+    hits: list[float] = []
+    mrrs: list[float] = []
+    per_case: list[dict] = []
+    for case in cases:
+        golds = gold_ranges(case)
+        if not golds:
+            continue
+        doc_id = resolve_document_id(case)
+        chunks = chunk_document(load_document(doc_id))
+        expected_ids = gold_bearing_chunk_ids(case, chunks)
+        if not expected_ids:
+            continue
+        query = _canonical_query_for(case)
+        retriever = build_native_bm25_retriever(chunks, k=k)
+        evaluator = RetrieverEvaluator.from_metric_names(["hit_rate", "mrr"], retriever=retriever)
+        result = evaluator.evaluate(query=query, expected_ids=expected_ids)
+        vals = result.metric_vals_dict
+        hits.append(vals["hit_rate"])
+        mrrs.append(vals["mrr"])
+        per_case.append(
+            {
+                "case_id": case["case_id"],
+                "expected_ids": expected_ids,
+                "retrieved_ids": list(result.retrieved_ids),
+                "hit_rate": vals["hit_rate"],
+                "mrr": vals["mrr"],
+            }
+        )
+    n = len(hits)
+    return {
+        "hit_rate": (sum(hits) / n) if n else 0.0,
+        "mrr": (sum(mrrs) / n) if n else 0.0,
+        "n": n,
+        "per_case": per_case,
+    }
+
+
 def evaluate_retriever_obj(
     cases: list[dict],
     config: RetrieverConfig,
@@ -176,7 +242,13 @@ def evaluate_retriever_obj(
     """`obj/gold_span_hit@k` / `obj/gold_span_mrr` for one config, via the
     EXISTING `dealpoint.eval.tournament.evaluate_config` -- never a fresh
     reimplementation of the metric.
+
+    Always retrieves at `TOURNAMENT_K` regardless of the `k` argument (which
+    controls the LlamaIndex side's `top_k` in the caller), so hit@5, hit@10
+    and MRR reproduce `data/reports/tournament.json` exactly -- passing a
+    shallower `k` here would truncate hit@10 and MRR to match hit@5.
     """
+    from dealpoint.config import TOURNAMENT_K
     from dealpoint.corpus.retrievers import build_retriever
     from dealpoint.eval.tournament import evaluate_config
 
@@ -189,7 +261,7 @@ def evaluate_retriever_obj(
     def _on_case(case: dict, query: str, rank: int | None) -> None:
         per_case.append({"case_id": case["case_id"], "first_hit_rank": rank})
 
-    metrics = evaluate_config(cases, retriever, _canonical_query_for, k=k, _on_case=_on_case)
+    metrics = evaluate_config(cases, retriever, _canonical_query_for, k=TOURNAMENT_K, _on_case=_on_case)
     return {
         "hit_at_5": metrics["hit_at_5"],
         "hit_at_10": metrics["hit_at_10"],
@@ -206,22 +278,16 @@ def classify_disagreement(
     retrieved_ids: list[str],
     chunks: list[Chunk],
     golds: list[Range],
-    rerank_would_hit: bool | None = None,
-    current_hit: bool | None = None,
 ) -> str:
     """Deterministic cause label for one disagreeing (case, config, direction).
 
     See `CAUSE_RULE_TEXT` for the full documented rule; this function is its
-    single implementation.
+    single implementation. `config` is accepted for a consistent call
+    signature across configs (including rerank configs) even though no
+    branch currently inspects it -- see `CAUSE_RULE_TEXT`'s note on why
+    "reranking" is not an emitted label.
     """
-    if (
-        config.rerank_model
-        and rerank_would_hit is not None
-        and current_hit is not None
-        and rerank_would_hit != current_hit
-    ):
-        return "reranking"
-
+    del config
     chunk_by_id = {c.chunk_id: c for c in chunks}
     if retrieved_ids:
         top_chunk = chunk_by_id.get(retrieved_ids[0])

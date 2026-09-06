@@ -139,18 +139,13 @@ def test_no_partial_run_model_is_ever_described_as_not_run():
     if not partial_run_models:
         pytest.skip("no partial_runs entries in this report")
 
-    from dealpoint.config import PARETO_MD_PATH, README_PATH
+    # The README PARETO block no longer carries a "Not run"/"Partially run"
+    # section at all (spec: those diagnostics live only in pareto.md) --
+    # this check is repointed there accordingly, rather than also grepping
+    # a README block that structurally cannot contain this content anymore.
+    from dealpoint.config import PARETO_MD_PATH
 
     md_text = PARETO_MD_PATH.read_text(encoding="utf-8") if PARETO_MD_PATH.exists() else ""
-    readme_text = README_PATH.read_text(encoding="utf-8") if README_PATH.exists() else ""
-    import re as _re
-
-    match = _re.search(
-        _re.escape("<!-- BEGIN PARETO -->") + r"(.*?)" + _re.escape("<!-- END PARETO -->"),
-        readme_text,
-        _re.DOTALL,
-    )
-    readme_block = match.group(1) if match else ""
 
     for nr in report.get("not_run", []):
         if nr.get("model") in partial_run_models:
@@ -160,14 +155,13 @@ def test_no_partial_run_model_is_ever_described_as_not_run():
             )
 
     for model in partial_run_models:
-        for label, text in (("pareto.md", md_text), ("README PARETO block", readme_block)):
-            # A per-model line containing both the model id and "not run" would
-            # misdescribe it; the model's own entry text (its not_run bullet, if
-            # any) is checked structurally above, so here just confirm no
-            # "`<model>`: not run" style bullet survived the render.
-            assert f"`{model}`: not run" not in text, (
-                f"{label} still describes {model!r} as not run"
-            )
+        # A per-model line containing both the model id and "not run" would
+        # misdescribe it; the model's own entry text (its not_run bullet, if
+        # any) is checked structurally above, so here just confirm no
+        # "`<model>`: not run" style bullet survived the render.
+        assert f"`{model}`: not run" not in md_text, (
+            f"pareto.md still describes {model!r} as not run"
+        )
 
 
 def test_completed_plus_partial_runs_usd_equals_m6_sweep_usd():

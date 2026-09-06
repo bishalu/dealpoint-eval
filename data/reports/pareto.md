@@ -48,16 +48,17 @@ Haiku's arm-D result is 18 cases (tranche_1); every other model's is 32. Any Hai
     "m4": 0.751879,
     "m4_1": 1.420234,
     "m5": 0.110038,
-    "m6": 0.742655
+    "m6": 0.742655,
+    "m7a": 0.14189
   },
-  "envelope_headroom": 0.38606,
+  "envelope_headroom": 0.24417,
   "envelope_usd": 4.0,
   "m6_judge_usd": 0.077565,
   "m6_probe_usd": 0.034754,
   "m6_realized_usd": 0.742655,
   "m6_sweep_usd": 0.630336,
   "target_usd": 1.0,
-  "total_realized_usd": 3.61394
+  "total_realized_usd": 3.75583
 }
 ```
 

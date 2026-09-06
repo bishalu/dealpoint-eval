@@ -29,6 +29,7 @@ os.environ.setdefault("ERROR_REPORTING", "NO")
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 from dealpoint.config import (
@@ -105,6 +106,9 @@ def resolve_evaluator_model(env_value: str | None = None) -> dict:
     price_basis = slate.get("price_basis", "unknown")
     verified_judges = [j for j in slate.get("judges", []) if j.get("ok")]
 
+    deepeval_version = _deepeval_library_version()
+    trio_models = {j.get("model") for j in slate.get("judges", [])}
+
     if env_value:
         family = _family_for_model_id(env_value)
         if family in CANDIDATE_FAMILIES:
@@ -114,10 +118,13 @@ def resolve_evaluator_model(env_value: str | None = None) -> dict:
             )
         return {
             "model": env_value,
+            "provider": env_value.split("/", 1)[0] if "/" in env_value else "unknown",
             "family": family,
             "source": f"env:{DEEPEVAL_MODEL_ENV}",
             "price_basis": "n/a (explicit override)",
             "policy_checked": True,
+            "deepeval_version": deepeval_version,
+            "shares_model_with_judge_trio": env_value in trio_models,
         }
 
     for judge in verified_judges:
@@ -127,16 +134,28 @@ def resolve_evaluator_model(env_value: str | None = None) -> dict:
             continue
         return {
             "model": model,
+            "provider": model.split("/", 1)[0] if model and "/" in model else "unknown",
             "family": family,
             "source": "judge_slate.json (verified judges, non-candidate-family)",
             "price_basis": price_basis,
             "policy_checked": True,
+            "deepeval_version": deepeval_version,
+            "shares_model_with_judge_trio": model in trio_models,
         }
 
     raise RuntimeError(
         "no evaluator model available: every verified judge-slate entry is in a "
         "candidate-agent family, and DEEPEVAL_MODEL is not set"
     )
+
+
+def _deepeval_library_version() -> str:
+    try:
+        from importlib.metadata import version
+
+        return version("deepeval")
+    except Exception:  # noqa: BLE001 - version lookup is best-effort, never fatal
+        return "unknown"
 
 
 # --- 4.2: subset + mapping ---------------------------------------------------
@@ -306,46 +325,73 @@ STEP_EFFICIENCY_GEVAL_CRITERIA = (
 def build_metrics(evaluator_model) -> dict:
     """Instantiate every DeepEval metric this cross-check uses, keyed by name.
 
-    `step_efficiency` uses DeepEval-native `StepEfficiencyMetric` when the
-    installed version has one (checked at runtime, since the milestone plan
-    treats this as a moving target); otherwise falls back to a documented
-    `GEval` definition whose criteria string is `STEP_EFFICIENCY_GEVAL_CRITERIA`
-    (recorded verbatim, hashed, in the report).
+    `step_efficiency` always uses the documented `GEval` definition
+    (`STEP_EFFICIENCY_GEVAL_CRITERIA`, recorded verbatim and hashed in the
+    report), never DeepEval-native `StepEfficiencyMetric`. That metric sets
+    `requires_trace = True` and reads `test_case._trace_dict`
+    (`deepeval/metrics/step_efficiency/step_efficiency.py`), populated only
+    by DeepEval's `@observe` tracing decorator -- `dict_to_llm_test_case`
+    never sets a trace, and constructing one by hand would mean adopting
+    DeepEval's own tracer as a second tracing path, which the brief section
+    4 excludes and the spec's no-bloat rule forbids. Measured on the
+    pre-repair run: 93 of 108 traces scored 0.0 with reason "No task or
+    trace provided for evaluation" -- real spend for empty input. The spec
+    explicitly allows this fallback ("DeepEval-native if present, else a
+    documented GEval definition").
     """
     from deepeval.metrics import (
         ArgumentCorrectnessMetric,
+        GEval,
         TaskCompletionMetric,
         ToolCorrectnessMetric,
     )
+    from deepeval.test_case import ToolCall
+    from deepeval.test_case.llm_test_case import SingleTurnParams
 
+    available_tools = [
+        ToolCall(name="search_agreement", input_parameters={}),
+        ToolCall(name="get_section", input_parameters={}),
+        ToolCall(name="lookup_defined_term", input_parameters={}),
+    ]
     metrics = {
         "task_completion": TaskCompletionMetric(model=evaluator_model, async_mode=False, include_reason=True),
-        "tool_correctness": ToolCorrectnessMetric(model=evaluator_model, async_mode=False, include_reason=True),
+        "tool_correctness": ToolCorrectnessMetric(
+            available_tools=available_tools, model=evaluator_model, async_mode=False, include_reason=True
+        ),
         "argument_correctness": ArgumentCorrectnessMetric(
             model=evaluator_model, async_mode=False, include_reason=True
         ),
-    }
-
-    try:
-        from deepeval.metrics import StepEfficiencyMetric
-
-        metrics["step_efficiency"] = StepEfficiencyMetric(
-            model=evaluator_model, async_mode=False, include_reason=True
-        )
-        metrics["step_efficiency_basis"] = "deepeval-native:StepEfficiencyMetric"
-    except ImportError:
-        from deepeval.metrics import GEval
-        from deepeval.test_case.llm_test_case import SingleTurnParams
-
-        metrics["step_efficiency"] = GEval(
+        "step_efficiency": GEval(
             name="StepEfficiency",
             criteria=STEP_EFFICIENCY_GEVAL_CRITERIA,
             evaluation_params=[SingleTurnParams.INPUT, SingleTurnParams.ACTUAL_OUTPUT],
             model=evaluator_model,
-        )
-        metrics["step_efficiency_basis"] = "documented GEval"
-
+        ),
+        "step_efficiency_basis": "documented GEval",
+    }
     return metrics
+
+
+def _measure_with_bounded_retry(metric, test_case, *, max_retries: int = 2, backoff_seconds: float = 3.0):
+    """Run one metric, retrying up to `max_retries` times (with a short
+    backoff) on a rate-limit error before giving up. A transient 429 would
+    otherwise silently become a missing datum -- see the `coverage` block
+    in the report for how often this still happens after retrying.
+    """
+    import time
+
+    last_exc: Exception | None = None
+    for attempt in range(max_retries + 1):
+        try:
+            return metric.measure(test_case), None
+        except Exception as exc:  # noqa: BLE001 - classified by name below, never swallowed silently
+            last_exc = exc
+            is_rate_limit = "RateLimitError" in type(exc).__name__ or "429" in str(exc)
+            if is_rate_limit and attempt < max_retries:
+                time.sleep(backoff_seconds)
+                continue
+            break
+    return None, last_exc
 
 
 def measure_test_case(metrics: dict, test_case) -> dict:
@@ -354,17 +400,48 @@ def measure_test_case(metrics: dict, test_case) -> dict:
     `argument_correctness` only applies where the case has a checkable
     argument (a defined-term case) -- DeepEval itself scores 1.0/"no tool
     calls" when nothing applicable is present, which this records rather
-    than hides.
+    than hides. Rate-limit errors get a bounded retry
+    (`_measure_with_bounded_retry`); any other exception, or a rate-limit
+    that survives the retries, is recorded as a null score with the
+    exception type name preserved in `reason` so the report's `coverage`
+    block can group nulls by cause.
     """
     out: dict = {}
     for name in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
         metric = metrics[name]
-        try:
-            score = metric.measure(test_case)
+        score, exc = _measure_with_bounded_retry(metric, test_case)
+        if exc is not None:
+            out[name] = {
+                "score": None,
+                "reason": f"{type(exc).__name__}: {exc}",
+                "error_type": type(exc).__name__,
+            }
+        else:
             out[name] = {"score": score, "reason": getattr(metric, "reason", None)}
-        except Exception as exc:  # noqa: BLE001 - a metric failure is a recorded row, not a crash
-            out[name] = {"score": None, "reason": f"{type(exc).__name__}: {exc}"}
     return out
+
+
+def compute_coverage(per_trace_scores: list[dict]) -> dict:
+    """Per-metric `{n_scored, n_null, null_reasons}` -- an honest count of how
+    many of the `n_traces` traces actually produced a non-null score for
+    each metric, and why the rest did not (grouped by exception type name).
+    """
+    metric_names = ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency")
+    coverage: dict = {}
+    for name in metric_names:
+        n_scored = 0
+        n_null = 0
+        null_reasons: dict[str, int] = {}
+        for row in per_trace_scores:
+            cell = row.get(name) or {}
+            if cell.get("score") is not None:
+                n_scored += 1
+            else:
+                n_null += 1
+                error_type = cell.get("error_type") or "unknown"
+                null_reasons[error_type] = null_reasons.get(error_type, 0) + 1
+        coverage[name] = {"n_scored": n_scored, "n_null": n_null, "null_reasons": null_reasons}
+    return coverage
 
 
 # --- 4.4: comparisons and conclusion -----------------------------------------
@@ -379,6 +456,7 @@ def compare_to_deterministic(deepeval_scores: list[dict], det_rows: list[dict]) 
         (1.0 if v is True else 0.0 if v is False else None)
         for v in (r.get("grounded_accuracy") for r in det_rows)
     ]
+    tool_correct = [r.get("tool_correctness", {}).get("score") for r in deepeval_scores]
     req_met = [
         (1.0 if v is True else 0.0 if v is False else None)
         for v in (r.get("required_evidence_met") for r in det_rows)
@@ -386,13 +464,27 @@ def compare_to_deterministic(deepeval_scores: list[dict], det_rows: list[dict]) 
     tool_calls = [r.get("tool_calls") for r in det_rows]
     cap_hits = sum(1 for tc_ in tool_calls if tc_ is not None and tc_ >= MAX_TOOL_CALLS)
 
+    paired_tool = [
+        (a, b) for a, b in zip(tool_correct, req_met, strict=True) if a is not None and b is not None
+    ]
+    # "Agreement": both sides at/above 0.5 (pass) or both below (fail) -- the
+    # same >=0.5-as-pass convention used elsewhere in this module.
+    agree = sum(1 for a, b in paired_tool if (a >= 0.5) == (b >= 0.5))
+
     return {
         "task_completion_vs_grounded_accuracy": {
             "spearman": spearman(tc, grounded),
             "n": sum(1 for a, b in zip(tc, grounded, strict=True) if a is not None and b is not None),
         },
         "tool_correctness_vs_required_evidence_met": {
-            "n": sum(1 for v in req_met if v is not None),
+            "n": len(paired_tool),
+            "agreement_rate": (agree / len(paired_tool)) if paired_tool else None,
+            "spearman": spearman([a for a, _ in paired_tool], [b for _, b in paired_tool]),
+            "note": (
+                "available_tools (search_agreement, get_section, lookup_defined_term) "
+                "is now passed to ToolCorrectnessMetric so both the tool-CALL and "
+                "tool-SELECTION halves of the metric are exercised."
+            ),
         },
         "n_at_or_over_tool_cap": cap_hits,
         "max_tool_calls": MAX_TOOL_CALLS,
@@ -443,27 +535,42 @@ def load_judge_dimension_means(path=None) -> dict[tuple[str, str], dict[str, flo
     }
 
 
-def compare_to_judge(deepeval_scores: list[dict], judge_means_by_trace: dict) -> dict:
-    """DeepEval step_efficiency <-> judge `trajectory` dimension, per trace."""
+def _paired_spearman_and_n(xs: list, ys: list) -> dict:
     from dealpoint.eval.agreement import spearman
 
+    n = sum(1 for a, b in zip(xs, ys, strict=True) if a is not None and b is not None)
+    return {"spearman": spearman(xs, ys), "n": n}
+
+
+def compare_to_judge(deepeval_scores: list[dict], judge_means_by_trace: dict) -> dict:
+    """DeepEval metrics <-> all four calibrated judge dimensions, per trace.
+
+    `n` is the count of traces where BOTH sides are non-None (paired,
+    matching `compare_to_deterministic`'s convention) -- not
+    `len(common_keys)`, which only requires the trace to exist in both
+    dicts and over-counts whenever either side's score is null.
+    """
     by_trace_key = {(r.get("case_id"), r.get("variant_id")): r for r in deepeval_scores}
     common_keys = sorted(set(by_trace_key) & set(judge_means_by_trace))
 
     step_eff = [by_trace_key[k].get("step_efficiency", {}).get("score") for k in common_keys]
     task_completion = [by_trace_key[k].get("task_completion", {}).get("score") for k in common_keys]
+    tool_correctness = [by_trace_key[k].get("tool_correctness", {}).get("score") for k in common_keys]
+    argument_correctness = [
+        by_trace_key[k].get("argument_correctness", {}).get("score") for k in common_keys
+    ]
     trajectory_dim = [judge_means_by_trace[k].get("trajectory") for k in common_keys]
     reasoning_dim = [judge_means_by_trace[k].get("reasoning") for k in common_keys]
+    evidence_dim = [judge_means_by_trace[k].get("evidence") for k in common_keys]
+    professional_dim = [judge_means_by_trace[k].get("professional") for k in common_keys]
 
     return {
-        "step_efficiency_vs_judge_trajectory": {
-            "spearman": spearman(step_eff, trajectory_dim),
-            "n": len(common_keys),
-        },
-        "task_completion_vs_judge_reasoning": {
-            "spearman": spearman(task_completion, reasoning_dim),
-            "n": len(common_keys),
-        },
+        "step_efficiency_vs_judge_trajectory": _paired_spearman_and_n(step_eff, trajectory_dim),
+        "task_completion_vs_judge_reasoning": _paired_spearman_and_n(task_completion, reasoning_dim),
+        "tool_correctness_vs_judge_evidence": _paired_spearman_and_n(tool_correctness, evidence_dim),
+        "argument_correctness_vs_judge_professional": _paired_spearman_and_n(
+            argument_correctness, professional_dim
+        ),
     }
 
 
@@ -508,24 +615,98 @@ def find_disagreements(per_trace_scores: list[dict], det_by_row: list[dict]) -> 
     return disagreements
 
 
-def compare_to_human() -> dict:
-    """Human comparison: `data/eval/calibration/human_scores.jsonl` is 0
-    bytes -- every cell here is `"pending"`, n=0, never fabricated.
+def load_human_dimension_means(path=None) -> dict[tuple[str, str], dict[str, float | None]]:
+    """`(case_id, variant_id) -> {dimension: mean-of-scorers}`, read from
+    `data/eval/calibration/human_scores.jsonl` (one row per
+    `(packet_id, scorer)`), joined back to `(case_id, variant_id)` through
+    `data/eval/calibration/variant_key.json` -- unlike judge packet ids
+    (which are re-derived by hashing), the human calibration packet ids are
+    recorded directly in that lookup file, so no hash reconstruction is
+    needed here.
     """
     from dealpoint.config import CALIBRATION_DIR
 
-    human_path = CALIBRATION_DIR / "human_scores.jsonl"
-    n = len(_load_jsonl(human_path))
-    status = "pending" if n == 0 else "available"
+    human_path = Path(path) if path is not None else CALIBRATION_DIR / "human_scores.jsonl"
+    rows = _load_jsonl(human_path)
+    if not rows:
+        return {}
+
+    variant_key_path = CALIBRATION_DIR / "variant_key.json"
+    variant_key: dict = {}
+    if variant_key_path.exists():
+        try:
+            variant_key = json.loads(variant_key_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            variant_key = {}
+
+    dims = ("reasoning", "evidence", "trajectory", "professional")
+    by_trace: dict[tuple[str, str], dict[str, list[float]]] = {}
+    for row in rows:
+        packet_id = row.get("packet_id")
+        key_entry = variant_key.get(packet_id) if packet_id else None
+        if key_entry is None:
+            continue
+        trace_key = (key_entry.get("case_id"), key_entry.get("variant_id"))
+        if trace_key[0] is None or trace_key[1] is None:
+            continue
+        entry = by_trace.setdefault(trace_key, {d: [] for d in dims})
+        for d in dims:
+            value = row.get(d)
+            if value is not None:
+                entry[d].append(value)
+
     return {
-        "n": n,
-        "status": status,
-        "task_completion_vs_human": status,
-        "step_efficiency_vs_human_trajectory_quality": status,
+        key: {d: (sum(vals) / len(vals) if vals else None) for d, vals in dims_map.items()}
+        for key, dims_map in by_trace.items()
     }
 
 
-def classify(comparisons: dict) -> tuple[str, str]:
+def compare_to_human(deepeval_scores: list[dict] | None = None, human_means_by_trace: dict | None = None) -> dict:
+    """Human comparison: real `{n, spearman}` statistics per the same
+    paired-count convention `compare_to_deterministic`/`compare_to_judge`
+    use, computed from `data/eval/calibration/human_scores.jsonl` joined
+    through `variant_key.json`. Falls back to the `"pending"` shape (n=0,
+    no statistic) only when the human file is genuinely empty -- never a
+    fabricated number, and never a placeholder string once real rows exist.
+
+    `task_completion_vs_human` compares DeepEval's `task_completion` against
+    the human `reasoning` dimension; `step_efficiency_vs_human_trajectory_quality`
+    compares DeepEval's `step_efficiency` against the human `trajectory`
+    dimension -- the same rubric-dimension pairing `compare_to_judge` uses
+    for the calibrated judge panel.
+    """
+    if human_means_by_trace is None:
+        human_means_by_trace = load_human_dimension_means()
+
+    n_human_rows = len(human_means_by_trace)
+    if n_human_rows == 0 or not deepeval_scores:
+        return {
+            "n": 0,
+            "status": "pending",
+            "task_completion_vs_human": "pending",
+            "step_efficiency_vs_human_trajectory_quality": "pending",
+        }
+
+    by_trace_key = {(r.get("case_id"), r.get("variant_id")): r for r in deepeval_scores}
+    common_keys = sorted(set(by_trace_key) & set(human_means_by_trace))
+
+    task_completion = [by_trace_key[k].get("task_completion", {}).get("score") for k in common_keys]
+    step_eff = [by_trace_key[k].get("step_efficiency", {}).get("score") for k in common_keys]
+    reasoning_dim = [human_means_by_trace[k].get("reasoning") for k in common_keys]
+    trajectory_dim = [human_means_by_trace[k].get("trajectory") for k in common_keys]
+
+    task_completion_vs_human = _paired_spearman_and_n(task_completion, reasoning_dim)
+    step_efficiency_vs_human = _paired_spearman_and_n(step_eff, trajectory_dim)
+
+    return {
+        "n": n_human_rows,
+        "status": "available",
+        "task_completion_vs_human": task_completion_vs_human,
+        "step_efficiency_vs_human_trajectory_quality": step_efficiency_vs_human,
+    }
+
+
+def classify(comparisons: dict, *, resolved_evaluator: dict | None = None) -> tuple[str, str]:
     """One of `KEEP_CORE_DIAGNOSTIC` / `KEEP_OPTIONAL_ANALYSIS` /
     `REMOVE_NO_ADDED_SIGNAL`, derived from the measured correlations.
 
@@ -536,11 +717,20 @@ def classify(comparisons: dict) -> tuple[str, str]:
     to tell, it is a plausible secondary cross-check -> KEEP_OPTIONAL_ANALYSIS.
     Otherwise (weak/no correlation, meaning it measures something distinct,
     or judge-comparison data exists showing added value) -> KEEP_CORE_DIAGNOSTIC.
+
+    If `resolved_evaluator` shares a model with the M5 judge trio, any
+    result that would otherwise be KEEP_CORE_DIAGNOSTIC on the strength of
+    vs_judge agreement is downgraded to KEEP_OPTIONAL_ANALYSIS -- shared-model
+    bias means high judge agreement is not trustworthy independent evidence.
+    vs_deterministic-driven outcomes (REMOVE_NO_ADDED_SIGNAL, and
+    KEEP_OPTIONAL_ANALYSIS from weak power) are unaffected: the deterministic
+    score shares no model with the evaluator.
     """
     det = comparisons.get("vs_deterministic", {})
     rho_info = det.get("task_completion_vs_grounded_accuracy", {})
     rho = rho_info.get("spearman")
     n = rho_info.get("n", 0)
+    shares_model = bool((resolved_evaluator or {}).get("shares_model_with_judge_trio"))
 
     if rho is None or n < 10:
         msg = (
@@ -560,6 +750,17 @@ def classify(comparisons: dict) -> tuple[str, str]:
             f"DeepEval task_completion correlates moderately with grounded_accuracy "
             f"(rho={rho:.3f}, n={n}) -- plausible as a secondary cross-check but not "
             f"strong enough evidence to call it a core diagnostic."
+        )
+        return "KEEP_OPTIONAL_ANALYSIS", msg
+    if shares_model:
+        msg = (
+            f"DeepEval task_completion correlates weakly with grounded_accuracy "
+            f"(rho={rho:.3f}, n={n}), which would otherwise support "
+            "KEEP_CORE_DIAGNOSTIC -- but the resolved evaluator shares a model with "
+            "the M5 judge trio it is compared against (see decisions), so any "
+            "apparent independence from vs_judge agreement is not trustworthy. "
+            "Downgraded to KEEP_OPTIONAL_ANALYSIS pending a genuinely independent "
+            "evaluator model."
         )
         return "KEEP_OPTIONAL_ANALYSIS", msg
     msg = (
@@ -597,12 +798,7 @@ BRIEF_DIFFERENCES = [
     {
         "id": 3,
         "topic": "scale_inherited",
-        "difference": (
-            "The judged subset is 18 cases x 6 variants (108 traces), not the brief "
-            "section 2.5's 40 x 6; human calibration is n=0 ('pending'), not the brief's "
-            "30 hand-scored traces. Already recorded in judges.json; restated here because "
-            "every DeepEval<->human comparison in this report is 'pending'."
-        ),
+        "difference": None,  # filled in by _brief_differences() with the real human-calibration n
     },
     {
         "id": 4,
@@ -614,7 +810,57 @@ BRIEF_DIFFERENCES = [
             "dealpoint.eval.braintrust_sync.assert_score_budget."
         ),
     },
+    {
+        "id": 5,
+        "topic": "evaluator_independence",
+        "difference": (
+            "The spec calls DeepEval an 'independent agent evaluator'. The resolved "
+            "evaluator model is drawn from judge_slate.json's verified, "
+            "non-candidate-family judges -- which is exactly the M5 judge trio, so the "
+            "resolved model is always one of the three judges it is compared against, "
+            "never a fourth independent model. This is a consequence of the spec's own "
+            "resolution rule ('the resolved provider/model/version... read from the "
+            "existing judge configuration, never hardcoded'), not a bug in this repair; "
+            "the caveat is recorded here, in the report's `decisions`, and factored "
+            "into `classify()` because it is not otherwise visible from the numbers."
+        ),
+    },
 ]
+
+BRIEF_SCALE_INHERITED_HUMAN_TARGET_N = 30  # brief section 2.5's hand-scored-trace target
+
+
+def _brief_differences() -> list[dict]:
+    """`BRIEF_DIFFERENCES` with the `scale_inherited` entry's human-calibration
+    text filled in from the ACTUAL row count on disk -- never the stale
+    hardcoded "n=0 ('pending')" the pre-repair version carried once real
+    human scores existed, and never silently wrong if the count changes
+    again later.
+    """
+    n_human = len(load_human_dimension_means())
+    if n_human == 0:
+        human_sentence = (
+            "human calibration is n=0 ('pending'), not the brief's "
+            f"{BRIEF_SCALE_INHERITED_HUMAN_TARGET_N} hand-scored traces. Every "
+            "DeepEval<->human comparison in this report is 'pending'."
+        )
+    else:
+        human_sentence = (
+            f"human calibration is n={n_human} hand-scored traces, {n_human} of the brief's "
+            f"{BRIEF_SCALE_INHERITED_HUMAN_TARGET_N}, not 'pending' -- DeepEval<->human "
+            "comparisons in this report carry a real {n, spearman} statistic wherever a "
+            "trace has both a DeepEval score and a human score."
+        )
+    differences = [dict(d) for d in BRIEF_DIFFERENCES]
+    for d in differences:
+        if d["topic"] == "scale_inherited":
+            d["difference"] = (
+                "The judged subset is 18 cases x 6 variants (108 traces), not the brief "
+                f"section 2.5's 40 x 6; {human_sentence} Already recorded in judges.json; "
+                "restated here because this report's own vs_human field is the thing that "
+                "changes when human calibration grows."
+            )
+    return differences
 
 
 def build_report(
@@ -626,9 +872,11 @@ def build_report(
     disagreements: list[dict],
     spend: dict,
     framework_versions: dict,
+    coverage: dict | None = None,
+    decisions: list[dict] | None = None,
     omitted_metrics: tuple[dict, ...] = OMITTED_RAG_METRICS,
 ) -> dict:
-    classification, rationale = classify(comparisons)
+    classification, rationale = classify(comparisons, resolved_evaluator=resolved_evaluator)
     return {
         "schema_version": 1,
         "resolved_evaluator": resolved_evaluator,
@@ -645,14 +893,15 @@ def build_report(
             ).hexdigest()[:16],
             "omitted_rag_metrics": list(omitted_metrics),
         },
+        "coverage": coverage or {},
         "per_trace_scores": per_trace_scores,
         "comparisons": comparisons,
         "disagreements": disagreements,
         "classification": classification,
         "classification_rationale": rationale,
         "spend": spend,
-        "decisions": [],
-        "brief_differences": BRIEF_DIFFERENCES,
+        "decisions": decisions or [],
+        "brief_differences": _brief_differences(),
     }
 
 
@@ -660,9 +909,15 @@ def render_markdown(report: dict) -> str:
     lines = ["# M7a -- DeepEval independent agent-eval cross-check\n"]
     ev = report.get("resolved_evaluator", {})
     lines.append(
-        f"Resolved evaluator: `{ev.get('model')}` (family `{ev.get('family')}`, "
+        f"Resolved evaluator: `{ev.get('model')}` (provider `{ev.get('provider')}`, "
+        f"family `{ev.get('family')}`, deepeval `{ev.get('deepeval_version')}`, "
         f"source `{ev.get('source')}`)\n"
     )
+    if ev.get("shares_model_with_judge_trio"):
+        lines.append(
+            "**Independence caveat:** this evaluator model is one of the three M5 judge-trio "
+            "models, not a fourth independent model -- see Decisions.\n"
+        )
     subset = report.get("subset", {})
     lines.append(
         f"Subset: {len(subset.get('case_ids', []))} cases x "
@@ -673,6 +928,29 @@ def render_markdown(report: dict) -> str:
         lines.append(f"- `{name}`")
     lines.append("")
     lines.append(f"step_efficiency basis: {report.get('metrics', {}).get('step_efficiency_basis')}\n")
+
+    coverage = report.get("coverage") or {}
+    if coverage:
+        lines.append("## Coverage (per-metric scored/null counts)\n")
+        lines.append("| metric | n_scored | n_null | null reasons |")
+        lines.append("|---|---|---|---|")
+        for name, c in coverage.items():
+            reasons = ", ".join(f"{k}={v}" for k, v in (c.get("null_reasons") or {}).items()) or "-"
+            lines.append(f"| {name} | {c.get('n_scored')} | {c.get('n_null')} | {reasons} |")
+        lines.append("")
+
+    spend = report.get("spend") or {}
+    if spend:
+        lines.append("## Spend\n")
+        lines.append(f"```json\n{json.dumps(spend, indent=2, sort_keys=True)}\n```\n")
+
+    decisions = report.get("decisions") or []
+    if decisions:
+        lines.append("## Decisions\n")
+        for d in decisions:
+            lines.append(f"- **{d['topic']}**: {d['decision']}")
+        lines.append("")
+
     lines.append("## Omitted RAG metrics (deliberate)\n")
     for m in report.get("metrics", {}).get("omitted_rag_metrics", []):
         lines.append(f"- **{m['name']}**: {m['reason']}")
@@ -731,17 +1009,11 @@ def _score_traces(rows, variant_ids, metrics, find_case, doc_cache) -> list[dict
     return out
 
 
-def main(argv: list[str] | None = None) -> int:
-    from dealpoint.eval.cases import find_case
-    from dealpoint.eval.framework_versions import framework_versions
-    from dealpoint.eval.spend import assert_within_cap, realized_usd
-    from dealpoint.llm.client import OpenRouterClient
-
-    subset_payload = judged_subset_variants()
-    case_ids = subset_payload["case_ids"]
-    variants = subset_payload["variants"]
-
-    # Load all det rows for the subset x variants.
+def _load_all_det_rows(case_ids: list[str], variants: list[dict]) -> tuple[list[dict], list[str]]:
+    """Every det row for the subset x variants, in the exact (case_id,
+    variant) order `main()`'s scoring loop uses -- shared by the metered
+    path and the offline `--from-cache` path so both agree on row order.
+    """
     all_rows: list[dict] = []
     all_variant_ids: list[str] = []
     for variant in variants:
@@ -752,7 +1024,161 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             all_rows.append(row)
             all_variant_ids.append(variant["variant_id"])
+    return all_rows, all_variant_ids
 
+
+DECISIONS_TEMPLATE: tuple[dict, ...] = (
+    {
+        "id": 1,
+        "topic": "step_efficiency_geval_fallback",
+        "decision": (
+            "step_efficiency always uses the documented GEval definition, never "
+            "DeepEval-native StepEfficiencyMetric, because that metric requires "
+            "DeepEval's @observe trace capture (a second tracing path the brief "
+            "excludes); see build_metrics's docstring for the measured failure mode "
+            "this avoids (93/108 traces scoring 0.0 with 'no trace provided')."
+        ),
+    },
+    {
+        "id": 2,
+        "topic": "evaluator_independence_caveat",
+        "decision": (
+            "The resolved evaluator ({model}) is one of the three M5 "
+            "judge-trio models (judge_slate.json), not a fourth independent model -- "
+            "all three verified, non-candidate-family judges ARE the trio, so there "
+            "is no alternative to switch to under the existing resolution rule (which "
+            "this repair does not change, per the milestone spec). "
+            "task_completion_vs_judge_reasoning and any other vs_judge comparison are "
+            "therefore contaminated by shared-model bias: DeepEval's 'independent "
+            "agent evaluator' shares a model with one third of the panel it is being "
+            "compared against. Factored into the classification below."
+        ),
+    },
+)
+
+
+def _write_report(
+    *,
+    resolved: dict,
+    case_ids: list[str],
+    variants: list,
+    n_traces: int,
+    per_trace_scores: list[dict],
+    det_by_row: list[dict],
+    spend: dict,
+    coverage: dict,
+    decisions: list[dict],
+    framework_versions_payload: dict,
+) -> dict:
+    """Build comparisons/disagreements/report from already-scored traces and
+    write the JSON + markdown. Shared by the metered path (fresh scores) and
+    the offline `--from-cache` path (scores already on disk, zero spend) --
+    the ONLY thing that legitimately differs between the two call sites is
+    `vs_human`, since `compare_to_human` now computes a real statistic
+    wherever `data/eval/calibration/human_scores.jsonl` has rows; every
+    other comparison is a pure function of `per_trace_scores`/`det_by_row`,
+    which are identical either way.
+    """
+    judge_means_by_trace = load_judge_dimension_means()
+    human_means_by_trace = load_human_dimension_means()
+    comparisons = {
+        "vs_deterministic": compare_to_deterministic(per_trace_scores, det_by_row),
+        "vs_judge": compare_to_judge(per_trace_scores, judge_means_by_trace),
+        "vs_human": compare_to_human(per_trace_scores, human_means_by_trace),
+    }
+    disagreements = find_disagreements(per_trace_scores, det_by_row)
+
+    variant_ids = [v["variant_id"] if isinstance(v, dict) else v for v in variants]
+
+    report = build_report(
+        resolved_evaluator=resolved,
+        subset={"case_ids": case_ids, "variants": variant_ids, "n_traces": n_traces},
+        per_trace_scores=per_trace_scores,
+        comparisons=comparisons,
+        disagreements=disagreements,
+        spend=spend,
+        framework_versions=framework_versions_payload,
+        coverage=coverage,
+        decisions=decisions,
+    )
+
+    DEEPEVAL_CROSSCHECK_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(DEEPEVAL_CROSSCHECK_JSON_PATH, "w", encoding="utf-8") as fh:
+        json.dump(report, fh, indent=2, sort_keys=True, ensure_ascii=False, default=str)
+        fh.write("\n")
+    with open(DEEPEVAL_CROSSCHECK_MD_PATH, "w", encoding="utf-8") as fh:
+        fh.write(render_markdown(report))
+
+    print(f"Wrote {DEEPEVAL_CROSSCHECK_JSON_PATH} and {DEEPEVAL_CROSSCHECK_MD_PATH}")
+    return report
+
+
+def _main_from_cache() -> int:
+    """Offline regeneration: reuse the per-trace scores, spend, coverage and
+    decisions ALREADY stored in `data/reports/deepeval_crosscheck.json` --
+    no metric is re-scored, no OpenRouterClient is constructed, no money is
+    spent. Only `vs_human` (and, as an automatic consequence, anything
+    downstream of it -- nothing currently is) can change; `classification`
+    depends only on `vs_deterministic` and the resolved evaluator's
+    `shares_model_with_judge_trio` flag, neither of which this path touches,
+    so it comes out identical to the cached report by construction.
+    """
+    if not DEEPEVAL_CROSSCHECK_JSON_PATH.exists():
+        print(f"{DEEPEVAL_CROSSCHECK_JSON_PATH} does not exist -- cannot regenerate from cache")
+        return 1
+
+    cached = json.loads(DEEPEVAL_CROSSCHECK_JSON_PATH.read_text(encoding="utf-8"))
+    resolved = cached["resolved_evaluator"]
+    subset = cached["subset"]
+    case_ids = subset["case_ids"]
+    variant_ids = subset["variants"]
+    per_trace_scores = cached["per_trace_scores"]
+
+    subset_payload = judged_subset_variants()
+    variants_by_id = {v["variant_id"]: v for v in subset_payload["variants"]}
+    variants = [variants_by_id[vid] for vid in variant_ids if vid in variants_by_id]
+
+    all_rows, _all_variant_ids = _load_all_det_rows(case_ids, variants)
+    det_by_row = [row.get("scores") or {} for row in all_rows]
+
+    if len(det_by_row) != len(per_trace_scores):
+        print(
+            f"row-count mismatch: {len(det_by_row)} det rows on disk vs "
+            f"{len(per_trace_scores)} cached per_trace_scores -- refusing to regenerate "
+            "from a stale cache; run without --from-cache to re-score"
+        )
+        return 1
+
+    _write_report(
+        resolved=resolved,
+        case_ids=case_ids,
+        variants=variant_ids,
+        n_traces=subset["n_traces"],
+        per_trace_scores=per_trace_scores,
+        det_by_row=det_by_row,
+        spend=cached["spend"],
+        coverage=cached["coverage"],
+        decisions=cached["decisions"],
+        framework_versions_payload=cached["framework_versions"],
+    )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = list(argv) if argv is not None else sys.argv[1:]
+    if "--from-cache" in argv:
+        return _main_from_cache()
+
+    from dealpoint.eval.cases import find_case
+    from dealpoint.eval.framework_versions import framework_versions
+    from dealpoint.eval.spend import assert_within_cap, realized_usd
+    from dealpoint.llm.client import OpenRouterClient
+
+    subset_payload = judged_subset_variants()
+    case_ids = subset_payload["case_ids"]
+    variants = subset_payload["variants"]
+
+    all_rows, all_variant_ids = _load_all_det_rows(case_ids, variants)
     n_traces = len(all_rows)
 
     resolved = resolve_evaluator_model()
@@ -787,38 +1213,45 @@ def main(argv: list[str] | None = None) -> int:
     per_trace_scores = calib_scores + remaining_scores
 
     det_by_row = [row.get("scores") or {} for row in all_rows]
-    judge_means_by_trace = load_judge_dimension_means()
-    comparisons = {
-        "vs_deterministic": compare_to_deterministic(per_trace_scores, det_by_row),
-        "vs_judge": compare_to_judge(per_trace_scores, judge_means_by_trace),
-        "vs_human": compare_to_human(),
-    }
-    disagreements = find_disagreements(per_trace_scores, det_by_row)
 
-    before = realized_usd()
-    spend = {
-        "m7a_ledger_before": before,
-        "n_traces": n_traces,
-    }
+    from dealpoint.eval.spend import read_ledger
 
-    report = build_report(
-        resolved_evaluator=resolved,
-        subset={"case_ids": case_ids, "variants": [v["variant_id"] for v in variants], "n_traces": n_traces},
-        per_trace_scores=per_trace_scores,
-        comparisons=comparisons,
-        disagreements=disagreements,
-        spend=spend,
-        framework_versions=framework_versions(),
+    captured_at_iso = __import__("datetime").datetime.now(__import__("datetime").UTC).isoformat()
+    all_ledger_rows = read_ledger()
+    deepeval_realized_usd = round(
+        sum(float(r.get("usd") or 0) for r in all_ledger_rows if r.get("purpose") == "deepeval"), 6
     )
+    m7a_realized_usd = round(
+        sum(float(r.get("usd") or 0) for r in all_ledger_rows if r.get("milestone_tag") == "m7a"), 6
+    )
+    global_realized_usd = realized_usd()
+    spend = {
+        "captured_at": captured_at_iso,
+        "deepeval_realized_usd": deepeval_realized_usd,
+        "m7a_realized_usd": m7a_realized_usd,
+        "global_realized_usd": global_realized_usd,
+        "n_traces": n_traces,
+        "calibration_n": n_calib,
+        "calibration_realized_usd": calib_realized,
+        "projected_full_usd": projected_full_usd,
+    }
 
-    DEEPEVAL_CROSSCHECK_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(DEEPEVAL_CROSSCHECK_JSON_PATH, "w", encoding="utf-8") as fh:
-        json.dump(report, fh, indent=2, sort_keys=True, ensure_ascii=False, default=str)
-        fh.write("\n")
-    with open(DEEPEVAL_CROSSCHECK_MD_PATH, "w", encoding="utf-8") as fh:
-        fh.write(render_markdown(report))
+    coverage = compute_coverage(per_trace_scores)
 
-    print(f"Wrote {DEEPEVAL_CROSSCHECK_JSON_PATH} and {DEEPEVAL_CROSSCHECK_MD_PATH}")
+    decisions = [dict(d, decision=d["decision"].format(model=resolved["model"])) for d in DECISIONS_TEMPLATE]
+
+    _write_report(
+        resolved=resolved,
+        case_ids=case_ids,
+        variants=variants,
+        n_traces=n_traces,
+        per_trace_scores=per_trace_scores,
+        det_by_row=det_by_row,
+        spend=spend,
+        coverage=coverage,
+        decisions=decisions,
+        framework_versions_payload=framework_versions(),
+    )
     return 0
 
 

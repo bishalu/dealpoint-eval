@@ -198,6 +198,10 @@ gate-m6:
 
 # ── dealpoint (M7a framework roles) ─────────────────────────────────────────
 
+# M7a: re-measure and record the optional dependency-group disk guard
+disk-guard *ARGS:
+    uv run python -m dealpoint.eval.disk_guard "$@"
+
 # M7a: LlamaIndex RAG lab -- native eval on canonical dev retrieval + synthetic-query study
 li-rag-eval *ARGS:
     uv run python -m dealpoint.rag_lab.report "$@"
@@ -214,9 +218,17 @@ deepeval-crosscheck *ARGS:
 braintrust-sync *ARGS:
     uv run python -m dealpoint.eval.braintrust_sync "$@"
 
+# M7a: offline, zero-network regeneration of braintrust_sync.json from current code
+braintrust-sync-dry-run:
+    uv run python -m dealpoint.eval.braintrust_sync --dry-run
+
 # M7a: run the six BTQL investigations and save results
 btql *ARGS:
     uv run python -m dealpoint.eval.btql "$@"
+
+# M7a: regenerate the standalone framework_versions.json artifact
+framework-versions *ARGS:
+    uv run python -m dealpoint.eval.framework_versions "$@"
 
 # milestone 7 acceptance gates only, offline
 gate-m7:

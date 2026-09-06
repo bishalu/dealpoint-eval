@@ -1,210 +1,17 @@
 [
   {
-    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm as arm, metadata.reasoning_type as rt | filter: metadata.reasoning_type is not null | limit: 50",
-    "executed_at": "2026-09-06T02:11:21.047065+00:00",
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, input, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" >= 2 and scores.\"obj/grounded_accuracy\" = 1 | limit: 50",
+    "executed_at": "2026-09-06T20:38:22.513989+00:00",
     "id": 1,
-    "notes": null,
+    "notes": "0 rows -- verified data-supported cause (not retention purge): every row in the target agent experiment has metadata.secondary_diagnostics.\"obj/tool_calls\" == 0 in this run, so the filter's tool_calls >= 2 predicate cannot match any case. No case in this run triggered a second search_agreement call before a grounded-correct answer.",
     "question": "Which cases did a later search_agreement call surface gold evidence that the first search missed?",
-    "row_count": 32,
-    "rows": [
-      {
-        "arm": "A",
-        "id": "7b6931f8-d414-4756-9692-e2adb1425cc1",
-        "input": "contract_14__redacted_q10",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30",
-        "input": "contract_6__redacted_q09",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "220d7076-f1d0-4b26-b3ab-424ef5935873",
-        "input": "contract_4__q04",
-        "rt": "structured"
-      },
-      {
-        "arm": "A",
-        "id": "3b8c0484-480a-416f-8140-3cee7b59494a",
-        "input": "contract_99__q03",
-        "rt": "numeric"
-      },
-      {
-        "arm": "A",
-        "id": "1c99bae9-8208-4249-886a-6a42b0c55713",
-        "input": "contract_103__q02",
-        "rt": "direct"
-      },
-      {
-        "arm": "A",
-        "id": "1b80af7e-dd39-4b0f-8c48-0625e3122f16",
-        "input": "contract_77__q01",
-        "rt": "direct"
-      },
-      {
-        "arm": "A",
-        "id": "a46a6c32-a346-4eb9-92de-debc21dd0bd8",
-        "input": "contract_77__q12",
-        "rt": "carve-out"
-      },
-      {
-        "arm": "A",
-        "id": "a5efc6e6-5ca8-41da-949f-288e6a2456b4",
-        "input": "contract_39__q11",
-        "rt": "carve-out"
-      },
-      {
-        "arm": "A",
-        "id": "69292c18-0217-4848-acae-4862536b260e",
-        "input": "contract_14__q10",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "152700e9-9a7a-44e4-b7f2-4f0004c4c30d",
-        "input": "contract_39__q09",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "2b3467f9-e866-43de-b824-7b5adf0c7657",
-        "input": "contract_103__q08",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "e1b1c65d-78ca-4a25-8f2f-6bff86b01549",
-        "input": "contract_39__q07",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "7a59f5b0-766f-4a8e-9ebb-a26c65f4291f",
-        "input": "contract_6__q06",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "2ee567d3-7fa5-4d2f-8ba0-ca814baf8d9c",
-        "input": "contract_128__q05",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "2e2cddfc-493a-4943-a7be-d41a32de1326",
-        "input": "contract_14__oos04",
-        "rt": "out-of-scope"
-      },
-      {
-        "arm": "A",
-        "id": "6e0f239c-b92c-460f-b803-11ae5b188e40",
-        "input": "contract_75__oos09",
-        "rt": "out-of-scope"
-      },
-      {
-        "arm": "A",
-        "id": "bad657d3-df09-4ac0-93e6-78802fa60d0e",
-        "input": "contract_103__redacted_q08",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "3919ba81-55d1-4b9a-aead-370c504f5b90",
-        "input": "contract_75__redacted_q07",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "45ed5087-ccf0-4fb7-a1ed-aa2a23a5427a",
-        "input": "contract_99__redacted_q06",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "14759ce8-284b-424a-a414-0c06c6506702",
-        "input": "contract_39__redacted_q05",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "a0a56453-c61e-498a-a029-3e5040774a0d",
-        "input": "contract_32__q04",
-        "rt": "structured"
-      },
-      {
-        "arm": "A",
-        "id": "a5431368-66ac-4111-a402-f689c7cdcc6b",
-        "input": "contract_32__q03",
-        "rt": "numeric"
-      },
-      {
-        "arm": "A",
-        "id": "1e2cf74b-125e-460e-a8b7-11ac44be1577",
-        "input": "contract_14__q02",
-        "rt": "direct"
-      },
-      {
-        "arm": "A",
-        "id": "a5618e1e-0fa0-4d58-b4ab-7b700b663c26",
-        "input": "contract_39__q01",
-        "rt": "direct"
-      },
-      {
-        "arm": "A",
-        "id": "b3248863-608e-4f3f-8206-1e621abd14b0",
-        "input": "contract_4__q12",
-        "rt": "carve-out"
-      },
-      {
-        "arm": "A",
-        "id": "fda725c7-6cd6-4b75-a552-0719468128e1",
-        "input": "contract_99__q11",
-        "rt": "carve-out"
-      },
-      {
-        "arm": "A",
-        "id": "703770f5-fac8-43d2-9e1f-8ba2fcb2190a",
-        "input": "contract_103__q10",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "acc59493-f273-42aa-ae9c-598057f20ed4",
-        "input": "contract_144__q09",
-        "rt": "cross-ref"
-      },
-      {
-        "arm": "A",
-        "id": "81ead9d2-e8db-4349-99fa-430f45e4cd09",
-        "input": "contract_32__q08",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "31c2396e-69c0-41f5-9fdd-f5b09839e3f4",
-        "input": "contract_7__q07",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "00ee97c0-b3d4-46db-9636-796921c73b1c",
-        "input": "contract_32__q06",
-        "rt": "defined-term"
-      },
-      {
-        "arm": "A",
-        "id": "42e8dc05-437f-418d-868f-79ba0f230fa4",
-        "input": "contract_144__q05",
-        "rt": "defined-term"
-      }
-    ],
+    "row_count": 0,
+    "rows": [],
     "title": "Retrieval rescue"
   },
   {
-    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.model as model, metadata.arm as arm | measures: count(1) as n",
-    "executed_at": "2026-09-06T02:11:21.614601+00:00",
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | filter: metadata.secondary_diagnostics.\"obj/execution_failed\" = 1 or metadata.secondary_diagnostics.\"obj/cap_hit\" = 1 | dimensions: metadata.model, metadata.arm | measures: count(1) as n",
+    "executed_at": "2026-09-06T20:38:23.088858+00:00",
     "id": 2,
     "notes": null,
     "question": "EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.",
@@ -213,239 +20,493 @@
       {
         "arm": "A",
         "model": "z-ai/glm-5.3-flash",
-        "n": 32
+        "n": 24
       }
     ],
     "title": "Failure attribution"
   },
   {
-    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type as rt | measures: count(1) as n",
-    "executed_at": "2026-09-06T02:11:21.749020+00:00",
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | dimensions: metadata.reasoning_type | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, count(1) as n",
+    "executed_at": "2026-09-06T20:38:23.904232+00:00",
     "id": 3,
     "notes": null,
     "question": "grounded_accuracy by reasoning_type (direct, numeric, structured, defined-term, cross-ref, carve-out).",
     "row_count": 7,
     "rows": [
       {
-        "n": 4,
-        "rt": "carve-out"
+        "grounded_accuracy": null,
+        "n": 8,
+        "reasoning_type": "out-of-scope"
       },
       {
-        "n": 4,
-        "rt": "direct"
+        "grounded_accuracy": 1,
+        "n": 8,
+        "reasoning_type": "numeric"
       },
       {
-        "n": 12,
-        "rt": "defined-term"
+        "grounded_accuracy": 0.6666666666666666,
+        "n": 48,
+        "reasoning_type": "defined-term"
       },
       {
-        "n": 2,
-        "rt": "out-of-scope"
+        "grounded_accuracy": 1,
+        "n": 16,
+        "reasoning_type": "carve-out"
       },
       {
-        "n": 2,
-        "rt": "structured"
+        "grounded_accuracy": 0.5,
+        "n": 24,
+        "reasoning_type": "cross-ref"
       },
       {
-        "n": 6,
-        "rt": "cross-ref"
+        "grounded_accuracy": 0.75,
+        "n": 16,
+        "reasoning_type": "direct"
       },
       {
-        "n": 2,
-        "rt": "numeric"
+        "grounded_accuracy": 1,
+        "n": 8,
+        "reasoning_type": "structured"
       }
     ],
     "title": "Reasoning slices"
   },
   {
-    "btql": "from: experiment('judge-A@haiku') | select: id, metadata | limit: 50",
-    "executed_at": "2026-09-06T02:11:21.905865+00:00",
+    "btql": "from: experiment('deepeval-crosscheck') | select: id, input, scores.\"deepeval/task_completion\" as task_completion, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: (scores.\"deepeval/task_completion\" >= 0.5 and scores.\"obj/grounded_accuracy\" = 0) or (scores.\"deepeval/task_completion\" < 0.5 and scores.\"obj/grounded_accuracy\" = 1) | limit: 50",
+    "executed_at": "2026-09-06T20:38:24.110824+00:00",
     "id": 4,
     "notes": null,
-    "question": "Traces where deepeval/ and obj/ scores disagree.",
-    "row_count": 1,
+    "question": "Traces where deepeval/task_completion and obj/grounded_accuracy disagree.",
+    "row_count": 17,
     "rows": [
       {
-        "id": "f1c713f3-5093-44d2-8fa2-bf79134bbe63",
-        "metadata": {
-          "arm": "A",
-          "case_type": null,
-          "framework_versions": {
-            "bm25s": "0.3.11",
-            "braintrust": "0.37.0",
-            "deepeval": "4.2.1",
-            "fastembed": "0.8.0",
-            "git_sha7": "b9eac78",
-            "llama-index-core": "0.14.24",
-            "llama-index-retrievers-bm25": "0.8.0",
-            "openai": "3.8.0",
-            "pydantic": "2.13.5",
-            "python": "3.12.3",
-            "qdrant-client": "1.19.0"
-          },
-          "git_sha": "b9eac78",
-          "index_version": null,
-          "model": "anthropic/claude-haiku-4.5",
-          "reasoning_type": null,
-          "retriever": "dense",
-          "skill_version": "f8d255cc169b",
-          "stage": "eval",
-          "variant_id": "A@haiku"
-        }
+        "grounded_accuracy": 0,
+        "id": "cb97ec1b-1bfe-4cbc-a1fd-4bc57456077c",
+        "input": "contract_39__q01",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "4e1a705c-d53b-4e7b-bf83-01f4c0419bc8",
+        "input": "contract_144__q09",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "162bc618-1144-40e3-b6ca-d681c30273d8",
+        "input": "contract_32__q06",
+        "task_completion": 0.7
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "a584c0ad-6f32-478d-96ad-91372515ecb8",
+        "input": "contract_4__q12",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "a6eb820e-e25f-4fbd-92d6-ae81cf08d89c",
+        "input": "contract_39__q01",
+        "task_completion": 0.7
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "2ec95781-ed1c-436d-a8fe-e94e49da4218",
+        "input": "contract_32__q03",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "c6436a37-bc7e-464f-b490-17af72058b0f",
+        "input": "contract_4__q12",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "631a6208-7e07-4672-b96c-a43ef3d8c3e0",
+        "input": "contract_144__q09",
+        "task_completion": 0.9
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "e75c98c9-969e-4dc8-a434-d0b6043e1849",
+        "input": "contract_103__q10",
+        "task_completion": 0.7
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "e941d5a7-29a6-4145-8778-7fa99d498604",
+        "input": "contract_32__q06",
+        "task_completion": 1
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "b0738136-d3c4-4fcc-810e-d77a675aa197",
+        "input": "contract_39__q01",
+        "task_completion": 0.95
+      },
+      {
+        "grounded_accuracy": 1,
+        "id": "e9cd52de-853e-4356-9e51-36cd3e20c83f",
+        "input": "contract_32__q06",
+        "task_completion": 0.3
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "e9c74393-3f74-4848-bf01-4d3d2a5f2038",
+        "input": "contract_39__q01",
+        "task_completion": 0.9
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "55a1136c-af2f-49c9-b82c-0d65dd510e29",
+        "input": "contract_144__q09",
+        "task_completion": 0.7
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "f900cf74-694a-4e4c-b9cd-ad6558e5020a",
+        "input": "contract_103__q10",
+        "task_completion": 0.6
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "6706c33b-e6e5-470a-85ff-b73245a63f7c",
+        "input": "contract_32__q06",
+        "task_completion": 0.7
+      },
+      {
+        "grounded_accuracy": 0,
+        "id": "a9638d58-8e38-4445-bc8b-2d12c23bd837",
+        "input": "contract_32__q04",
+        "task_completion": 0.7
       }
     ],
     "title": "DeepEval disagreement"
   },
   {
-    "btql": "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model as model | measures: count(1) as n",
-    "executed_at": "2026-09-06T02:11:22.449129+00:00",
+    "btql": "from: experiment('pareto-anthropic_claude-haiku-4.5') | dimensions: metadata.model | measures: avg(scores.\"obj/grounded_accuracy\") as grounded_accuracy, avg(metadata.secondary_diagnostics.\"obj/usd\") as avg_usd",
+    "executed_at": "2026-09-06T20:38:24.621075+00:00",
     "id": 5,
     "notes": null,
-    "question": "Cost per correct answer by model, across the M6 Pareto experiments.",
+    "question": "Grounded accuracy and average cost per case, for one M6 Pareto model experiment.",
     "row_count": 1,
     "rows": [
       {
-        "model": "anthropic/claude-haiku-4.5",
-        "n": 1
+        "avg_usd": null,
+        "grounded_accuracy": null,
+        "model": "anthropic/claude-haiku-4.5"
       }
     ],
     "title": "Model economics"
   },
   {
-    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm as arm | limit: 50",
-    "executed_at": "2026-09-06T02:11:22.820062+00:00",
+    "btql": "from: experiment('A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc') | select: id, metadata.arm, metadata.secondary_diagnostics.\"obj/tool_calls\" as tool_calls, scores.\"obj/grounded_accuracy\" as grounded_accuracy | filter: metadata.secondary_diagnostics.\"obj/tool_calls\" is not null | limit: 50",
+    "executed_at": "2026-09-06T20:38:25.106428+00:00",
     "id": 6,
     "notes": null,
     "question": "Tool calls vs outcome -- does more searching correlate with a worse result?",
-    "row_count": 32,
+    "row_count": 50,
     "rows": [
       {
         "arm": "A",
-        "id": "7b6931f8-d414-4756-9692-e2adb1425cc1"
+        "grounded_accuracy": null,
+        "id": "14fbe113-b71c-4fe1-9992-e980f2b1a9e3",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "9a269bc3-4e2c-49fa-89c9-ce68100aed30"
+        "grounded_accuracy": null,
+        "id": "5639ddec-1b22-48f2-bb52-7cdb8e6b30ea",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "220d7076-f1d0-4b26-b3ab-424ef5935873"
+        "grounded_accuracy": 1,
+        "id": "e95ba2b5-0abc-4284-8985-c8a7fe575459",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "3b8c0484-480a-416f-8140-3cee7b59494a"
+        "grounded_accuracy": 1,
+        "id": "b3fefa26-e98d-460b-bfe9-858ecbfa097a",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "1c99bae9-8208-4249-886a-6a42b0c55713"
+        "grounded_accuracy": 1,
+        "id": "28d7d9f1-b2a9-4c77-96e0-11e536d61ab0",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "1b80af7e-dd39-4b0f-8c48-0625e3122f16"
+        "grounded_accuracy": 1,
+        "id": "50b0a4f4-a62f-4e3b-ac7b-1393dc97905f",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "a46a6c32-a346-4eb9-92de-debc21dd0bd8"
+        "grounded_accuracy": 1,
+        "id": "fb88bd82-91ab-4f37-9954-344b476a3916",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "a5efc6e6-5ca8-41da-949f-288e6a2456b4"
+        "grounded_accuracy": null,
+        "id": "fa499b3d-ab0a-4c97-96d3-ce2a53ed7131",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "69292c18-0217-4848-acae-4862536b260e"
+        "grounded_accuracy": null,
+        "id": "e4581d2b-36de-4cca-8ea9-f24cf4e5c1ac",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "152700e9-9a7a-44e4-b7f2-4f0004c4c30d"
+        "grounded_accuracy": 0,
+        "id": "466a3add-96c9-40b2-a2ef-5690389ae639",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "2b3467f9-e866-43de-b824-7b5adf0c7657"
+        "grounded_accuracy": 1,
+        "id": "1516ef83-dbb8-4e43-a39e-7a0f118b571e",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "e1b1c65d-78ca-4a25-8f2f-6bff86b01549"
+        "grounded_accuracy": 1,
+        "id": "cfeb6991-8243-4089-9f36-631dfb3a0446",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "7a59f5b0-766f-4a8e-9ebb-a26c65f4291f"
+        "grounded_accuracy": 0,
+        "id": "a0a7095d-ed8b-4649-afb1-b4ca32185771",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "2ee567d3-7fa5-4d2f-8ba0-ca814baf8d9c"
+        "grounded_accuracy": 1,
+        "id": "ffd1ca07-74c6-42a9-bcbb-5b27ad6bef11",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "2e2cddfc-493a-4943-a7be-d41a32de1326"
+        "grounded_accuracy": null,
+        "id": "cf5f6643-d39b-48f6-ad7b-08e29851506e",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "6e0f239c-b92c-460f-b803-11ae5b188e40"
+        "grounded_accuracy": null,
+        "id": "ec85fc56-3c94-4615-9486-84643210970a",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "bad657d3-df09-4ac0-93e6-78802fa60d0e"
+        "grounded_accuracy": null,
+        "id": "45521110-e2be-487f-8d47-6aa80e87bc07",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "3919ba81-55d1-4b9a-aead-370c504f5b90"
+        "grounded_accuracy": null,
+        "id": "1133142f-505d-424f-8dbd-d0e5d0ee897d",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "45ed5087-ccf0-4fb7-a1ed-aa2a23a5427a"
+        "grounded_accuracy": null,
+        "id": "21637a4b-68b7-4394-b8a1-4434c6919087",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "14759ce8-284b-424a-a414-0c06c6506702"
+        "grounded_accuracy": null,
+        "id": "25e4fee7-8ae9-4785-bb69-d8d23d168c0d",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "a0a56453-c61e-498a-a029-3e5040774a0d"
+        "grounded_accuracy": null,
+        "id": "36243cd2-30f2-4af1-8026-406803f83b79",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "a5431368-66ac-4111-a402-f689c7cdcc6b"
+        "grounded_accuracy": 1,
+        "id": "22a0066b-7925-43bf-bbf1-35f2bee7dc6b",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "1e2cf74b-125e-460e-a8b7-11ac44be1577"
+        "grounded_accuracy": 1,
+        "id": "b66e6442-40a6-45bb-a6be-1159e83d380a",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "a5618e1e-0fa0-4d58-b4ab-7b700b663c26"
+        "grounded_accuracy": 0,
+        "id": "f9a8387a-2278-4232-b4cf-9225dec7cc1b",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "b3248863-608e-4f3f-8206-1e621abd14b0"
+        "grounded_accuracy": 1,
+        "id": "5051245a-c89f-4312-8b26-aacb740be07e",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "fda725c7-6cd6-4b75-a552-0719468128e1"
+        "grounded_accuracy": null,
+        "id": "50f91989-db3d-4db6-91ac-77e396f8de72",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "703770f5-fac8-43d2-9e1f-8ba2fcb2190a"
+        "grounded_accuracy": 1,
+        "id": "d1f0ebe2-2332-4219-aac8-4eedfbbaebeb",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "acc59493-f273-42aa-ae9c-598057f20ed4"
+        "grounded_accuracy": null,
+        "id": "fd902155-83ae-4118-a90f-77b083792f47",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "81ead9d2-e8db-4349-99fa-430f45e4cd09"
+        "grounded_accuracy": null,
+        "id": "0cebb024-fd7f-4673-95a5-fbae41b5c5ca",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "31c2396e-69c0-41f5-9fdd-f5b09839e3f4"
+        "grounded_accuracy": 1,
+        "id": "bc17ac0f-d46d-47d1-b6e2-79f51239d29d",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "00ee97c0-b3d4-46db-9636-796921c73b1c"
+        "grounded_accuracy": 0,
+        "id": "c5a9d02f-d3b7-4b81-98a6-6912c2d47f8e",
+        "tool_calls": 0
       },
       {
         "arm": "A",
-        "id": "42e8dc05-437f-418d-868f-79ba0f230fa4"
+        "grounded_accuracy": null,
+        "id": "d483bd45-59f1-4d36-b6c0-72d36a934876",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "79ffe56b-39c7-4ce7-9f9a-c3c9d1527a4e",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "9680f261-b243-4ddb-b053-93e76274c7b0",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "6358bb30-115f-4523-97c9-2d0f0074a1c0",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "bbb57f35-a4e4-4cde-8049-e306ced6e2d6",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "3852f1be-37d0-48ef-84ad-4116b134a539",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "8ccd315c-8d37-49d4-8b12-42db59993a6e",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "f91b8442-db94-4c21-9ec6-723c1cceaabe",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "9f181477-705b-4ab1-8bd2-a98e72173a41",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "c6ac222a-8342-4508-aae9-30c6337d9538",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 0,
+        "id": "b9970faf-34be-4e55-ac3c-d8b02260bc4d",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "39a0f033-8c12-4b74-94be-b89128faf592",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "a5d15799-40d4-423f-a1d2-ee88c9a7ff81",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 0,
+        "id": "bb15e486-5e99-4a80-b88d-9196c3e987b8",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": 1,
+        "id": "4fc5a69e-c67a-4eb5-be30-26dddfd647e7",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "69b6c589-2419-4061-b688-3e5e20a681af",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "488dc7c2-20cd-410c-b29d-c1d117b285ea",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "5d43cd5f-dfd9-4567-9117-baeca6049886",
+        "tool_calls": 0
+      },
+      {
+        "arm": "A",
+        "grounded_accuracy": null,
+        "id": "5fdc6d41-c0d3-4003-bb20-b869cea309c9",
+        "tool_calls": 0
       }
     ],
     "title": "Trajectory inefficiency"

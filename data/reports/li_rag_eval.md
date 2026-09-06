@@ -1,6 +1,6 @@
 # M7a -- LlamaIndex RAG lab: native evaluation on canonical dev retrieval
 
-Case set: `dev` (58 cases), chunk_version=`8e5e8ba56765`, index_version=`e2b4a2b97561`, git_sha7=`ebfc41d`
+Case set: `dev` (58 cases), chunk_version=`8e5e8ba56765`, index_version=`e2b4a2b97561`, git_sha7=`199ddba`
 
 LlamaIndex owns retriever composition/evaluation and the synthetic-query study; MAUD gold-span overlap remains benchmark truth. LlamaIndex node ids never replace it.
 
@@ -8,34 +8,35 @@ LlamaIndex owns retriever composition/evaluation and the synthetic-query study; 
 
 | config | li/hit_rate | li/mrr | obj/gold_span_hit@5 | obj/gold_span_mrr | n |
 |---|---|---|---|---|---|
-| dense | 81.0% | 0.621 | 81.0% | 0.621 | 58 |
-| bm25 | 86.2% | 0.664 | 86.2% | 0.664 | 58 |
-| hybrid_rrf | 91.4% | 0.724 | 91.4% | 0.724 | 58 |
-| hybrid_rrf_rerank | 91.4% | 0.723 | 91.4% | 0.723 | 58 |
-| multi_query_fusion | 82.8% | 0.678 | 82.8% | 0.678 | 58 |
-| multi_query_fusion_rerank | 87.9% | 0.713 | 87.9% | 0.713 | 58 |
+| dense | 81.0% | 0.621 | 81.0% | 0.626 | 58 |
+| bm25 | 86.2% | 0.664 | 86.2% | 0.673 | 58 |
+| hybrid_rrf | 91.4% | 0.724 | 91.4% | 0.732 | 58 |
+| hybrid_rrf_rerank | 91.4% | 0.723 | 91.4% | 0.727 | 58 |
+| multi_query_fusion | 82.8% | 0.678 | 82.8% | 0.690 | 58 |
+| multi_query_fusion_rerank | 87.9% | 0.713 | 87.9% | 0.718 | 58 |
+| li_native_bm25 | 84.5% | 0.651 | 86.2% | 0.673 | 58 |
 
 ## Ranking-order agreement (Spearman over retriever ranks)
 
-hit_rate vs hit@5: rho = 1.0
+hit_rate vs hit@5: rho = 0.9908673886137245
 
-mrr vs mrr: rho = 1.0
+mrr vs mrr: rho = 0.9910312089651149
 
 ## Disagreements
 
-LI-hit/MAUD-miss: 0; MAUD-hit/LI-miss: 0
-
-Near-zero disagreement is expected and reported plainly, not manufactured: expected_ids for the LlamaIndex RetrieverEvaluator ARE the project's gold-bearing chunk ids (dealpoint.rag_lab.evaluate.gold_bearing_chunk_ids uses the exact same overlap_chars/MIN_GOLD_OVERLAP_CHARS rule as dealpoint.eval.tournament._first_hit_rank), so the two metrics differ only where k-truncation or multi-hit averaging bites.
+LI-hit/MAUD-miss: 1; MAUD-hit/LI-miss: 2
 
 Cause rule:
 
-> Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'reranking' when the config carries a rerank_model AND the pre-rerank fused ranking's hit/miss differs from the post-rerank ranking's hit/miss at the same k; 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other four labels -- typically the retrieved list and expected_ids simply differ).
+> Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other three labels -- typically the retrieved list and expected_ids simply differ). A 'reranking' label was considered (spec section 3.2) but is not emitted: the pipeline never computes the pre-rerank ranking needed to detect it, so including it would describe a rule this code cannot actually apply.
 
 ## Synthetic-query robustness (secondary)
 
-Generator: `llama_index.core.evaluation.dataset_generation.DatasetGenerator` (num_questions_per_chunk=2), model=`z-ai/glm-5.3-flash`, n_chunks=73, n_queries=106, prompt_hash=`93801419e0abfb5b`
+Generator: `llama_index.core.evaluation.dataset_generation.DatasetGenerator` (num_questions_per_chunk=2), model=`z-ai/glm-5.3-flash`, n_chunks_attempted=113, n_chunks_kept=73 (filter: `dealpoint.rag_lab.synthetic._looks_like_question`), n_queries=106, prompt_hash=`93801419e0abfb5b`
 
-Total realized cost: $0.015215
+kept_questions_usd: $0.015215 | frozen_run_usd: $0.024087 | ledger_purpose_total_usd: $0.059064
+
+Three distinct cost figures, none interchangeable: kept_questions_usd (0.015215) sums only the usd recorded against the 73 chunks whose questions survived the keep filter; frozen_run_usd (0.024087) is the real cost of the 113 generation calls in the frozen run (kept and dropped chunks alike); ledger_purpose_total_usd (0.059064) sums every purpose=synthetic_query ledger row across all attempts, including superseded ones from earlier interrupted runs.
 
 Calibration/estimate provenance:
 ```json

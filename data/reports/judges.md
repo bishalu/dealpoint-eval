@@ -3,7 +3,7 @@
 These are **model-judged secondary scores, budget-scaled**, and are never presented as objective truth. Human calibration is **pending** unless stated otherwise below.
 
 `rubric_version`: `cfda9f8cc401`  
-`git_sha7`: `20e71ca`
+`git_sha7`: `199ddba`
 
 ## Judged subset
 
@@ -37,14 +37,7 @@ These are **model-judged secondary scores, budget-scaled**, and are never presen
 
 ## Human calibration
 
-Computed against the scored human packets:
-
-| dimension | spearman (mean vs human) | qwk (rounded mean vs human) | n |
-|---|---|---|---|
-| reasoning | 0.9872449580586936 | 0.9350961538461539 | 24 |
-| evidence | 0.9517785209496884 | 0.9532467532467532 | 24 |
-| trajectory | 0.7014714527116149 | 0.5483870967741935 | 24 |
-| professional | 0.9427505789964495 | 0.8966153846153846 | 24 |
+**pending.** Pending human input: `score data/eval/calibration/form.md`.
 
 ## Recorded decisions
 
@@ -73,9 +66,9 @@ Computed against the scored human packets:
 {
   "absolute_usd": 1.2,
   "assumed_input_tokens_per_call": 8000,
-  "envelope_headroom_after_m5": 0.286712,
-  "envelope_headroom_after_m6": 0.286712,
-  "envelope_realized_usd": 3.713288,
+  "envelope_headroom_after_m5": 0.24417,
+  "envelope_headroom_after_m6": 0.24417,
+  "envelope_realized_usd": 3.75583,
   "envelope_usd": 4.0,
   "est_basis": "tokens_per_call x live",
   "est_usd": 0.12852,

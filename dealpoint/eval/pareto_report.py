@@ -665,17 +665,64 @@ def render_svg(report: dict) -> str:
 
 
 def _readme_pareto_block(report: dict) -> str:
-    md = render_markdown(report)
-    # Strip the top H1 (README already has its own heading structure) but
-    # keep everything else -- the README test checks numbers/sentences, not
-    # heading levels.
-    lines = md.split("\n")
-    if lines and lines[0].startswith("# "):
-        lines = lines[2:]
+    """README PARETO block (engineer's instruction, 2026-09-05): per-model
+    table of grounded accuracy "x% (k of n scored)" and $/case ONLY, plus
+    the budget-scaled/objective/not-comparable disclosure sentence, the
+    held-fixed sentence, and the frontier line. Nothing else: "Not run",
+    "Partially run", "Comparability note", "Spend", "Recorded decisions",
+    "Brief-vs-spec differences" and "Caveats" stay complete in
+    `data/reports/pareto.md` (all seven already present there), never
+    duplicated into the README. The README is an introduction for readers
+    who do not know the project; the reports are the record.
+    """
+    disclosure = (
+        "This report is **budget-scaled** (32-case frozen subset per model, 18 at Haiku) -- "
+        "grounded_accuracy is **objective** (deterministic Python over expert labels); judged "
+        "quality is **secondary and model-judged, never objective truth**; scores are **not "
+        "comparable** to the MAUD leaderboard."
+    )
+    lines: list[str] = [disclosure, ""]
+    hf = report.get("held_fixed") or {}
+    if hf.get("sentence"):
+        lines.append(hf["sentence"])
+        lines.append("")
+
+    lines.append("| model | grounded_accuracy | $/case |")
+    lines.append("|---|---|---|")
+    for model, m in sorted(report.get("models", {}).items()):
+        ga = m.get("grounded_accuracy") or {}
+        n_scored = ga.get("n")
+        n_cases = m.get("n_cases")
+        ga_str = f"{_pct(ga.get('mean'))} ({n_scored} of {n_cases} scored)"
+        usd_per_case = m.get("usd_per_case")
+        usd_per_case_str = f"${usd_per_case:.5f}" if usd_per_case is not None else "n/a"
+        lines.append(f"| {model} | {ga_str} | {usd_per_case_str} |")
+    lines.append("")
+
+    frontier = report.get("frontier") or {}
+    lines.append(f"**Frontier** ({frontier.get('rule', '')}): {frontier.get('models')}")
+    lines.append("")
+
+    lines.append(
+        "Full diagnostics -- not-run/partially-run models, the comparability note, spend, "
+        "recorded decisions, brief-vs-spec differences, caveats -- are in "
+        "[`data/reports/pareto.md`](data/reports/pareto.md) and "
+        "[`data/reports/pareto.json`](data/reports/pareto.json)."
+    )
     return "\n".join(lines).strip()
 
 
 def regenerate_readme_pareto(report: dict, readme_path: Path = README_PATH) -> None:
+    """Both generated README blocks (RESULTS and PARETO) sit under the same
+    `## Latest numbers` heading, PARETO as a `### Model cost/quality (M6)`
+    subsection directly below RESULTS -- never its own `## Model
+    cost/quality Pareto (M6)` H2 at the bottom of the file, past `## Scope`
+    and `## Layout`, which is where earlier versions of this generator put
+    it. The fallback path (no existing marker pair) inserts the subsection
+    right after `<!-- END RESULTS -->` when that marker exists, so a fresh
+    README still gets the right placement; only if RESULTS is ALSO absent
+    does this fall back to appending at the end of the file.
+    """
     block = _readme_pareto_block(report)
     if readme_path.exists():
         text = readme_path.read_text(encoding="utf-8")
@@ -685,11 +732,13 @@ def regenerate_readme_pareto(report: dict, readme_path: Path = README_PATH) -> N
     replacement = f"{README_BEGIN}\n{block}\n{README_END}"
     if pattern.search(text):
         text = pattern.sub(replacement, text)
-    else:
-        text = (
-            text.rstrip("\n")
-            + f"\n\n## Model cost/quality Pareto (M6)\n\n{replacement}\n"
+    elif "<!-- END RESULTS -->" in text:
+        text = text.replace(
+            "<!-- END RESULTS -->",
+            f"<!-- END RESULTS -->\n\n### Model cost/quality (M6)\n\n{replacement}",
         )
+    else:
+        text = text.rstrip("\n") + f"\n\n## Latest numbers\n\n### Model cost/quality (M6)\n\n{replacement}\n"
     readme_path.write_text(text, encoding="utf-8")
 
 

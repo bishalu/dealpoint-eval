@@ -146,3 +146,21 @@ def build_li_retriever(
         scorer=scorer,
     )
     return ProjectRetrieverAdapter(inner, agreement_id, k)
+
+
+def build_native_bm25_retriever(chunks: list[Chunk], *, k: int) -> BaseRetriever:
+    """A genuinely native `llama_index.retrievers.bm25.BM25Retriever` over the
+    same canonical chunks -- the spec's "or compose native equivalents where
+    LlamaIndex has them" branch (section 1A), taken for exactly one
+    retriever so the cross-check has an independent tokenizer/scorer rather
+    than being a second reading of the project's own `bm25s` ranking.
+
+    CPU-only, zero model calls, zero network. `nodes` uses `chunk_to_node`
+    so node ids remain the project's `chunk_id` -- `expected_ids` still
+    compares directly, no id-translation layer.
+    """
+    from llama_index.core.schema import BaseNode
+    from llama_index.retrievers.bm25 import BM25Retriever
+
+    nodes: list[BaseNode] = [chunk_to_node(chunk) for chunk in chunks]
+    return BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=k)

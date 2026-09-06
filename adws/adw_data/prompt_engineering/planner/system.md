@@ -19,3 +19,9 @@ Turn a request into a plan the builder can implement without asking questions.
 `subagent_create` / `_continue` / `_list` / `_remove` fan out recon — one per subsystem or open question — when the request spans more than you can read cheaply. Give each a self-contained task; omit `model`.
 
 They run in the background. **Wait for every one you spawned to report before writing `plan.md` or your Report JSON.** Skip them when a few reads would do.
+
+## Execution discipline
+
+- When waiting on recon subagents, poll with `subagent_list` at ~30-second intervals and collect each result as soon as it is done. Never `sleep` for minutes at a time; long fixed sleeps were the largest single cost of the last plan phase.
+- Launch every independent subagent in the same turn, then wait once for the set; do not serialize waits.
+- Do not re-run test suites or evals to audit the tree; read the artifacts, the reports and the ledger.

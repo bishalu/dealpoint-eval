@@ -21,7 +21,7 @@
       "name": "synthetic_query"
     }
   ],
-  "dry_run": false,
+  "dry_run": true,
   "experiments": [
     "rag-m3-dense",
     "rag-m3-bm25",
@@ -58,7 +58,7 @@
     "braintrust": "0.37.0",
     "deepeval": "4.2.1",
     "fastembed": "0.8.0",
-    "git_sha7": "b9eac78",
+    "git_sha7": "199ddba",
     "llama-index-core": "0.14.24",
     "llama-index-retrievers-bm25": "0.8.0",
     "openai": "3.8.0",
@@ -66,7 +66,85 @@
     "python": "3.12.3",
     "qdrant-client": "1.19.0"
   },
+  "live_run_status": {
+    "blocked_at": "2026-09-06T19:41:54.458000+00:00",
+    "blocked_by": "Braintrust workspace plan limit: num_scores_calendar_months",
+    "blocked_detail": "Violations of resource constraint num_scores_calendar_months: (8d085458-23cd-4dae-a88f-383718549e80, 11016, 11000) -- current usage 11016 against a plan limit of 11000, an account-level quota unrelated to this code.",
+    "blocked_step": "_sync_prompts (Project.publish() -> insert-functions API call)",
+    "code_verified_before_block": "Experiment logging (score-budget split, per-case RAG/pareto rows, judge-dimension 0-1 rescaling) ran live against the real API before the block and was confirmed correct via direct BTQL queries against the partially-synced data.",
+    "last_full_live_sync_blocked": true,
+    "resolution": "Re-run `just braintrust-sync` (or `just braintrust-sync-dry-run` for an offline-safe check that still exercises every code path except the network calls) once the workspace's monthly score quota resets or the plan is upgraded."
+  },
   "n_experiments": 29,
+  "parameters": {
+    "published": true,
+    "registered": [
+      "dealpoint-runtime-parameters"
+    ],
+    "schema": {
+      "arm": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "arm_retrievers": {
+        "A": "dense",
+        "B": "dense",
+        "C": "hybrid_rrf",
+        "D": "hybrid_rrf"
+      },
+      "dataset_split": [
+        "dev",
+        "test",
+        "counterfactual"
+      ],
+      "max_tool_calls": 8,
+      "mode": [
+        "fake",
+        "live"
+      ],
+      "model_alias": [
+        "anthropic/claude-haiku-4.5",
+        "deepseek/deepseek-v4-flash",
+        "google/gemini-3.1-flash-lite",
+        "qwen/qwen3.7-flash",
+        "z-ai/glm-5.3-flash"
+      ],
+      "skill_version": "f8d255cc169b",
+      "top_k": 5,
+      "version": 2
+    }
+  },
+  "prompts": {
+    "n": 3,
+    "plan": [
+      {
+        "name": "agent-base-system-prompt",
+        "slug": "agent-base-system-prompt",
+        "source_hash": "3dc7ffe99e23",
+        "version_label": null
+      },
+      {
+        "name": "agent-arm-d-skill-injection",
+        "slug": "agent-arm-d-skill-injection",
+        "source_hash": "f8d255cc169b",
+        "version_label": "skill_version f8d255cc169b"
+      },
+      {
+        "name": "judge-calibrated-rubric",
+        "slug": "judge-calibrated-rubric",
+        "source_hash": "cfda9f8cc401",
+        "version_label": "rubric_version cfda9f8cc401"
+      }
+    ],
+    "published": true,
+    "registered": [
+      "agent-base-system-prompt",
+      "agent-arm-d-skill-injection",
+      "judge-calibrated-rubric"
+    ]
+  },
   "replayed_traces": 6,
   "representative_cases": {
     "rule": "Six categories, each a deterministic predicate over a stored canonical result row: 'successful_direct' = grounded_accuracy is True and reasoning_type == 'direct' and tool_calls <= 2; 'retrieval_rescue' = grounded_accuracy is True and (gold_first_rank is None or gold_first_rank > 1) and >= 2 search_agreement steps; 'defined_term_cross_ref' = required_evidence is not None and a lookup_defined_term or get_section step exists; 'inefficient_trajectory' = cap_hit is True, or tool_calls >= 6 with grounded_accuracy is not True; 'wrong_answer' = answer_correct is False; 'abstention_counterfactual' = case_set == 'counterfactual' and record.status == 'ABSTAINED'. Ties broken by ascending sha256(f'{SEED}:{case_id}:{variant_id}') (dealpoint.eval.subset._seeded_key's convention).",
@@ -75,41 +153,106 @@
         "case_id": "contract_0__q01",
         "category": "successful_direct",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_openai_gpt-5.6-luna-pro_D_openai_gpt-5.6-luna-pro_e2b4a2b97561_3fcdae7.jsonl",
         "variant_id": "D@openai/gpt-5.6-luna-pro"
       },
       {
         "case_id": "contract_0__q01",
         "category": "retrieval_rescue",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/dev_C_z-ai_glm-5.3-flash_e2b4a2b97561_4d2e361.jsonl",
         "variant_id": "C@z-ai/glm-5.3-flash"
       },
       {
         "case_id": "contract_99__redacted_q06",
         "category": "defined_term_cross_ref",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
         "variant_id": "D@anthropic/claude-haiku-4.5"
       },
       {
         "case_id": "contract_99__q03",
         "category": "inefficient_trajectory",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
         "variant_id": "D@qwen/qwen3.7-flash"
       },
       {
         "case_id": "contract_144__q09",
         "category": "wrong_answer",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_4d2e361.jsonl",
         "variant_id": "A@anthropic/claude-haiku-4.5"
       },
       {
         "case_id": "contract_75__oos09",
         "category": "abstention_counterfactual",
         "experiment_name": null,
+        "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_4d2e361.jsonl",
         "variant_id": "A@anthropic/claude-haiku-4.5"
       }
     ]
   },
+  "review_set": {
+    "dataset": "maud-dealpoint-review-set",
+    "n": 12
+  },
   "review_set_n": 12,
   "score_budget_ok": true,
-  "synced_at": "2026-09-06T02:38:27.739498+00:00"
+  "scorers": {
+    "limitation": "braintrust 0.37.0's own `Project.publish()` refuses code functions outright (\"Code functions cannot be published directly. Use `braintrust push` instead.\" -- verified by reading Project.publish's source in this venv) and posts only prompts/parameters via the insert-functions API. `project.scorers.create(...)` therefore produces a local CodeFunction DECLARATION, not a registered Braintrust scorer -- actually registering it requires the separate `braintrust push` CLI, which loads and executes this module server-side and is out of scope for a same-process sync call. Tested and rejected per the no-bloat rule's \"tested-and-rejected features are documented, not hidden\": this sync declares the six scorer handlers (proving the canonical-import bridge works, see test_make_scorer_handler_*) but does not claim they are live in Braintrust. Prompts and parameters ARE actually published below via Project.publish(), which the SDK does support for those two function types.",
+    "n": 6,
+    "plan": [
+      {
+        "import_path": "dealpoint.eval.scorers.grounded_accuracy",
+        "name": "grounded_accuracy",
+        "slug": "grounded-accuracy",
+        "threshold": 1.0
+      },
+      {
+        "import_path": "dealpoint.eval.scorers.answer_correct",
+        "name": "answer_correct",
+        "slug": "answer-correct",
+        "threshold": 1.0
+      },
+      {
+        "import_path": "dealpoint.eval.scorers.citation_verbatim",
+        "name": "citation_verbatim",
+        "slug": "citation-verbatim",
+        "threshold": 1.0
+      },
+      {
+        "import_path": "dealpoint.eval.scorers.citation_gold_overlap",
+        "name": "citation_gold_overlap",
+        "slug": "citation-gold-overlap",
+        "threshold": 1.0
+      },
+      {
+        "import_path": "dealpoint.eval.scorers.required_evidence_met",
+        "name": "required_evidence_met",
+        "slug": "required-evidence-met",
+        "threshold": 1.0
+      },
+      {
+        "import_path": "dealpoint.eval.scorers.skill_adherence",
+        "name": "skill_adherence",
+        "slug": "skill-adherence",
+        "threshold": null
+      }
+    ],
+    "published": false,
+    "registered": [
+      "grounded-accuracy",
+      "answer-correct",
+      "citation-verbatim",
+      "citation-gold-overlap",
+      "required-evidence-met",
+      "skill-adherence"
+    ]
+  },
+  "synced_at": "2026-09-06T20:32:20.947589+00:00",
+  "tools": {
+    "exposed": false,
+    "reason": "search_agreement/get_section/lookup_defined_term each need the 68 MB Qdrant index (data/index/), the 64 MB derived canonical corpus (data/derived/) and fastembed's ONNX embedding weights loaded in-process. None of this can run inside Braintrust's function execution environment without duplicating this project's entire index/data layer -- exactly what the no-bloat rule and the brief's 'no second tracing/data architecture' guidance forbid. Documented decision, not an omission; no placeholder stubs are shipped."
+  }
 }

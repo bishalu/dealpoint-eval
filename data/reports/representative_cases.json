@@ -5,36 +5,42 @@
       "case_id": "contract_0__q01",
       "category": "successful_direct",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_probe_openai_gpt-5.6-luna-pro_D_openai_gpt-5.6-luna-pro_e2b4a2b97561_3fcdae7.jsonl",
       "variant_id": "D@openai/gpt-5.6-luna-pro"
     },
     {
       "case_id": "contract_0__q01",
       "category": "retrieval_rescue",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/dev_C_z-ai_glm-5.3-flash_e2b4a2b97561_4d2e361.jsonl",
       "variant_id": "C@z-ai/glm-5.3-flash"
     },
     {
       "case_id": "contract_99__redacted_q06",
       "category": "defined_term_cross_ref",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_D_D_anthropic_claude-haiku-4.5_e2b4a2b97561_e3ee9cc.jsonl",
       "variant_id": "D@anthropic/claude-haiku-4.5"
     },
     {
       "case_id": "contract_99__q03",
       "category": "inefficient_trajectory",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/pareto_D_qwen_qwen3.7-flash_D_qwen_qwen3.7-flash_e2b4a2b97561_3fcdae7.jsonl",
       "variant_id": "D@qwen/qwen3.7-flash"
     },
     {
       "case_id": "contract_144__q09",
       "category": "wrong_answer",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_4d2e361.jsonl",
       "variant_id": "A@anthropic/claude-haiku-4.5"
     },
     {
       "case_id": "contract_75__oos09",
       "category": "abstention_counterfactual",
       "experiment_name": null,
+      "results_path": "/home/exedev/repos/dealpoint-eval/data/results/test_subset_v1_tranche1_A_A_anthropic_claude-haiku-4.5_e2b4a2b97561_4d2e361.jsonl",
       "variant_id": "A@anthropic/claude-haiku-4.5"
     }
   ]

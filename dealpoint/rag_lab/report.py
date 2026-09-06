@@ -135,12 +135,14 @@ def build_report(
                 "hit_rate": per_config_results[c]["li"]["hit_rate"],
                 "mrr": per_config_results[c]["li"]["mrr"],
                 "n": per_config_results[c]["li"]["n"],
+                "per_case": per_config_results[c]["li"].get("per_case", []),
             },
             "obj": {
                 "gold_span_hit_at_5": per_config_results[c]["obj"]["hit_at_5"],
                 "gold_span_hit_at_10": per_config_results[c]["obj"]["hit_at_10"],
                 "gold_span_mrr": per_config_results[c]["obj"]["mrr"],
                 "n": per_config_results[c]["obj"]["n"],
+                "per_case": per_config_results[c]["obj"].get("per_case", []),
             },
         }
         for c in config_names
@@ -251,13 +253,20 @@ def render_markdown(report: dict) -> str:
     else:
         lines.append(
             f"Generator: `{synth.get('generator')}` ({synth.get('generator_version')}), "
-            f"model=`{synth.get('model')}`, n_chunks={synth.get('n_chunks')}, "
+            f"model=`{synth.get('model')}`, n_chunks_attempted={synth.get('n_chunks_attempted')}, "
+            f"n_chunks_kept={synth.get('n_chunks_kept')} (filter: `{synth.get('kept_filter')}`), "
             f"n_queries={synth.get('n_queries')}, prompt_hash=`{synth.get('prompt_hash')}`"
         )
         lines.append("")
-        total_usd = synth.get("total_usd")
-        total_usd_str = f"${total_usd:.6f}" if total_usd is not None else "n/a"
-        lines.append(f"Total realized cost: {total_usd_str}")
+
+        def _usd(x):
+            return f"${x:.6f}" if x is not None else "n/a"
+
+        lines.append(
+            f"kept_questions_usd: {_usd(synth.get('kept_questions_usd'))} | "
+            f"frozen_run_usd: {_usd(synth.get('frozen_run_usd'))} | "
+            f"ledger_purpose_total_usd: {_usd(synth.get('ledger_purpose_total_usd'))}"
+        )
         if synth.get("cost_note"):
             lines.append("")
             lines.append(synth["cost_note"])
@@ -341,6 +350,28 @@ def main(argv: list[str] | None = None) -> int:
             f"disagreements={len(disagreements)} ({time.time() - t0:.1f}s)"
         )
 
+    print("Evaluating native llama_index.retrievers.bm25.BM25Retriever (li_native_bm25) ...")
+    import dataclasses
+
+    from dealpoint.rag_lab.evaluate import evaluate_native_bm25_li
+
+    bm25_config = next(c for c in DEFAULT_CONFIGS if c.name == "bm25")
+    native_bm25_config = dataclasses.replace(bm25_config, name="li_native_bm25")
+    li_native = evaluate_native_bm25_li(all_cases, k=5)
+    obj_for_native = per_config["bm25"]["obj"]
+    native_disagreements = find_disagreements(
+        all_cases, native_bm25_config, li_native, obj_for_native, k=5
+    )
+    per_config["li_native_bm25"] = {
+        "li": li_native,
+        "obj": obj_for_native,
+        "disagreements": native_disagreements,
+    }
+    print(
+        f"  li_native_bm25 native li/hit_rate={li_native['hit_rate']:.3f} "
+        f"disagreements={len(native_disagreements)}"
+    )
+
     dataset_version = ""
     if DATASET_VERSION_TXT_PATH.exists():
         dataset_version = DATASET_VERSION_TXT_PATH.read_text(encoding="utf-8").strip()
@@ -373,31 +404,61 @@ def main(argv: list[str] | None = None) -> int:
         row_usd_values: list[float] = [
             float(r["usd"]) for r in synth_rows if r.get("usd") is not None
         ]
-        total_usd = generation_run.get("total_usd")
-        if total_usd is None and row_usd_values:
-            total_usd = round(sum(row_usd_values), 6)
+        kept_questions_usd = generation_run.get("total_usd")
+        if kept_questions_usd is None and row_usd_values:
+            kept_questions_usd = round(sum(row_usd_values), 6)
         n_rows_missing_usd = sum(1 for r in synth_rows if r.get("usd") is None)
+
+        n_chunks_kept = len({r["chunk_id"] for r in synth_rows})
+        n_chunks_attempted = generation_run.get("n_chunks", n_chunks_kept)
+
+        from dealpoint.eval.spend import read_ledger
+
+        ledger_rows = read_ledger()
+        ledger_purpose_rows = [r for r in ledger_rows if r.get("purpose") == "synthetic_query"]
+        ledger_purpose_total_usd = round(sum(float(r.get("usd") or 0) for r in ledger_purpose_rows), 6)
+
+        # frozen_run_usd: the real cost of the 113 generation calls that produced
+        # the frozen file, taken from the ledger rows following the calibration
+        # sample (the calibration's own rows are excluded) -- distinct from
+        # kept_questions_usd, which only reflects the 73 chunks whose questions
+        # survived `_looks_like_question` filtering.
+        calibration_rows = (generation_run.get("calibration") or {}).get("rows", [])
+        calibration_chunk_ids = {r["chunk_id"] for r in calibration_rows}
+        frozen_run_rows = [
+            r for r in ledger_purpose_rows if r.get("chunk_id") not in calibration_chunk_ids
+        ][-n_chunks_attempted:] if n_chunks_attempted else []
+        frozen_run_usd = round(sum(float(r.get("usd") or 0) for r in frozen_run_rows), 6)
 
         synthetic = {
             "generator": first_row.get("generator"),
             "generator_version": first_row.get("generator_version"),
             "prompt_hash": first_row.get("prompt_hash"),
             "model": first_row.get("model"),
-            "n_chunks": len({r["chunk_id"] for r in synth_rows}),
+            "n_chunks_attempted": n_chunks_attempted,
+            "n_chunks_kept": n_chunks_kept,
+            "kept_filter": "dealpoint.rag_lab.synthetic._looks_like_question",
             "n_queries": synth_eval["n_queries"],
             "file_sha256": _sha256_file(SYNTHETIC_DEV_QUERIES_PATH),
             "results": synth_eval["results"],
             "verdict": synth_eval["verdict"],
             "calibration": generation_run.get("calibration"),
             "estimate": generation_run.get("estimate"),
-            "total_usd": total_usd,
+            "kept_questions_usd": kept_questions_usd,
+            "frozen_run_usd": frozen_run_usd,
+            "ledger_purpose_total_usd": ledger_purpose_total_usd,
+            "cost_note": (
+                "Three distinct cost figures, none interchangeable: kept_questions_usd "
+                f"({kept_questions_usd}) sums only the usd recorded against the "
+                f"{n_chunks_kept} chunks whose questions survived the keep filter; "
+                f"frozen_run_usd ({frozen_run_usd}) is the real cost of the {n_chunks_attempted} "
+                "generation calls in the frozen run (kept and dropped chunks alike); "
+                f"ledger_purpose_total_usd ({ledger_purpose_total_usd}) sums every "
+                "purpose=synthetic_query ledger row across all attempts, including "
+                "superseded ones from earlier interrupted runs."
+            ),
             "n_rows_missing_usd": n_rows_missing_usd,
         }
-        if n_rows_missing_usd:
-            synthetic["cost_note"] = (
-                f"{n_rows_missing_usd} of {len(synth_rows)} rows have no matching ledger "
-                "spend row for their generating chunk_id and carry usd: null."
-            )
 
     report = build_report(
         per_config,

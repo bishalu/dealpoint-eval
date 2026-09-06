@@ -13,7 +13,7 @@ import pytest
 
 from dealpoint.config import PARETO_JSON_PATH, README_PATH
 
-pytestmark = pytest.mark.gate_m6
+pytestmark = [pytest.mark.gate_m6, pytest.mark.gate_m7]
 
 
 def _pct(x):
@@ -47,15 +47,41 @@ def test_readme_pareto_block_matches_pareto_json():
         n_cases = m.get("n_cases")
         grounded = _pct(ga.get("mean"))
         assert grounded in block, f"{model} grounded_accuracy {grounded} missing from README"
-        assert f"({n_scored}/{n_cases})" in block, (
-            f"{model} missing scored-n ({n_scored}/{n_cases}) denominator"
+        assert f"({n_scored} of {n_cases} scored)" in block, (
+            f"{model} missing scored-n ({n_scored} of {n_cases} scored) denominator"
         )
         usd_per_case = m.get("usd_per_case")
         if usd_per_case is not None:
             assert f"${usd_per_case:.5f}" in block
-        latency_median = m.get("latency_median_ms")
-        if latency_median is not None:
-            assert str(latency_median) in block
 
-    for nr in report.get("not_run", []):
-        assert nr.get("model") in block
+    # Moved-out sections must appear only in data/reports/pareto.md, never
+    # duplicated into the README block.
+    for heading in (
+        "## Not run",
+        "## Partially run",
+        "## Comparability note",
+        "## Spend",
+        "## Recorded decisions",
+        "## Brief-vs-spec differences",
+        "## Caveats",
+    ):
+        assert heading not in block, f"{heading} must not appear in the README PARETO block"
+
+    assert "data/reports/pareto.md" in block
+    assert "data/reports/pareto.json" in block
+
+
+def test_readme_pareto_block_sits_under_latest_numbers():
+    if not README_PATH.exists():
+        pytest.skip("README.md not present")
+    readme = README_PATH.read_text(encoding="utf-8")
+    latest_numbers_idx = readme.find("## Latest numbers")
+    pareto_begin_idx = readme.find("<!-- BEGIN PARETO -->")
+    if pareto_begin_idx == -1:
+        pytest.skip("README.md has no PARETO block yet")
+    assert latest_numbers_idx != -1
+    assert latest_numbers_idx < pareto_begin_idx
+    next_h2_idx = readme.find("\n## ", latest_numbers_idx + len("## Latest numbers"))
+    if next_h2_idx != -1:
+        assert pareto_begin_idx < next_h2_idx, "PARETO block must be under ## Latest numbers, before the next H2"
+    assert "## Model cost/quality Pareto (M6)" not in readme

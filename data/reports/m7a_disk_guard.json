@@ -1,38 +1,34 @@
 {
   "floor_bytes": 500000000,
-  "measured_at": "2026-09-05T00:00:00+00:00",
   "groups": [
     {
+      "dry_run_output": "Resolved 72 packages in 127ms\nWould download 1 package\nWould uninstall 1 package\nWould install 1 package\n - dealpoint==0.1.0 (from file:///home/exedev/repos/dealpoint-eval)\n + dealpoint @ file:///home/exedev/repos/dealpoint-eval",
+      "free_after_bytes": 1541029888,
+      "free_before_bytes": 1541050368,
       "group": "rag-lab",
-      "free_before_bytes": 1257095168,
-      "free_after_bytes": 1254531072,
-      "packages_added": [
-        "aiohappyeyeballs", "aiohttp", "aiosignal", "aiosqlite", "banks",
-        "cloudpickle", "colorama", "dataclasses-json", "defusedxml", "deprecated",
-        "dirtyjson", "filetype", "frozenlist", "greenlet", "griffe", "griffecli",
-        "griffelib", "jinja2", "joblib", "llama-index-core", "llama-index-instrumentation",
-        "llama-index-retrievers-bm25", "llama-index-workflows", "markupsafe",
-        "marshmallow", "multidict", "mypy-extensions", "nest-asyncio", "networkx",
-        "nltk", "platformdirs", "propcache", "pystemmer", "regex", "setuptools",
-        "sqlalchemy", "tenacity", "tiktoken", "tinytag", "typing-inspect", "yarl"
-      ],
+      "re_measured_at": "2026-09-06T17:29:05.240650+00:00",
       "within_guard": true
     },
     {
+      "dry_run_output": "Resolved 68 packages in 94ms\nWould download 1 package\nWould uninstall 1 package\nWould install 1 package\n - dealpoint==0.1.0 (from file:///home/exedev/repos/dealpoint-eval)\n + dealpoint @ file:///home/exedev/repos/dealpoint-eval",
+      "free_after_bytes": 1541029888,
+      "free_before_bytes": 1541029888,
       "group": "deepeval",
-      "free_before_bytes": 1254473728,
-      "free_after_bytes": 1252827136,
-      "packages_added": [
-        "annotated-doc", "backoff", "click", "deepeval", "distro", "execnet",
-        "markdown-it-py", "mdurl", "opentelemetry-api", "opentelemetry-sdk",
-        "opentelemetry-semantic-conventions", "posthog", "prompt-toolkit",
-        "pydantic-settings", "pyfiglet", "pytest-asyncio", "pytest-repeat",
-        "pytest-rerunfailures", "pytest-xdist", "questionary", "rich",
-        "shellingham", "tabulate", "typer", "wcwidth", "wheel"
-      ],
+      "re_measured_at": "2026-09-06T17:29:05.377668+00:00",
       "within_guard": true
     }
   ],
-  "within_guard": true,
-  "notes": "Re-measured with `uv pip install --dry-run` before touching the live environment, per the milestone spec (specs/milestones/m7a.md, \"Budget and disk\"). Both groups installed within the 500 MB floor with substantial headroom (final free: ~1.25 GB). `.venv` grew from 340 MB to 451 MB. Neither group pulled torch/transformers/nvidia wheels. The visualizer node_modules (146 MB) was left untouched."
+  "install_time_observation": {
+    "deepeval": {
+      "free_after_bytes": 1252827136,
+      "free_before_bytes": 1254473728
+    },
+    "note": "Deltas measured 2026-09-05 during the original live install, before either optional group was present. `.venv` grew from 340 MB to 451 MB across both groups combined; neither pulled torch/transformers/nvidia wheels. Kept for historical record only -- see each group's `re_measured_at` entry above for the current (already-installed) state.",
+    "rag_lab": {
+      "free_after_bytes": 1254531072,
+      "free_before_bytes": 1257095168
+    }
+  },
+  "measured_at": "2026-09-06T17:29:05.377693+00:00",
+  "within_guard": true
 }

@@ -59,6 +59,64 @@ def test_parse_btql_result_zero_rows():
     assert count == 0
 
 
+def test_each_query_references_the_quantity_its_question_names():
+    """A placeholder query (e.g. `count(1)` with no reference to the field
+    its question asks about) must fail this test -- see the pre-repair
+    D8 audit, where none of the six queries referenced `scores.*` at all.
+    """
+    from dealpoint.eval.btql import build_investigations
+
+    investigations = build_investigations()
+    required_substring_by_id = {
+        1: "obj/grounded_accuracy",
+        2: "obj/execution_failed",
+        3: "obj/grounded_accuracy",
+        4: "deepeval/task_completion",
+        5: "obj/grounded_accuracy",
+        6: "obj/tool_calls",
+    }
+    for inv in investigations:
+        required = required_substring_by_id[inv["id"]]
+        assert required in inv["btql"], f"query {inv['id']} does not reference {required!r}"
+
+
+def test_query_4_targets_deepeval_crosscheck_not_a_judge_experiment():
+    from dealpoint.eval.btql import build_investigations
+
+    investigations = build_investigations()
+    query_4 = next(inv for inv in investigations if inv["id"] == 4)
+    assert "deepeval-crosscheck" in query_4["btql"]
+
+
+def test_curl_rendering_is_shell_syntax_valid():
+    """The printed curl command must actually be runnable bash -- the
+    pre-repair version embedded the BTQL string's own single quotes
+    (from `experiment('...')`) inside an outer single-quoted `-d '...'`
+    payload, which a shell would terminate early.
+    """
+    import subprocess
+
+    from dealpoint.eval.btql import render_queries_markdown
+
+    fake_results = [
+        {
+            "id": 1,
+            "title": "x",
+            "question": "y",
+            "btql": "from: experiment('a-b-c') | select: id, scores.\"obj/x\" as x | limit: 5",
+            "executed_at": "2026-01-01T00:00:00+00:00",
+            "row_count": 0,
+            "notes": None,
+            "rows": [],
+        }
+    ]
+    markdown = render_queries_markdown(fake_results)
+    lines = markdown.splitlines()
+    curl_line = next(line for line in lines if line.startswith("curl -s"))
+    result = subprocess.run(["bash", "-n", "-c", curl_line], capture_output=True, text=True, check=False)
+    assert result.returncode == 0, f"curl line is not valid bash syntax: {result.stderr}"
+
+
 @pytest.mark.needs_network
 def test_execute_investigations_live():
     from dealpoint.eval.btql import execute_investigations

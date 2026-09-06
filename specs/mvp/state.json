@@ -796,7 +796,8 @@
       "attempts": 4,
       "blocker": "",
       "commits": [
-        "b9eac78"
+        "b9eac78",
+        "a632dc9"
       ],
       "ended_at": "2026-09-06T09:38:37.164+00:00",
       "exclusions": [],
@@ -1093,9 +1094,17 @@
         "milestone": "m7a",
         "ok": true,
         "session": "488479df"
+      },
+      {
+        "at": "2026-09-06T17:28:27.814+00:00",
+        "calls": 580,
+        "est_usd": 0.156544,
+        "milestone": "m7a",
+        "ok": true,
+        "session": "4daf5d8d"
       }
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-06T17:00:24.425+00:00"
+  "updated_at": "2026-09-06T17:28:27.814+00:00"
 }
