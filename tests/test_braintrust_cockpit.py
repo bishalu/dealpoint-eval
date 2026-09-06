@@ -68,14 +68,16 @@ class FakeSdkClient:
 
 
 class FakeRestClient:
-    """`get`/`post` shape only -- the same seam `RestClient` exposes.
-    Resolves the one project by name and dedupes `/v1/view` by
-    `(view_type, name)`, mirroring Braintrust's insert-style upsert (`id`
-    present -> update).
+    """`get`/`post`/`patch` shape only -- the same seam `RestClient` exposes.
+    Resolves the one project by name; `/v1/view` is filtered by
+    `object_type`/`object_id` on GET (the real API's query params) and
+    updated via `PATCH /v1/view/{id}` (the real update path -- `POST` never
+    takes an `id`, confirmed live).
     """
 
     def __init__(self):
         self.views: list[dict] = []
+        self.functions: list[dict] = []
         self._next_id = 1
         self.post_calls: list[tuple[str, dict]] = []
 
@@ -83,24 +85,44 @@ class FakeRestClient:
         if path == "/v1/project":
             return {"objects": [{"id": "proj-1", "name": (params or {}).get("project_name")}]}
         if path == "/v1/view":
-            return {"objects": list(self.views)}
+            params = params or {}
+            return {
+                "objects": [
+                    v
+                    for v in self.views
+                    if v.get("object_type") == params.get("object_type") and v.get("object_id") == params.get("object_id")
+                ]
+            }
+        if path == "/v1/function":
+            return {"objects": list(self.functions)}
         raise ValueError(path)
 
     def post(self, path, json_body):
         self.post_calls.append((path, json_body))
         if path == "/v1/view":
-            if json_body.get("id"):
-                for v in self.views:
-                    if v["id"] == json_body["id"]:
-                        v.update(json_body)
-                        return v
             new_view = dict(json_body)
             new_view["id"] = f"view-{self._next_id}"
             self._next_id += 1
             self.views.append(new_view)
             return new_view
-        if path in ("/v1/facet", "/v1/pattern"):
-            return {"id": f"{path}-1"}
+        if path == "/v1/function":
+            for fn in self.functions:
+                if fn.get("slug") == json_body.get("slug"):
+                    fn.update(json_body)
+                    return fn
+            new_fn = dict(json_body)
+            new_fn["id"] = f"function-{self._next_id}"
+            self._next_id += 1
+            self.functions.append(new_fn)
+            return new_fn
+        raise ValueError(path)
+
+    def patch(self, path, json_body):
+        view_id = path.rsplit("/", 1)[-1]
+        for v in self.views:
+            if v["id"] == view_id:
+                v.update(json_body)
+                return v
         raise ValueError(path)
 
 

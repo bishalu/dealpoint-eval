@@ -1677,10 +1677,11 @@ def sync(client, *, dry_run: bool = False) -> dict:
     return result
 
 
-def _emit_span_tree(root_span_source, node: dict, parent_span=None) -> None:
+def _emit_span_tree(root_span_source, node: dict, parent_span=None, allowed_score_names: set[str] | None = None) -> int:
     """Recursively emit `node` (from `log_hierarchy`) as nested spans on
     `root_span_source`/`parent_span`. Zero model calls -- every field comes
-    from the already-built hierarchy dict.
+    from the already-built hierarchy dict. Returns the total number of
+    scores actually logged across the whole subtree.
 
     `root_span_source` provides the top-level `start_span` call only (used
     when `parent_span is None`); every recursive call already has a
@@ -1691,6 +1692,15 @@ def _emit_span_tree(root_span_source, node: dict, parent_span=None) -> None:
     `_NoopSpan` that is silently discarded, which is why the module-level
     `braintrust` object must never be passed here as the root source for a
     real sync (see `sync()`'s replay section, which asserts against this).
+
+    `allowed_score_names`, when given, restricts which namespaced score
+    names a `provenance` node may log as a Braintrust score -- everything
+    else is moved to `metadata.provenance_excluded_from_scores`, the same
+    place out-of-range provenance values already go. `None` preserves the
+    old keep-everything-as-a-score behaviour (`sync()`'s representative-
+    trace replay, unrestricted); the M7b hero-case replay passes an
+    explicit set so it logs only `judge/<dimension>` scores, never `obj/*`
+    re-logged onto a fresh experiment (spec section 2 / the spend guard).
     """
     name = node.get("name", "span")
     log_kwargs: dict = {}
@@ -1732,6 +1742,10 @@ def _emit_span_tree(root_span_source, node: dict, parent_span=None) -> None:
                     scores[namespaced] = normalized
                 else:
                     excluded[namespaced] = normalized
+        if allowed_score_names is not None:
+            for k in list(scores):
+                if k not in allowed_score_names:
+                    excluded[k] = scores.pop(k)
         log_kwargs["scores"] = scores
         if excluded:
             log_kwargs.setdefault("metadata", {})
@@ -1745,11 +1759,14 @@ def _emit_span_tree(root_span_source, node: dict, parent_span=None) -> None:
     if hasattr(span, "log") and log_kwargs:
         span.log(**log_kwargs)
 
+    n_scores = len(log_kwargs.get("scores") or {})
     for child in node.get("children", []):
-        _emit_span_tree(root_span_source, child, parent_span=span)
+        n_scores += _emit_span_tree(root_span_source, child, parent_span=span, allowed_score_names=allowed_score_names)
 
     if hasattr(span, "end"):
         span.end()
+
+    return n_scores
 
 
 SCORER_PUBLISH_LIMITATION = (

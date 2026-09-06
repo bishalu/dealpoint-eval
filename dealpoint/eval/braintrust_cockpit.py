@@ -13,12 +13,13 @@ Two client seams, both optional:
   replay the hero-case judge-span trace as a dedicated experiment
   (`m7b-hero-case`), the same `start_span`/`log` shape `braintrust_sync.py`
   uses.
-- `rest_client` -- a thin REST seam (`get`/`post`) for `/v1/view` (saved
-  views + the dashboard) and the best-effort Topics/Pattern endpoints, used
-  because the SDK does not expose persistent creation for those objects
-  (see `TOPICS_PATTERN_LIMITATION`). A fake test double drives the offline
-  gate; `RestClient` is the real (but never network-called in tests) HTTP
-  wrapper.
+- `rest_client` -- a thin REST seam (`get`/`post`/`patch`) for `/v1/view`
+  (saved views + the dashboard), `/v1/function` (Topics facet), and reads
+  against `/v1/experiment`, `/v1/dataset`, `/v1/organization` for the
+  manifest's `experiments`/`datasets`/`permalinks` keys. Patterns have no
+  REST creation path at all (see `PATTERN_REST_LIMITATION`). A fake test
+  double drives the offline gate; `RestClient` is the real (but never
+  network-called in tests) HTTP wrapper.
 """
 
 from __future__ import annotations
@@ -56,28 +57,38 @@ HERO_RULE_TEXT = (
 # --- human-scoring path probe (spec section 3) ------------------------------
 
 HUMAN_SCORING_PROBE = {
-    "probed_via": "mcp_braintrust_search_docs('human review scores configuration Pro Enterprise')",
+    "probed_via": (
+        "mcp_braintrust_get_project_settings(project_id=dealpoint-eval) live on "
+        "2026-09-06, corroborated with mcp_braintrust_search_docs('configure human "
+        "review scores Pro Enterprise plan') and data/reports/braintrust_sync.json"
+    ),
+    "probed_at": "2026-09-06T23:00:00+00:00",
     "finding": (
-        "Braintrust's 'Configure review scores' doc states human review scorers "
-        "are 'only available on Pro and Enterprise plans' and that the Starter "
-        "plan is 'limited to 1 per project' even when available. This project's "
-        "Braintrust workspace is on the Starter plan (independently evidenced by "
-        "the M7a live sync's num_scores_calendar_months quota error and the "
-        "documented 14-day log retention this workspace exhibits -- both Starter "
-        "characteristics, recorded in data/reports/braintrust_sync.json's "
-        "live_run_status). Four rubric dimensions (reasoning, evidence, "
-        "trajectory, professional) are required; Starter allows at most one "
-        "configured human review score per project."
+        "get_project_settings on the live dealpoint-eval project returned "
+        "settings={} -- zero configured review scores exist on this workspace "
+        "today, so there is nothing to extend rather than something already at "
+        "a hard cap. The docs' 'Configure review scores' page states human "
+        "review scorers are 'only available on Pro and Enterprise plans', and "
+        "separately (docs 'Upgrade your plan') that Starter is 'limited to 1 "
+        "per project' even where available -- 1 slot, not the 4 rubric "
+        "dimensions (reasoning, evidence, trajectory, professional) this "
+        "milestone needs. That this workspace is Starter-tier is independently "
+        "evidenced by the M7a live sync's real, observed block: "
+        "data/reports/braintrust_sync.json's live_run_status recorded "
+        "blocked_by='Braintrust workspace plan limit: num_scores_calendar_months' "
+        "with usage 11016 against a limit of 11000 -- a Starter-plan monthly "
+        "score quota actually hit live, not inferred from a doc alone."
     ),
     "decision": "local_form",
     "decision_reason": (
         "Configured Review scores cannot carry all four rubric dimensions on "
-        "this workspace's plan. Branch B of spec section 3 applies: "
-        "data/eval/calibration/form.md is the scoring surface (as M5 already "
-        "built), `just calibration` computes agreement locally, and "
-        "`just braintrust-cockpit` pushes the rows as human/<dimension> scores "
-        "on the matching experiment/trace rows. The walkthrough shows human "
-        "scores in the experiment table and the trace, not in Review mode."
+        "this workspace's plan (1 slot available, 4 needed). Branch B of spec "
+        "section 3 applies: data/eval/calibration/form.md is the scoring "
+        "surface (as M5 already built), `just calibration` computes agreement "
+        "locally, and `just braintrust-cockpit` pushes the rows as "
+        "human/<dimension> scores on the matching experiment/trace rows. The "
+        "walkthrough shows human scores in the experiment table and the trace, "
+        "not in Review mode."
     ),
 }
 
@@ -312,27 +323,35 @@ def documented_btql_query(query_number: int) -> str:
     return rest[fence_start:fence_end].strip()
 
 
+def _review_set_case_ids() -> list[str]:
+    from dealpoint.eval.braintrust_sync import review_set
+
+    return sorted({p["case_id"] for p in review_set()})
+
+
 def view_definitions() -> list[dict]:
     """The seven named table views (spec section 4). Names are stable;
     `sync_cockpit` resolves by name so a re-run updates rather than
-    duplicates. BTQL filters are the documented queries verbatim.
+    duplicates. BTQL filters are the documented queries verbatim; every
+    `definition` carries a `btql` key so `_view_data_for` maps it onto the
+    real `view_data.search.filter` REST shape without a second mechanism.
     """
+    review_case_ids = _review_set_case_ids()
+    review_btql = " or ".join(f"metadata.case_id = '{cid}'" for cid in review_case_ids) or "false"
     return [
         {
             "name": "Judged traces by variant",
             "view_type": "experiments",
             "caption": "Every judge- experiment, tagged stage=evaluation: variant, judge/* aggregates, obj/grounded_accuracy.",
-            "definition": {
-                "filter": "tags.stage = 'evaluation' and name starts_with 'judge-'",
-                "columns": ["variant", "judge/reasoning", "judge/evidence", "judge/trajectory", "judge/professional", "obj/grounded_accuracy"],
-            },
+            "definition": {"btql": "tags.stage = 'evaluation' and name like 'judge-%'"},
         },
         {
             "name": "Judge disagreement",
             "view_type": "experiment",
+            "bind_to": "hero_experiment",
             "caption": "Rows on the hero variant where max pairwise judge spread >= 2 on any dimension, sorted by spread.",
             "definition": {
-                "filter": "metadata.judge_spread_max >= 2",
+                "btql": "metadata.judge_spread_max >= 2",
                 "sort": "metadata.judge_spread_max desc",
             },
         },
@@ -363,8 +382,8 @@ def view_definitions() -> list[dict]:
         {
             "name": "Review set (12)",
             "view_type": "for_review_experiments",
-            "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set).",
-            "definition": {"dataset": "maud-dealpoint-review-set"},
+            "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set), matched by case_id.",
+            "definition": {"btql": review_btql},
         },
     ]
 
@@ -410,20 +429,36 @@ def dashboard_definition() -> dict:
 
 
 # --- Topics + one Pattern (spec section 7) ----------------------------------
+#
+# Confirmed live, 2026-09-06 (direct REST probes against api.braintrust.dev,
+# this repo's real key): `/v1/facet` and `/v1/pattern` do NOT exist -- both
+# return the Next.js app-router's catch-all 404 page (not an API 400/404),
+# proving those paths aren't API routes at all. A Topics facet is really a
+# saved `Function` (`function_data.type == "facet"`, confirmed via
+# `braintrust/_generated_types.py`'s `FacetData`/`FunctionData` and a live
+# `POST /v1/function` that created and then idempotently updated one by
+# `(project_id, slug)`). Patterns have no public REST/API surface in this
+# SDK version at all -- every plausible path (`/v1/pattern(s)`,
+# `/v1/project-pattern`) 404s the same way. This is a genuine platform gap,
+# not a code defect: per spec section 4, "If the REST surface ... genuinely
+# does not exist for this plan, do not fake it ... That is a legitimate
+# outcome." `sync_topics_and_pattern` therefore creates Topics for real via
+# `/v1/function`, and records (never invents) that Patterns have no REST
+# creation path -- see PATTERN_REST_LIMITATION.
 
-TOPICS_PATTERN_LIMITATION = (
-    "Braintrust's Topics and Patterns REST surface is not documented in this "
-    "offline environment the way scorers/prompts/parameters are (those are "
-    "first-class braintrust-sdk `Project` members). The preprocessor and "
-    "facet prompt below were validated with "
-    "mcp_braintrust_test_preprocessor_on_trace / test_facet_on_trace before "
-    "being committed here (spec section 7); persistence goes through "
-    "rest_client.post('/v1/facet', ...) and rest_client.post('/v1/pattern', "
-    "...), matching the create_facet / new_pattern MCP tools' payload shape. "
-    "If the real endpoint contract differs, the offline gate (a fake REST "
-    "client) still proves the idempotent-by-name mapping; only a live run "
-    "would surface a schema mismatch, the same honesty this project already "
-    "applies to SCORER_PUBLISH_LIMITATION."
+PATTERN_REST_LIMITATION = (
+    "No public REST endpoint exists to create a Braintrust Pattern in this "
+    "API surface (probed live: GET/POST /v1/pattern, /v1/patterns and "
+    "/v1/project-pattern all return the web app's catch-all 404 page, not an "
+    "API error -- there is no such route). The only creation path observed is "
+    "the product's internal Loop/pattern-analysis feature, exposed to an "
+    "MCP-enabled agent session as `new_pattern` but not as public REST. This "
+    "module cannot create a Pattern from pure Python; `pattern_definition()` "
+    "still defines the payload the milestone specifies (name, description, "
+    ">= 3 supporting trace ids), and the id recorded in the manifest, when "
+    "present, was created once via that MCP tool and is looked up from "
+    "data/reports/pattern_record.json (committed, analogous to "
+    "braintrust_runs.json) so a re-sync never tries to recreate it."
 )
 
 
@@ -600,9 +635,10 @@ def assert_human_score_budget(rows: list[dict]) -> int:
 
 class RestClient:
     """Real HTTP wrapper for the subset of Braintrust's public REST API this
-    module uses (`GET/POST /v1/view`, best-effort `/v1/facet`, `/v1/pattern`).
+    module uses (`GET/POST/PATCH /v1/view`, `GET/POST /v1/function`, `GET
+    /v1/project`, `/v1/experiment`, `/v1/dataset`, `/v1/organization`).
     Never imported/instantiated by the offline test suite; a fake test
-    double with the same `get`/`post` shape drives every gate test.
+    double with the same `get`/`post`/`patch` shape drives every gate test.
     """
 
     def __init__(self, api_key: str, base_url: str = "https://api.braintrust.dev") -> None:
@@ -633,6 +669,18 @@ class RestClient:
         response.raise_for_status()
         return response.json()
 
+    def patch(self, path: str, json_body: dict) -> dict:
+        import requests
+
+        response = requests.patch(
+            f"{self.base_url}{path}",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json=json_body,
+            timeout=30,
+        )
+        response.raise_for_status()
+        return response.json()
+
 
 def _resolve_project_id(rest_client) -> str:
     payload = rest_client.get("/v1/project", {"project_name": PROJECT})
@@ -642,70 +690,148 @@ def _resolve_project_id(rest_client) -> str:
     return objects[0]["id"]
 
 
-def _upsert_view(rest_client, project_id: str, view_type: str, name: str, view_data: dict) -> dict:
-    """`GET /v1/view?project_id=...` then `POST /v1/view` -- if a view with
-    this exact `(view_type, name)` already exists, its `id` is included in
-    the POST body so the call updates it in place (Braintrust's insert-style
-    API: presence of `id` upserts) instead of minting a duplicate.
+def _resolve_experiment_id(rest_client, project_id: str, name: str) -> str | None:
+    """`GET /v1/experiment?project_id=...&experiment_name=...` -- best
+    effort: unresolvable (unknown route on a fake/dry-run client, or the
+    experiment not created yet) falls back to `None` rather than raising,
+    so a view that wants to bind to it can fall back to the project.
     """
-    existing_payload = rest_client.get("/v1/view", {"project_id": project_id})
+    try:
+        payload = rest_client.get("/v1/experiment", {"project_id": project_id, "experiment_name": name})
+    except Exception:
+        return None
+    objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
+    if not objects:
+        return None
+    return objects[0]["id"]
+
+
+def _view_data_for(definition: dict) -> dict:
+    """Definition (`{btql, sort}` or `{custom_charts}`) -> the real
+    `View.view_data` REST shape, confirmed live 2026-09-06: table/logs/
+    experiment views take `{"search": {"filter": [{"btql": ...}]}}`
+    (+ optional `"sort"`); the monitor dashboard takes `{"custom_charts":
+    [...]}` (`ViewData.custom_charts`, `braintrust/_generated_types.py`).
+    """
+    if "custom_charts" in definition:
+        return {"custom_charts": definition["custom_charts"]}
+    search: dict = {}
+    if "btql" in definition:
+        search["filter"] = [{"btql": definition["btql"]}]
+    if "sort" in definition:
+        search["sort"] = [{"btql": definition["sort"]}]
+    return {"search": search} if search else {}
+
+
+def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, name: str, view_data: dict) -> dict:
+    """`GET /v1/view?object_type=...&object_id=...` then `POST /v1/view`
+    (create) or `PATCH /v1/view/{id}` (update) -- confirmed live 2026-09-06:
+    `GET /v1/view` takes `object_type`/`object_id`, not `project_id`; `POST
+    /v1/view` rejects an `id` key outright ("Extraneous key"), and the
+    insert-style upsert this module assumed does not exist -- the real
+    update path is `PATCH /v1/view/{id}` with the same body, no `id` field.
+    """
+    existing_payload = rest_client.get("/v1/view", {"object_type": object_type, "object_id": object_id})
     existing = existing_payload.get("objects", existing_payload) if isinstance(existing_payload, dict) else existing_payload
     match = next((v for v in existing if v.get("name") == name and v.get("view_type") == view_type), None)
 
     body = {
-        "project_id": project_id,
-        "object_type": "project",
-        "object_id": project_id,
+        "object_type": object_type,
+        "object_id": object_id,
         "view_type": view_type,
         "name": name,
         "view_data": view_data,
     }
-    created = match is None
-    if match is not None:
-        body["id"] = match["id"]
-    result = rest_client.post("/v1/view", body)
-    return {"id": result.get("id", (match or {}).get("id")), "created": created}
+    if match is None:
+        result = rest_client.post("/v1/view", body)
+        return {"id": result.get("id"), "created": True}
+    result = rest_client.patch(f"/v1/view/{match['id']}", body)
+    return {"id": result.get("id", match["id"]), "created": False}
 
 
-def sync_views_and_dashboard(rest_client) -> dict:
+def sync_views_and_dashboard(rest_client, hero_experiment_id: str | None = None) -> dict:
     project_id = _resolve_project_id(rest_client)
     views_result = []
     for v in view_definitions():
-        upserted = _upsert_view(rest_client, project_id, v["view_type"], v["name"], v["definition"])
-        views_result.append({"name": v["name"], "view_type": v["view_type"], "caption": v["caption"], **upserted})
+        object_type, object_id = "project", project_id
+        if v.get("bind_to") == "hero_experiment" and hero_experiment_id:
+            object_type, object_id = "experiment", hero_experiment_id
+        upserted = _upsert_view(rest_client, object_type, object_id, v["view_type"], v["name"], _view_data_for(v["definition"]))
+        views_result.append(
+            {"name": v["name"], "view_type": v["view_type"], "caption": v["caption"], "object_type": object_type, "object_id": object_id, **upserted}
+        )
 
     dash = dashboard_definition()
-    dash_upserted = _upsert_view(rest_client, project_id, dash["view_type"], dash["name"], {"charts": dash["charts"]})
+    dash_upserted = _upsert_view(rest_client, "project", project_id, dash["view_type"], dash["name"], _view_data_for({"custom_charts": dash["charts"]}))
     dashboard_result = {"name": dash["name"], **dash_upserted}
 
     return {"project_id": project_id, "views": views_result, "dashboard": dashboard_result}
 
 
 def sync_topics_and_pattern(rest_client, project_id: str) -> dict:
-    topics_body = {"project_id": project_id, **topics_config()}
-    try:
-        topics_result = rest_client.post("/v1/facet", topics_body)
-    except Exception as exc:  # noqa: BLE001 - endpoint contract unconfirmed live, see TOPICS_PATTERN_LIMITATION
-        topics_result = {"error": str(exc)}
-
-    pattern_body = {"project_id": project_id, **pattern_definition()}
-    try:
-        pattern_result = rest_client.post("/v1/pattern", pattern_body)
-    except Exception as exc:  # noqa: BLE001 - endpoint contract unconfirmed live, see TOPICS_PATTERN_LIMITATION
-        pattern_result = {"error": str(exc)}
-
-    return {
-        "topics": {"id": topics_result.get("id"), "config": topics_config(), "limitation": TOPICS_PATTERN_LIMITATION},
-        "pattern": {"id": pattern_result.get("id"), "definition": pattern_definition(), "limitation": TOPICS_PATTERN_LIMITATION},
+    """Topics: a real `POST /v1/function` (`function_data.type == "facet"`),
+    idempotent by `(project_id, slug)` (confirmed live). Pattern: no REST
+    creation path exists (`PATTERN_REST_LIMITATION`) -- `pattern.id` comes
+    from the local, committed `data/reports/pattern_record.json` when
+    present (written once via the `new_pattern` MCP tool, the only creation
+    path this platform offers; never invented here).
+    """
+    cfg = topics_config()
+    function_body = {
+        "project_id": project_id,
+        "name": cfg["facet_name"],
+        "slug": cfg["facet_name"],
+        "function_data": {"type": "facet", "prompt": cfg["facet_prompt"]},
     }
+    try:
+        facet_result = rest_client.post("/v1/function", function_body)
+        topics_result: dict = {"id": facet_result.get("id"), "config": cfg}
+    except Exception as exc:  # noqa: BLE001 - a live failure must be visible in the manifest, never silently faked
+        topics_result = {"id": None, "config": cfg, "error": str(exc)}
+    # Cluster ASSIGNMENT is asynchronous, product-UI-driven work on Braintrust's
+    # side (a "topic map" job over already-synced traces) with no read-back
+    # path in this SDK/REST surface within a single script run -- never
+    # invented here. `clusters` stays empty with the reason recorded rather
+    # than faked; a later `just braintrust-cockpit` run can populate it once
+    # a topic map exists to read (spec section 7's honest-gap precedent).
+    topics_result["clusters"] = []
+    topics_result["clusters_limitation"] = (
+        "Topic clustering runs asynchronously in Braintrust's product UI over "
+        "already-synced traces; this SDK/REST surface exposes no read-back of "
+        "materialized cluster names within a single script invocation. The "
+        "facet function above is created for real (confirmed live); cluster "
+        "names are read back and appended here once a topic map exists, not "
+        "invented in the meantime."
+    )
+
+    pattern_record_path = Path("data/reports/pattern_record.json")
+    pattern_id = None
+    if pattern_record_path.exists():
+        pattern_id = json.loads(pattern_record_path.read_text(encoding="utf-8")).get("pattern_id")
+    pattern_result = {"id": pattern_id, "definition": pattern_definition(), "limitation": PATTERN_REST_LIMITATION}
+
+    return {"topics": topics_result, "pattern": pattern_result}
 
 
 # --- hero-case replay (spec section 1-2) ------------------------------------
 
 
+JUDGE_SCORE_ALLOWED_NAMES: frozenset[str] = frozenset(f"judge/{dim}" for dim in JUDGE_DIMENSIONS)
+
+
+def _judge_spread_by_dim(judge_rows: list[dict], packet_id: str) -> dict[str, float]:
+    rows = _judge_rows_for_packet(judge_rows, packet_id)
+    spreads: dict[str, float] = {}
+    for dim in JUDGE_DIMENSIONS:
+        vals = [r[dim] for r in rows if r.get(dim) is not None]
+        if len(vals) >= 2:
+            spreads[dim] = max(vals) - min(vals)
+    return spreads
+
+
 def _hero_hierarchy(case_id: str, variant_id: str) -> tuple[dict, dict]:
+    from dealpoint.eval.braintrust_sync import _mean_judge_dims_for_packet, log_hierarchy
     from dealpoint.corpus.document import load_document
-    from dealpoint.eval.braintrust_sync import log_hierarchy
     from dealpoint.eval.cases import find_case, resolve_document_id
 
     subset = _judged_subset()
@@ -718,12 +844,23 @@ def _hero_hierarchy(case_id: str, variant_id: str) -> tuple[dict, dict]:
     except (KeyError, FileNotFoundError):
         case, doc = {}, None
 
-    hierarchy = log_hierarchy(row, case, doc)
+    packet_id = _packet_id_for(case_id, variant_id)
+    all_judge_rows = _load_jsonl(JUDGE_SCORES_PATH)
+    judge_dims = _mean_judge_dims_for_packet(all_judge_rows, packet_id)
+    spread_by_dim = _judge_spread_by_dim(all_judge_rows, packet_id)
+
+    hierarchy = log_hierarchy(row, case, doc, judge_dims=judge_dims)
     tree = judge_spans(case_id, variant_id)
     agent_node = hierarchy["children"][0]
     for child in agent_node["children"]:
         if child.get("name") == "scoring":
             child["children"] = tree["spans"]
+            # spec section 4: the 'Judge disagreement' view filters on this
+            # metadata key -- write it on every replayed scoring span so the
+            # view has something to match, never a filter over an unwritten field.
+            child.setdefault("metadata", {})
+            child["metadata"]["judge_spread_by_dim"] = spread_by_dim
+            child["metadata"]["judge_spread_max"] = max(spread_by_dim.values()) if spread_by_dim else 0.0
     return hierarchy, tree
 
 
@@ -747,11 +884,17 @@ def replay_hero_case(sdk_client, case_id: str) -> dict:
             raise RuntimeError("hero-case replay span landed on _NoopSpan")
         if hasattr(root_span, "log"):
             root_span.log(metadata={"case_id": case_id, "variant_id": variant_id})
+        n_scores_emitted = 0
         for child in hierarchy.get("children", []):
-            _emit_span_tree(experiment, child, parent_span=root_span)
+            n_scores_emitted += _emit_span_tree(
+                experiment, child, parent_span=root_span, allowed_score_names=JUDGE_SCORE_ALLOWED_NAMES
+            )
         if hasattr(root_span, "end"):
             root_span.end()
-        _ledger_record("m7b-hero-case", f"{case_id}:{variant_id}", JUDGE_AGGREGATE_DIMENSIONS)
+        # Record what was ACTUALLY emitted, not the constant JUDGE_AGGREGATE_DIMENSIONS --
+        # a ledger that misreports counts cannot support the "never re-log" audit (spec
+        # spend guard). Falls back to 0 for fake test doubles whose spans don't track scores.
+        _ledger_record("m7b-hero-case", f"{case_id}:{variant_id}", n_scores_emitted)
     if hasattr(experiment, "flush"):
         experiment.flush()
     return {"experiment_name": "m7b-hero-case", "variant_trees": variant_trees}
@@ -860,9 +1003,6 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
     `data/reports/demo_manifest.json`. `sdk_client=None` skips the hero-case
     replay and human-score push (used by the REST-only offline gate tests).
     """
-    views_dashboard = sync_views_and_dashboard(rest_client)
-    topics_pattern = sync_topics_and_pattern(rest_client, views_dashboard["project_id"])
-
     hero = hero_case()
     human_rows = human_score_rows()
     n_human_scores = assert_human_score_budget(human_rows)
@@ -870,10 +1010,17 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
     planned_scores = planned_live_scores(n_human_scores)
     replay_result = None
     pushed_scores = 0
+    hero_experiment_id = None
     if sdk_client is not None and hero.get("case_id"):
         assert_live_score_budget(planned_scores)      # before the first write
         replay_result = replay_hero_case(sdk_client, hero["case_id"])
         pushed_scores = push_human_scores(sdk_client, human_rows)
+        # 'Judge disagreement' (spec section 4) binds to the hero experiment, not
+        # the project -- resolvable now that the replay has created it.
+        hero_experiment_id = _resolve_experiment_id(rest_client, _resolve_project_id(rest_client), "m7b-hero-case")
+
+    views_dashboard = sync_views_and_dashboard(rest_client, hero_experiment_id=hero_experiment_id)
+    topics_pattern = sync_topics_and_pattern(rest_client, views_dashboard["project_id"])
 
     return {
         "views_dashboard": views_dashboard,
@@ -890,14 +1037,95 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
     }
 
 
-def build_demo_manifest(result: dict) -> dict:
-    """`data/reports/demo_manifest.json`'s full shape (spec section 6)."""
+EXPERIMENT_NAME_PREFIXES: tuple[str, ...] = ("A-", "B-", "C-", "D-", "judge-", "judged-", "m7-", "m7b-")
+DATASET_NAMES: tuple[str, ...] = (
+    "maud-dealpoint-dev-v1",
+    "maud-dealpoint-test-v1",
+    "maud-dealpoint-counterfactual-v1",
+    "maud-dealpoint-review-set",
+)
+
+
+def _resolve_experiments(rest_client, project_id: str) -> list[dict]:
+    """Every experiment name/id the walkthrough cites, newest-by-prefix
+    (spec section 6: "resolved by name prefix, newest wins, so a re-sync
+    never strands the doc"). Falls back to an empty list on a fake/dry-run
+    client that doesn't implement `/v1/experiment` (never raises).
+    """
+    try:
+        payload = rest_client.get("/v1/experiment", {"project_id": project_id, "limit": 200})
+    except Exception:
+        return []
+    objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
+    newest_by_prefix: dict[str, dict] = {}
+    for exp in objects or []:
+        name = exp.get("name") or ""
+        for prefix in EXPERIMENT_NAME_PREFIXES:
+            if not name.startswith(prefix):
+                continue
+            current = newest_by_prefix.get(prefix)
+            if current is None or (exp.get("created") or "") > (current.get("created") or ""):
+                newest_by_prefix[prefix] = exp
+    return [
+        {"prefix": prefix, "name": exp["name"], "id": exp["id"], "created": exp.get("created")}
+        for prefix, exp in sorted(newest_by_prefix.items())
+    ]
+
+
+def _resolve_datasets(rest_client, project_id: str) -> list[dict]:
+    try:
+        payload = rest_client.get("/v1/dataset", {"project_id": project_id, "limit": 200})
+    except Exception:
+        return []
+    objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
+    by_name = {ds["name"]: ds for ds in (objects or []) if ds.get("name") in DATASET_NAMES}
+    return [{"name": name, "id": by_name[name]["id"]} for name in DATASET_NAMES if name in by_name]
+
+
+def _org_name(rest_client) -> str | None:
+    try:
+        payload = rest_client.get("/v1/organization", {})
+    except Exception:
+        return None
+    objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
+    return objects[0]["name"] if objects else None
+
+
+def permalinks(rest_client, project_id: str, experiments: list[dict], datasets: list[dict]) -> dict:
+    """One URL per walkthrough stop (spec section 6), built from the SAME
+    `https://www.braintrust.dev/app/<org>/p/<project>/...` shape
+    `data/reports/braintrust_runs.json` already records and
+    `mcp_braintrust_generate_permalink` confirms for experiments. Empty when
+    the org can't be resolved (fake/dry-run client) rather than a guess.
+    """
+    org = _org_name(rest_client)
+    if not org:
+        return {}
+    import urllib.parse
+
+    base = f"https://www.braintrust.dev/app/{urllib.parse.quote(org)}/p/{PROJECT}"
+    links: dict[str, str] = {f"experiment:{e['name']}": f"{base}/experiments/{e['name']}" for e in experiments}
+    links.update({f"dataset:{d['name']}": f"{base}/datasets/{d['name']}" for d in datasets})
+    return links
+
+
+def build_demo_manifest(result: dict, rest_client=None) -> dict:
+    """`data/reports/demo_manifest.json`'s full shape (spec section 6).
+    `rest_client`, when given, resolves the live experiments/datasets/
+    permalinks the manifest needs; omitted (or a client without those
+    routes) yields empty lists rather than a crash -- offline callers still
+    get every OTHER key.
+    """
     from dealpoint.eval.cases import git_sha7
     from dealpoint.eval.rubric import rubric_version
 
     views_dashboard = result["views_dashboard"]
+    project_id = views_dashboard["project_id"]
+    experiments = _resolve_experiments(rest_client, project_id) if rest_client is not None else []
+    datasets = _resolve_datasets(rest_client, project_id) if rest_client is not None else []
+    review_case_ids = _review_set_case_ids()
     return {
-        "project_id": views_dashboard["project_id"],
+        "project_id": project_id,
         "views": views_dashboard["views"],
         "dashboard": views_dashboard["dashboard"],
         "topics": result["topics_pattern"]["topics"],
@@ -916,6 +1144,10 @@ def build_demo_manifest(result: dict) -> dict:
             "experiment_name": (result.get("replay") or {}).get("experiment_name"),
             "variants": sorted((result.get("replay") or {}).get("variant_trees", {}).keys()),
         },
+        "experiments": experiments,
+        "datasets": datasets,
+        "review_set": review_case_ids,
+        "permalinks": permalinks(rest_client, project_id, experiments, datasets) if rest_client is not None else {},
         "git_sha7": git_sha7(),
         "rubric_version": rubric_version(),
         "subset_hash": JUDGED_SUBSET_HASH,
@@ -934,6 +1166,7 @@ class _DryRunRestClient:
     def __init__(self) -> None:
         self._project_id = "dry-run-project-id"
         self._views: list[dict] = []
+        self._functions: list[dict] = []
         self._next_id = 1
 
     def get(self, path: str, params: dict | None = None) -> dict:
@@ -941,23 +1174,41 @@ class _DryRunRestClient:
             return {"objects": [{"id": self._project_id, "name": (params or {}).get("project_name", PROJECT)}]}
         if path == "/v1/view":
             return {"objects": list(self._views)}
+        if path == "/v1/function":
+            return {"objects": list(self._functions)}
+        # /v1/experiment, /v1/dataset, /v1/organization -- deliberately
+        # unhandled: a dry run never resolves real experiments/datasets/org,
+        # so `_resolve_experiment_id`/`_resolve_experiments`/`permalinks` fall
+        # back to their offline defaults (None / [] / {}) via the caught
+        # exception, exactly like a fake test double without those routes.
         raise ValueError(f"unhandled dry-run GET {path}")
 
     def post(self, path: str, json_body: dict) -> dict:
         if path == "/v1/view":
-            if json_body.get("id"):
-                for v in self._views:
-                    if v["id"] == json_body["id"]:
-                        v.update(json_body)
-                        return v
             new_view = dict(json_body)
             new_view["id"] = f"view-{self._next_id}"
             self._next_id += 1
             self._views.append(new_view)
             return new_view
-        if path in ("/v1/facet", "/v1/pattern"):
-            return {"id": f"{path.strip('/').replace('/', '-')}-dry-run"}
+        if path == "/v1/function":
+            for fn in self._functions:
+                if fn.get("slug") == json_body.get("slug"):
+                    fn.update(json_body)
+                    return fn
+            new_fn = dict(json_body)
+            new_fn["id"] = f"function-{self._next_id}"
+            self._next_id += 1
+            self._functions.append(new_fn)
+            return new_fn
         raise ValueError(f"unhandled dry-run POST {path}")
+
+    def patch(self, path: str, json_body: dict) -> dict:
+        view_id = path.rsplit("/", 1)[-1]
+        for v in self._views:
+            if v["id"] == view_id:
+                v.update(json_body)
+                return v
+        raise ValueError(f"unhandled dry-run PATCH {path}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -966,27 +1217,51 @@ def main(argv: list[str] | None = None) -> int:
     # is accepted for symmetry with braintrust_sync and always wins.
     live = "--live" in argv and "--dry-run" not in argv
 
+    rest_client_for_manifest = None
     if not live:
-        result = sync_cockpit(_DryRunRestClient(), sdk_client=None)
+        rest_client_for_manifest = _DryRunRestClient()
+        result = sync_cockpit(rest_client_for_manifest, sdk_client=None)
         print(f"dry run (pass --live to write); planned live scores: {result['n_live_scores_planned']} "
               f"(cap {LIVE_SCORE_CAP})")
     else:
-        from dealpoint.eval.braintrust_adapter import braintrust_available
-
-        if not braintrust_available():
-            print("braintrust unavailable (no key or package) -- skipping cleanly")
-            return 0
-
         import os
 
-        import braintrust
+        # T1 fix: resolve the key via the SAME resolver `braintrust_available()`
+        # uses (env -> .env.braintrust -> .braintrust.json), not raw
+        # `os.environ` -- the key lives in `.env.braintrust` (`just` only
+        # dotenv-loads `.env`), so the old `os.environ.get(...)` read "" and
+        # built `RestClient("")`: every REST call would 401 mid-run. Also
+        # exports the resolved key to the process environment so the
+        # `braintrust` SDK (which reads `BRAINTRUST_API_KEY` from `os.environ`
+        # internally) authenticates as the SAME identity as the REST seam.
+        from dealpoint.eval.braintrust_adapter import load_braintrust_key
 
-        api_key = os.environ.get("BRAINTRUST_API_KEY", "")
+        api_key = load_braintrust_key()
+        if not api_key:
+            print(
+                "braintrust --live requested but no API key resolved (checked env, "
+                ".env.braintrust, .braintrust.json) -- aborting, nothing written",
+                file=sys.stderr,
+            )
+            return 1
+        try:
+            import braintrust
+        except ImportError:
+            print(
+                "braintrust --live requested but the braintrust package is not installed "
+                "-- aborting, nothing written",
+                file=sys.stderr,
+            )
+            return 1
+
+        os.environ["BRAINTRUST_API_KEY"] = api_key
+        print("live run: key resolved, writing to Braintrust")
         global _LEDGER_ACTIVE
         _LEDGER_ACTIVE = True
-        result = sync_cockpit(RestClient(api_key), sdk_client=braintrust)
+        rest_client_for_manifest = RestClient(api_key)
+        result = sync_cockpit(rest_client_for_manifest, sdk_client=braintrust)
 
-    manifest = build_demo_manifest(result)
+    manifest = build_demo_manifest(result, rest_client=rest_client_for_manifest)
     DEMO_MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(DEMO_MANIFEST_PATH, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2, sort_keys=True, ensure_ascii=False, default=str)
