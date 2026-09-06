@@ -797,9 +797,11 @@
       "blocker": "",
       "commits": [
         "b9eac78",
-        "a632dc9"
+        "a632dc9",
+        "a8874ec",
+        "ce4fc98"
       ],
-      "ended_at": "2026-09-06T09:38:37.164+00:00",
+      "ended_at": "2026-09-06T21:04:03.041+00:00",
       "exclusions": [],
       "id": "m7a",
       "infra_retries": 1,
@@ -810,7 +812,7 @@
           "n_experiments": 29,
           "replayed_traces": 6,
           "review_set_n": 12,
-          "synced_at": "2026-09-06T02:38:27.739498+00:00"
+          "synced_at": "2026-09-06T20:32:20.947589+00:00"
         },
         "caching_probe": {
           "cost_per_call_usd_after": 0.003092,
@@ -840,7 +842,7 @@
         },
         "deepeval_crosscheck": {
           "classification": "KEEP_OPTIONAL_ANALYSIS",
-          "classification_rationale": "DeepEval task_completion correlates moderately with grounded_accuracy (rho=0.381, n=42) -- plausible as a secondary cross-check but not strong enough evidence to call it a core diagnostic.",
+          "classification_rationale": "DeepEval task_completion correlates weakly with grounded_accuracy (rho=0.211, n=45), which would otherwise support KEEP_CORE_DIAGNOSTIC -- but the resolved evaluator shares a model with the M5 judge trio it is compared against (see decisions), so any apparent independence from vs_judge agreement is not trustworthy. Downgraded to KEEP_OPTIONAL_ANALYSIS pending a genuinely independent evaluator model.",
           "schema_version": 1
         },
         "dev_smoke_m4": {
@@ -858,7 +860,7 @@
           "braintrust": "0.37.0",
           "deepeval": "4.2.1",
           "fastembed": "0.8.0",
-          "git_sha7": "b9eac78",
+          "git_sha7": "199ddba",
           "llama-index-core": "0.14.24",
           "llama-index-retrievers-bm25": "0.8.0",
           "openai": "3.8.0",
@@ -871,17 +873,15 @@
           "verified_at": "2026-09-05T20:46:25.244679+00:00"
         },
         "judges": {
-          "generated_at": "2026-09-05T20:47:32.212848+00:00",
-          "git_sha7": "3fcdae7",
-          "human_calibration": "pending",
+          "generated_at": "2026-09-06T17:40:37.751397+00:00",
+          "git_sha7": "20e71ca",
           "n_judge_rows": 324,
           "n_judge_rows_failed": 0,
           "n_judge_rows_ok": 324,
-          "pending_human_input": "score data/eval/calibration/form.md",
           "rubric_version": "cfda9f8cc401"
         },
         "li_rag_eval": {
-          "cause_rule": "Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'reranking' when the config carries a rerank_model AND the pre-rerank fused ranking's hit/miss differs from the post-rerank ranking's hit/miss at the same k; 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other four labels -- typically the retrieved list and expected_ids simply differ).",
+          "cause_rule": "Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other three labels -- typically the retrieved list and expected_ids simply differ). A 'reranking' label was considered (spec section 3.2) but is not emitted: the pipeline never computes the pre-rerank ranking needed to detect it, so including it would describe a rule this code cannot actually apply.",
           "schema_version": 1
         },
         "m0_1_oos_collisions": {
@@ -913,13 +913,12 @@
         },
         "m7a_disk_guard": {
           "floor_bytes": 500000000,
-          "measured_at": "2026-09-05T00:00:00+00:00",
-          "notes": "Re-measured with `uv pip install --dry-run` before touching the live environment, per the milestone spec (specs/milestones/m7a.md, \"Budget and disk\"). Both groups installed within the 500 MB floor with substantial headroom (final free: ~1.25 GB). `.venv` grew from 340 MB to 451 MB. Neither group pulled torch/transformers/nvidia wheels. The visualizer node_modules (146 MB) was left untouched."
+          "measured_at": "2026-09-06T17:29:05.377693+00:00"
         },
         "pareto": {
           "budget_scaled_note": "32-case frozen subset per model (18 at Haiku); not the brief's full-scale design.",
-          "generated_at": "2026-09-05T22:13:28.459396+00:00",
-          "git_sha7": "75e2d39",
+          "generated_at": "2026-09-06T19:49:01.134164+00:00",
+          "git_sha7": "199ddba",
           "version": "v1"
         },
         "pareto_slate": {
@@ -966,10 +965,13 @@
         }
       },
       "models": {
-        "planner": "pi-claude-code-provider/opus"
+        "builder": "claude-bridge/claude-sonnet-5",
+        "documenter": "claude-bridge/claude-haiku-4-5",
+        "planner": "claude-bridge/claude-opus-5",
+        "reviewer": "claude-bridge/claude-opus-5"
       },
       "started_at": "2026-09-05T22:31:20.706+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -983,9 +985,26 @@
         "rubric_version": "cfda9f8cc401",
         "skill_version": "f8d255cc169b"
       }
+    },
+    "m7b": {
+      "adw_ids": [],
+      "attempts": 0,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m7b",
+      "infra_retries": 0,
+      "last_failure": "",
+      "last_failure_class": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "",
+      "status": "pending",
+      "versions": {}
     }
   },
-  "next_action": "m7a running in session 4daf5d8d (attempt 4)",
+  "next_action": "run m7b",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1106,5 +1125,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-06T17:28:27.814+00:00"
+  "updated_at": "2026-09-06T21:04:03.041+00:00"
 }
