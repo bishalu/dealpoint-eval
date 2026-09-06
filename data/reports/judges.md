@@ -3,7 +3,7 @@
 These are **model-judged secondary scores, budget-scaled**, and are never presented as objective truth. Human calibration is **pending** unless stated otherwise below.
 
 `rubric_version`: `cfda9f8cc401`  
-`git_sha7`: `ebfc41d`
+`git_sha7`: `20e71ca`
 
 ## Judged subset
 
@@ -37,7 +37,14 @@ These are **model-judged secondary scores, budget-scaled**, and are never presen
 
 ## Human calibration
 
-**pending.** Pending human input: `score data/eval/calibration/form.md`.
+Computed against the scored human packets:
+
+| dimension | spearman (mean vs human) | qwk (rounded mean vs human) | n |
+|---|---|---|---|
+| reasoning | 0.9872449580586936 | 0.9350961538461539 | 24 |
+| evidence | 0.9517785209496884 | 0.9532467532467532 | 24 |
+| trajectory | 0.7014714527116149 | 0.5483870967741935 | 24 |
+| professional | 0.9427505789964495 | 0.8966153846153846 | 24 |
 
 ## Recorded decisions
 
