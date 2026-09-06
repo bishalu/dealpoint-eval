@@ -1,6 +1,11 @@
-# Demo walkthrough
+# Demo walkthrough (draft) — M7a
 
-Every name, id and number below resolves to `data/reports/demo_manifest.json`, which `just braintrust-cockpit` regenerates from Git/local sources. Sections needing a human operator in an MCP-enabled session are marked **[cockpit session]**; everything else is produced by code, checked by the `gate_m7b` offline suite.
+A 5–10 minute technical walkthrough, in the engineer's order. Every name, id and
+number below resolves to a local artifact on disk (`data/reports/`,
+`data/eval/`, `data/results/`) as of `git_sha7 199ddba`. Sections that need a
+live, authenticated Braintrust MCP session (after the Claude Code restart) are
+marked **[M7b]** — this milestone (M7a) produces everything reproducible from
+code/SDK/`bt` CLI, checkpointed so M7b resumes from it, never reruns it.
 
 ## Role diagram
 
@@ -15,10 +20,6 @@ local reports + Git --> permanent evidence (data/reports/, data/results/, specs/
 Only the first row ever decides a winner: MAUD gold-span overlap
 (`overlap_chars` against `MIN_GOLD_OVERLAP_CHARS=50`). LlamaIndex and
 DeepEval are cross-checks, never a replacement.
-
-## The hero path
-
-**Hero case `contract_32__q04`** (arms A@haiku/D@haiku disagree on `obj/grounded_accuracy`: `False` vs `True`; max pairwise judge spread `4` among 2 candidates). Replayed as `m7b-hero-case`: `case -> agent -> ... -> scoring -> {judge/mistral, judge/nvidia, judge/bytedance, judge/aggregate}` for both variants, zero model calls.
 
 ## 1. Datasets
 
@@ -79,7 +80,7 @@ cases (`data/reports/representative_cases.json`), chosen by rule:
 | wrong_answer | `contract_144__q09` | `A@anthropic/claude-haiku-4.5` |
 | abstention_counterfactual | `contract_75__oos09` | `A@anthropic/claude-haiku-4.5` |
 
-Saved views over these spans, idempotent by name: `Judged traces by variant` (view-1), `Judge disagreement` (view-2), `Retrieval rescue` (view-3), `Failure attribution` (view-4), `DeepEval vs judge disagreement` (view-5), `Trajectory inefficiency` (view-6), `Review set (12)` (view-7). [cockpit session] A Loop-generated custom trace view (judge spans as a 3x4 grid, human row beneath); its `tv` param via `just demo-manifest-record --step 4`.
+**[M7b]** Custom trace view / saved views over these spans.
 
 ## 5. Scorers
 
@@ -95,11 +96,11 @@ prompts and parameters ARE published (`SCORER_PUBLISH_LIMITATION`).
 
 ## 6. Review
 
-Human-scoring path: **local_form** -- Starter plan allows one configured review score, not the four rubric dimensions needed, so scoring stays at `data/eval/calibration/form.md` (M5) and `just braintrust-cockpit` pushes 96 `human/<dimension>` scores onto the matching `judge-<variant_id>` rows (0 pushed in this run). Shown in the experiment table and trace, not Review mode.
-
-[cockpit session] Scoring the review set at `form.md`, then `just calibration` and `just braintrust-cockpit` (`--step 1`).
-
-[cockpit session] Playground: the hero case's blinded packet against the calibrated judge prompt, three judge models side by side (`--step 3`).
+**[M7b]** The 12-trace blinded review set is synced (`review_set(12)`), its
+diversity rule (spans reasoning types, >= 1 abstention, >= 2 variants)
+enforced by construction. `variant_id` is never pushed to the synced
+dataset; the blinded `packet_text` is, as `expected`. Local human
+calibration has real data: `human_scores.jsonl` carries 24 scored rows.
 
 ## 7. Eval of Evals
 
@@ -115,15 +116,15 @@ shared model); vs human n=24, available. **Classification:
 
 ## 8. Loop / SQL
 
-The six BTQL investigations are saved as four of the seven cockpit views (`Retrieval rescue`, `Failure attribution`, `DeepEval vs judge disagreement`, `Trajectory inefficiency`), matching `docs/braintrust-queries.md` verbatim.
-
-[cockpit session] A Loop thread over the hero case asking query 2's question in plain words; URL via `just demo-manifest-record --step 2`.
+**[M7b]** Braintrust Loop investigation thread. `docs/braintrust-queries.md`
+has six BTQL investigations, executed live: retrieval rescue 0 rows
+(verified data-supported: every row has `tool_calls == 0` in this run),
+failure attribution 1 row, reasoning slices 7 rows, DeepEval disagreement
+**17 rows**, model economics 1 row, trajectory inefficiency 50 rows.
 
 ## 9. Debugger
 
-Topics (`trace-outcome-summary` facet, clustering on) render each `case > agent` span as question/tools/answer/`obj/grounded_accuracy` text. One Pattern, `Trajectory inefficiency: cap-hit or >=6 tool calls without a correct answer`, names 5 supporting trace ids from the same predicate as BTQL query 6.
-
-[cockpit session] Cluster names surfaced by Topics, and whether any maps to a query-2 failure cause (`--step 2`).
+**[M7b]** Topics/Patterns/Debugger use over the synced traces.
 
 ## 10. Model Economics
 
@@ -139,7 +140,7 @@ reached these experiments (`data/reports/braintrust_sync.json`'s
 
 ## 11. Dashboard
 
-A saved dashboard, `DealPoint eval overview` (view-8), five charts: obj/grounded_accuracy by arm/model; judge/<dimension> mean by variant; judge vs human on the review set (captioned "pending human calibration" until scores exist); $/case by model; DeepEval vs obj/ agreement rate.
+**[M7b]** A saved dashboard over the above experiments/scores.
 
 ## Braintrust tools — decision, not a stub
 
@@ -168,7 +169,3 @@ plan limit (11016 of 11000) partway through — an account-level quota, not a
 code defect. The mapping is fully covered by offline tests against a fake
 client. Re-running after the quota resets (or on an upgraded plan) is
 expected to complete cleanly against this same code.
-
----
-
-Every link and id above is one `data/reports/demo_manifest.json` can regenerate: re-run `just braintrust-cockpit` then `just demo-walkthrough`. This doc has no content that only exists because a person clicked it once.

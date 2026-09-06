@@ -1702,6 +1702,18 @@ def _emit_span_tree(root_span_source, node: dict, parent_span=None) -> None:
     if "finding" in node:
         log_kwargs.setdefault("metadata", {})
         log_kwargs["metadata"]["finding"] = node["finding"]
+    if "input" in node:
+        log_kwargs["input"] = node["input"]
+    if "output" in node:
+        log_kwargs["output"] = node["output"]
+    if "metadata" in node:
+        # A plain `metadata` dict (e.g. judge_spans()'s judge/<family> and
+        # judge/aggregate nodes -- braintrust_cockpit.py) merges into
+        # whatever case_id/span/finding already populated above, never
+        # clobbering those keys; the node's own metadata wins on conflict
+        # since it is the more specific, caller-supplied payload.
+        log_kwargs.setdefault("metadata", {})
+        log_kwargs["metadata"].update(node["metadata"])
     if "provenance" in node:
         scores: dict = {}
         excluded: dict = {}
@@ -1914,7 +1926,10 @@ LIVE_RUN_STATUS: dict = {
 
 def main(argv: list[str] | None = None) -> int:
     argv = list(argv) if argv is not None else sys.argv[1:]
-    dry_run_flag = "--dry-run" in argv
+    # Dry run is the default (operator instruction, 2026-09-06: the org's Braintrust
+    # plan is at its score cap with pay-as-you-go overage). A live sync needs an
+    # explicit `--live`; `--dry-run` always wins.
+    dry_run_flag = "--live" not in argv or "--dry-run" in argv
 
     if dry_run_flag:
         # A genuinely offline path: `_DryRunClient` never touches the network

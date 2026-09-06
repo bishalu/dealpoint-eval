@@ -223,3 +223,27 @@ tracing backend, no metric weaker than gold labels, no hardcoded judge stack, no
 The cockpit session itself (executed after the gate, by the operator with the MCP-enabled Claude session);
 any product UI; any change to `specs/grilled-product-brief.md`, `m5.md` or `m7a.md`; new judges, new cases,
 new metered runs.
+
+## Spend guard (engineer's instruction, 2026-09-06 evening; binding)
+
+The org's Braintrust plan reached its 10k monthly score cap during M7a's syncs (every re-sync minted a
+suffixed experiment copy and re-logged every score). Pay-as-you-go overage is now on, and the engineer
+wants to pay as little as possible before the demo is up. The factory therefore implements, and the
+reviewer verifies, all of the following; they are already in the code at the start of attempt 3:
+
+- `braintrust_sync` and `braintrust_cockpit` are **dry-run by default**. A live write needs an explicit
+  `--live`; `--dry-run` always wins. `just braintrust-sync` / `just braintrust-cockpit` without `--live`
+  never touch the API.
+- Before the first live write, `braintrust_cockpit` computes the exact number of scores the run will
+  create (`n_live_scores_planned` = human scores + 4 per replayed tree), prints it, records it in
+  `demo_manifest.json`, and aborts with `ScoreBudgetError` if it exceeds `LIVE_SCORE_CAP` (600). Extending
+  the replay (all judged trees) means extending `planned_replay_trees()`; the cap stays.
+- A local ledger, `data/reports/braintrust_score_ledger.jsonl`, records every score written live
+  (experiment, key, count, timestamp). Re-runs skip anything in the ledger: **a score is never re-logged**.
+  The idempotency proof is "second `--live` run writes zero scores and the ledger is unchanged".
+- Per-judge scores live in span metadata, never as scores. Only `judge/<dimension>` aggregates and
+  `human/<dimension>` are scores.
+- The full M7a `braintrust-sync --live` is **not** run in M7b. The existing experiments are the demo's
+  substrate; reads (BTQL, summaries, views, dashboards, permalinks) are free and are how claims are verified.
+- Expected live spend for the whole milestone: about 100 to 500 scores, under two dollars. Anything
+  larger is a defect.

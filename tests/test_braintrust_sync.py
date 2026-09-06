@@ -553,3 +553,47 @@ def test_representative_cases_json_is_written_by_main(tmp_path, monkeypatch):
     import json as json_mod
 
     assert json_mod.loads(fake_path.read_text(encoding="utf-8")) == rep_cases
+
+
+def test_m7b_human_score_budget_extends_m7a_budget_without_touching_it():
+    """M7b's only score addition is `human/<dimension>` (spec "Budget and
+    disk": "M7b adds at most human/<dimension> (4) per human-scored trace on
+    the review set (12 to 54 traces) and nothing else"). Asserted here, next
+    to M7a's own budget tests, without modifying `braintrust_sync.py` itself
+    -- M7b is additive, M7a's checkpoint is untouched.
+    """
+    from dealpoint.eval.braintrust_cockpit import (
+        JUDGE_DIMENSIONS,
+        assert_human_score_budget,
+        human_score_rows,
+    )
+
+    rows = human_score_rows()
+    total = assert_human_score_budget(rows)
+    assert 0 < len(rows) <= 54
+    assert total <= 4 * len(rows)
+    for row in rows:
+        assert len(row["scores"]) <= len(JUDGE_DIMENSIONS)
+        assert all(name.startswith("human/") for name in row["scores"])
+
+
+def test_m7b_openrouter_ledger_unchanged():
+    """M7b makes no model calls: no spend-ledger row carries `milestone_tag:
+    m7b` (spec "Budget and disk": "OpenRouter ledger unchanged by this
+    milestone").
+    """
+    import json as json_mod
+    from pathlib import Path
+
+    from dealpoint.config import RESULTS_DIR
+
+    ledger_path = Path(RESULTS_DIR) / "spend_ledger.jsonl"
+    if not ledger_path.exists():
+        return
+    with open(ledger_path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            row = json_mod.loads(line)
+            assert row.get("milestone_tag") != "m7b"

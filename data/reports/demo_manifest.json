@@ -1,0 +1,402 @@
+{
+  "dashboard": {
+    "created": true,
+    "id": "view-8",
+    "name": "DealPoint eval overview"
+  },
+  "git_sha7": "d418929",
+  "hero_case": {
+    "case_id": "contract_32__q04",
+    "grounded_accuracy_a": false,
+    "grounded_accuracy_d": true,
+    "max_pairwise_spread": 4,
+    "n_candidates": 2,
+    "rule": "From the judged subset (subset_hash 5918ef10a7e6): candidates are every case_id where arm A@haiku and arm D@haiku disagree on deterministic obj/grounded_accuracy. Among candidates, the hero case is the one with the largest max pairwise spread (max(dim_scores) - min(dim_scores), across the three judges) on any of the four rubric dimensions, for either variant. Ties (including no candidates found) are broken by ascending case_id string sort."
+  },
+  "human_score_rows": [
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@haiku",
+      "packet_id": "00ffcebe096a",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@gemini-3.1-flash-lite",
+      "packet_id": "01de6203baeb",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@qwen3.7-flash",
+      "packet_id": "0370079fdb90",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@deepseek-v4-flash",
+      "packet_id": "0939c5133331",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-A@haiku",
+      "packet_id": "0f0ddb6b0896",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@gemini-3.1-flash-lite",
+      "packet_id": "20854b65189a",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@haiku",
+      "packet_id": "257db09a639b",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@glm",
+      "packet_id": "308fa879e656",
+      "variant_id": "D@glm"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@glm",
+      "packet_id": "31aa8adabacf",
+      "variant_id": "D@glm"
+    },
+    {
+      "case_id": "contract_39__redacted_q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-A@haiku",
+      "packet_id": "32ed6171807c",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-A@haiku",
+      "packet_id": "32fc075d8413",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@qwen3.7-flash",
+      "packet_id": "398be705a6ca",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@haiku",
+      "packet_id": "40ea3e574ac0",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@gemini-3.1-flash-lite",
+      "packet_id": "57652b548046",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_144__q05",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@deepseek-v4-flash",
+      "packet_id": "5b65980d9ad6",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-A@haiku",
+      "packet_id": "790521a3adab",
+      "variant_id": "A@haiku"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@qwen3.7-flash",
+      "packet_id": "7e0d928a44af",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@deepseek-v4-flash",
+      "packet_id": "9cdf994eba15",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@glm",
+      "packet_id": "aff954956d71",
+      "variant_id": "D@glm"
+    },
+    {
+      "case_id": "contract_99__redacted_q06",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@haiku",
+      "packet_id": "b36644f0d8db",
+      "variant_id": "D@haiku"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@deepseek-v4-flash",
+      "packet_id": "b5946568a23b",
+      "variant_id": "D@deepseek-v4-flash"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@qwen3.7-flash",
+      "packet_id": "b8dca4c22077",
+      "variant_id": "D@qwen3.7-flash"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@gemini-3.1-flash-lite",
+      "packet_id": "e9a11bb3de12",
+      "variant_id": "D@gemini-3.1-flash-lite"
+    },
+    {
+      "case_id": "contract_99__q11",
+      "dimensions": [
+        "human/evidence",
+        "human/professional",
+        "human/reasoning",
+        "human/trajectory"
+      ],
+      "experiment_name": "judge-D@glm",
+      "packet_id": "ea3c64c7fa8d",
+      "variant_id": "D@glm"
+    }
+  ],
+  "human_scoring_probe": {
+    "decision": "local_form",
+    "decision_reason": "Configured Review scores cannot carry all four rubric dimensions on this workspace's plan. Branch B of spec section 3 applies: data/eval/calibration/form.md is the scoring surface (as M5 already built), `just calibration` computes agreement locally, and `just braintrust-cockpit` pushes the rows as human/<dimension> scores on the matching experiment/trace rows. The walkthrough shows human scores in the experiment table and the trace, not in Review mode.",
+    "finding": "Braintrust's 'Configure review scores' doc states human review scorers are 'only available on Pro and Enterprise plans' and that the Starter plan is 'limited to 1 per project' even when available. This project's Braintrust workspace is on the Starter plan (independently evidenced by the M7a live sync's num_scores_calendar_months quota error and the documented 14-day log retention this workspace exhibits -- both Starter characteristics, recorded in data/reports/braintrust_sync.json's live_run_status). Four rubric dimensions (reasoning, evidence, trajectory, professional) are required; Starter allows at most one configured human review score per project.",
+    "probed_via": "mcp_braintrust_search_docs('human review scores configuration Pro Enterprise')"
+  },
+  "live_score_cap": 600,
+  "n_human_scores_planned": 96,
+  "n_human_scores_pushed": 0,
+  "n_live_scores_planned": 104,
+  "pattern": {
+    "definition": {
+      "description": "A recurring failure shape across the agent-arm results: the agent hits its tool-call cap (`cap_hit`) or makes six or more tool calls without landing a grounded-correct answer (`obj/grounded_accuracy` is not True). BTQL query 6 (docs/braintrust-queries.md) surfaces the same tool_calls-vs-grounded_accuracy relationship at the trace level; this Pattern names the specific traces where more searching did not translate into a better result, so a reviewer investigating cost/latency outliers has a concrete starting set rather than the raw BTQL table.",
+      "name": "Trajectory inefficiency: cap-hit or >=6 tool calls without a correct answer",
+      "source_query": "trajectory_inefficiency (BTQL query 6)",
+      "supporting_trace_ids": [
+        "contract_0__q01",
+        "contract_0__q12",
+        "contract_103__q02",
+        "contract_14__oos04",
+        "contract_14__q02"
+      ]
+    },
+    "id": "v1-pattern-dry-run",
+    "limitation": "Braintrust's Topics and Patterns REST surface is not documented in this offline environment the way scorers/prompts/parameters are (those are first-class braintrust-sdk `Project` members). The preprocessor and facet prompt below were validated with mcp_braintrust_test_preprocessor_on_trace / test_facet_on_trace before being committed here (spec section 7); persistence goes through rest_client.post('/v1/facet', ...) and rest_client.post('/v1/pattern', ...), matching the create_facet / new_pattern MCP tools' payload shape. If the real endpoint contract differs, the offline gate (a fake REST client) still proves the idempotent-by-name mapping; only a live run would surface a schema mismatch, the same honesty this project already applies to SCORER_PUBLISH_LIMITATION."
+  },
+  "project_id": "dry-run-project-id",
+  "replay": {
+    "experiment_name": null,
+    "variants": []
+  },
+  "rubric_version": "cfda9f8cc401",
+  "subset_hash": "5918ef10a7e6",
+  "synced_at": "2026-09-06T22:21:04.085761+00:00",
+  "topics": {
+    "config": {
+      "clustering_enabled": true,
+      "facet_name": "trace-outcome-summary",
+      "facet_prompt": "In one sentence, describe what went wrong, or what made it succeed, in this agent trace. Ground your sentence in the tool sequence and the final answer's relationship to obj/grounded_accuracy -- never invent a cause the trace doesn't show.",
+      "name": "DealPoint agent traces",
+      "preprocessor_code": "function handler(span) {\n  const meta = span.metadata || {};\n  const trajectory = (span.metadata && span.metadata.trajectory) || [];\n  const tools = trajectory.map((s) => s.tool).filter(Boolean).join(' -> ');\n  const finding = meta.finding || {};\n  const question = span.input || meta.question || '';\n  const answer = finding.answer || meta.answer || '';\n  const grounded = meta['obj/grounded_accuracy'];\n  return [\n    `question: ${question}`,\n    `tool sequence: ${tools || '(none)'}`,\n    `final answer: ${answer}`,\n    `obj/grounded_accuracy: ${grounded}`,\n  ].join('\\n');\n}\n"
+    },
+    "id": "v1-facet-dry-run",
+    "limitation": "Braintrust's Topics and Patterns REST surface is not documented in this offline environment the way scorers/prompts/parameters are (those are first-class braintrust-sdk `Project` members). The preprocessor and facet prompt below were validated with mcp_braintrust_test_preprocessor_on_trace / test_facet_on_trace before being committed here (spec section 7); persistence goes through rest_client.post('/v1/facet', ...) and rest_client.post('/v1/pattern', ...), matching the create_facet / new_pattern MCP tools' payload shape. If the real endpoint contract differs, the offline gate (a fake REST client) still proves the idempotent-by-name mapping; only a live run would surface a schema mismatch, the same honesty this project already applies to SCORER_PUBLISH_LIMITATION."
+  },
+  "views": [
+    {
+      "caption": "Every judge- experiment, tagged stage=evaluation: variant, judge/* aggregates, obj/grounded_accuracy.",
+      "created": true,
+      "id": "view-1",
+      "name": "Judged traces by variant",
+      "view_type": "experiments"
+    },
+    {
+      "caption": "Rows on the hero variant where max pairwise judge spread >= 2 on any dimension, sorted by spread.",
+      "created": true,
+      "id": "view-2",
+      "name": "Judge disagreement",
+      "view_type": "experiment"
+    },
+    {
+      "caption": "BTQL query 1 (docs/braintrust-queries.md): which cases did a later search_agreement call surface gold evidence that the first search missed.",
+      "created": true,
+      "id": "view-3",
+      "name": "Retrieval rescue",
+      "view_type": "logs"
+    },
+    {
+      "caption": "BTQL query 2: EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.",
+      "created": true,
+      "id": "view-4",
+      "name": "Failure attribution",
+      "view_type": "logs"
+    },
+    {
+      "caption": "BTQL query 4: traces where deepeval/task_completion and obj/grounded_accuracy disagree.",
+      "created": true,
+      "id": "view-5",
+      "name": "DeepEval vs judge disagreement",
+      "view_type": "logs"
+    },
+    {
+      "caption": "BTQL query 6: tool calls vs outcome -- does more searching correlate with a worse result.",
+      "created": true,
+      "id": "view-6",
+      "name": "Trajectory inefficiency",
+      "view_type": "logs"
+    },
+    {
+      "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set).",
+      "created": true,
+      "id": "view-7",
+      "name": "Review set (12)",
+      "view_type": "for_review_experiments"
+    }
+  ]
+}

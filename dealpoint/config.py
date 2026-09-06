@@ -319,3 +319,12 @@ M7A_MAX_SCORES_PER_CASE = 12
 M7A_MAX_SUBSET_FOR_WIDE_SCORES = 60
 M7A_DISK_FLOOR_BYTES = 500_000_000
 
+# --- M7b: Braintrust cockpit (views, dashboard, topics, one pattern) -------
+DEMO_MANIFEST_PATH = REPORTS_DIR / "demo_manifest.json"
+DEMO_WALKTHROUGH_PATH = REPO_ROOT / "docs" / "demo-walkthrough.md"
+DEMO_WALKTHROUGH_DRAFT_PATH = REPO_ROOT / "docs" / "templates" / "demo-walkthrough.draft.md"
+COCKPIT_SESSION_PATH = REPO_ROOT / "docs" / "cockpit-session.md"
+JUDGED_SUBSET_HASH = "5918ef10a7e6"
+M7B_MAX_NEW_SCORES = 1500
+M7B_MAX_WORDS = 1400
+

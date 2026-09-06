@@ -19,3 +19,10 @@ Implement the plan (or request) exactly; report every file you changed.
 - Never regenerate an artifact that is already correct, and never re-run a metered or CPU-heavy job to "double check" it. Verify from the artifact and the ledger.
 - Iterate with targeted tests (`pytest tests/test_x.py -q`, `-x`, `-k`). Run the full offline suite, `ruff` and `pyright` once, at the end, before the envelope. Not after every defect.
 - Do not wait on a background job by reading its log repeatedly. One poll loop, then act on the exit status.
+- Braintrust score budget (this project): the org's plan is 10k scores/month, already at its cap, with pay-as-you-go overage. Every Braintrust-writing command is conservative by construction:
+  - `--dry-run` is the default; a live write requires an explicit `--live` flag, and `just braintrust-cockpit` without `--live` never touches the API.
+  - Before any live write, compute the exact number of scores the run would create, print it, record it in the run's report, and abort if it exceeds **600**. The guard is code, not a comment.
+  - Never write a score that already exists: check the target experiment for existing rows/scores first and skip them. Re-logging is the leak that spent the quota.
+  - Per-judge scores go in span metadata, never as scores. Only `judge/<dimension>` aggregates and `human/<dimension>` (24 packets, 96 scores) are scores.
+  - Update experiments and views by stable name; never create a suffixed copy; never delete or recreate an experiment.
+  - Reads (BTQL, summaries, views, dashboards, permalinks) are free; use them to verify instead of re-writing.

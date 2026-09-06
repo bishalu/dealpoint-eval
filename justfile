@@ -214,7 +214,8 @@ synth-queries *ARGS:
 deepeval-crosscheck *ARGS:
     uv run python -m dealpoint.eval.deepeval_adapter "$@"
 
-# M7a: recreate every Braintrust artifact from Git/local sources; idempotent
+# M7a: recreate every Braintrust artifact from Git/local sources; idempotent.
+# Dry run by default; pass --live to write (scores cost money on this plan).
 braintrust-sync *ARGS:
     uv run python -m dealpoint.eval.braintrust_sync "$@"
 
@@ -233,6 +234,29 @@ framework-versions *ARGS:
 # milestone 7 acceptance gates only, offline
 gate-m7:
     uv run pytest -m "gate_m7 and not needs_network and not needs_model" -q
+
+# ── dealpoint (M7b Braintrust cockpit + multi-judge demo) ──────────────────
+
+# M7b: create/update the cockpit (views, dashboard, Topics, one Pattern, hero-case replay, human/ scores); idempotent.
+# Dry run by default; `just braintrust-cockpit --live` writes, capped at LIVE_SCORE_CAP scores and never re-logging.
+braintrust-cockpit *ARGS:
+    uv run python -m dealpoint.eval.braintrust_cockpit "$@"
+
+# M7b: offline, zero-network regeneration of demo_manifest.json from current code
+braintrust-cockpit-dry-run:
+    uv run python -m dealpoint.eval.braintrust_cockpit --dry-run
+
+# M7b: regenerate docs/demo-walkthrough.md from data/reports/demo_manifest.json
+demo-walkthrough:
+    uv run python -m dealpoint.eval.demo_walkthrough
+
+# M7b: record one cockpit-session step's result: just demo-manifest-record --step 2 --note "..." --url https://...
+demo-manifest-record *ARGS:
+    uv run python -m dealpoint.eval.demo_manifest_record "$@"
+
+# milestone 7b acceptance gates only, offline
+gate-m7b:
+    uv run pytest -m "gate_m7b and not needs_network and not needs_model" -q
 
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 

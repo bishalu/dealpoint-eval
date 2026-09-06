@@ -1,6 +1,0 @@
-adw_id: 8a45e94a   engineer exedev
-▶ 01 request  engineer · exedev  Record the loop's inputs: parent id, brief hash, cap, and where the checkpoint says we are
-  · input: core eval MVP loop — all remaining milestones, parent: b2e38d8b, brief_sha: a622d596d6b7, max_corrections: 2, spend_cap: $6.00, status: m0_1 passed atte…
-  ✓ request 0.0s
-▶ 02 m7a_run4  code · factory  Launch m7a as its own SSSF session from a clean context, and read back what it recorded
-  · child: 4daf5d8d, correction: False, log: adws/adw_data/sessions/8a45e94a/m7a_run4.log

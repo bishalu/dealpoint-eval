@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m7a",
+  "current_milestone": "m7b",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -987,24 +987,206 @@
       }
     },
     "m7b": {
-      "adw_ids": [],
-      "attempts": 0,
+      "adw_ids": [
+        "ce7cdd1f"
+      ],
+      "attempts": 2,
       "blocker": "",
       "commits": [],
-      "ended_at": "",
+      "ended_at": "2026-09-06T22:16:07.697+00:00",
       "exclusions": [],
       "id": "m7b",
       "infra_retries": 0,
       "last_failure": "",
       "last_failure_class": "",
-      "metrics": {},
-      "models": {},
-      "started_at": "",
+      "metrics": {
+        "braintrust_sync": {
+          "n_experiments": 29,
+          "replayed_traces": 6,
+          "review_set_n": 12,
+          "synced_at": "2026-09-06T20:32:20.947589+00:00"
+        },
+        "caching_probe": {
+          "cost_per_call_usd_after": 0.003092,
+          "cost_per_call_usd_before": 0.001914,
+          "decision": "Not padded. The spec explicitly forbids padding a prompt to reach a cacheable minimum.",
+          "finding": "The static prefix (system prompt + question spec + tool schemas) measures ~511-609 tokens across the 12 questions, well below Anthropic's 2048-token minimum cacheable prefix for the Haiku class. cached_tokens was 0 on every call in this probe (and on all 96 pre-existing ledger rows), consistent with the prefix being below the provider's minimum -- not a request-shape bug. The request shape is already correct (dealpoint.llm.client.build_system_message sends the system message as a content-block list with cache_control: {'type': 'ephemeral'}), so no block-placement fix was needed or applied.",
+          "measured_static_prefix_tokens_range": "511-609 (approx, chars/4.8 across the 12 questions)",
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls_in_probe": 13,
+          "provider_minimum_cacheable_tokens": 2048
+        },
+        "caching_probe_raw": {
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls": 13
+        },
+        "case_counts": {
+          "counterfactual": 40,
+          "dev": 58,
+          "judge_scores": 324,
+          "synthetic_dev_queries": 106,
+          "test": 167
+        },
+        "chunk_report": {
+          "chars_per_token_ratio_mean": 4.845026404213299,
+          "n_sampled_chunks": 500,
+          "n_total_chunks": 12312
+        },
+        "deepeval_crosscheck": {
+          "classification": "KEEP_OPTIONAL_ANALYSIS",
+          "classification_rationale": "DeepEval task_completion correlates weakly with grounded_accuracy (rho=0.211, n=45), which would otherwise support KEEP_CORE_DIAGNOSTIC -- but the resolved evaluator shares a model with the M5 judge trio it is compared against (see decisions), so any apparent independence from vs_judge agreement is not trustworthy. Downgraded to KEEP_OPTIONAL_ANALYSIS pending a genuinely independent evaluator model.",
+          "schema_version": 1
+        },
+        "demo_manifest": {
+          "git_sha7": "d418929",
+          "n_human_scores_planned": 96,
+          "n_human_scores_pushed": 0,
+          "project_id": "dry-run-project-id",
+          "rubric_version": "cfda9f8cc401",
+          "subset_hash": "5918ef10a7e6",
+          "synced_at": "2026-09-06T21:47:34.782717+00:00"
+        },
+        "dev_smoke_m4": {
+          "n_legs": 2
+        },
+        "four_arm": {
+          "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark.",
+          "version": "v2 after harness repair"
+        },
+        "four_arm_v1_execution_defects": {
+          "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark."
+        },
+        "framework_versions": {
+          "bm25s": "0.3.11",
+          "braintrust": "0.37.0",
+          "deepeval": "4.2.1",
+          "fastembed": "0.8.0",
+          "git_sha7": "199ddba",
+          "llama-index-core": "0.14.24",
+          "llama-index-retrievers-bm25": "0.8.0",
+          "openai": "3.8.0",
+          "pydantic": "2.13.5",
+          "python": "3.12.3",
+          "qdrant-client": "1.19.0"
+        },
+        "judge_slate": {
+          "price_basis": "live",
+          "verified_at": "2026-09-05T20:46:25.244679+00:00"
+        },
+        "judges": {
+          "generated_at": "2026-09-06T17:40:37.751397+00:00",
+          "git_sha7": "20e71ca",
+          "n_judge_rows": 324,
+          "n_judge_rows_failed": 0,
+          "n_judge_rows_ok": 324,
+          "rubric_version": "cfda9f8cc401"
+        },
+        "li_rag_eval": {
+          "cause_rule": "Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other three labels -- typically the retrieved list and expected_ids simply differ). A 'reranking' label was considered (spec section 3.2) but is not emitted: the pipeline never computes the pre-rerank ranking needed to detect it, so including it would describe a rule this code cannot actually apply.",
+          "schema_version": 1
+        },
+        "m0_1_oos_collisions": {
+          "collision_window": 400
+        },
+        "m0_1_parser_report": {
+          "corpus_gold_span_hits": 2970,
+          "corpus_gold_span_section_rate": 0.8549222797927462,
+          "corpus_gold_span_total": 3474,
+          "eligible_count": 139,
+          "giant_section_fraction_threshold": 0.4,
+          "gold_span_section_rate_ceiling": 0.8926309729418538,
+          "min_structural_coverage_threshold": 0.8,
+          "n_agreements": 152,
+          "parser_version": "29cc01eda19b"
+        },
+        "m4_1_estimate_before_v2": {
+          "basis": "ledger:measured(arm,model)",
+          "calls": 656,
+          "cases": 164,
+          "est_usd": 0.907372,
+          "per_call_usd": 0.001383,
+          "per_case_usd": 0.005533,
+          "sweep": "four_arm"
+        },
+        "m4_1_probes": {
+          "case_selection_rule": "For each probed (model, arm), take the first 2 case_ids, in frozen-subset order (data/eval/test_subset_v1.json's case_ids list), whose v1 result row for that (model, arm) has record.status == 'EXECUTION_FAILED'. Resolved in code from the v1 result JSONL named in data/reports/four_arm_manifest_v1.json (falling back to the live four_arm_manifest.json before v1 preservation), never hard-coded. This is a diagnostic selection on a FROZEN subset -- it selects nothing that is reported as a headline result, and the v2 sweep (dealpoint.eval.four_arm_sweep) runs the whole subset regardless of what the probes found.",
+          "notes": "'before' numbers are read from the v1 result JSONLs, not re-spent: v1's ExecutionRecord carried no failure_detail/raw_final_text field (that is the defect this milestone's deliverable 1 fixes), so every 'before' failure_detail_classes entry is synthesized from the coarser failure_reason and is labelled as such. 'after' rounds run the same 2 case_ids for real through the repaired harness and read the new failure_detail/finish_reasons fields directly off the written result rows."
+        },
+        "m7a_disk_guard": {
+          "floor_bytes": 500000000,
+          "measured_at": "2026-09-06T17:29:05.377693+00:00"
+        },
+        "pareto": {
+          "budget_scaled_note": "32-case frozen subset per model (18 at Haiku); not the brief's full-scale design.",
+          "generated_at": "2026-09-06T19:49:01.134164+00:00",
+          "git_sha7": "199ddba",
+          "version": "v1"
+        },
+        "pareto_slate": {
+          "git_sha7": "3fcdae7",
+          "price_basis": "live",
+          "probe_n_cases": 2,
+          "probe_spend_usd": 0.033902,
+          "verified_at": "2026-09-05T19:56:47.172737+00:00"
+        },
+        "representative_cases": {
+          "rule": "Six categories, each a deterministic predicate over a stored canonical result row: 'successful_direct' = grounded_accuracy is True and reasoning_type == 'direct' and tool_calls <= 2; 'retrieval_rescue' = grounded_accuracy is True and (gold_first_rank is None or gold_first_rank > 1) and >= 2 search_agreement steps; 'defined_term_cross_ref' = required_evidence is not None and a lookup_defined_term or get_section step exists; 'inefficient_trajectory' = cap_hit is True, or tool_calls >= 6 with grounded_accuracy is not True; 'wrong_answer' = answer_correct is False; 'abstention_counterfactual' = case_set == 'counterfactual' and record.status == 'ABSTAINED'. Ties broken by ascending sha256(f'{SEED}:{case_id}:{variant_id}') (dealpoint.eval.subset._seeded_key's convention)."
+        },
+        "synthetic_generation_run": {
+          "file_sha256": "75b9a6d647383ec1d80b0d555f30c51513bc0d844663d9710eb5038b2dd44d19",
+          "generated_at": "2026-09-06T00:18:42.275463+00:00",
+          "generator": "llama_index.core.evaluation.dataset_generation.DatasetGenerator",
+          "generator_version": "num_questions_per_chunk=2",
+          "model": "z-ai/glm-5.3-flash",
+          "n_chunks": 113,
+          "n_queries": 106,
+          "out_path": "/home/exedev/repos/dealpoint-eval/data/eval/synthetic_dev_queries.jsonl",
+          "prompt_hash": "93801419e0abfb5b",
+          "total_usd": 0.015215
+        },
+        "tournament": {
+          "fetch_k": 20,
+          "k": 10,
+          "rerank_model": "Xenova/ms-marco-MiniLM-L-6-v2",
+          "rrf_k": 60,
+          "schema_version": 1,
+          "total_wall_seconds": 774.955
+        },
+        "versions": {
+          "arm_c_index_version": "8ae2fc1e24e9",
+          "chunk_version": "8e5e8ba56765",
+          "dataset_version": "81ed82cd7552",
+          "embedding_model": "BAAI/bge-small-en-v1.5",
+          "index_version": "e2b4a2b97561",
+          "n_chunks": 12312,
+          "n_documents": 50,
+          "parser_version": "29cc01eda19b",
+          "rubric_version": "cfda9f8cc401",
+          "skill_version": "f8d255cc169b"
+        }
+      },
+      "models": {
+        "builder": "claude-bridge/claude-sonnet-5",
+        "reviewer": "claude-bridge/claude-opus-5"
+      },
+      "started_at": "2026-09-06T21:04:07.174+00:00",
       "status": "pending",
-      "versions": {}
+      "versions": {
+        "arm_c_index_version": "8ae2fc1e24e9",
+        "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
+        "chunk_version": "8e5e8ba56765",
+        "dataset_version": "81ed82cd7552",
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "index_version": "e2b4a2b97561",
+        "n_chunks": "12312",
+        "n_documents": "50",
+        "parser_version": "29cc01eda19b",
+        "rubric_version": "cfda9f8cc401",
+        "skill_version": "f8d255cc169b"
+      }
     }
   },
-  "next_action": "run m7b",
+  "next_action": "m7b was interrupted by the operator (session ce7cdd1f, attempt 2) to make Braintrust writes conservative; resume with `just mvp`",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1125,5 +1307,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-06T21:04:03.041+00:00"
+  "updated_at": "2026-09-06T22:16:11.410+00:00"
 }
