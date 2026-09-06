@@ -790,9 +790,10 @@
     },
     "m7a": {
       "adw_ids": [
-        "488479df"
+        "488479df",
+        "4daf5d8d"
       ],
-      "attempts": 3,
+      "attempts": 4,
       "blocker": "",
       "commits": [
         "b9eac78"
@@ -967,7 +968,7 @@
         "planner": "pi-claude-code-provider/opus"
       },
       "started_at": "2026-09-05T22:31:20.706+00:00",
-      "status": "pending",
+      "status": "running",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -983,7 +984,7 @@
       }
     }
   },
-  "next_action": "m7a was interrupted (session 488479df exit 143) \u2014 resume with `just mvp`",
+  "next_action": "m7a running in session 4daf5d8d (attempt 4)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1096,5 +1097,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-06T16:48:32.174+00:00"
+  "updated_at": "2026-09-06T17:00:24.425+00:00"
 }
