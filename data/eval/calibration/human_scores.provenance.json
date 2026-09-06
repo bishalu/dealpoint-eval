@@ -1,0 +1,41 @@
+{
+  "scorer": "lawyer_1",
+  "provenance": "AI-drafted proposed assessment reviewed and adopted by the engineer's lawyer as the official human calibration (confirmed by the engineer 2026-09-06)",
+  "source_bundle": "calibration_bundle_24.md (24 packets cut verbatim from data/eval/calibration/packets.md)",
+  "rubric_version": "cfda9f8cc401",
+  "n_packets": 24,
+  "methodology": [
+    "Reasoning evaluates the legal linkage in the finding as printed; missing tool text is not presumed fabricated or empty.",
+    "Evidence evaluates evidence submitted with the finding, rather than the whole retrieval corpus. No finding or no submitted evidence scores 1.",
+    "When no gold span is supplied, evidence scores describe intrinsic sufficiency only; no gold-match assertion is made.",
+    "Gold spans are used only for evidence scoring, not to impute reasoning or retrieval steps.",
+    "External agreement verification is a separate legal cross-check, not retroactive retrieval credit.",
+    "Professional scores assess the narrow answer as written, not a certification that the retrieval chain is fully auditable.",
+    "Trajectory is assessed independently of completion; targeted progress can receive credit despite a cap or execution failure."
+  ],
+  "external_primary_sources": [
+    {
+      "title": "Virtusa / Austin HoldCo / Austin BidCo merger agreement, September 9, 2020",
+      "sections": [
+        "9.03"
+      ],
+      "url": "https://www.sec.gov/Archives/edgar/data/1207074/000110465920104049/tm2030571d1_ex2-1.htm"
+    },
+    {
+      "title": "The New Home Company / Newport merger agreement, July 23, 2021",
+      "sections": [
+        "9.6",
+        "6.11",
+        "9.13"
+      ],
+      "url": "https://www.sec.gov/Archives/edgar/data/1574596/000119312521223612/d193271dex21.htm"
+    }
+  ],
+  "status_counts_in_set": {
+    "CAP_HIT": 14,
+    "ANSWERED": 7,
+    "ABSTAINED": 2,
+    "EXECUTION_FAILED": 1
+  },
+  "recorded_at": "2026-09-06T17:40:37+00:00"
+}
