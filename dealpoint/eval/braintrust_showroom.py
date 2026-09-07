@@ -398,6 +398,7 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
             if human and v.get(d) is not None and human.get(d) is not None:
                 out[f"judge_{family.lower()}_{d}_abs_err"] = abs(_rescale(v[d]) - _rescale(human[d]))
                 out[f"judge_{family.lower()}_{d}_bias"] = _rescale(v[d]) - _rescale(human[d])     # + = judge runs high
+                out[f"judge_{family.lower()}_{d}_closeness"] = 1.0 - out[f"judge_{family.lower()}_{d}_abs_err"]   # 1.0 = identical
     # Per judge family: the realized cost of its call on this packet, the mean distance from the lawyer
     # over the four dimensions, and agreement per dollar ((1 - distance) / usd), so "which judge" can be
     # answered per dimension, overall, and with cost in the picture.

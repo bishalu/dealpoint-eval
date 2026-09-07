@@ -445,8 +445,8 @@ def chart_catalogue() -> dict[str, dict]:
         "judge_vs_lawyer": {"title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
                             "measure": [{"btql": f"avg(metadata.panel_{d}_closeness)", "name": d} for d in JUDGE_DIMS_],
                             "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        **{f"judge_bias_{d}": {"title": f"Which judge for {d}? Signed bias, judge minus lawyer: + runs high, - runs low, closest to 0 wins (24 packets)",
-                               "measure": [{"btql": f"avg(metadata.judge_{f}_{d}_bias)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
+        **{f"judge_bias_{d}": {"title": f"Which judge for {d}? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+                               "measure": [{"btql": f"avg(metadata.judge_{f}_{d}_closeness)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
            for d in JUDGE_DIMS_},
         "judge_family_usd": {"title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
                              "measure": [{"btql": f"avg(metadata.judge_{f}_usd)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
@@ -482,9 +482,10 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
      ("ret_hit5", "ret_hit10", "ret_mrr")),
     ("Judges and the lawyer",
      ("Three cheap LLM judges (Mistral Small, NVIDIA Nemotron, ByteDance Seed) scored 108 blinded traces on four dimensions; a lawyer scored 24 of "
-     "the same packets. First chart: can the panel be trusted (panel mean next to the lawyer, per dimension). Next four: which judge for which "
-     "dimension, as signed bias against the lawyer; every judge runs high, the one closest to zero wins that dimension. Then cost per call "
-     "(a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
+     "the same packets. First chart: can the panel be trusted (closeness of the three-judge mean to the lawyer, per dimension; 100% is identical). "
+     "Next four: which judge for which dimension, each judge's closeness to the lawyer; the tallest bar is the pick. Direction, for the record: "
+     "every judge scores higher than the lawyer on every dimension, most of all on trajectory, so a gap always means over-credit. Then cost per "
+     "call (a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
      ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional", "judge_family_usd", "deepeval")),
     ("Which prompt?",
      ("Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
