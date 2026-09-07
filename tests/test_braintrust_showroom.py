@@ -205,3 +205,52 @@ def test_playground_rows_are_the_exact_arm_a_packets_with_gold_expected():
     prompts = playground_prompts()
     assert [p["slug"] for p in prompts] == ["arm-a-prompt-base", "arm-a-prompt-terse", "arm-a-prompt-cite-first", "arm-a-prompt-abstain-first"]
     assert all(p["messages"][1]["content"].startswith("{{input}}") and p["messages"][0]["role"] == "system" for p in prompts)
+
+
+def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
+    from dealpoint.eval.braintrust_showroom import _mirror_context, mirror_for, stored_row_index
+
+    idx = stored_row_index()
+    ctx = _mirror_context()
+    m = mirror_for("contract_144__q05", "D@glm", idx[("contract_144__q05", "D@glm")], ctx)
+    assert m["system_label"] == "D: agent + hybrid + skill" and m["model_label"] == "glm" and m["variant_label"] == "D@glm"
+    assert m["ga_all"] == 1 and m["ga_scored"] == 1 and m["cap_hit"] == 0 and m["tool_calls"] == 5
+    assert 0 < m["usd"] < 0.01 and 30 < m["wall_s"] < 60
+    assert m["judge_reasoning"] == 1.0 and abs(m["judge_evidence"] - (4.6667 - 1) / 4) < 1e-3
+    assert m["has_human"] == 1 and m["human_professional"] == 1.0 and m["human_trajectory"] == 0.5
+    assert m["deepeval_task_completion"] is not None and m["deepeval_agrees_with_truth"] in (0, 1)
+    # the same row under the full model id maps to the same judged packet
+    m2 = mirror_for("contract_144__q05", "D@z-ai/glm-5.3-flash", idx[("contract_144__q05", "D@z-ai/glm-5.3-flash")], ctx)
+    assert m2["variant_label"] == "D@glm" and m2["judge_reasoning"] == m["judge_reasoning"]
+    # the redacted twin: a cap-hit with no grounded accuracy, counted as 0 over all cases, abstain wrong
+    t = mirror_for("contract_39__redacted_q05", "D@glm", idx[("contract_39__redacted_q05", "D@glm")], ctx)
+    assert t["cap_hit"] == 1 and t["ga_scored"] is None and t["ga_all"] == 0 and t["abstain_correct"] == 0 and t["case_set"] == "counterfactual"
+
+
+def test_retrieval_log_rows_cover_the_tournament_once():
+    from dealpoint.eval.braintrust_showroom import retrieval_log_rows
+
+    rows = retrieval_log_rows()
+    assert len(rows) == 58 * 6
+    by = {(r["case_id"], r["retriever"]): r for r in rows}
+    assert len(by) == len(rows)
+    q05 = {r["retriever"]: r["metadata"]["first_hit_rank"] for r in rows if r["case_id"] == "contract_46__q05"}
+    assert q05["dense"] == 7 and q05["hybrid_rrf"] == 1
+    hybrid = [r["metadata"]["hit_at_5"] for r in rows if r["retriever"] == "hybrid_rrf"]
+    assert abs(sum(hybrid) / len(hybrid) - 0.9138) < 0.001, "matches the tournament's hit@5"
+
+
+def test_prompt_variant_log_rows_join_judges_to_roots():
+    from dealpoint.eval.braintrust_showroom import prompt_variant_log_rows
+
+    events = {"terse": [
+        {"id": "r1", "root_span_id": "s1", "is_root": True, "input": "packet", "output": {"answer": "Actual knowledge"},
+         "metadata": {"case_id": "contract_144__q05", "question_id": "q05", "gold_answer": "Actual knowledge", "case_set": "test"}},
+        {"id": "x1", "root_span_id": "s1", "is_root": False, "span_parents": ["s1"], "span_attributes": {"type": "score", "name": "Judge: evidence"}, "scores": {"Judge: evidence": 0.75}},
+        {"id": "x2", "root_span_id": "s1", "is_root": False, "span_parents": ["s1"], "span_attributes": {"type": "score", "name": "Judge: professional"}, "scores": {"Judge: professional": 1.0}},
+    ]}
+    rows = prompt_variant_log_rows(events)
+    assert len(rows) == 1
+    m = rows[0]["metadata"]
+    assert m["prompt_variant"] == "terse" and m["case_id"] == "contract_144__q05" and m["category"] == "prompt-variant"
+    assert m["judge_evidence"] == 0.75 and m["judge_professional"] == 1.0 and rows[0]["output"] == "Actual knowledge"

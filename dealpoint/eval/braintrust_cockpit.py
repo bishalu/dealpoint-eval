@@ -396,32 +396,57 @@ def view_definitions() -> list[dict]:
     ]
 
 
+AGENT_LOGS = "(metadata.category = 'agent' or metadata.category = 'judged')"
+
+
 def dashboard_charts() -> list[dict]:
-    """The `DealPoint eval overview` dashboard charts, as data (never a string template) so a
-    fake-client test can assert on the structure directly.
+    """The `DealPoint eval overview` dashboard, one engineering question per chart, as data (never a
+    string template) so a fake-client test can assert on the structure directly.
 
     The dashboard is Braintrust's *monitor* surface over PROJECT LOGS. Two facts shape it: (1) the logs
-    carry zero obj/*, judge/*, human/* or li/* scores (those live in experiments), so a chart over those
-    names is blank by construction, which is what the first version of this dashboard did; (2) a monitor
-    chart is either a time series (x = time, right for production traffic) or a `scalars` toplist (groups
-    ranked by an aggregate, x = the group). Experiment comparisons are not time series, so every chart
-    here is a toplist over log fields the logs actually carry (counts by metadata, the boolean
-    `metadata.obj_grounded_accuracy` mirrored from each stored row, the online rule's `Judge: professional`
-    score), except the last, where time is the point: the online score as new logs land.
+    carry zero obj/*, judge/*, human/* or li/* scores (those live in experiments, where the Starter plan
+    meters them), so a chart over those names is blank by construction, which is what the first version
+    of this dashboard did; (2) a monitor chart is either a time series (x = time, right for production
+    traffic) or a `scalars` toplist (groups ranked by an aggregate, x = the group). Experiment comparisons
+    are not time series. So every chart here is a toplist over the METADATA MIRROR the showroom merges
+    onto each log (`braintrust_showroom.metadata_mirror`: self-describing labels, obj/judge/human/DeepEval
+    numbers rescaled to 0..1, cost, latency, cap-hits), plus the retrieval and prompt-variant logs.
     """
     return [
-        {"title": "Grounded accuracy (row metadata) by arm", "kind": "toplist",
-         "measure": "avg(metadata.obj_grounded_accuracy)", "group_by": ["metadata.arm"]},
-        {"title": "Grounded accuracy (row metadata) by model, arm D", "kind": "toplist",
-         "measure": "avg(metadata.obj_grounded_accuracy)", "group_by": ["metadata.model"], "filters": ["metadata.arm = 'D'"]},
-        {"title": "Traces by status and arm (cap-hits are the failure story)", "kind": "toplist",
-         "measure": "count(1)", "group_by": ["metadata.status", "metadata.arm"], "unit": "count"},
-        {"title": "Online judge: professional by model", "kind": "toplist",
-         "measure": 'avg(scores."Judge: professional")', "group_by": ["metadata.model"]},
-        {"title": "Traces by category (judged, agent sweep, representative, live replay)", "kind": "toplist",
-         "measure": "count(1)", "group_by": ["metadata.category"], "unit": "count"},
-        {"title": "Online judge: professional as new logs land",
-         "measure": 'avg(scores."Judge: professional")', "group_by": ["metadata.arm"]},
+        {"title": "Which system? Grounded accuracy over every answerable test case (unanswered = 0), GLM 5.3 flash", "kind": "toplist",
+         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"]},
+        {"title": "Which system? Cap-hit rate (loop never stops), GLM", "kind": "toplist",
+         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
+        {"title": "Which system? Fabrication rate (invented clauses), GLM", "kind": "toplist",
+         "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
+        {"title": "Which system? Correct abstention on counterfactuals (the definition is not there)", "kind": "toplist",
+         "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": [f"metadata.case_set = 'counterfactual' and {AGENT_LOGS}"]},
+        {"title": "Which retriever? Gold-span hit@5 on the 58 dev queries", "kind": "toplist",
+         "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        {"title": "Which retriever? Mean reciprocal rank of the gold span", "kind": "toplist",
+         "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        {"title": "Which model? Grounded accuracy over every answerable test case, arm D (agent + hybrid + skill)", "kind": "toplist",
+         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and metadata.case_set = 'test' and {AGENT_LOGS}"]},
+        {"title": "Which model? Dollars per case, arm D (realized, from the local ledger)", "kind": "toplist",
+         "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"], "unit": "cost"},
+        {"title": "Which model? Seconds per case, arm D", "kind": "toplist",
+         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"], "unit": "duration"},
+        {"title": "Which model? Cap-hit rate, arm D", "kind": "toplist",
+         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"]},
+        {"title": "Judges vs the lawyer: mean of three judges next to the human, 24 blinded packets (rubric 1-5 as 0-1)", "kind": "toplist",
+         "measure": [f"avg(metadata.judge_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")]
+         + [f"avg(metadata.human_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")],
+         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+        {"title": "Judge panel: professional quality by system@model, 108 judged traces", "kind": "toplist",
+         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+        {"title": "Judge panel: evidence quality by system@model, 108 judged traces", "kind": "toplist",
+         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+        {"title": "DeepEval vs deterministic truth: task-completion agreement rate by system@model", "kind": "toplist",
+         "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+        {"title": "Which prompt? Judge: professional by arm-A prompt variant, 18 packets, GLM", "kind": "toplist",
+         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
+        {"title": "Which prompt? Judge: evidence by arm-A prompt variant", "kind": "toplist",
+         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
     ]
 
 

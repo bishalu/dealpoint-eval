@@ -8,7 +8,18 @@ quality cockpit. Nothing you click was made by hand: two commands rebuilt this p
 `data/reports/` in Git.
 
 Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
-Dashboard (Monitor): https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2
+Dashboard: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2
+
+**The dashboard, one question per chart.** Braintrust's dashboard is the monitor over project logs, so it
+cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
+therefore mirrors every number into log metadata (free; scores are the metered thing) and the dashboard is
+sixteen ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
+abstention on counterfactuals, A to D on GLM), *Which retriever?* (hit@5 and MRR, six retrievers on the
+58 dev queries), *Which model?* (accuracy, dollars, seconds, cap-hits, arm D on five models), *Judges vs
+the lawyer* (four dimensions, 24 packets), the judge panel by system@model, DeepEval's agreement with
+truth, and *Which prompt?* (the four arm-A prompts, judged). Accuracy there counts an unanswered case as
+wrong, so it reads lower than the "of scored cases" figures in the reports; both are true, say which one
+you mean. If you only get one screen, this is it; every chart has a stop below that explains it.
 
 **The spine.** One question, MAUD's `q05`: *Does the agreement's definition of Knowledge include
 constructive knowledge?* Two options, "Constructive knowledge" or "Actual knowledge", plus "ABSTAIN" when
@@ -20,8 +31,8 @@ only right answer is to abstain.
 
 **How to read the Experiments tab.** Every experiment carries the same metadata schema: `axis` (the question
 it belongs to), `varies` (the one variable that changes along that axis), `holds` (what is fixed), plus
-`arm`, `loop`, `retriever`, `skill`, `model`, `cases`. Turn on those columns once and the table reads as a
-grid: SYSTEM (A to D, one config key per step), MODEL (arm D, five models), RETRIEVAL (six retrievers, one
+`arm`, `loop`, `retriever`, `skill`, `model`, `cases`. The **Arms A to D** view pins those columns; in any
+other view turn them on once from the column picker and the table reads as a grid: SYSTEM (A to D, one config key per step), MODEL (arm D, five models), RETRIEVAL (six retrievers, one
 scorer cross-check, one query-distribution check), JUDGE (six variants under three judges and one lawyer),
 CROSSCHECK (DeepEval), PROMPT (four arm-A prompts), TRACES. The saved views below are those axes.
 
@@ -340,9 +351,12 @@ Retention: logs written 2026-09-07 expire around 2026-09-21 on Starter; experime
   lawyer's review is its spec.
 - "Is the lawyer's scoring real?" AI-drafted, reviewed and adopted by the lawyer, provenance recorded next
   to the scores (`data/eval/calibration/human_scores.provenance.json`). Say that, do not hide it.
-- "Why does the dashboard look different from the Experiments page?" The dashboard is the monitor over
-  Logs, which carry no experiment scores by construction; it charts trace counts by status and arm, row
-  metadata accuracy, and the online judge score. Experiment comparison lives on the Experiments page, which
-  is built for it.
+- "Why does the dashboard say 46% for arm D when the report says 65%?" The dashboard counts every
+  answerable test case, so a cap-hit or an execution failure counts as wrong; the report's headline is
+  over the cases that produced a finding. Both are on the row (`ga_all` vs `ga_scored`); the honest number
+  for a deployment decision is the dashboard's.
+- "Where do the dashboard numbers come from if the logs have no scores?" From the same stored result rows
+  the experiments were built from, mirrored onto each log as metadata by `just braintrust-showroom --only
+  mirror`. Same source, second surface, zero scores.
 - "Where do the deterministic scorers run?" In Git, in `dealpoint/eval/scorers.py`, over the corpus and index
   that cannot live inside Braintrust's function runtime. The LLM judges run in Braintrust. Honest split.

@@ -15,6 +15,10 @@ So this module never writes a score. It only adds the things Braintrust does not
     judges   the calibrated rubric as four Braintrust LLM scorers on the OpenRouter judge models (your key,
              your ledger; creation is free, invocation is an OpenRouter call) via `bt scorers create`
     views    saved comparison views: arms, models, judges, RAG
+    mirror   every number the dashboard needs (labels, obj/judge/human/DeepEval, cost, latency) merged onto
+             each root log as METADATA (free), never as scores (metered): the Monitor page only sees logs
+    raglogs  the M3 tournament as score-free logs (58 dev queries x 6 retrievers, gold-span rank in metadata)
+    promptlogs  the Playground pre-run experiments mirrored to logs, judges' scores as metadata
     playground  the 18 judged cases as the exact arm-A packets (a dataset) + base/terse/cite-first/abstain-first
              as chat prompts, so the Playground prompt A/B/C holds everything but the system prompt fixed;
              `--live --run-playground` pre-runs it server-side (POST /v1/eval) as four experiments (scores!)
@@ -64,7 +68,7 @@ ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
 # (tests) or BRAINTRUST_LEDGER_FILE (explicit override) wins over the org-derived path.
 LEDGER_PATH: Path | None = None
 MANIFEST_PATH: Path | None = None
-STEPS = ("tag", "rows", "logs", "review", "params", "prompts", "judges", "views", "playground")
+STEPS = ("tag", "rows", "logs", "mirror", "raglogs", "review", "params", "prompts", "judges", "views", "playground", "promptlogs")
 
 _ARM = re.compile(r"^(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
 _JUDGED = re.compile(r"^judged-(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
@@ -270,8 +274,7 @@ def _ledger_keys() -> set[tuple[str, str]]:
 
 def _case_info(case_id: str) -> dict:
     try:
-        from dealpoint.eval.cases import find_case
-        from dealpoint.eval.questions import resolve_question
+        from dealpoint.eval.cases import find_case, resolve_question
         case = find_case(case_id)
         info = {"case_type": case.get("case_type"), "question_id": case.get("question_id")}
         with contextlib.suppress(Exception):     # reasoning type is decoration, never a failure
@@ -330,6 +333,162 @@ def step_rows(api: Api, live: bool, manifest: dict) -> None:
         if live:
             time.sleep(0.6)                 # stay under the API rate limit across 42 experiments
     manifest["rows_merged"] = total
+
+
+SYSTEM_LABEL = {"A": "A: pipeline + dense", "B": "B: agent + dense", "C": "C: agent + hybrid", "D": "D: agent + hybrid + skill"}
+JUDGE_DIMS = ("reasoning", "evidence", "trajectory", "professional")
+
+
+def _rescale(v) -> float | None:
+    """Rubric 1..5 -> 0..1, the same map the LLM scorers' choice_scores use."""
+    return None if v is None else (float(v) - 1.0) / 4.0
+
+
+def _flag(v) -> int | None:
+    return None if v is None else int(bool(v))
+
+
+def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | None = None, human: dict | None = None,
+                    deepeval: dict | None = None) -> dict:
+    """Every number the dashboard needs, as log METADATA (free) rather than scores (metered), with one
+    label vocabulary across all log families (short model names, self-describing system labels).
+    The same values live as real scores on the experiments; this is the mirror the Monitor page can see."""
+    scores = row.get("scores") or {}
+    rec = row.get("record") or {}
+    status = rec.get("status") or row.get("status")
+    arm = row.get("arm") or rec.get("arm")
+    model = row.get("model") or rec.get("model") or ""
+    short = SHORT_MODEL.get(model, model)
+    ga = scores.get("grounded_accuracy")
+    out = {
+        "system_label": SYSTEM_LABEL.get(arm, arm), "model_label": short, "variant_label": f"{arm}@{short}",
+        "status": status, "case_set": (case or {}).get("case_set") or row.get("case_set"), "question_id": (case or {}).get("question_id") or row.get("question_id"),
+        "ga_scored": None if ga is None else int(bool(ga)), "ga_all": int(bool(ga)),
+        "answer_correct_all": int(bool(scores.get("answer_correct"))),
+        "cap_hit": _flag(scores.get("cap_hit") if scores.get("cap_hit") is not None else status == "CAP_HIT"),
+        "execution_failed": _flag(scores.get("execution_failed") if scores.get("execution_failed") is not None else status == "EXECUTION_FAILED"),
+        "abstained": int(status == "ABSTAINED"), "fabrication": _flag(scores.get("fabrication")),
+        "abstain_correct": _flag(scores.get("abstain_correct")) if ((case or {}).get("case_set") or row.get("case_set")) == "counterfactual" else None,
+        "usd": scores.get("usd") if scores.get("usd") is not None else row.get("usd"),
+        "wall_s": (scores.get("wall_ms") or rec.get("wall_ms") or 0) / 1000.0 or None,
+        "tool_calls": scores.get("tool_calls") if scores.get("tool_calls") is not None else rec.get("tool_calls"),
+        "has_human": int(bool(human)),
+    }
+    for d in JUDGE_DIMS:
+        out[f"judge_{d}"] = _rescale((judge_dims or {}).get(d))
+        out[f"human_{d}"] = _rescale((human or {}).get(d))
+    for k in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
+        v = ((deepeval or {}).get(k) or {}).get("score") if deepeval else None
+        out[f"deepeval_{k}"] = v
+    tc = out["deepeval_task_completion"]
+    out["deepeval_agrees_with_truth"] = None if (tc is None or ga is None) else int((tc >= 0.5) == bool(ga))
+    return out
+
+
+def _mirror_context() -> dict:
+    """Judge means per packet, the lawyer's scores per packet, DeepEval per (case, variant): loaded once."""
+    from dealpoint.eval.braintrust_cockpit import _load_jsonl
+    from dealpoint.eval.braintrust_sync import (
+        _deepeval_scores_by_trace,
+        _mean_judge_dims_for_packet,
+        _packet_id_for,
+    )
+
+    judge_rows = _load_jsonl("data/eval/judge_scores.jsonl")
+    human_path = Path("data/eval/calibration/human_scores.jsonl")
+    human = {h["packet_id"]: h for h in _load_jsonl(human_path)} if human_path.exists() else {}
+    return {"judge_rows": judge_rows, "human": human, "deepeval": _deepeval_scores_by_trace(),
+            "packet_id_for": _packet_id_for, "judge_dims_for": _mean_judge_dims_for_packet}
+
+
+def mirror_for(case_id: str, variant_id: str, row: dict, ctx: dict) -> dict:
+    """`metadata_mirror` for one (case, variant) under either id convention (`D@glm` or `D@z-ai/glm-5.3-flash`)."""
+    from dealpoint.eval.braintrust_sync import _judged_variant_id_for
+    from dealpoint.eval.cases import find_case
+
+    arm, _, model = variant_id.partition("@")
+    short_variant = variant_id if model in SHORT_MODEL.values() else (_judged_variant_id_for(arm, model) or variant_id)
+    try:
+        case = find_case(case_id)
+    except KeyError:
+        case = {}
+    pid = ctx["packet_id_for"](case_id, short_variant)
+    judge_dims = ctx["judge_dims_for"](ctx["judge_rows"], pid) or None
+    human = ctx["human"].get(pid)
+    deepeval = ctx["deepeval"].get((case_id, short_variant))
+    row = {**row, "arm": row.get("arm") or arm, "model": row.get("model") or model}
+    return metadata_mirror(row, case=case, judge_dims=judge_dims, human=human, deepeval=deepeval)
+
+
+def stored_row_index() -> dict[tuple[str, str], dict]:
+    """(case_id, variant_id) -> stored result row, under BOTH id conventions, from the judged subset,
+    the four-arm/Pareto sweeps and the representative selections."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _load_jsonl, _variant_results
+    from dealpoint.eval.braintrust_sync import representative_cases
+
+    idx: dict[tuple[str, str], dict] = {}
+    subset = _judged_subset()
+    for v in subset.get("variants", []):
+        for case_id, row in _variant_results(subset, v["variant_id"]).items():
+            idx[(case_id, v["variant_id"])] = row
+            idx[(case_id, f"{v['arm']}@{v['model']}")] = row
+    for p in agent_run_log_plan(set()):
+        idx.setdefault((p["case_id"], p["variant_id"]), p["row"])
+    for sel in representative_cases().get("selections", []):
+        if sel.get("results_path"):
+            for r in _load_jsonl(sel["results_path"]):
+                if r.get("case_id") == sel["case_id"]:
+                    idx.setdefault((sel["case_id"], sel["variant_id"]), r)
+    return idx
+
+
+def retrieval_log_rows() -> list[dict]:
+    """The M3 tournament, one score-free log per (dev case, retriever config) on the canonical query:
+    gold-span rank as metadata (`hit_at_5`, `hit_at_10`, `mrr`), so the dashboard can rank retrievers."""
+    from dealpoint.eval.cases import find_case, resolve_question
+
+    t = json.loads(Path("data/reports/tournament.json").read_text(encoding="utf-8"))
+    out: list[dict] = []
+    for r in t.get("per_case", []):
+        if r.get("query_type") != "canonical":
+            continue
+        rank = r.get("first_hit_rank")
+        try:
+            q = resolve_question(find_case(r["case_id"]))
+            query, gloss = q.canonical_query, q.gloss
+        except KeyError:
+            query, gloss = r["case_id"], ""
+        out.append({"case_id": r["case_id"], "retriever": r["config"], "input": query,
+                    "output": f"first gold-span hit at rank {rank}" if rank else "no gold-span hit in the top 20",
+                    "metadata": {"category": "retrieval", "retriever": r["config"], "case_id": r["case_id"], "question_id": r.get("question_id"),
+                                 "agreement_id": r.get("agreement_id"), "gloss": gloss, "first_hit_rank": rank,
+                                 "hit_at_5": int(bool(rank and rank <= 5)), "hit_at_10": int(bool(rank and rank <= 10)),
+                                 "mrr": (1.0 / rank) if rank else 0.0, "stages": r.get("stages")}})
+    return out
+
+
+def prompt_variant_log_rows(events_by_variant: dict[str, list[dict]]) -> list[dict]:
+    """Playground experiments (`playground-arm-A-<variant>` fetch events) -> one score-free log per
+    (variant, case) with the judges' scores as metadata. Pure over fetched events, testable."""
+    out: list[dict] = []
+    for variant, events in events_by_variant.items():
+        roots = {e["root_span_id"]: e for e in events if _is_root(e)}
+        judged: dict[str, dict] = {}
+        for e in events:
+            if (e.get("span_attributes") or {}).get("type") == "score" and e.get("scores"):
+                for name, val in e["scores"].items():
+                    judged.setdefault(e["root_span_id"], {})[name.replace("Judge: ", "judge_")] = val
+        for rid, root in roots.items():
+            meta = root.get("metadata") or {}
+            case_id = meta.get("case_id") or meta.get("id")
+            answer = root.get("output")
+            if isinstance(answer, dict):
+                answer = answer.get("answer") or json.dumps(answer)[:200]
+            out.append({"variant": variant, "case_id": case_id, "input": str(root.get("input") or "")[:2000], "output": str(answer)[:500] if answer is not None else "(no output)",
+                        "metadata": {"category": "prompt-variant", "prompt_variant": variant, "case_id": case_id, "question_id": meta.get("question_id"),
+                                     "gold_answer": meta.get("gold_answer"), "case_set": meta.get("case_set"), "system_label": SYSTEM_LABEL["A"], "model_label": "glm",
+                                     **judged.get(rid, {})}})
+    return out
 
 
 def agent_run_log_plan(already_planned: set[tuple[str, str]]) -> list[dict]:
@@ -395,7 +554,8 @@ def _log_one_tree(logger, p: dict, manifest: dict) -> str | None:
     arm, _, model = p["variant_id"].partition("@")
     meta = {"case_id": p["case_id"], "variant_id": p["variant_id"], "arm": arm, "model": model, "category": p["category"],
             "status": (row.get("record") or {}).get("status") or row.get("status"),
-            "obj_grounded_accuracy": (row.get("scores") or {}).get("grounded_accuracy"), **_case_info(p["case_id"])}
+            "obj_grounded_accuracy": (row.get("scores") or {}).get("grounded_accuracy"), **_case_info(p["case_id"]),
+            **mirror_for(p["case_id"], p["variant_id"], row, p.get("ctx") or _mirror_context())}
     root = logger.start_span(name=f"{p['case_id']} | {p['variant_id']}")
     root.log(input=(case or {}).get("question_text") or p["case_id"], metadata=meta)
     n = 0
@@ -441,6 +601,93 @@ def step_replay(api: Api, live: bool, manifest: dict, target: str) -> None:
     root_id = _log_one_tree(logger, p, manifest)
     logger.flush()
     print(f"  logged root span {root_id}")
+
+
+def _all_root_logs(api: Api) -> list[dict]:
+    out, cursor = [], None
+    while True:
+        body = {"limit": 500, **({"cursor": cursor} if cursor else {})}
+        payload = api.post(f"project_logs/{PROJECT_ID}/fetch", body)
+        events = payload.get("events", [])
+        out += [e for e in events if _is_root(e)]
+        cursor = payload.get("cursor")
+        if not cursor or not events:
+            return out
+
+
+def step_mirror(api: Api, live: bool, manifest: dict) -> None:
+    """Merge the metadata mirror onto every existing agent-trace root log (idempotent; 0 scores)."""
+    idx = stored_row_index()
+    print(f"mirror: metadata mirror (labels, obj/judge/human/DeepEval numbers, cost, latency) onto every root log; {len(idx)} stored rows indexed")
+    manifest["mirror"] = {"rows_indexed": len(idx), "logs_updated": 0, "logs_unmatched": 0}
+    if not live:
+        return
+    ctx = _mirror_context()
+    roots = _all_root_logs(api)
+    events, unmatched = [], 0
+    for e in roots:
+        m = e.get("metadata") or {}
+        if m.get("category") in ("retrieval", "prompt-variant") or not m.get("case_id") or not m.get("variant_id"):
+            continue
+        row = idx.get((m["case_id"], m["variant_id"]))
+        if row is None:
+            unmatched += 1
+            continue
+        events.append({"id": e["id"], "metadata": mirror_for(m["case_id"], m["variant_id"], row, ctx), "_is_merge": True})
+    _assert_scoreless(events)
+    for i in range(0, len(events), 100):
+        api.post(f"project_logs/{PROJECT_ID}/insert", {"events": events[i:i + 100]})
+    manifest["mirror"].update({"logs_updated": len(events), "logs_unmatched": unmatched})
+    _ledger("logs", f"mirror:{len(events)}")
+    print(f"  merged onto {len(events)} logs ({unmatched} unmatched)")
+
+
+def step_raglogs(api: Api, live: bool, manifest: dict) -> None:
+    rows = retrieval_log_rows()
+    seen = _ledger_keys()
+    todo = [r for r in rows if ("logs", f"retrieval:{r['case_id']}:{r['retriever']}") not in seen]
+    print(f"raglogs: {len(rows)} retrieval logs (58 dev queries x 6 retrievers, gold-span rank as metadata), {len(todo)} not yet in the ledger, 0 scores")
+    manifest["raglogs"] = {"planned": len(rows), "written_this_run": 0}
+    if not live or not todo:
+        return
+    import braintrust
+    logger = braintrust.init_logger(project=PROJECT, set_current=True)
+    for r in todo:
+        span = logger.start_span(name=f"{r['case_id']} | retrieval:{r['retriever']}")
+        span.log(input=r["input"], output=r["output"], metadata=r["metadata"])
+        span.end()
+        _ledger("logs", f"retrieval:{r['case_id']}:{r['retriever']}")
+        manifest["raglogs"]["written_this_run"] += 1
+    logger.flush()
+
+
+def step_promptlogs(api: Api, live: bool, manifest: dict) -> None:
+    """The Playground pre-run experiments mirrored into Logs, one per (variant, case), judges as metadata."""
+    variants = [pr["slug"].removeprefix("arm-a-prompt-") for pr in playground_prompts()]
+    print(f"promptlogs: playground-arm-A-* experiments -> logs with judge scores as metadata ({', '.join(variants)}), 0 scores")
+    manifest["promptlogs"] = {"variants": variants, "written_this_run": 0}
+    if not live:
+        return
+    events_by_variant: dict[str, list[dict]] = {}
+    for v in variants:
+        exp = api.get("experiment", {"project_id": PROJECT_ID, "experiment_name": f"playground-arm-A-{v}"}).get("objects", [])
+        if exp:
+            events_by_variant[v] = api.fetch_rows(exp[0]["id"])
+    rows = prompt_variant_log_rows(events_by_variant)
+    seen = _ledger_keys()
+    todo = [r for r in rows if r["case_id"] and ("logs", f"prompt:{r['variant']}:{r['case_id']}") not in seen]
+    print(f"  {len(rows)} rows fetched, {len(todo)} to log")
+    if not todo:
+        return
+    import braintrust
+    logger = braintrust.init_logger(project=PROJECT, set_current=True)
+    for r in todo:
+        span = logger.start_span(name=f"{r['case_id']} | prompt:{r['variant']}")
+        span.log(input=r["input"], output=r["output"], metadata=r["metadata"])
+        span.end()
+        _ledger("logs", f"prompt:{r['variant']}:{r['case_id']}")
+        manifest["promptlogs"]["written_this_run"] += 1
+    logger.flush()
 
 
 def step_review(api: Api, live: bool, manifest: dict) -> None:
@@ -607,31 +854,57 @@ def step_playground(api: Api, live: bool, manifest: dict) -> None:
     _ledger("playground", "dataset+prompts")
 
 
-def run_playground(api: Api, manifest: dict, judges: tuple[str, ...] = PLAYGROUND_JUDGES) -> None:
+def _eval_progress(api: Api, experiment_id: str) -> tuple[int, int]:
+    """(root rows with an output, root rows with at least one non-null score) for an experiment."""
+    roots = [r for r in api.fetch_rows(experiment_id) if _is_root(r)]
+    return (sum(1 for r in roots if r.get("output") is not None),
+            sum(1 for r in roots if any(v is not None for v in (r.get("scores") or {}).values())))
+
+
+def run_playground(api: Api, manifest: dict, judges: tuple[str, ...] = PLAYGROUND_JUDGES, variants: set[str] | None = None,
+                   n_rows: int = 18, wait_s: int = 1200) -> None:
     """Pre-run the Playground server-side (POST /v1/eval): one experiment per prompt over the arm-A
-    packets, scored by the LLM judges. Scores: len(prompts) x 18 x len(judges); OpenRouter: cents."""
-    prompts = playground_prompts()
+    packets, scored by the LLM judges. Scores: len(prompts) x 18 x len(judges); OpenRouter: cents.
+
+    The eval runs asynchronously on Braintrust's side and a non-streaming POST hits the gateway's
+    timeout after ~3 minutes while the eval keeps going (observed live), so the request streams, and
+    completion is decided by polling the experiment until every row has an output (or `wait_s`).
+    An experiment that already exists under the same name would be appended to, not replaced: pass
+    `variants` to re-run one, after deleting it."""
+    prompts = [pr for pr in playground_prompts() if not variants or pr["slug"].removeprefix("arm-a-prompt-") in variants]
     ds = api.get("dataset", {"project_id": PROJECT_ID, "dataset_name": PLAYGROUND_DATASET}).get("objects", [])
     if not ds:
         raise SystemExit("playground dataset missing; run --only playground first")
     fid = {o["slug"]: o["id"] for o in api.get("function", {"project_id": PROJECT_ID, "limit": 200}).get("objects", [])}
     scores = [{"function_id": fid[f"judge-{d}"]} for d in judges]
-    n_scores = len(prompts) * 18 * len(judges)
-    print(f"playground run: {len(prompts)} experiments x 18 rows x {len(judges)} judges = {n_scores} scores")
+    print(f"playground run: {len(prompts)} experiments x {n_rows} rows x {len(judges)} judges = {len(prompts) * n_rows * len(judges)} scores")
     manifest["playground_run"] = []
     for pr in prompts:
         variant = pr["slug"].removeprefix("arm-a-prompt-")
         name = f"playground-arm-A-{variant}"
         body = {"project_id": PROJECT_ID, "data": {"dataset_id": ds[0]["id"]}, "task": {"function_id": fid[pr["slug"]]}, "scores": scores,
                 "experiment_name": name, "metadata": {k: v for k, v in classify_experiment(name).items() if k not in ("tags", "description")},
-                "max_concurrency": 2, "stream": False}
-        r = requests.post(f"{API}/eval", headers=api.h, json=body, timeout=1800)
-        ok = r.status_code < 300
-        print(f"  {name}: {'ok' if ok else 'FAILED'} {r.text[:300] if not ok else ''}")
-        manifest["playground_run"].append({"experiment": name, "ok": ok, "response": r.json() if ok else r.text[:300]})
-        if ok:
-            _ledger(name, "playground-eval", 18 * len(judges))
-    manifest["playground_run_scores_planned"] = n_scores
+                "max_concurrency": 2, "stream": True}
+        with contextlib.suppress(requests.RequestException), \
+                requests.post(f"{API}/eval", headers=api.h, json=body, timeout=(30, 600), stream=True) as r:
+            for _ in r.iter_lines():
+                pass
+        exp = api.get("experiment", {"project_id": PROJECT_ID, "experiment_name": name}).get("objects", [])
+        if not exp:
+            print(f"  {name}: FAILED (no experiment created)")
+            manifest["playground_run"].append({"experiment": name, "ok": False})
+            continue
+        deadline = time.time() + wait_s
+        outputs = scored = 0
+        while time.time() < deadline:
+            outputs, scored = _eval_progress(api, exp[0]["id"])
+            if outputs >= n_rows:
+                break
+            time.sleep(30)
+        ok = outputs >= n_rows
+        print(f"  {name}: {'complete' if ok else 'INCOMPLETE'} ({outputs}/{n_rows} outputs, {scored} rows scored)")
+        manifest["playground_run"].append({"experiment": name, "id": exp[0]["id"], "ok": ok, "outputs": outputs, "rows_scored": scored})
+        _ledger(name, "playground-eval", scored * len(judges))
 
 
 JUDGE_DIMENSIONS = ("reasoning", "evidence", "trajectory", "professional")
@@ -701,6 +974,10 @@ def main(argv: list[str] | None = None) -> int:
         if a == "--replay" and i + 1 < len(argv):
             replay = argv[i + 1]
     run_pg = "--run-playground" in argv
+    variants = None
+    for i, a in enumerate(argv):
+        if a == "--variants" and i + 1 < len(argv):
+            variants = set(argv[i + 1].split(","))
     key = load_braintrust_key()
     if live and not key:
         print("no BRAINTRUST_API_KEY; refusing a live run", file=sys.stderr)
@@ -720,7 +997,7 @@ def main(argv: list[str] | None = None) -> int:
         if not live:
             print("playground run needs --live (it writes scores and spends OpenRouter cents)")
             return 2
-        run_playground(api, manifest)
+        run_playground(api, manifest, variants=variants)
         return 0
     for name in STEPS:
         if only and name not in only:

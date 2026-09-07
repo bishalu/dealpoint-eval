@@ -163,28 +163,28 @@ def test_view_btql_filters_match_the_documented_queries_verbatim():
     assert by_name["Trajectory inefficiency"]["definition"]["btql"] == documented_btql_query(6)
 
 
-def test_dashboard_charts_only_use_fields_the_logs_carry():
+def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
     """The dashboard is the monitor surface over project logs; the logs carry no obj/*, judge/*,
-    human/* or li/* scores (those live in experiments), so a chart over them is blank by
-    construction. Every chart must aggregate a log field: a count, `metadata.*`, or the online
-    scoring rule's `Judge: professional` score."""
+    human/* or li/* scores (those live in experiments), so every chart aggregates the metadata mirror
+    the showroom merges onto logs, as a toplist (groups on the axis, not time), one question each."""
     from dealpoint.eval.braintrust_cockpit import _chart_rest_definition, dashboard_definition
 
     dash = dashboard_definition()
     assert dash["name"] == "DealPoint eval overview"
-    assert len(dash["charts"]) == 6
-    kinds = [_chart_rest_definition(c)["type"] for c in dash["charts"]]
-    assert kinds[:-1] == ["scalars"] * 5 and kinds[-1] == "monitorTimeseries", "only the as-it-lands chart is a time series"
-    assert all(_chart_rest_definition(c)["viz"]["type"] == "toplist" for c in dash["charts"][:-1])
+    assert len(dash["charts"]) == 16
+    questions = [c["title"].split("?")[0] for c in dash["charts"] if "?" in c["title"]]
+    assert {"Which system", "Which retriever", "Which model", "Which prompt"} <= set(questions)
+    assert any("lawyer" in c["title"] for c in dash["charts"]) and any("DeepEval" in c["title"] for c in dash["charts"])
     for chart in dash["charts"]:
         measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
         for m in measures:
-            assert "obj/" not in m and "judge/" not in m and "human/" not in m and "li/" not in m, m
-            assert m.startswith("count(") or "metadata." in m or 'scores."Judge: professional"' in m, m
+            assert m.startswith("avg(metadata.") or m.startswith("count("), m
+            assert "scores." not in m
         assert all(g.startswith("metadata.") for g in chart["group_by"])
+        assert chart["filters"], "every chart names the log family it aggregates"
         rest = _chart_rest_definition(chart)
-        assert rest["viz"]["unitType"] == ("count" if chart["measure"].startswith("count(") else "percent")
-    assert "by arm" in dash["charts"][0]["title"].lower()
+        assert rest["type"] == "scalars" and rest["viz"]["type"] == "toplist"
+        assert rest["filters"] == [{"btql": f} for f in chart["filters"]]
 
 
 def test_sync_views_and_dashboard_idempotent_second_run_creates_nothing_new():
