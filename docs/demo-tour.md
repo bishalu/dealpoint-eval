@@ -357,16 +357,17 @@ as fast as anything on the slate, at twice Qwen's cost. Qwen is the cost floor: 
 per dollar, with the worst cap-hit and failure rates. Haiku is the same quality as GLM and DeepSeek at
 sixteen times the cost, and the dashboard shows it at six correct outcomes per dollar.
 
-The scoring system is two numbers read together, and one tie-breaker. **Safe rate**: the share of
+The accuracy point is **safe accuracy**, the biggest number that survives scrutiny, read with one check
+and one tie-breaker. **Safe accuracy**: the share of
 cases where the system did not mislead, a correct answer, a correct abstention, or a silent failure
 (abstained wrongly, hit the tool cap, failed to produce a finding). **Precision when it answers**: of the
 cases it answered, how many were right; silence cannot inflate this one, which is why it always sits next
 to safe rate. A misleading answer is a wrong answer, or any answer when the agreement does not address the
 question. **Net accuracy**, correct minus misleading over every case, is the tie-breaker. In a legal tool
 a silent failure costs a lookup; a misleading answer costs a client. The overview dashboard's first three
-charts rank every system@model by these on the same 18 cases:
+charts rank every system@model by these on the same 18 cases (D@gemini's safe accuracy is 83%; the agents run 83 to 89%):
 
-| system@model, same 18 cases | safe | precision when answering | answered | quotes verbatim | net | $/case |
+| system@model, same 18 cases | safe accuracy | precision when answering | answered | quotes verbatim | net | $/case |
 |---|---|---|---|---|---|---|
 | **D@gemini** | 83% | 67% | 50% | **100%** | **33%** | $0.0055 |
 | D@deepseek | **89%** | **71%** | 39% | 71% | 17% | $0.0024 |

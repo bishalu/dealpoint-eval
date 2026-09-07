@@ -416,7 +416,7 @@ def chart_catalogue() -> dict[str, dict]:
     """Every chart, keyed, with a short title (the dashboard's name carries the question). Each is a
     toplist over the metadata mirror: see `dashboard_definitions` for why nothing here is a time series."""
     return {
-        "sys_safe": {"title": f"SAFE RATE, the headline: share of cases where the system did not mislead (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL})",
+        "sys_safe": {"title": f"SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL})",
                      "measure": "avg(metadata.safe)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_precision": {"title": f"PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right; the check on safe rate, since silence cannot inflate this ({SYS_POOL})",
                           "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
@@ -441,10 +441,10 @@ def chart_catalogue() -> dict[str, dict]:
         "ret_hit5": {"title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)", "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_mrr": {"title": "Mean reciprocal rank of the gold span, 58 dev queries", "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_hit10": {"title": "Gold-span hit@10 on the 58 dev queries", "measure": "avg(metadata.hit_at_10)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
-        "mod_safe": {"title": f"SAFE RATE, the headline: share of cases where the model did not mislead, correct or silent ({MOD_POOL})", "measure": "avg(metadata.safe)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_safe": {"title": f"SAFE ACCURACY, the accuracy point: share of cases with no wrong answer, correct or silent ({MOD_POOL})", "measure": "avg(metadata.safe)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "mod_precision": {"title": f"PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right ({MOD_POOL})", "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "mod_verbatim": {"title": f"VERBATIM QUOTES: of the answers given, how many cited a word-for-word span of the agreement ({MOD_POOL})", "measure": "sum(metadata.cite_verbatim_answered) / sum(metadata.answered)", "group_by": ["metadata.model_label"], "filters": [D18]},
-        "pareto_safe": {"title": "SAFE RATE across every system@model on the same 18 cases: did not mislead (correct, or silent)", "measure": "avg(metadata.safe)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "pareto_safe": {"title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent), every system@model on the same 18 cases", "measure": "avg(metadata.safe)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "pareto_precision": {"title": "PRECISION WHEN IT ANSWERS across every system@model on the same 18 cases: right when it speaks", "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "mod_net": {"title": f"NET ACCURACY, the headline: correct minus misleading over every case ({MOD_POOL})", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "mod_misleading": {"title": f"Misleading answers: answered and wrong, or answered on a counterfactual ({MOD_POOL})", "measure": "avg(metadata.misleading)", "group_by": ["metadata.model_label"], "filters": [D18]},
@@ -486,7 +486,7 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("DealPoint eval overview",
      ("VERDICTS (from the question dashboards, 2026-09-07; small samples, one run each). "
       "SEARCH: hybrid (dense + BM25, reciprocal-rank fusion), no reranker: 91% gold-span hit@5 vs 81% dense. "
-      "SCORING: two numbers, read together. SAFE RATE = share of cases where the system did not mislead (a correct answer, a correct abstention, or "
+      "THE ACCURACY POINT is SAFE ACCURACY: the share of cases with no wrong answer. Read it with its check. SAFE ACCURACY = share of cases where the system did not mislead (a correct answer, a correct abstention, or "
       "a silent failure: abstained wrongly, hit the tool cap, failed to produce a finding). PRECISION WHEN IT ANSWERS = of the cases it answered, how "
       "many were right; silence cannot inflate this one, which is why it sits next to safe rate. A misleading answer is a wrong answer, or any answer "
       "when the agreement does not address the question. NET ACCURACY (correct minus misleading, over every case) is the tie-breaker. "
@@ -499,7 +499,7 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
       "JUDGES: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory; two judges, not three; no judge "
       "is trustworthy on trajectory, keep the lawyer there. "
       "PROMPT: cite-first for the baseline (best evidence score), terse loses everywhere. "
-      "Every chart is a comparison, never a lone number: the first two rank every system@model by safe rate and by precision on the same 18 cases. "
+      "Every chart is a comparison, never a lone number: the first ranks every system@model by safe accuracy on the same 18 cases, the second by precision. "
       "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
       "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
      ("pareto_safe", "pareto_precision", "pareto_net", "sys_safe", "mod_safe", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
