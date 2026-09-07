@@ -279,8 +279,23 @@ One investigation, three tools, in this order:
    would have ended them early?"* The answer is the spec for the next milestone: a "definition absent"
    stopping rule for the loop.
 
-One Pattern records it ("agent searches repeatedly for a defined term the agreement does not contain, then
-hits the tool cap") so the next batch of logs gets matched against it automatically.
+One Pattern records it so the next batch of logs gets matched against it automatically. Paste-ready
+(Patterns has no REST path; create it in the UI or with the `new_pattern` MCP tool once `braintrust-demo`
+is authorised):
+
+- **Title:** Agent loops on a defined term the agreement does not contain, then hits the tool cap
+- **Description:** On the counterfactual cases where the Knowledge (or another) definition was redacted,
+  the arm-D agent keeps issuing `lookup_defined_term` and `search_agreement` calls for a definition that is
+  not in the document until it hits the 8-call cap. Across the five arm-D models on the six redacted or
+  out-of-scope judged cases, 25 of 30 traces ended in CAP_HIT, 4 abstained, 1 answered anyway (a
+  fabrication); the single-shot pipeline abstained on 5 of 6. The loop has no "I have looked everywhere"
+  stopping rule. Fix: a definition-absent stopping rule after two empty lookups.
+- **Supporting traces (Logs ids):** `e9194ae8-2506-4101-b7ee-352cfef65d4a` (contract_39__redacted_q05,
+  D@gemini), `69790cfb-4268-4dc5-8fdb-06d78033aba5` (contract_39__redacted_q05, D@qwen),
+  `c164bda3-8235-4f45-a52a-476afc801f9a` (contract_99__redacted_q06, D@gemini),
+  `ac2f94ad-5ad8-47d9-93b9-2fa53cf46ca5` (contract_99__redacted_q06, D@qwen),
+  `d945f9c6-9962-4932-9164-0908f9c3a620` (contract_103__redacted_q08, D@qwen),
+  `27ae52f0-0ca8-4a42-a212-f6286c9c21fa` (contract_75__redacted_q07, D@deepseek).
 
 One-liner: "The bug is retrieval control flow, not model IQ, and the fix has a name before anyone writes
 code."
@@ -333,8 +348,9 @@ Everything below needs a browser session or the `braintrust-demo` MCP OAuth; the
    preprocessor `dealpoint-trace-preprocessor`, which renders system, model, question, status, answer and
    objective grounding for every log. Look at the clusters once they materialise, then pause the daily
    job after Wednesday (model credit is the one meter no code guards).
-4. One Loop thread with the stop-8 prompt, saved. One Pattern via the MCP `new_pattern` tool with the
-   stop-8 wording.
+4. One Loop thread with the stop-8 prompt, saved. Patterns is enabled (2026-09-07); create the one
+   Pattern from the paste-ready block in stop 8 (UI, or the `new_pattern` MCP tool after the OAuth
+   restart), then let the automation match new logs against it.
 5. Playground: open the four `arm-a-prompt-*` prompts over `maud-dealpoint-playground-armA` with the three
    judges, run once (about $0.10 OpenRouter), save the session. The `playground-arm-A-*` experiments are the
    fallback.
