@@ -21,7 +21,7 @@ pinned to 30 days so batch-ingested logs never fall out of a sliding window.
 | Which system? | A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill on the same 32 cases: correct outcome, cap-hits, fabrication, abstention, the loop on GLM vs Haiku, dollars, seconds, tool calls, correct outcomes per dollar | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/8e0003f4-5840-45b3-bc9a-86fcb686ec1a |
 | Which model? | arm D on the same 18 cases, five models: correct outcome, dollars, seconds, p90, cap-hits, execution failures, per dollar, dollars per correct outcome, the Pareto list across every system@model | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
 | Which retriever? | six retrievers on the 58 dev queries: hit@5, hit@10, MRR | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/32c5a4be-7898-4630-af11-ca40e743e9e4 |
-| Judges and the lawyer | mean of three judges next to the lawyer; each judge family's distance from the lawyer overall and per dimension; cost per judged trace and agreement per dollar per family; the panel by system@model; DeepEval's agreement with truth | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
+| Judges and the lawyer | the panel's mean next to the lawyer; signed bias per judge family per dimension (every judge runs high; how high, and where); cost per call per family; the panel by system@model; DeepEval's agreement with truth | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
 | Which prompt? | the four arm-A prompts, judged on professional quality, evidence and reasoning | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
 
 Every ranking chart compares one case pool at a time (the five arm-D models on the same 18 judged cases,
@@ -211,15 +211,16 @@ tidy, well-hedged refusal; NVIDIA punishes it; the lawyer's read is "reasonable,
 there". A spread like that is information, not noise: it tells you which judge is credulous about fluent
 hedging before you deploy that judge.
 
-Which judge, then? The "Judges and the lawyer" dashboard ranks the three families by mean distance
-from the lawyer (0 to 1 scale, lower is better) per dimension and overall, with the realized cost of
-each call and agreement per dollar. Overall the three are within two hundredths of each other (NVIDIA
-0.10, Mistral 0.11, ByteDance 0.13), but the dimensions split: Mistral is closest on evidence (0.03) and
-professional quality (0.07) and worst on trajectory (0.29); NVIDIA and ByteDance tie on trajectory
-(0.20). Mistral is also the cheapest call, so it wins agreement per dollar by a third. The panel we would
-deploy is therefore not "the best judge" but a per-dimension pick: Mistral for reasoning, evidence and
-professional quality, NVIDIA or ByteDance for trajectory, which is exactly how the four LLM scorers on
-the Scorers tab are assigned.
+Which judge, then? The "Judges and the lawyer" dashboard shows each family's signed bias against the
+lawyer per dimension (judge minus lawyer, 0 to 1 scale). Every bar is positive: all three judges run
+high, everywhere. How high is the decision. On reasoning and evidence the bias is a rounding error
+(0.01 to 0.06). On professional quality Mistral runs highest (0.07). On trajectory every judge
+over-credits and Mistral most of all (0.29, versus 0.14 for NVIDIA and 0.16 for ByteDance): it gives
+points for "targeted progress" on runs that produced nothing. Cost is a wash (all three within fifteen
+thousandths of a cent per call; the whole calibration was fourteen cents). So the panel to deploy is a
+per-dimension pick, not a best judge: Mistral for reasoning, evidence and professional quality, NVIDIA or
+ByteDance for trajectory, which is how the four LLM scorers on the Scorers tab are assigned, with the
+standing caveat that no judge is trustworthy on trajectory without the lawyer.
 
 Then the twin, `contract_39__redacted_q05`: every arm-D run hit the cap, the lawyer gave them 1s, and the
 judges agreed, except on trajectory, where Mistral gives 3s for "targeted progress" on a run that produced
