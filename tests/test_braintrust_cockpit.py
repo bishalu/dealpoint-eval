@@ -180,7 +180,8 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
 
     dashes = dashboard_definitions()
     assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "Which prompt?"]
-    assert len(dashes[0]["charts"]) == 6
+    assert len(dashes[0]["charts"]) == 11 and sum(1 for c in dashes[0]["charts"] if c.get("kind") == "bignumber") == 5
+    assert all(d["description"].startswith("VERDICT") for d in dashes), "every dashboard leads with its verdict"
     judges = next(d for d in dashes if d["name"] == "Judges and the lawyer")
     assert [c["group_by"] for c in judges["charts"]] == [[]] * len(judges["charts"]), "the judges page never ranks systems"
     used = {k for _, _, keys in DASHBOARDS for k in keys}
@@ -203,7 +204,7 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
             if any(g.endswith(("system_label", "model_label", "variant_label")) for g in chart["group_by"]):
                 assert "metadata.comparable = 1" in " ".join(chart["filters"]), chart["title"]
             rest = _chart_rest_definition(chart)
-            assert rest["type"] == "scalars" and rest["viz"]["type"] == "toplist"
+            assert rest["type"] == "scalars" and rest["viz"]["type"] == ("singleValue" if chart.get("kind") == "bignumber" else "toplist")
     assert "A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill" in dashes[1]["charts"][0]["title"]
 
 

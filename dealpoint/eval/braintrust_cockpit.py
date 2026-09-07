@@ -416,6 +416,16 @@ def chart_catalogue() -> dict[str, dict]:
     """Every chart, keyed, with a short title (the dashboard's name carries the question). Each is a
     toplist over the metadata mirror: see `dashboard_definitions` for why nothing here is a time series."""
     return {
+        "big_best_config": {"kind": "bignumber", "title": "BEST MEASURED CONFIG: A@haiku (single shot on Claude Haiku 4.5), correct outcome on the same 18 cases; 0 fabrication, 0 cap-hits, 3.7 s, $0.0034",
+                            "measure": [{"btql": "avg(metadata.correct_all)", "name": "A@haiku"}], "group_by": [], "filters": [f"{JUDGED18} and metadata.variant_label = 'A@haiku'"]},
+        "big_best_agent": {"kind": "bignumber", "title": "BEST AGENT: D@gemini (agent + hybrid + skill on Gemini 3.1 flash lite), correct outcome on the same 18 cases; the only agent that never fabricates",
+                           "measure": [{"btql": "avg(metadata.correct_all)", "name": "D@gemini"}], "group_by": [], "filters": [f"{JUDGED18} and metadata.variant_label = 'D@gemini-3.1-flash-lite'"]},
+        "big_best_retriever": {"kind": "bignumber", "title": "BEST RETRIEVER: hybrid_rrf (dense + BM25, reciprocal-rank fusion, no reranker), gold-span hit@5 on the 58 dev queries",
+                               "measure": [{"btql": "avg(metadata.hit_at_5)", "name": "hybrid_rrf"}], "group_by": [], "filters": ["metadata.category = 'retrieval' and metadata.retriever = 'hybrid_rrf'"]},
+        "big_judges": {"kind": "bignumber", "title": "BEST JUDGE PANEL: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory. Shown: Mistral's closeness to the lawyer on evidence",
+                       "measure": [{"btql": "avg(metadata.judge_mistral_evidence_closeness)", "name": "Mistral on evidence"}], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
+        "big_best_prompt": {"kind": "bignumber", "title": "BEST BASELINE PROMPT: cite-first, Judge: evidence over the 18 arm-A packets",
+                            "measure": [{"btql": "avg(metadata.judge_evidence)", "name": "cite-first"}], "group_by": [], "filters": ["metadata.category = 'prompt-variant' and metadata.prompt_variant = 'cite-first'"]},
         "sys_correct": {"title": f"Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL}; a correct abstention counts)",
                         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_cap": {"title": f"Cap-hit rate, the loop never stops ({SYS_POOL})", "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
@@ -475,31 +485,32 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
       "PROMPT: cite-first for the baseline (best evidence score), terse loses everywhere. "
       "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
       "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
-     ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_evidence")),
+     ("big_best_config", "big_best_agent", "big_best_retriever", "big_judges", "big_best_prompt",
+      "pareto", "sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "prompt_evidence")),
     ("Which system?",
-     ("Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
+     ("VERDICT: A wins today (most correct outcomes, zero fabrication, a quarter of the cost); C beats D and earns its place once a stopping rule ends the cap-hits. Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
      "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
      "abstention), whether the loop pays off more on a stronger model, then dollars, seconds, tool calls and correct outcomes per dollar."),
      ("sys_correct", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
     ("Which model?",
-     ("Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
+     ("VERDICT: Gemini 3.1 flash lite for quality, Qwen 3.7 flash for the cost floor, Haiku out of the loop; and the Pareto list says the best config overall is the single-shot baseline on Haiku. Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
      "then reliability (cap-hits, execution failures), then the two numbers a deployment decision turns on: correct outcomes per dollar and "
      "dollars per correct outcome. The Pareto list ranks every system@model by correct outcomes per dollar; the judge panel's chart is the "
      "judges' view of the same race."),
      ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto", "panel_professional")),
     ("Which retriever?",
-     ("Six retrievers on the same 58 dev queries, scored against the expert's gold span: hit@5, hit@10 and mean reciprocal rank. "
+     ("VERDICT: hybrid_rrf, no reranker. Six retrievers on the same 58 dev queries, scored against the expert's gold span: hit@5, hit@10 and mean reciprocal rank. "
      "Hybrid (dense + BM25 with reciprocal-rank fusion) wins; reranking adds nothing."),
      ("ret_hit5", "ret_hit10", "ret_mrr")),
     ("Judges and the lawyer",
-     ("Three cheap LLM judges (Mistral Small, NVIDIA Nemotron, ByteDance Seed) scored 108 blinded traces on four dimensions; a lawyer scored 24 of "
+     ("VERDICT: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory, two judges not three, and the lawyer keeps trajectory. Three cheap LLM judges (Mistral Small, NVIDIA Nemotron, ByteDance Seed) scored 108 blinded traces on four dimensions; a lawyer scored 24 of "
      "the same packets. First chart: can the panel be trusted (closeness of the three-judge mean to the lawyer, per dimension; 100% is identical). "
      "Next four: which judge for which dimension, each judge's closeness to the lawyer; the tallest bar is the pick. Direction, for the record: "
      "every judge scores higher than the lawyer on every dimension, most of all on trajectory, so a gap always means over-credit. Then cost per "
      "call (a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
      ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional", "judge_family_usd", "deepeval")),
     ("Which prompt?",
-     ("Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
+     ("VERDICT: cite-first (best evidence score); terse loses everywhere; abstain-first buys nothing. Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
      "judged on professional quality, evidence and reasoning by the LLM scorers. Only the prompt varies."),
      ("prompt_professional", "prompt_evidence", "prompt_reasoning")),
 )
@@ -523,7 +534,7 @@ def dashboard_definitions() -> list[dict]:
     time range is pinned (DASHBOARD_RANGE) so a sliding default window cannot blank batch-ingested logs.
     """
     cat = chart_catalogue()
-    return [{"name": name, "description": desc, "view_type": "monitor", "charts": [{**cat[k], "kind": "toplist"} for k in keys]}
+    return [{"name": name, "description": desc, "view_type": "monitor", "charts": [{"kind": "toplist", **cat[k]} for k in keys]}
             for name, desc, keys in DASHBOARDS]
 
 
@@ -861,6 +872,9 @@ def _chart_rest_definition(chart: dict) -> dict:
     group_bys = [{"btql": g, "displayName": GROUP_DISPLAY.get(g, g.rsplit(".", 1)[-1])} for g in chart.get("group_by", [])]
     unit_type = chart.get("unit") or ("cost" if "usd" in str(chart["measure"]) else "percent")
     filters = [{"btql": f} for f in chart.get("filters", [])]
+    if chart.get("kind") == "bignumber":
+        return {"type": "scalars", "measures": [_measure_rest(m) for m in measures], "groupBys": [], "filters": filters,
+                "viz": {"type": "singleValue", "unitType": unit_type}}
     if chart.get("kind") == "toplist":
         return {"type": "scalars", "measures": [_measure_rest(m) for m in measures], "groupBys": group_bys, "filters": filters,
                 "sortByOptions": {"type": "value", "direction": "desc"}, "viz": {"type": "toplist", "unitType": unit_type}}
