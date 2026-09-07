@@ -66,7 +66,11 @@ SEQUENCE: list[MilestoneSpec] = [
                   absolute_usd=2.50),
     MilestoneSpec(id="m7b", title="Braintrust cockpit and the multi-judge demo (reproducible layer)",
                   spec_path="specs/milestones/m7b.md", gate_marker="gate_m7b"),
+    # M8 is registered but its spec is a DRAFT (engineer's retrieval/benchmark directive of
+    # 2026-09-06); `adw_mvp.py` must not launch it until the deliverables, budget and gate are set.
+    # Run with `--only m8` after the spec is finalised.
 ]
+DRAFT_MILESTONES = {"m8"}
 
 # Exit codes shared by both ADWs, so the parent can branch without parsing prose.
 EXIT_PASSED = 0

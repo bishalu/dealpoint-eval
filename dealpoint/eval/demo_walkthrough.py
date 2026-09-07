@@ -51,13 +51,14 @@ def _logs_trace_section(manifest: dict) -> str:
 def _review_section(manifest: dict) -> str:
     probe = manifest["human_scoring_probe"]
     n_pushed = manifest["n_human_scores_pushed"]
+    n_human_live = (manifest.get("ledger") or {}).get("n_human_scores", 0)
     n_planned = manifest["n_human_scores_planned"]
     return (
         f"Human-scoring path: **{probe['decision']}** -- Starter plan allows one configured "
         "review score, not the four rubric dimensions needed, so scoring stays at "
         f"`data/eval/calibration/form.md` (M5) and `just braintrust-cockpit` pushes "
         f"{n_planned} `human/<dimension>` scores onto the matching `judge-<variant_id>` rows "
-        f"({n_pushed} pushed in this run). Shown in the experiment table and trace, not Review "
+        f"({n_human_live} live per the score ledger; {n_pushed} in this run). Shown in the experiment table and trace, not Review "
         f"mode.\n\n{COCKPIT_MARKER} Scoring the review set at `form.md`, then `just calibration` "
         "and `just braintrust-cockpit` (`--step 1`)."
     )
@@ -108,9 +109,9 @@ def _debugger_section(manifest: dict) -> str:
 def _dashboard_section(manifest: dict) -> str:
     dash = manifest["dashboard"]
     return (
-        f"A saved dashboard, `{dash['name']}` ({dash['id']}), five charts: obj/grounded_accuracy "
+        f"A saved dashboard, `{dash['name']}` ({dash['id']}), six charts: obj/grounded_accuracy "
         "by arm/model; judge/<dimension> mean by variant; judge vs human on the review set "
-        "(captioned \"pending human calibration\" until scores exist); $/case by model; "
+        "(captioned \"pending human calibration\" only while no human scores exist); RAG tournament hit@5/hit@10/MRR by retriever; $/case by model; "
         "DeepEval vs obj/ agreement rate."
     )
 

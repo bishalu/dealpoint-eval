@@ -24,33 +24,33 @@
   ],
   "experiments": [
     {
-      "created": "2026-09-06T02:38:13.819Z",
-      "id": "d8af18a8-e061-4203-aba2-b24961cab617",
-      "name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7",
+      "created": "2026-09-06T02:08:58.002Z",
+      "id": "72f276bf-4ea7-4745-9a1f-aea65d638405",
+      "name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
       "prefix": "A-"
     },
     {
-      "created": "2026-09-06T02:38:10.667Z",
-      "id": "b57b44ac-0e3f-4d5f-bc72-13bfe0bed096",
-      "name": "B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d",
+      "created": "2026-09-06T02:08:55.007Z",
+      "id": "cc1f8b2f-0abb-4b4c-b661-383ee3c43941",
+      "name": "B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
       "prefix": "B-"
     },
     {
-      "created": "2026-09-06T02:38:11.676Z",
-      "id": "0e8e741d-d12c-49b0-bd10-d91ef9743b9c",
-      "name": "C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4",
+      "created": "2026-09-06T02:08:55.948Z",
+      "id": "561c1321-7c62-4a15-85f9-8e38fa1d77f7",
+      "name": "C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
       "prefix": "C-"
     },
     {
-      "created": "2026-09-06T02:38:17.891Z",
-      "id": "2d03d21a-8297-4071-baf2-5c80d674b53f",
-      "name": "D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0",
+      "created": "2026-09-06T02:09:04.283Z",
+      "id": "1a3ec4fd-040b-4e47-b610-6b80d0b21a73",
+      "name": "D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7",
       "prefix": "D-"
     },
     {
-      "created": "2026-09-06T02:38:22.721Z",
-      "id": "90838e82-1de8-4ae3-b363-bbd18aa05e73",
-      "name": "judge-D@gemini-3.1-flash-lite-f0c5a63c",
+      "created": "2026-09-06T02:09:11.742Z",
+      "id": "3db28d99-bf8f-4758-aca7-54533d4bb7e7",
+      "name": "judge-D@gemini-3.1-flash-lite",
       "prefix": "judge-"
     },
     {
@@ -156,7 +156,7 @@
       "prefix": null
     }
   ],
-  "git_sha7": "526f26c",
+  "git_sha7": "94f93d8",
   "hero_case": {
     "case_id": "contract_32__q04",
     "grounded_accuracy_a": false,
@@ -462,6 +462,12 @@
     "probed_at": "2026-09-06T23:00:00+00:00",
     "probed_via": "mcp_braintrust_get_project_settings(project_id=dealpoint-eval) live on 2026-09-06, corroborated with mcp_braintrust_search_docs('configure human review scores Pro Enterprise plan') and data/reports/braintrust_sync.json"
   },
+  "ledger": {
+    "last_ts": "2026-09-07T01:12:00.942991+00:00",
+    "n_entries": 32,
+    "n_human_scores": 96,
+    "n_live_scores": 104
+  },
   "live_score_cap": 600,
   "n_human_scores_planned": 96,
   "n_human_scores_pushed": 0,
@@ -488,12 +494,12 @@
     "dataset:maud-dealpoint-dev-v1": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-dev-v1",
     "dataset:maud-dealpoint-judged_calibration": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-judged_calibration",
     "dataset:maud-dealpoint-test-v1": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-test-v1",
-    "experiment:A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7",
+    "experiment:A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
     "experiment:A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
-    "experiment:B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d",
-    "experiment:C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4",
-    "experiment:D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0",
-    "experiment:judge-D@gemini-3.1-flash-lite-f0c5a63c": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/judge-D@gemini-3.1-flash-lite-f0c5a63c",
+    "experiment:B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "experiment:C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "experiment:D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7",
+    "experiment:judge-D@gemini-3.1-flash-lite": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/judge-D@gemini-3.1-flash-lite",
     "experiment:judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
     "experiment:m7-representative-traces": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7-representative-traces",
     "experiment:m7b-hero-case": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case",
@@ -516,6 +522,7 @@
     "view:Failure attribution": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=86c17089-a244-4757-bdd6-7def89c7f6f0",
     "view:Judge disagreement": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case?v=00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1",
     "view:Judged traces by variant": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments?v=70a5af97-633a-4437-8bcf-fa576dfa1a63",
+    "view:RAG tournament": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments?v=4a45284b-f2d1-4082-adb9-a6f024e10874",
     "view:Retrieval rescue": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=922c48dd-5634-41fe-9362-635df1ca4504",
     "view:Review set (12)": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments?v=7cf518e1-6271-4551-892d-4a28497b0e95",
     "view:Trajectory inefficiency": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=d72191ea-8253-42e3-8a0d-37861c65776f"
@@ -526,6 +533,48 @@
     "variants": [
       "A@haiku",
       "D@haiku"
+    ]
+  },
+  "replay_representative": {
+    "experiment_name": "m7-representative-traces",
+    "n_trees": 6,
+    "trees": [
+      {
+        "case_id": "contract_0__q01",
+        "category": "successful_direct",
+        "n_scores": 0,
+        "variant_id": "D@openai/gpt-5.6-luna-pro"
+      },
+      {
+        "case_id": "contract_0__q01",
+        "category": "retrieval_rescue",
+        "n_scores": 0,
+        "variant_id": "C@z-ai/glm-5.3-flash"
+      },
+      {
+        "case_id": "contract_99__redacted_q06",
+        "category": "defined_term_cross_ref",
+        "n_scores": 0,
+        "variant_id": "D@anthropic/claude-haiku-4.5"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "category": "inefficient_trajectory",
+        "n_scores": 0,
+        "variant_id": "D@qwen/qwen3.7-flash"
+      },
+      {
+        "case_id": "contract_144__q09",
+        "category": "wrong_answer",
+        "n_scores": 0,
+        "variant_id": "A@anthropic/claude-haiku-4.5"
+      },
+      {
+        "case_id": "contract_75__oos09",
+        "category": "abstention_counterfactual",
+        "n_scores": 0,
+        "variant_id": "A@anthropic/claude-haiku-4.5"
+      }
     ]
   },
   "review_set": [
@@ -542,7 +591,7 @@
   ],
   "rubric_version": "cfda9f8cc401",
   "subset_hash": "5918ef10a7e6",
-  "synced_at": "2026-09-07T00:42:54.342625+00:00",
+  "synced_at": "2026-09-07T01:12:11.359185+00:00",
   "topics": {
     "clusters": [],
     "clusters_limitation": "Topic clustering runs asynchronously in Braintrust's product UI over already-synced traces; this SDK/REST surface exposes no read-back of materialized cluster names within a single script invocation. The facet function above is created for real (confirmed live); cluster names are read back and appended here once a topic map exists, not invented in the meantime.",
@@ -609,6 +658,15 @@
       "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
       "object_type": "project",
       "view_type": "logs"
+    },
+    {
+      "caption": "The six frozen M3 retriever configs plus the M7 LlamaIndex cross-check and synthetic-query study: li/hit_rate, li/mrr, obj/hit@5, obj/hit@10 side by side.",
+      "created": true,
+      "id": "4a45284b-f2d1-4082-adb9-a6f024e10874",
+      "name": "RAG tournament",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
+      "view_type": "experiments"
     },
     {
       "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set), matched by case_id.",

@@ -79,7 +79,7 @@ cases (`data/reports/representative_cases.json`), chosen by rule:
 | wrong_answer | `contract_144__q09` | `A@anthropic/claude-haiku-4.5` |
 | abstention_counterfactual | `contract_75__oos09` | `A@anthropic/claude-haiku-4.5` |
 
-Saved views over these spans, idempotent by name: `Judged traces by variant` (70a5af97-633a-4437-8bcf-fa576dfa1a63), `Judge disagreement` (00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1), `Retrieval rescue` (922c48dd-5634-41fe-9362-635df1ca4504), `Failure attribution` (86c17089-a244-4757-bdd6-7def89c7f6f0), `DeepEval vs judge disagreement` (3b40b355-eeea-4400-8f47-03031d7e946c), `Trajectory inefficiency` (d72191ea-8253-42e3-8a0d-37861c65776f), `Review set (12)` (7cf518e1-6271-4551-892d-4a28497b0e95). [cockpit session] A Loop-generated custom trace view (judge spans as a 3x4 grid, human row beneath); its `tv` param via `just demo-manifest-record --step 4`.
+Saved views over these spans, idempotent by name: `Judged traces by variant` (70a5af97-633a-4437-8bcf-fa576dfa1a63), `Judge disagreement` (00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1), `Retrieval rescue` (922c48dd-5634-41fe-9362-635df1ca4504), `Failure attribution` (86c17089-a244-4757-bdd6-7def89c7f6f0), `DeepEval vs judge disagreement` (3b40b355-eeea-4400-8f47-03031d7e946c), `Trajectory inefficiency` (d72191ea-8253-42e3-8a0d-37861c65776f), `RAG tournament` (4a45284b-f2d1-4082-adb9-a6f024e10874), `Review set (12)` (7cf518e1-6271-4551-892d-4a28497b0e95). [cockpit session] A Loop-generated custom trace view (judge spans as a 3x4 grid, human row beneath); its `tv` param via `just demo-manifest-record --step 4`.
 
 ## 5. Scorers
 
@@ -95,7 +95,7 @@ prompts and parameters ARE published (`SCORER_PUBLISH_LIMITATION`).
 
 ## 6. Review
 
-Human-scoring path: **local_form** -- Starter plan allows one configured review score, not the four rubric dimensions needed, so scoring stays at `data/eval/calibration/form.md` (M5) and `just braintrust-cockpit` pushes 96 `human/<dimension>` scores onto the matching `judge-<variant_id>` rows (0 pushed in this run). Shown in the experiment table and trace, not Review mode.
+Human-scoring path: **local_form** -- Starter plan allows one configured review score, not the four rubric dimensions needed, so scoring stays at `data/eval/calibration/form.md` (M5) and `just braintrust-cockpit` pushes 96 `human/<dimension>` scores onto the matching `judge-<variant_id>` rows (96 live per the score ledger; 0 in this run). Shown in the experiment table and trace, not Review mode.
 
 [cockpit session] Scoring the review set at `form.md`, then `just calibration` and `just braintrust-cockpit` (`--step 1`).
 
@@ -141,7 +141,7 @@ reached these experiments (`data/reports/braintrust_sync.json`'s
 
 ## 11. Dashboard
 
-A saved dashboard, `DealPoint eval overview` (b3122524-c555-4599-8544-f302bc284b52), five charts: obj/grounded_accuracy by arm/model; judge/<dimension> mean by variant; judge vs human on the review set (captioned "pending human calibration" until scores exist); $/case by model; DeepEval vs obj/ agreement rate.
+A saved dashboard, `DealPoint eval overview` (b3122524-c555-4599-8544-f302bc284b52), six charts: obj/grounded_accuracy by arm/model; judge/<dimension> mean by variant; judge vs human on the review set (captioned "pending human calibration" only while no human scores exist); RAG tournament hit@5/hit@10/MRR by retriever; $/case by model; DeepEval vs obj/ agreement rate.
 
 ## Braintrust tools — decision, not a stub
 

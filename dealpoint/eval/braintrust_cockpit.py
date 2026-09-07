@@ -382,6 +382,12 @@ def view_definitions() -> list[dict]:
             "definition": {"btql": documented_btql_query(QUERY_NUMBERS["trajectory_inefficiency"])},
         },
         {
+            "name": "RAG tournament",
+            "view_type": "experiments",
+            "caption": "The six frozen M3 retriever configs plus the M7 LlamaIndex cross-check and synthetic-query study: li/hit_rate, li/mrr, obj/hit@5, obj/hit@10 side by side.",
+            "definition": {"btql": "name like 'rag-%'"},
+        },
+        {
             "name": "Review set (12)",
             "view_type": "for_review_experiments",
             "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set), matched by case_id.",
@@ -391,7 +397,7 @@ def view_definitions() -> list[dict]:
 
 
 def dashboard_charts() -> list[dict]:
-    """The five `DealPoint eval overview` dashboard charts, in spec order,
+    """The six `DealPoint eval overview` dashboard charts, in spec order,
     as data (never a string template) so a fake-client test can assert on
     the structure directly.
     """
@@ -412,6 +418,11 @@ def dashboard_charts() -> list[dict]:
             + [f'avg(scores."human/{dim}")' for dim in JUDGE_DIMENSIONS],
             "group_by": ["metadata.variant_id"],
             "caption_if_empty": "pending human calibration",
+        },
+        {
+            "title": "RAG tournament: hit@5, hit@10 and MRR by retriever",
+            "measure": ['avg(scores."obj/gold_span_hit_at_5")', 'avg(scores."obj/gold_span_hit_at_10")', 'avg(scores."li/mrr")'],
+            "group_by": ["metadata.config"],
         },
         {
             "title": "$/case by model",
@@ -1015,6 +1026,57 @@ def _ledger_record(experiment: str, key: str, n_scores: int) -> None:
                              "ts": datetime.now(UTC).isoformat()}) + "\n")
 
 
+REPRESENTATIVE_EXPERIMENT = "m7-representative-traces"
+
+
+def replay_representative_cases(sdk_client) -> dict:
+    """Replay the six rule-chosen representative traces (representative_cases())
+    into `m7-representative-traces` as full span trees with NO scores
+    (`allowed_score_names=set()`): the walkthrough's "Logs trace" stop needs
+    the trees, and trees without scores cost nothing on the plan. Ledger
+    entries carry n_scores=0; re-runs skip trees already recorded.
+    """
+    from dealpoint.corpus.document import load_document
+    from dealpoint.eval.braintrust_sync import (
+        _emit_span_tree,
+        _init_experiment,
+        log_hierarchy,
+        representative_cases,
+    )
+    from dealpoint.eval.cases import find_case, resolve_document_id
+
+    selections = representative_cases().get("selections", [])
+    seen = _ledger_load()
+    experiment = _init_experiment(sdk_client, REPRESENTATIVE_EXPERIMENT)
+    replayed: list[dict] = []
+    for sel in selections:
+        case_id, variant_id = sel.get("case_id"), sel.get("variant_id")
+        key = f"{case_id}:{variant_id}"
+        if not case_id or (REPRESENTATIVE_EXPERIMENT, key) in seen:
+            continue
+        rows = {r.get("case_id"): r for r in _load_jsonl(sel["results_path"])} if sel.get("results_path") else {}
+        row = rows.get(case_id) or {"case_id": case_id, "scores": {}, "record": {"trajectory": []}}
+        try:
+            case = find_case(case_id)
+            doc = load_document(resolve_document_id(case))
+        except (KeyError, FileNotFoundError):
+            case, doc = {}, None
+        hierarchy = log_hierarchy(row, case, doc, judge_dims=None)
+        root_span = experiment.start_span(name=f"{sel.get('category')}:{variant_id}")
+        if hasattr(root_span, "log"):
+            root_span.log(metadata={"case_id": case_id, "variant_id": variant_id, "category": sel.get("category")})
+        n_scores = 0
+        for child in hierarchy.get("children", []):
+            n_scores += _emit_span_tree(experiment, child, parent_span=root_span, allowed_score_names=set())
+        if hasattr(root_span, "end"):
+            root_span.end()
+        _ledger_record(REPRESENTATIVE_EXPERIMENT, key, n_scores)
+        replayed.append({"category": sel.get("category"), "case_id": case_id, "variant_id": variant_id, "n_scores": n_scores})
+    if hasattr(experiment, "flush"):
+        experiment.flush()
+    return {"experiment_name": REPRESENTATIVE_EXPERIMENT, "trees": replayed, "n_trees": len(replayed)}
+
+
 def push_human_scores(sdk_client, rows: list[dict]) -> int:
     """Push `human/<dimension>` scores onto the matching `judge-<variant_id>`
     experiment rows, keyed by the SAME stable row id `braintrust_sync.sync`
@@ -1051,7 +1113,7 @@ def push_human_scores(sdk_client, rows: list[dict]) -> int:
 # --- driver + manifest -------------------------------------------------------
 
 
-def sync_cockpit(rest_client, sdk_client=None) -> dict:
+def sync_cockpit(rest_client, sdk_client=None, replay_representative: bool = False) -> dict:
     """Create/update every persistent cockpit object, idempotently, and
     return the raw result dict `build_demo_manifest` turns into
     `data/reports/demo_manifest.json`. `sdk_client=None` skips the hero-case
@@ -1069,6 +1131,9 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
         assert_live_score_budget(planned_scores)      # before the first write
         replay_result = replay_hero_case(sdk_client, hero["case_id"])
         pushed_scores = push_human_scores(sdk_client, human_rows)
+    replay_representative_result = None
+    if sdk_client is not None and replay_representative:
+        replay_representative_result = replay_representative_cases(sdk_client)   # score-free by construction
         # 'Judge disagreement' (spec section 4) binds to the hero experiment, not
         # the project -- resolvable now that the replay has created it.
         hero_experiment_id = _resolve_experiment_id(rest_client, _resolve_project_id(rest_client), "m7b-hero-case")
@@ -1085,6 +1150,7 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
         "n_human_scores_pushed": pushed_scores,
         "n_live_scores_planned": planned_scores,
         "live_score_cap": LIVE_SCORE_CAP,
+        "replay_representative": replay_representative_result,
         "replay": replay_result,
         "human_scoring_probe": HUMAN_SCORING_PROBE,
         "synced_at": datetime.now(UTC).isoformat(),
@@ -1092,6 +1158,7 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
 
 
 EXPERIMENT_NAME_PREFIXES: tuple[str, ...] = ("A-", "B-", "C-", "D-", "judge-", "judged-", "m7-", "m7b-")
+_SYNC_COPY_SUFFIX = re.compile(r"-[0-9a-f]{8}$")
 
 # The frozen M7a draft (docs/templates/demo-walkthrough.draft.md) cites these
 # 14 experiment names literally (RAG lab families section 2, one representative
@@ -1137,6 +1204,13 @@ def _resolve_experiments(rest_client, project_id: str) -> list[dict]:
         return []
     objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
     objects = objects or []
+    # A trailing "-<8 hex>" marks a re-sync copy (M7a's syncs minted one per run;
+    # the copies are 1-row stubs once the score quota was hit). Within a prefix
+    # family prefer an unsuffixed experiment (the scored original), then newest.
+    def _rank(exp: dict) -> tuple[int, str]:
+        name = exp.get("name") or ""
+        return (0 if _SYNC_COPY_SUFFIX.search(name) else 1, exp.get("created") or "")
+
     newest_by_prefix: dict[str, dict] = {}
     for exp in objects:
         name = exp.get("name") or ""
@@ -1144,7 +1218,7 @@ def _resolve_experiments(rest_client, project_id: str) -> list[dict]:
             if not name.startswith(prefix):
                 continue
             current = newest_by_prefix.get(prefix)
-            if current is None or (exp.get("created") or "") > (current.get("created") or ""):
+            if current is None or _rank(exp) > _rank(current):
                 newest_by_prefix[prefix] = exp
     resolved = [
         {"prefix": prefix, "name": exp["name"], "id": exp["id"], "created": exp.get("created")}
@@ -1232,6 +1306,27 @@ def permalinks(
     return links
 
 
+def ledger_totals() -> dict:
+    """Live scores written so far, from the score ledger (read regardless of
+    _LEDGER_ACTIVE: reporting is not writing)."""
+    totals = {"n_live_scores": 0, "n_human_scores": 0, "n_entries": 0, "last_ts": None}
+    if not SCORE_LEDGER_PATH.exists():
+        return totals
+    with open(SCORE_LEDGER_PATH, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            row = json.loads(line)
+            totals["n_entries"] += 1
+            n = int(row.get("n_scores", 0))
+            totals["n_live_scores"] += n
+            if str(row.get("experiment", "")).startswith("judge-"):
+                totals["n_human_scores"] += n
+            totals["last_ts"] = row.get("ts")
+    return totals
+
+
 def build_demo_manifest(result: dict, rest_client=None) -> dict:
     """`data/reports/demo_manifest.json`'s full shape (spec section 6).
     `rest_client`, when given, resolves the live experiments/datasets/
@@ -1264,8 +1359,10 @@ def build_demo_manifest(result: dict, rest_client=None) -> dict:
         ],
         "n_human_scores_planned": result["n_human_scores_planned"],
         "n_human_scores_pushed": result["n_human_scores_pushed"],
+        "ledger": ledger_totals(),
         "n_live_scores_planned": result["n_live_scores_planned"],
         "live_score_cap": result["live_score_cap"],
+        "replay_representative": result.get("replay_representative"),
         "replay": {
             "experiment_name": (result.get("replay") or {}).get("experiment_name"),
             "variants": sorted((result.get("replay") or {}).get("variant_trees", {}).keys()),
@@ -1396,7 +1493,7 @@ def main(argv: list[str] | None = None) -> int:
         global _LEDGER_ACTIVE
         _LEDGER_ACTIVE = True
         rest_client_for_manifest = RestClient(api_key)
-        result = sync_cockpit(rest_client_for_manifest, sdk_client=braintrust)
+        result = sync_cockpit(rest_client_for_manifest, sdk_client=braintrust, replay_representative=True)
 
     manifest = build_demo_manifest(result, rest_client=rest_client_for_manifest)
     DEMO_MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
