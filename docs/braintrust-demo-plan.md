@@ -55,7 +55,55 @@ the tour regenerated with `bishal.ai` links; Claude Code restart for the MCP OAu
 | 10 | Playground | arm-A variants over the 18 cases, judged live | iterate before coding |
 | 11 | SQL | the six saved investigations | serious querying of nested data |
 | 12 | Topics, Patterns, Debugger, Loop | clusters over the logs; one Pattern; Debugger on the hero trace; one Loop thread | discover and diagnose without knowing the query first |
-| 13 | close | "everything above came from `just braintrust-sync` in a fresh org for $0" | reproducibility |
+| 13 | Online scoring + alert | `judge-professional` scoring new logs as they land; one threshold alert configured | production evals, the loop closing |
+| 14 | close | "everything above came from `just braintrust-sync` in a fresh org for $0" | reproducibility |
+
+## Comparison matrix: every A/B/C/D we can show
+
+"Same cases, one variable changed, compare case by case" is the Braintrust move. These are the axes the data
+supports. **Free** means the experiments already exist in the new org; the rest are small, bounded runs.
+
+| axis | variants | cases | how it shows in Braintrust | status / cost |
+|---|---|---|---|---|
+| **Architecture** | arm A / B / C / D, same model (GLM) | 32 test | Experiments compare: Summary table, Grid, Comparison grade | free, synced |
+| **Model** | arm D on GLM / Haiku / DeepSeek / Qwen / Gemini | 32 test | same view; `$/case` in row metadata for the economic axis | free, synced |
+| **Arm x model** | A@GLM, A@Haiku, D@GLM, D@Haiku (2x2) | 32 test | select four; does the agent loop pay off more on the stronger model? | free, synced |
+| **Retrieval method** | dense / bm25 / hybrid / hybrid+rerank / fusion / fusion+rerank | 58 dev | `rag-m3-*`: `obj/hit@5`, `obj/hit@10`, `li/hit_rate`, `li/mrr` side by side | free, synced |
+| **Retrieval, query distribution** | frozen winner on dev vs on 106 synthetic queries | 58 vs 106 | `rag-m3-hybrid` vs `rag-m7-synthetic`: does the winner hold under new questions | free, synced |
+| **Retrieval, scorer independence** | our `obj/*` vs LlamaIndex-native `li/*` on the same config | 58 dev | `rag-m7-li-crosscheck`: agreement and the 3 real disagreements | free, synced |
+| **Judge model** | Mistral / NVIDIA / ByteDance per dimension | 18 judged | per-judge scores are row metadata on `judge-*`; SQL view "judge spread" + the `judge/aggregate` span | free (SQL/metadata); as separate experiments would cost ~1,300 scores, not worth it |
+| **Judge vs human** | mean-of-judges vs the lawyer, four dimensions | 24 packets | `judge/*` and `human/*` on the same rows; kappa/rho from `judges.json` in the narration | free, synced |
+| **DeepEval vs our judges vs truth** | `deepeval/task_completion` vs `judge/reasoning` vs `obj/grounded_accuracy` | 18 judged | compare `deepeval-crosscheck` against `judge-D@haiku` (same inputs), plus the "DeepEval vs judge disagreement" view | free, synced |
+| **DeepEval evaluator model** | Mistral (current, a judge-trio member) vs a non-trio model (Qwen 3.7 flash) | 18 judged | a second `deepeval-crosscheck-qwen` experiment; is DeepEval's 0.84 agreement with the judges just shared-model contamination? | new: ~$0.10 OpenRouter, ~72-432 scores |
+| **Prompt** | arm-A base / terse / cite-first / abstain-first | 18 judged | Playground, four prompts side by side, judged live by the four LLM scorers | new: ~$0.10 OpenRouter, ~216 scores if saved |
+| **Skill on/off** | arm D with the skill injection vs without | 18 judged | `D-glm-noskill` next to `D@glm`; is the skill doing the work, or the loop? | new: ~$0.20 OpenRouter, 108 scores |
+| **Reasoning type** | definition / carve-out / standard / ... slices | all | filters and group-by on `metadata.reasoning_type` (now on every row) | free after the row step |
+| **Abstention** | counterfactual cases by arm | 40 | `obj/abstain_correct` by arm; who invents clauses | free, synced |
+| **Production scoring** | `judge-professional` as an online scoring rule on new logs | next replays | the "monitor again" end of the loop: scores appear on logs as they land | new: OpenRouter cents, ~6-18 scores |
+
+New-run total if we do all of them: about 800 scores and under $1 of OpenRouter. Projected end state stays
+around **4,600 of 10,000 scores**, model credit **$3-5 of $10**, data **< 0.05 GB**.
+
+## Feature coverage: what each stop exercises
+
+| Braintrust feature | where it appears | cost |
+|---|---|---|
+| Datasets, expected values, trace-to-dataset | stop 1; add the hero failure trace to a `regressions` dataset live | free |
+| Experiments, case-level compare, comparison grade | stops 2, 3, 4, 7 and every axis above | free |
+| Nested agent traces (Logs) | stop 5, 114 traces | free (data only) |
+| Scorers: code + LLM + human on one row | stops 6, 7, 8 | free to create; cents to invoke |
+| Human review, assignments, review sets | stop 8 | free |
+| Prompts with versions | stop 9: push a v2 of the base prompt to show version history | free |
+| Parameters | stop 9 | free |
+| Playground | stop 10 | ~$0.10 |
+| SQL / BTQL saved queries | stop 11 | free |
+| Topics, Patterns, Debugger, Loop | stop 12 | model credit |
+| Online scoring rule | new stop after 12 | cents |
+| Alerts / automations | a threshold alert on `judge-professional` below 0.5 (configure, do not trigger) | free |
+| Tags, filters, saved views | throughout | free |
+| CLI + MCP | narrate: "the factory and I never open the UI to build this" | free |
+| Dashboards | built-in Cost and quality only (custom is Pro) | free |
+| Environments, tools | not shown (Pro; tools need the local index) | none |
 
 ## The three limits, and what each remaining step costs against them
 
