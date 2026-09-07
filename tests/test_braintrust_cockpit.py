@@ -174,7 +174,8 @@ def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
 
     dash = dashboard_definition()
     assert dash["name"] == "DealPoint eval overview"
-    assert len(dash["charts"]) == 20
+    assert len(dash["charts"]) == 28
+    assert sum(1 for c in dash["charts"] if "usd" in str(c["measure"]) or "wall_s" in str(c["measure"]) or "tool_calls" in str(c["measure"])) == 10
     assert "A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill" in dash["charts"][0]["title"]
     questions = [c["title"].split("?")[0] for c in dash["charts"] if "?" in c["title"]]
     assert {"Which system", "Which retriever", "Which model", "Which prompt"} <= set(questions)
@@ -182,7 +183,7 @@ def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
     for chart in dash["charts"]:
         measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
         for m in measures:
-            assert m.startswith(("avg(metadata.", "count(")), m
+            assert m.startswith(("avg(metadata.", "count(", "sum(metadata.", "percentile(metadata.")), m
             assert "scores." not in m
         assert all(g.startswith("metadata.") for g in chart["group_by"])
         assert chart["filters"], "every chart names the log family it aggregates"

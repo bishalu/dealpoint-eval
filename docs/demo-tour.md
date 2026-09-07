@@ -13,11 +13,13 @@ Dashboard: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/
 **The dashboard, one question per chart.** Braintrust's dashboard is the monitor over project logs, so it
 cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
 therefore mirrors every number into log metadata (free; scores are the metered thing) and the dashboard is
-twenty ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
+twenty-eight ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
 abstention on counterfactuals, A to D on GLM, the ladder spelled out in the first title), *Does the loop
 pay off more on the stronger model?* (A and D on GLM and Haiku), *Which retriever?* (hit@5 and MRR, six
 retrievers on the 58 dev queries), *Which model?* (accuracy, dollars, seconds, cap-hits, execution
-failures, arm D on five models), *Judges vs the lawyer* (four dimensions, 24 packets), *Which judge?*
+failures, arm D on five models), the cost series (dollars, seconds and tool calls per case by system;
+correct answers per dollar by system, by model and across every system@model; dollars per correct answer
+and p90 latency by model), *Judges vs the lawyer* (four dimensions, 24 packets), *Which judge?*
 (each family's distance from the lawyer on reasoning and on trajectory), the judge panel by system@model,
 DeepEval's agreement with truth, and *Which prompt?* (the four arm-A prompts, judged). Accuracy there counts an unanswered case as
 wrong, so it reads lower than the "of scored cases" figures in the reports; both are true, say which one
