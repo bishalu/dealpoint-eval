@@ -513,12 +513,19 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
      "every judge scores higher than the lawyer on every dimension, most of all on trajectory, so a gap always means over-credit. Then cost per "
      "call (a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
      ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional", "judge_family_usd")),
-    ("Second opinions",
-     ("VERDICT: cross-checks, never gates. Only what each outside framework uniquely adds is here. DeepEval's three trajectory metrics (tool "
-      "correctness, argument correctness, step efficiency) grade HOW the agent worked, which none of our deterministic scorers measure; its task-completion "
-      "score is omitted because it duplicates our judges (and its evaluator model is one of them). LlamaIndex's RetrieverEvaluator is an independent read "
-      "of the same retrievers, including its genuinely native bm25 that our scorer cannot see; it ranks the six shared retrievers exactly as we do."),
-     ("deepeval_tools", "deepeval_args", "deepeval_steps", "li_hit_rate", "li_mrr")),
+    ("DeepEval",
+     ("VERDICT: a cross-check, never a gate. Only what DeepEval uniquely adds is here: its three trajectory metrics grade HOW the agent worked, "
+      "which none of our deterministic scorers measure. Tool correctness (right tools called and selected; agrees with our required-evidence check "
+      "89% of the time), argument correctness (right arguments to those tools; nothing of ours checks this), step efficiency (redundant or wasted "
+      "calls). Its task-completion score is omitted: it duplicates our judges, and its evaluator model is one of them. Same 108 judged traces, "
+      "one row per system@model."),
+     ("deepeval_tools", "deepeval_args", "deepeval_steps")),
+    ("LlamaIndex",
+     ("VERDICT: the retrieval verdict holds under an independent grader. LlamaIndex's RetrieverEvaluator scored the same six frozen retrievers on "
+      "the same 58 dev queries with its own hit rate and MRR, and ranks them exactly as our gold-span scorer does (Spearman 0.99). It also scores "
+      "its genuinely native bm25 config, which our scorer cannot see; that one disagrees with ours on three queries, all traced to duplicate "
+      "relevant chunks. Our own numbers for the same retrievers are on the Which retriever? dashboard."),
+     ("li_hit_rate", "li_mrr")),
     ("Which prompt?",
      ("VERDICT: cite-first (best evidence score); terse loses everywhere; abstain-first buys nothing. Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
      "judged on professional quality, evidence and reasoning by the LLM scorers. Only the prompt varies."),

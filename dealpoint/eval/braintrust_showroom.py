@@ -502,7 +502,7 @@ def retrieval_log_rows() -> list[dict]:
     # LlamaIndex's genuinely native config (li_native_bm25) has no tournament row: its rows come from the
     # LlamaIndex report alone, with our obj/ scorer's verdict absent (that is the cross-check's point).
     seen = {(r["case_id"], r["config"]) for r in per_case}
-    for (case_id, config), v in li.items():
+    for case_id, config in li:
         if config == "li_native_bm25" and (case_id, config) not in seen:
             per_case.append({"case_id": case_id, "config": config, "query_type": "canonical", "first_hit_rank": None, "agreement_id": case_id.split("__")[0],
                              "question_id": case_id.split("__")[-1], "li_only": True})
@@ -520,7 +520,7 @@ def retrieval_log_rows() -> list[dict]:
                 "scored_by_ours": int(not li_only), **li.get((r["case_id"], r["config"]), {})}
         if not li_only:
             meta.update({"hit_at_5": int(bool(rank and rank <= 5)), "hit_at_10": int(bool(rank and rank <= 10)), "mrr": (1.0 / rank) if rank else 0.0})
-        output = ("LlamaIndex-native config: li/hit_rate %s" % meta.get("li_hit_rate")) if li_only else (f"first gold-span hit at rank {rank}" if rank else "no gold-span hit in the top 20")
+        output = f"LlamaIndex-native config: li/hit_rate {meta.get('li_hit_rate')}" if li_only else (f"first gold-span hit at rank {rank}" if rank else "no gold-span hit in the top 20")
         out.append({"case_id": r["case_id"], "retriever": r["config"], "input": query, "output": output, "metadata": meta})
     return out
 

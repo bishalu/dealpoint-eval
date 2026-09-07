@@ -179,7 +179,7 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
     )
 
     dashes = dashboard_definitions()
-    assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "Second opinions", "Which prompt?"]
+    assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "DeepEval", "LlamaIndex", "Which prompt?"]
     assert len(dashes[0]["charts"]) == 11 and sum(1 for c in dashes[0]["charts"] if c.get("kind") == "bignumber") == 5
     assert all(d["description"].startswith("VERDICT") for d in dashes), "every dashboard leads with its verdict"
     judges = next(d for d in dashes if d["name"] == "Judges and the lawyer")
@@ -235,7 +235,7 @@ def test_sync_views_and_dashboard_idempotent_second_run_creates_nothing_new():
     n2 = len(rest.views)
     ids2 = sorted(v["id"] for v in r2["views"]) + sorted(d["id"] for d in r2["dashboards"])
 
-    assert n1 == n2 == 15  # 8 views + 7 dashboards
+    assert n1 == n2 == 16  # 8 views + 8 dashboards
     assert ids1 == ids2
     assert all(not v["created"] for v in r2["views"])
     assert r2["dashboard"]["created"] is False
