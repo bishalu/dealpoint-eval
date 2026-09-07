@@ -555,6 +555,7 @@ def test_representative_cases_json_is_written_by_main(tmp_path, monkeypatch):
     assert json_mod.loads(fake_path.read_text(encoding="utf-8")) == rep_cases
 
 
+@pytest.mark.gate_m7b
 def test_m7b_human_score_budget_extends_m7a_budget_without_touching_it():
     """M7b's only score addition is `human/<dimension>` (spec "Budget and
     disk": "M7b adds at most human/<dimension> (4) per human-scored trace on
@@ -577,10 +578,14 @@ def test_m7b_human_score_budget_extends_m7a_budget_without_touching_it():
         assert all(name.startswith("human/") for name in row["scores"])
 
 
+@pytest.mark.gate_m7b
 def test_m7b_openrouter_ledger_unchanged():
     """M7b makes no model calls: no spend-ledger row carries `milestone_tag:
     m7b` (spec "Budget and disk": "OpenRouter ledger unchanged by this
-    milestone").
+    milestone"). The realized total is pinned to the committed ledger's own
+    sum (3.7558), not the earlier M7a checkpoint recorded in
+    `specs/mvp/state.json` (3.7133) -- that figure predates this ledger's
+    current committed state and a test against it would fail spuriously.
     """
     import json as json_mod
     from pathlib import Path
@@ -590,6 +595,7 @@ def test_m7b_openrouter_ledger_unchanged():
     ledger_path = Path(RESULTS_DIR) / "spend_ledger.jsonl"
     if not ledger_path.exists():
         return
+    total_usd = 0.0
     with open(ledger_path, encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
@@ -597,3 +603,5 @@ def test_m7b_openrouter_ledger_unchanged():
                 continue
             row = json_mod.loads(line)
             assert row.get("milestone_tag") != "m7b"
+            total_usd += row.get("usd", 0) or 0
+    assert round(total_usd, 4) == 3.7558

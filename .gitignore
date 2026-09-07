@@ -74,6 +74,7 @@ data/index/
 !data/reports/m7a_disk_guard.json
 !data/reports/demo_manifest.json
 !data/reports/synthetic_generation_run.json
+!data/reports/braintrust_score_ledger.jsonl
 __pycache__/
 .pytest_cache/
 .ruff_cache/

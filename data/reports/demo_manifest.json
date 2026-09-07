@@ -1,10 +1,162 @@
 {
   "dashboard": {
-    "created": true,
-    "id": "view-8",
+    "created": false,
+    "id": "b3122524-c555-4599-8544-f302bc284b52",
     "name": "DealPoint eval overview"
   },
-  "git_sha7": "d418929",
+  "datasets": [
+    {
+      "id": "3334a6fc-63f7-48b0-a3ca-bbcfea01af25",
+      "name": "maud-dealpoint-dev-v1"
+    },
+    {
+      "id": "73671b96-c5af-4698-b946-b12ebb1b5fdb",
+      "name": "maud-dealpoint-test-v1"
+    },
+    {
+      "id": "1374f23e-3d37-40fe-b821-5f4548ed267e",
+      "name": "maud-dealpoint-counterfactual-v1"
+    },
+    {
+      "id": "550292f0-6f64-4ba1-850b-29ff41f40434",
+      "name": "maud-dealpoint-judged_calibration"
+    }
+  ],
+  "experiments": [
+    {
+      "created": "2026-09-06T02:38:13.819Z",
+      "id": "d8af18a8-e061-4203-aba2-b24961cab617",
+      "name": "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7",
+      "prefix": "A-"
+    },
+    {
+      "created": "2026-09-06T02:38:10.667Z",
+      "id": "b57b44ac-0e3f-4d5f-bc72-13bfe0bed096",
+      "name": "B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d",
+      "prefix": "B-"
+    },
+    {
+      "created": "2026-09-06T02:38:11.676Z",
+      "id": "0e8e741d-d12c-49b0-bd10-d91ef9743b9c",
+      "name": "C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4",
+      "prefix": "C-"
+    },
+    {
+      "created": "2026-09-06T02:38:17.891Z",
+      "id": "2d03d21a-8297-4071-baf2-5c80d674b53f",
+      "name": "D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0",
+      "prefix": "D-"
+    },
+    {
+      "created": "2026-09-06T02:38:22.721Z",
+      "id": "90838e82-1de8-4ae3-b363-bbd18aa05e73",
+      "name": "judge-D@gemini-3.1-flash-lite-f0c5a63c",
+      "prefix": "judge-"
+    },
+    {
+      "created": "2026-09-05T16:46:25.375Z",
+      "id": "f85530ac-e221-4411-a33b-380f9abebdc7",
+      "name": "judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "prefix": "judged-"
+    },
+    {
+      "created": "2026-09-06T19:39:41.433Z",
+      "id": "7e4ead7c-23a4-42da-afd3-f04fb99d5396",
+      "name": "m7-representative-traces",
+      "prefix": "m7-"
+    },
+    {
+      "created": "2026-09-06T23:34:29.485Z",
+      "id": "22925766-eec0-4989-a97e-6b8548461555",
+      "name": "m7b-hero-case",
+      "prefix": "m7b-"
+    },
+    {
+      "created": "2026-09-06T02:08:48.833Z",
+      "id": "b9e9f1fd-1874-493a-8593-1f4ecc99d016",
+      "name": "rag-m3-dense",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:49.524Z",
+      "id": "bf127f9b-f373-4c0a-8abb-1a19f2634785",
+      "name": "rag-m3-bm25",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:50.263Z",
+      "id": "4a8f2ce3-e578-4b70-a0c1-f6f337c0c621",
+      "name": "rag-m3-hybrid",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:50.905Z",
+      "id": "d4654fab-8c65-474a-92a0-8c26d98adda9",
+      "name": "rag-m3-hybrid-rerank",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:51.541Z",
+      "id": "3c2f2f9e-fe31-49bf-99b2-8a5985b5710d",
+      "name": "rag-m3-fusion",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:52.141Z",
+      "id": "63b77058-b09a-4e9d-b6f1-790d3374fd57",
+      "name": "rag-m3-fusion-rerank",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:52.725Z",
+      "id": "a73ce6b0-1aad-48bc-831a-228f7927d837",
+      "name": "rag-m7-li-crosscheck",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:53.354Z",
+      "id": "8df06e08-c1d4-40f0-bb04-aa910d5a75d9",
+      "name": "rag-m7-synthetic",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:08:53.944Z",
+      "id": "4cead019-bb47-4fb8-8af1-86166989cab3",
+      "name": "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:09:14.320Z",
+      "id": "31b911bc-bf75-4dd5-b0a2-9ae82141de7e",
+      "name": "pareto-deepseek_deepseek-v4-flash",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:09:15.675Z",
+      "id": "b649369f-b39d-475b-ae4e-838ee971634c",
+      "name": "pareto-qwen_qwen3.7-flash",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:09:15.028Z",
+      "id": "d8398d5f-1720-4176-af46-8a13fcfd7626",
+      "name": "pareto-google_gemini-3.1-flash-lite",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:09:13.640Z",
+      "id": "1a08dd81-853a-4bc4-9460-7a105d0686ad",
+      "name": "pareto-anthropic_claude-haiku-4.5",
+      "prefix": null
+    },
+    {
+      "created": "2026-09-06T02:09:16.604Z",
+      "id": "458e4972-dacf-4880-af4b-e3a1ea49f748",
+      "name": "pareto-z-ai_glm-5.3-flash",
+      "prefix": null
+    }
+  ],
+  "git_sha7": "526f26c",
   "hero_case": {
     "case_id": "contract_32__q04",
     "grounded_accuracy_a": false,
@@ -305,9 +457,10 @@
   ],
   "human_scoring_probe": {
     "decision": "local_form",
-    "decision_reason": "Configured Review scores cannot carry all four rubric dimensions on this workspace's plan. Branch B of spec section 3 applies: data/eval/calibration/form.md is the scoring surface (as M5 already built), `just calibration` computes agreement locally, and `just braintrust-cockpit` pushes the rows as human/<dimension> scores on the matching experiment/trace rows. The walkthrough shows human scores in the experiment table and the trace, not in Review mode.",
-    "finding": "Braintrust's 'Configure review scores' doc states human review scorers are 'only available on Pro and Enterprise plans' and that the Starter plan is 'limited to 1 per project' even when available. This project's Braintrust workspace is on the Starter plan (independently evidenced by the M7a live sync's num_scores_calendar_months quota error and the documented 14-day log retention this workspace exhibits -- both Starter characteristics, recorded in data/reports/braintrust_sync.json's live_run_status). Four rubric dimensions (reasoning, evidence, trajectory, professional) are required; Starter allows at most one configured human review score per project.",
-    "probed_via": "mcp_braintrust_search_docs('human review scores configuration Pro Enterprise')"
+    "decision_reason": "Configured Review scores cannot carry all four rubric dimensions on this workspace's plan (1 slot available, 4 needed). Branch B of spec section 3 applies: data/eval/calibration/form.md is the scoring surface (as M5 already built), `just calibration` computes agreement locally, and `just braintrust-cockpit` pushes the rows as human/<dimension> scores on the matching experiment/trace rows. The walkthrough shows human scores in the experiment table and the trace, not in Review mode.",
+    "finding": "get_project_settings on the live dealpoint-eval project returned settings={} -- zero configured review scores exist on this workspace today, so there is nothing to extend rather than something already at a hard cap. The docs' 'Configure review scores' page states human review scorers are 'only available on Pro and Enterprise plans', and separately (docs 'Upgrade your plan') that Starter is 'limited to 1 per project' even where available -- 1 slot, not the 4 rubric dimensions (reasoning, evidence, trajectory, professional) this milestone needs. That this workspace is Starter-tier is independently evidenced by the M7a live sync's real, observed block: data/reports/braintrust_sync.json's live_run_status recorded blocked_by='Braintrust workspace plan limit: num_scores_calendar_months' with usage 11016 against a limit of 11000 -- a Starter-plan monthly score quota actually hit live, not inferred from a doc alone.",
+    "probed_at": "2026-09-06T23:00:00+00:00",
+    "probed_via": "mcp_braintrust_get_project_settings(project_id=dealpoint-eval) live on 2026-09-06, corroborated with mcp_braintrust_search_docs('configure human review scores Pro Enterprise plan') and data/reports/braintrust_sync.json"
   },
   "live_score_cap": 600,
   "n_human_scores_planned": 96,
@@ -326,18 +479,73 @@
         "contract_14__q02"
       ]
     },
-    "id": "v1-pattern-dry-run",
-    "limitation": "Braintrust's Topics and Patterns REST surface is not documented in this offline environment the way scorers/prompts/parameters are (those are first-class braintrust-sdk `Project` members). The preprocessor and facet prompt below were validated with mcp_braintrust_test_preprocessor_on_trace / test_facet_on_trace before being committed here (spec section 7); persistence goes through rest_client.post('/v1/facet', ...) and rest_client.post('/v1/pattern', ...), matching the create_facet / new_pattern MCP tools' payload shape. If the real endpoint contract differs, the offline gate (a fake REST client) still proves the idempotent-by-name mapping; only a live run would surface a schema mismatch, the same honesty this project already applies to SCORER_PUBLISH_LIMITATION."
+    "id": null,
+    "limitation": "No public REST endpoint exists to create a Braintrust Pattern in this API surface (probed live: GET/POST /v1/pattern, /v1/patterns and /v1/project-pattern all return the web app's catch-all 404 page, not an API error -- there is no such route). The only creation path observed is the product's internal Loop/pattern-analysis feature, exposed to an MCP-enabled agent session as `new_pattern` but not as public REST. This module cannot create a Pattern from pure Python; `pattern_definition()` still defines the payload the milestone specifies (name, description, >= 3 supporting trace ids), and the id recorded in the manifest, when present, was created once via that MCP tool and is looked up from data/reports/pattern_record.json (committed, analogous to braintrust_runs.json) so a re-sync never tries to recreate it."
   },
-  "project_id": "dry-run-project-id",
+  "permalinks": {
+    "dashboard:DealPoint eval overview": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/dashboards/b3122524-c555-4599-8544-f302bc284b52",
+    "dataset:maud-dealpoint-counterfactual-v1": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-counterfactual-v1",
+    "dataset:maud-dealpoint-dev-v1": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-dev-v1",
+    "dataset:maud-dealpoint-judged_calibration": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-judged_calibration",
+    "dataset:maud-dealpoint-test-v1": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/datasets/maud-dealpoint-test-v1",
+    "experiment:A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc-0846cbe7",
+    "experiment:A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "experiment:B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-f3ab401d",
+    "experiment:C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc-ccdeb3a4",
+    "experiment:D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7-6691b6a0",
+    "experiment:judge-D@gemini-3.1-flash-lite-f0c5a63c": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/judge-D@gemini-3.1-flash-lite-f0c5a63c",
+    "experiment:judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/judged-D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "experiment:m7-representative-traces": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7-representative-traces",
+    "experiment:m7b-hero-case": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case",
+    "experiment:pareto-anthropic_claude-haiku-4.5": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/pareto-anthropic_claude-haiku-4.5",
+    "experiment:pareto-deepseek_deepseek-v4-flash": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/pareto-deepseek_deepseek-v4-flash",
+    "experiment:pareto-google_gemini-3.1-flash-lite": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/pareto-google_gemini-3.1-flash-lite",
+    "experiment:pareto-qwen_qwen3.7-flash": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/pareto-qwen_qwen3.7-flash",
+    "experiment:pareto-z-ai_glm-5.3-flash": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/pareto-z-ai_glm-5.3-flash",
+    "experiment:rag-m3-bm25": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-bm25",
+    "experiment:rag-m3-dense": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-dense",
+    "experiment:rag-m3-fusion": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-fusion",
+    "experiment:rag-m3-fusion-rerank": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-fusion-rerank",
+    "experiment:rag-m3-hybrid": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-hybrid",
+    "experiment:rag-m3-hybrid-rerank": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m3-hybrid-rerank",
+    "experiment:rag-m7-li-crosscheck": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m7-li-crosscheck",
+    "experiment:rag-m7-synthetic": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/rag-m7-synthetic",
+    "hero_trace:A@haiku": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case",
+    "hero_trace:D@haiku": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case",
+    "view:DeepEval vs judge disagreement": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=3b40b355-eeea-4400-8f47-03031d7e946c",
+    "view:Failure attribution": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=86c17089-a244-4757-bdd6-7def89c7f6f0",
+    "view:Judge disagreement": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments/m7b-hero-case?v=00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1",
+    "view:Judged traces by variant": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments?v=70a5af97-633a-4437-8bcf-fa576dfa1a63",
+    "view:Retrieval rescue": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=922c48dd-5634-41fe-9362-635df1ca4504",
+    "view:Review set (12)": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/experiments?v=7cf518e1-6271-4551-892d-4a28497b0e95",
+    "view:Trajectory inefficiency": "https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/logs?v=d72191ea-8253-42e3-8a0d-37861c65776f"
+  },
+  "project_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
   "replay": {
-    "experiment_name": null,
-    "variants": []
+    "experiment_name": "m7b-hero-case",
+    "variants": [
+      "A@haiku",
+      "D@haiku"
+    ]
   },
+  "review_set": [
+    "contract_103__q10",
+    "contract_144__q05",
+    "contract_32__q03",
+    "contract_32__q08",
+    "contract_39__redacted_q05",
+    "contract_4__q12",
+    "contract_75__redacted_q07",
+    "contract_7__q07",
+    "contract_99__q11",
+    "contract_99__redacted_q06"
+  ],
   "rubric_version": "cfda9f8cc401",
   "subset_hash": "5918ef10a7e6",
-  "synced_at": "2026-09-06T22:21:04.085761+00:00",
+  "synced_at": "2026-09-07T00:42:54.342625+00:00",
   "topics": {
+    "clusters": [],
+    "clusters_limitation": "Topic clustering runs asynchronously in Braintrust's product UI over already-synced traces; this SDK/REST surface exposes no read-back of materialized cluster names within a single script invocation. The facet function above is created for real (confirmed live); cluster names are read back and appended here once a topic map exists, not invented in the meantime.",
     "config": {
       "clustering_enabled": true,
       "facet_name": "trace-outcome-summary",
@@ -345,57 +553,70 @@
       "name": "DealPoint agent traces",
       "preprocessor_code": "function handler(span) {\n  const meta = span.metadata || {};\n  const trajectory = (span.metadata && span.metadata.trajectory) || [];\n  const tools = trajectory.map((s) => s.tool).filter(Boolean).join(' -> ');\n  const finding = meta.finding || {};\n  const question = span.input || meta.question || '';\n  const answer = finding.answer || meta.answer || '';\n  const grounded = meta['obj/grounded_accuracy'];\n  return [\n    `question: ${question}`,\n    `tool sequence: ${tools || '(none)'}`,\n    `final answer: ${answer}`,\n    `obj/grounded_accuracy: ${grounded}`,\n  ].join('\\n');\n}\n"
     },
-    "id": "v1-facet-dry-run",
-    "limitation": "Braintrust's Topics and Patterns REST surface is not documented in this offline environment the way scorers/prompts/parameters are (those are first-class braintrust-sdk `Project` members). The preprocessor and facet prompt below were validated with mcp_braintrust_test_preprocessor_on_trace / test_facet_on_trace before being committed here (spec section 7); persistence goes through rest_client.post('/v1/facet', ...) and rest_client.post('/v1/pattern', ...), matching the create_facet / new_pattern MCP tools' payload shape. If the real endpoint contract differs, the offline gate (a fake REST client) still proves the idempotent-by-name mapping; only a live run would surface a schema mismatch, the same honesty this project already applies to SCORER_PUBLISH_LIMITATION."
+    "id": "41466814-99d5-44ab-b883-1fb390d7bc16"
   },
   "views": [
     {
       "caption": "Every judge- experiment, tagged stage=evaluation: variant, judge/* aggregates, obj/grounded_accuracy.",
-      "created": true,
-      "id": "view-1",
+      "created": false,
+      "id": "70a5af97-633a-4437-8bcf-fa576dfa1a63",
       "name": "Judged traces by variant",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "experiments"
     },
     {
       "caption": "Rows on the hero variant where max pairwise judge spread >= 2 on any dimension, sorted by spread.",
-      "created": true,
-      "id": "view-2",
+      "created": false,
+      "id": "00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1",
       "name": "Judge disagreement",
+      "object_id": "22925766-eec0-4989-a97e-6b8548461555",
+      "object_type": "experiment",
       "view_type": "experiment"
     },
     {
       "caption": "BTQL query 1 (docs/braintrust-queries.md): which cases did a later search_agreement call surface gold evidence that the first search missed.",
-      "created": true,
-      "id": "view-3",
+      "created": false,
+      "id": "922c48dd-5634-41fe-9362-635df1ca4504",
       "name": "Retrieval rescue",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "logs"
     },
     {
       "caption": "BTQL query 2: EXECUTION_FAILED / CAP_HIT counts grouped by model and arm.",
-      "created": true,
-      "id": "view-4",
+      "created": false,
+      "id": "86c17089-a244-4757-bdd6-7def89c7f6f0",
       "name": "Failure attribution",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "logs"
     },
     {
       "caption": "BTQL query 4: traces where deepeval/task_completion and obj/grounded_accuracy disagree.",
-      "created": true,
-      "id": "view-5",
+      "created": false,
+      "id": "3b40b355-eeea-4400-8f47-03031d7e946c",
       "name": "DeepEval vs judge disagreement",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "logs"
     },
     {
       "caption": "BTQL query 6: tool calls vs outcome -- does more searching correlate with a worse result.",
-      "created": true,
-      "id": "view-6",
+      "created": false,
+      "id": "d72191ea-8253-42e3-8a0d-37861c65776f",
       "name": "Trajectory inefficiency",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "logs"
     },
     {
-      "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set).",
-      "created": true,
-      "id": "view-7",
+      "caption": "The 12 blinded traces flagged for human calibration (dealpoint.eval.braintrust_sync.review_set), matched by case_id.",
+      "created": false,
+      "id": "7cf518e1-6271-4551-892d-4a28497b0e95",
       "name": "Review set (12)",
+      "object_id": "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577",
+      "object_type": "project",
       "view_type": "for_review_experiments"
     }
   ]

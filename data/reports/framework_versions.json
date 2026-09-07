@@ -3,7 +3,7 @@
   "braintrust": "0.37.0",
   "deepeval": "4.2.1",
   "fastembed": "0.8.0",
-  "git_sha7": "de34296",
+  "git_sha7": "526f26c",
   "llama-index-core": "0.14.24",
   "llama-index-retrievers-bm25": "0.8.0",
   "openai": "3.8.0",

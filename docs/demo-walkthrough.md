@@ -79,7 +79,7 @@ cases (`data/reports/representative_cases.json`), chosen by rule:
 | wrong_answer | `contract_144__q09` | `A@anthropic/claude-haiku-4.5` |
 | abstention_counterfactual | `contract_75__oos09` | `A@anthropic/claude-haiku-4.5` |
 
-Saved views over these spans, idempotent by name: `Judged traces by variant` (view-1), `Judge disagreement` (view-2), `Retrieval rescue` (view-3), `Failure attribution` (view-4), `DeepEval vs judge disagreement` (view-5), `Trajectory inefficiency` (view-6), `Review set (12)` (view-7). [cockpit session] A Loop-generated custom trace view (judge spans as a 3x4 grid, human row beneath); its `tv` param via `just demo-manifest-record --step 4`.
+Saved views over these spans, idempotent by name: `Judged traces by variant` (70a5af97-633a-4437-8bcf-fa576dfa1a63), `Judge disagreement` (00bd8ca6-7a82-4c6f-b2b3-f0d7344078a1), `Retrieval rescue` (922c48dd-5634-41fe-9362-635df1ca4504), `Failure attribution` (86c17089-a244-4757-bdd6-7def89c7f6f0), `DeepEval vs judge disagreement` (3b40b355-eeea-4400-8f47-03031d7e946c), `Trajectory inefficiency` (d72191ea-8253-42e3-8a0d-37861c65776f), `Review set (12)` (7cf518e1-6271-4551-892d-4a28497b0e95). [cockpit session] A Loop-generated custom trace view (judge spans as a 3x4 grid, human row beneath); its `tv` param via `just demo-manifest-record --step 4`.
 
 ## 5. Scorers
 
@@ -121,7 +121,9 @@ The six BTQL investigations are saved as four of the seven cockpit views (`Retri
 
 ## 9. Debugger
 
-Topics (`trace-outcome-summary` facet, clustering on) render each `case > agent` span as question/tools/answer/`obj/grounded_accuracy` text. One Pattern, `Trajectory inefficiency: cap-hit or >=6 tool calls without a correct answer`, names 5 supporting trace ids from the same predicate as BTQL query 6.
+Topics (`trace-outcome-summary` facet, clustering on) render each `case > agent` span as question/tools/answer/`obj/grounded_accuracy` text.
+
+[cockpit session] One Pattern, `Trajectory inefficiency: cap-hit or >=6 tool calls without a correct answer` (5 supporting trace ids from the same predicate as BTQL query 6) is defined in code but has no public REST creation route on this platform, so it is created during the cockpit session (`new_pattern`), not by `braintrust_cockpit.py`.
 
 [cockpit session] Cluster names surfaced by Topics, and whether any maps to a query-2 failure cause (`--step 2`).
 
@@ -139,7 +141,7 @@ reached these experiments (`data/reports/braintrust_sync.json`'s
 
 ## 11. Dashboard
 
-A saved dashboard, `DealPoint eval overview` (view-8), five charts: obj/grounded_accuracy by arm/model; judge/<dimension> mean by variant; judge vs human on the review set (captioned "pending human calibration" until scores exist); $/case by model; DeepEval vs obj/ agreement rate.
+A saved dashboard, `DealPoint eval overview` (b3122524-c555-4599-8544-f302bc284b52), five charts: obj/grounded_accuracy by arm/model; judge/<dimension> mean by variant; judge vs human on the review set (captioned "pending human calibration" until scores exist); $/case by model; DeepEval vs obj/ agreement rate.
 
 ## Braintrust tools — decision, not a stub
 

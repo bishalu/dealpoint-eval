@@ -76,13 +76,33 @@ def _loop_sql_section() -> str:
 def _debugger_section(manifest: dict) -> str:
     topics = manifest["topics"]["config"]
     pattern = manifest["pattern"]["definition"]
-    return (
+    pattern_id = manifest["pattern"].get("id")
+    body = (
         f"Topics (`{topics['facet_name']}` facet, clustering on) render each `case > agent` "
-        "span as question/tools/answer/`obj/grounded_accuracy` text. One Pattern, "
-        f"`{pattern['name']}`, names {len(pattern['supporting_trace_ids'])} supporting trace "
-        f"ids from the same predicate as BTQL query 6.\n\n{COCKPIT_MARKER} Cluster names "
-        "surfaced by Topics, and whether any maps to a query-2 failure cause (`--step 2`)."
+        "span as question/tools/answer/`obj/grounded_accuracy` text."
     )
+    if pattern_id:
+        body += (
+            f" One Pattern, `{pattern['name']}`, names {len(pattern['supporting_trace_ids'])} "
+            "supporting trace ids from the same predicate as BTQL query 6."
+        )
+    else:
+        # No public REST route exists to create a Pattern on this platform
+        # (PATTERN_REST_LIMITATION); the payload below is defined in code but
+        # not yet a real Braintrust object -- say so, behind the marker, 
+        # rather than asserting it exists.
+        body += (
+            f"\n\n{COCKPIT_MARKER} One Pattern, `{pattern['name']}` "
+            f"({len(pattern['supporting_trace_ids'])} supporting trace ids from the same predicate "
+            "as BTQL query 6) is defined in code but has no public REST creation route on this "
+            "platform, so it is created during the cockpit session (`new_pattern`), not by "
+            "`braintrust_cockpit.py`."
+        )
+    body += (
+        f"\n\n{COCKPIT_MARKER} Cluster names surfaced by Topics, and whether any maps to a "
+        "query-2 failure cause (`--step 2`)."
+    )
+    return body
 
 
 def _dashboard_section(manifest: dict) -> str:

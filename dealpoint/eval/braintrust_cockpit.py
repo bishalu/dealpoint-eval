@@ -25,7 +25,9 @@ Two client seams, both optional:
 from __future__ import annotations
 
 import json
+import re
 import sys
+import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -698,7 +700,7 @@ def _resolve_experiment_id(rest_client, project_id: str, name: str) -> str | Non
     """
     try:
         payload = rest_client.get("/v1/experiment", {"project_id": project_id, "experiment_name": name})
-    except Exception:
+    except Exception:  # noqa: BLE001 - best-effort fallback to the project on any unresolvable/fake route
         return None
     objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
     if not objects:
@@ -706,15 +708,62 @@ def _resolve_experiment_id(rest_client, project_id: str, name: str) -> str | Non
     return objects[0]["id"]
 
 
+_SCORE_AVG_RE = re.compile(r'^avg\(scores\."([^"]+)"\)$')
+
+# Namespace for deterministic per-chart uuids (spec section 5: "keep the
+# payload as data"; a stable id per chart title keeps a re-run's custom_charts
+# payload byte-identical rather than growing new chart ids every sync).
+_CHART_ID_NAMESPACE = uuid.UUID("6b3f9e0a-8f3a-4b7f-9b3e-b7f3a4b7f9b3")
+
+
+def _measure_rest(measure_btql: str) -> dict:
+    """One `dashboard_charts()` measure string -> the real `custom_charts`
+    measure shape, confirmed live 2026-09-06 via `create_monitoring_view` +
+    `GET /v1/view`: a bare `avg(scores."X")` is `{type: aggregateScore,
+    scoreName, aggregator}`; anything else (a full BTQL expression, e.g. the
+    `$/case` or DeepEval-agreement measures) is `{type: expression, btql}`.
+    """
+    match = _SCORE_AVG_RE.match(measure_btql)
+    if match:
+        score_name = match.group(1)
+        return {"type": "aggregateScore", "scoreName": score_name, "aggregator": {"type": "avg"}, "displayName": score_name}
+    return {"type": "expression", "btql": measure_btql, "displayName": measure_btql}
+
+
+def _chart_rest_definition(chart: dict) -> dict:
+    measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
+    group_bys = [{"btql": g, "displayName": g.rsplit(".", 1)[-1]} for g in chart.get("group_by", [])]
+    unit_type = "cost" if "usd" in str(chart["measure"]) else "percent"
+    return {
+        "type": "monitorTimeseries",
+        "measures": [_measure_rest(m) for m in measures],
+        "groupBys": group_bys,
+        "viz": {"type": "timeseries", "timeseriesVizType": "bars", "unitType": unit_type},
+    }
+
+
 def _view_data_for(definition: dict) -> dict:
     """Definition (`{btql, sort}` or `{custom_charts}`) -> the real
     `View.view_data` REST shape, confirmed live 2026-09-06: table/logs/
     experiment views take `{"search": {"filter": [{"btql": ...}]}}`
-    (+ optional `"sort"`); the monitor dashboard takes `{"custom_charts":
-    [...]}` (`ViewData.custom_charts`, `braintrust/_generated_types.py`).
+    (+ optional `"sort"`); the monitor dashboard takes
+    `{"custom_charts": {"charts": {<chart_id>: {title, definition}, ...},
+    "layout": {"type": "linear", "order": [<chart_id>, ...]}, "version":
+    "0.0.0"}}` -- confirmed live via `create_monitoring_view` + `GET
+    /v1/view` (a bare `"charts": [...]` array, as an earlier version of this
+    module posted, 400s with "Expected object, received array").
     """
     if "custom_charts" in definition:
-        return {"custom_charts": definition["custom_charts"]}
+        charts: dict = {}
+        order: list[str] = []
+        for chart in definition["custom_charts"]:
+            chart_id = str(uuid.uuid5(_CHART_ID_NAMESPACE, chart["title"]))
+            entry = {"title": chart["title"], "definition": _chart_rest_definition(chart)}
+            if "caption_if_empty" in chart:
+                entry["caption_if_empty"] = chart["caption_if_empty"]
+            charts[chart_id] = entry
+            order.append(chart_id)
+        return {"custom_charts": {"charts": charts, "layout": {"type": "linear", "order": order}, "version": "0.0.0"}}
     search: dict = {}
     if "btql" in definition:
         search["filter"] = [{"btql": definition["btql"]}]
@@ -742,6 +791,11 @@ def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, 
         "name": name,
         "view_data": view_data,
     }
+    if view_type == "monitor":
+        # confirmed live 2026-09-06: a monitor view needs `options.viewType ==
+        # "monitor"` alongside `view_data.custom_charts`, or the dashboard
+        # renders with no chart layout even though the POST succeeds.
+        body["options"] = {"viewType": "monitor", "options": {"projectId": object_id, "type": object_type}}
     if match is None:
         result = rest_client.post("/v1/view", body)
         return {"id": result.get("id"), "created": True}
@@ -816,7 +870,7 @@ def sync_topics_and_pattern(rest_client, project_id: str) -> dict:
 # --- hero-case replay (spec section 1-2) ------------------------------------
 
 
-JUDGE_SCORE_ALLOWED_NAMES: frozenset[str] = frozenset(f"judge/{dim}" for dim in JUDGE_DIMENSIONS)
+JUDGE_SCORE_ALLOWED_NAMES: set[str] = {f"judge/{dim}" for dim in JUDGE_DIMENSIONS}
 
 
 def _judge_spread_by_dim(judge_rows: list[dict], packet_id: str) -> dict[str, float]:
@@ -830,8 +884,8 @@ def _judge_spread_by_dim(judge_rows: list[dict], packet_id: str) -> dict[str, fl
 
 
 def _hero_hierarchy(case_id: str, variant_id: str) -> tuple[dict, dict]:
-    from dealpoint.eval.braintrust_sync import _mean_judge_dims_for_packet, log_hierarchy
     from dealpoint.corpus.document import load_document
+    from dealpoint.eval.braintrust_sync import _mean_judge_dims_for_packet, log_hierarchy
     from dealpoint.eval.cases import find_case, resolve_document_id
 
     subset = _judged_subset()
@@ -1038,11 +1092,36 @@ def sync_cockpit(rest_client, sdk_client=None) -> dict:
 
 
 EXPERIMENT_NAME_PREFIXES: tuple[str, ...] = ("A-", "B-", "C-", "D-", "judge-", "judged-", "m7-", "m7b-")
+
+# The frozen M7a draft (docs/templates/demo-walkthrough.draft.md) cites these
+# 14 experiment names literally (RAG lab families section 2, one representative
+# agent run section 3, the five Pareto-sweep runs section 10) -- fixed,
+# unsuffixed names from a specific milestone run, not the "newest wins"
+# per-prefix families EXPERIMENT_NAME_PREFIXES resolves. Confirmed live: each
+# name below also exists suffixed (e.g. "rag-m3-dense-7f166caa", an M7a re-sync
+# artifact); only the EXACT unsuffixed name is the one the doc quotes.
+EXACT_EXPERIMENT_NAMES: tuple[str, ...] = (
+    "rag-m3-dense",
+    "rag-m3-bm25",
+    "rag-m3-hybrid",
+    "rag-m3-hybrid-rerank",
+    "rag-m3-fusion",
+    "rag-m3-fusion-rerank",
+    "rag-m7-li-crosscheck",
+    "rag-m7-synthetic",
+    "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "pareto-deepseek_deepseek-v4-flash",
+    "pareto-qwen_qwen3.7-flash",
+    "pareto-google_gemini-3.1-flash-lite",
+    "pareto-anthropic_claude-haiku-4.5",
+    "pareto-z-ai_glm-5.3-flash",
+)
 DATASET_NAMES: tuple[str, ...] = (
     "maud-dealpoint-dev-v1",
     "maud-dealpoint-test-v1",
     "maud-dealpoint-counterfactual-v1",
     "maud-dealpoint-review-set",
+    "maud-dealpoint-judged_calibration",
 )
 
 
@@ -1054,11 +1133,12 @@ def _resolve_experiments(rest_client, project_id: str) -> list[dict]:
     """
     try:
         payload = rest_client.get("/v1/experiment", {"project_id": project_id, "limit": 200})
-    except Exception:
+    except Exception:  # noqa: BLE001 - offline/fake clients don't implement this route; empty list, never raise
         return []
     objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
+    objects = objects or []
     newest_by_prefix: dict[str, dict] = {}
-    for exp in objects or []:
+    for exp in objects:
         name = exp.get("name") or ""
         for prefix in EXPERIMENT_NAME_PREFIXES:
             if not name.startswith(prefix):
@@ -1066,16 +1146,23 @@ def _resolve_experiments(rest_client, project_id: str) -> list[dict]:
             current = newest_by_prefix.get(prefix)
             if current is None or (exp.get("created") or "") > (current.get("created") or ""):
                 newest_by_prefix[prefix] = exp
-    return [
+    resolved = [
         {"prefix": prefix, "name": exp["name"], "id": exp["id"], "created": exp.get("created")}
         for prefix, exp in sorted(newest_by_prefix.items())
     ]
+    by_exact_name = {exp["name"]: exp for exp in objects if exp.get("name") in EXACT_EXPERIMENT_NAMES}
+    resolved.extend(
+        {"prefix": None, "name": name, "id": by_exact_name[name]["id"], "created": by_exact_name[name].get("created")}
+        for name in EXACT_EXPERIMENT_NAMES
+        if name in by_exact_name
+    )
+    return resolved
 
 
 def _resolve_datasets(rest_client, project_id: str) -> list[dict]:
     try:
         payload = rest_client.get("/v1/dataset", {"project_id": project_id, "limit": 200})
-    except Exception:
+    except Exception:  # noqa: BLE001 - offline/fake clients don't implement this route; empty list, never raise
         return []
     objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
     by_name = {ds["name"]: ds for ds in (objects or []) if ds.get("name") in DATASET_NAMES}
@@ -1085,14 +1172,39 @@ def _resolve_datasets(rest_client, project_id: str) -> list[dict]:
 def _org_name(rest_client) -> str | None:
     try:
         payload = rest_client.get("/v1/organization", {})
-    except Exception:
+    except Exception:  # noqa: BLE001 - offline/fake clients don't implement this route; None, never raise
         return None
     objects = payload.get("objects", payload) if isinstance(payload, dict) else payload
     return objects[0]["name"] if objects else None
 
 
-def permalinks(rest_client, project_id: str, experiments: list[dict], datasets: list[dict]) -> dict:
-    """One URL per walkthrough stop (spec section 6), built from the SAME
+# Table-view URLs pin the saved view's id via a `?v=` query param on the
+# page that renders that view_type -- the same "pin a view by id" mechanism
+# Braintrust documents for traces/datasets (`&tv=`/`&dv=`), generalized to
+# every view_type this project creates. The monitor dashboard's confirmed-live
+# shape (`/dashboards/<id>`, matched against a real `monitor_url`) is handled
+# separately below since a dashboard is not a `?v=`-pinned table view.
+_VIEW_TYPE_PAGE: dict[str, str] = {
+    "logs": "logs",
+    "experiments": "experiments",
+    "for_review_experiments": "experiments",
+    "experiment": "experiments",
+}
+
+
+def permalinks(
+    rest_client,
+    project_id: str,
+    experiments: list[dict],
+    datasets: list[dict],
+    views: list[dict] | None = None,
+    dashboard: dict | None = None,
+    hero_experiment_name: str | None = None,
+    hero_variants: list[str] | None = None,
+) -> dict:
+    """One URL per walkthrough stop (spec section 6): every resolved
+    experiment/dataset, the seven saved views, the dashboard, and one entry
+    per hero-case variant trace -- built from the SAME
     `https://www.braintrust.dev/app/<org>/p/<project>/...` shape
     `data/reports/braintrust_runs.json` already records and
     `mcp_braintrust_generate_permalink` confirms for experiments. Empty when
@@ -1106,6 +1218,17 @@ def permalinks(rest_client, project_id: str, experiments: list[dict], datasets: 
     base = f"https://www.braintrust.dev/app/{urllib.parse.quote(org)}/p/{PROJECT}"
     links: dict[str, str] = {f"experiment:{e['name']}": f"{base}/experiments/{e['name']}" for e in experiments}
     links.update({f"dataset:{d['name']}": f"{base}/datasets/{d['name']}" for d in datasets})
+    for v in views or []:
+        if v.get("object_type") == "experiment" and hero_experiment_name:
+            page = f"experiments/{hero_experiment_name}"
+        else:
+            page = _VIEW_TYPE_PAGE.get(v.get("view_type") or "", "logs")
+        links[f"view:{v['name']}"] = f"{base}/{page}?v={v['id']}"
+    if dashboard and dashboard.get("id"):
+        links[f"dashboard:{dashboard['name']}"] = f"{base}/dashboards/{dashboard['id']}"
+    if hero_experiment_name:
+        for variant_id in hero_variants or []:
+            links[f"hero_trace:{variant_id}"] = f"{base}/experiments/{hero_experiment_name}"
     return links
 
 
@@ -1124,6 +1247,9 @@ def build_demo_manifest(result: dict, rest_client=None) -> dict:
     experiments = _resolve_experiments(rest_client, project_id) if rest_client is not None else []
     datasets = _resolve_datasets(rest_client, project_id) if rest_client is not None else []
     review_case_ids = _review_set_case_ids()
+    replay_raw = result.get("replay") or {}
+    hero_experiment_name = replay_raw.get("experiment_name")
+    hero_variants = sorted((replay_raw.get("variant_trees") or {}).keys())
     return {
         "project_id": project_id,
         "views": views_dashboard["views"],
@@ -1147,7 +1273,18 @@ def build_demo_manifest(result: dict, rest_client=None) -> dict:
         "experiments": experiments,
         "datasets": datasets,
         "review_set": review_case_ids,
-        "permalinks": permalinks(rest_client, project_id, experiments, datasets) if rest_client is not None else {},
+        "permalinks": permalinks(
+            rest_client,
+            project_id,
+            experiments,
+            datasets,
+            views=views_dashboard["views"],
+            dashboard=views_dashboard["dashboard"],
+            hero_experiment_name=hero_experiment_name,
+            hero_variants=hero_variants,
+        )
+        if rest_client is not None
+        else {},
         "git_sha7": git_sha7(),
         "rubric_version": rubric_version(),
         "subset_hash": JUDGED_SUBSET_HASH,

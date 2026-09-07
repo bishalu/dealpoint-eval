@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import platform
+from functools import lru_cache
 from importlib import metadata
 
 from dealpoint.config import FRAMEWORK_VERSIONS_PATH
@@ -35,10 +36,14 @@ def _version(name: str) -> str | None:
         return None
 
 
+@lru_cache(maxsize=1)
 def _pi_version() -> str | None:
     """`pi --version`'s stdout, trimmed. `None` (not raised) when `pi` isn't
     on PATH or the invocation fails -- this module must stay usable in an
-    environment without pi installed.
+    environment without pi installed. Cached: `braintrust_sync.common_metadata`
+    calls `framework_versions()` once per row, and an uncached subprocess spawn
+    there turned every offline sync into hundreds of `pi` invocations -- the
+    exact cause of the multi-minute test-suite stalls this cache fixes.
     """
     import subprocess
 
@@ -50,6 +55,7 @@ def _pi_version() -> str | None:
     return version or None
 
 
+@lru_cache(maxsize=1)
 def _pi_mcp_extension_version() -> str | dict:
     """pi-mcp-extension's version (spec 'Operator setup' item 4). `pi
     extension list` writes only diagnostic `$ref` warnings to stderr and
@@ -57,6 +63,8 @@ def _pi_mcp_extension_version() -> str | dict:
     never by scanning its output) -- the documented fallback is the
     installed extension's own `package.json` under `~/.pi`. Returns a
     `{"unavailable": reason}` dict, never a guess, when neither path works.
+    Cached for the same reason as `_pi_version` -- one subprocess spawn per
+    process, not one per `common_metadata()` call.
     """
     import subprocess
     from pathlib import Path
@@ -78,7 +86,7 @@ def _pi_mcp_extension_version() -> str | dict:
 
 
 def framework_versions() -> dict:
-    versions = {pkg: _version(pkg) for pkg in PACKAGES}
+    versions: dict[str, object] = {pkg: _version(pkg) for pkg in PACKAGES}
     versions["python"] = platform.python_version()
     versions["git_sha7"] = git_sha7()
     versions["pi"] = _pi_version()
