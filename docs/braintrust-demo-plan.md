@@ -14,8 +14,8 @@ Done in the new org today:
 | item | state |
 |---|---|
 | Auth | API key in `.env.braintrust` (old org's key kept as `.env.braintrust.legacy`); `bt` profile `demo`; Claude Code MCP entry `braintrust-demo` (needs your OAuth on restart); pi MCP entry; OpenRouter provider secret created |
-| Data | `just braintrust-sync --live` once: 30 experiments, 6 datasets, 986 rows, **3,986 scores**, 6 replayed traces, 3 prompts, 1 parameters object. Verified by read-back. |
-| Free tier left | ~6,000 scores, $10 model credit, ~1 GB data |
+| Data | `just braintrust-sync --live` once: 30 experiments, 6 datasets, 986 rows, **3,755 scores** (3,986 planned; nulls are not counted), 6 replayed traces, 3 prompts, 1 parameters object. Verified by read-back. |
+| Free tier used (Braintrust's own meter, 2026-09-07) | scores **3,755 of 10,000**; logs (processed data) **0.0023 GB of 1 GB**; model credits **$0 of $10** |
 | Code | `braintrust-sync`, `braintrust-cockpit`, `braintrust-showroom`: org-switchable (`BRAINTRUST_PROJECT`, `BRAINTRUST_ENV_FILE`, `BRAINTRUST_LEDGER_FILE`), dry-run default, `--live` opt-in, exact score counts before writing, per-org ledgers, no hardcoded org ids |
 
 Not yet done (all free unless marked): showroom steps (experiment tags and descriptions, row-level metadata,
@@ -57,11 +57,35 @@ the tour regenerated with `bishal.ai` links; Claude Code restart for the MCP OAu
 | 12 | Topics, Patterns, Debugger, Loop | clusters over the logs; one Pattern; Debugger on the hero trace; one Loop thread | discover and diagnose without knowing the query first |
 | 13 | close | "everything above came from `just braintrust-sync` in a fresh org for $0" | reproducibility |
 
+## The three limits, and what each remaining step costs against them
+
+Starter meters three things separately: **scores** (10k/month; each score written on a row), **processed data**
+(1 GB/month; every byte ingested: rows, spans, datasets; measured at ingestion, deleting does not refund),
+and **model credit** ($10/month; Braintrust's own built-in models: Topics, Loop, Debugger, Playground on built-ins).
+OpenRouter calls hit none of them; they hit your OpenRouter ledger.
+
+| step | scores | processed data | model credit | OpenRouter |
+|---|---|---|---|---|
+| sync (done) | 3,755 | ~2 MB | 0 | 0 |
+| tags, row metadata, review flags, parameters, prompts, views | 0 | < 1 MB (metadata merges) | 0 | 0 |
+| 114 trace trees into Logs | 0 | ~10-20 MB (full span trees with retrieved text) | 0 | 0 |
+| 4 judge scorers (create) | 0 | ~0 | 0 | 0 |
+| judge scorer calls in the demo | 1 per call | ~0 | 0 | cents |
+| Playground: 3 variants x 18 cases, saved | ~216 (108 rows x 2 if judged) | ~1 MB | 0 | ~$0.10 |
+| Topics over the 114 logs | 0 | 0 | ~$1-2 (facet + cluster tokens) | 0 |
+| one Pattern, one Loop thread, Debugger on one trace | 0 | 0 | ~$1-3 | 0 |
+| re-sync after a rotation or a new milestone | up to 3,755 again | ~2 MB | 0 | 0 |
+| **projected end state** | **~4,000 of 10,000** | **< 0.05 of 1 GB** | **~$3-5 of $10** | **< $1** |
+
+Guard rails already in code: dry-run default, `--live` opt-in, exact score count printed before the first write,
+per-run cap, per-org ledger so nothing is re-logged. The one limit no code guards is model credit: Topics runs
+daily once enabled, so enable it once for the demo window and pause it after recording.
+
 ## Costs
 
 | item | scores | money |
 |---|---|---|
-| sync (done) | 3,986 | $0 (inside free tier) |
+| sync (done) | 3,755 (Braintrust's count; 3,986 planned, the difference is null scores) | $0 (inside free tier) |
 | showroom steps | 0 | $0 |
 | judge scorer invocations during the demo | 1 per call | OpenRouter cents |
 | Playground run, 3 variants x 18 cases, saved | ~216 | $0 scores (inside tier) + ~$0.10 OpenRouter |
