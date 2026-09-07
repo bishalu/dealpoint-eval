@@ -180,7 +180,7 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
 
     dashes = dashboard_definitions()
     assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "DeepEval", "LlamaIndex", "Which prompt?"]
-    assert len(dashes[0]["charts"]) == 9
+    assert len(dashes[0]["charts"]) == 11
     assert not any(c.get("kind") == "bignumber" for d in dashes for c in d["charts"]), "no lone numbers: every chart compares"
     assert "metadata.safe" in str(dashes[0]["charts"][0]["measure"]) and "SAFE ACCURACY" in dashes[0]["charts"][0]["title"]
     assert "correct_answered" in str(dashes[0]["charts"][1]["measure"]) and "PRECISION" in dashes[0]["charts"][1]["title"], "safe rate never stands without precision"

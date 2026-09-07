@@ -502,7 +502,7 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
       "Every chart is a comparison, never a lone number: the first ranks every system@model by safe accuracy on the same 18 cases, the second by precision. "
       "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
       "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
-     ("pareto_safe", "pareto_precision", "pareto_net", "sys_safe", "mod_safe", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
+     ("pareto_safe", "pareto_precision", "pareto_net", "sys_safe", "sys_correct", "mod_safe", "mod_correct", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
     ("Which system?",
      ("VERDICT on net accuracy (correct minus misleading): see the first chart; the agent arms fail silently (cap-hits) where the baseline answers wrongly, and the skill trades cap-hits for fabrication. Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
      "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
