@@ -25,6 +25,7 @@ Two client seams, both optional:
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import uuid
@@ -973,7 +974,7 @@ def replay_hero_case(sdk_client, case_id: str) -> dict:
 # ledger so a re-run never re-logs a score that already exists.
 
 LIVE_SCORE_CAP = 600
-SCORE_LEDGER_PATH = Path("data/reports/braintrust_score_ledger.jsonl")
+SCORE_LEDGER_PATH = Path(os.environ.get("BRAINTRUST_LEDGER_FILE", "data/reports/braintrust_score_ledger.jsonl"))   # one ledger per org: set BRAINTRUST_LEDGER_FILE for the demo org
 JUDGE_AGGREGATE_DIMENSIONS = 4          # judge/<dimension> scores per replayed tree
 
 

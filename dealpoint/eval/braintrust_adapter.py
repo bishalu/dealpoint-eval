@@ -22,7 +22,9 @@ from pathlib import Path
 from dealpoint.config import REPORTS_DIR, VERSIONS_JSON_PATH
 from dealpoint.eval.cases import slugify_model
 
-PROJECT = "dealpoint-eval"
+# The Braintrust project name. Override with BRAINTRUST_PROJECT to point every sync, cockpit and
+# showroom command at another org/project (the demo org), without touching this repo's config.
+PROJECT = os.environ.get("BRAINTRUST_PROJECT", "dealpoint-eval")
 
 # Exactly six scores per case (spec §5 / deliverable 3). `skill_adherence`
 # returns None until M4 but must already be in this list from M2 onward.
@@ -86,7 +88,7 @@ def load_braintrust_key() -> str | None:
 
     from dealpoint.config import REPO_ROOT
 
-    env_path = REPO_ROOT / ".env.braintrust"
+    env_path = REPO_ROOT / os.environ.get("BRAINTRUST_ENV_FILE", ".env.braintrust")
     if env_path.exists():
         from dotenv import dotenv_values
 

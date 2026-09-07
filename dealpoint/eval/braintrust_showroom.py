@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -39,15 +40,16 @@ import requests
 from dealpoint.eval.braintrust_adapter import PROJECT, load_braintrust_key
 
 API = "https://api.braintrust.dev/v1"
-PROJECT_ID = "3eb5eb88-e6f5-41c7-b38d-20bbe49b9577"
-OWNER_USER_ID = "a2e283e8-250a-4048-9020-61d50cd52d71"
+PROJECT_ID = ""          # resolved by name at runtime (see Api.resolve_project); never hardcode an org's ids
+OWNER_USER_ID = ""       # the project's creator, resolved alongside
+ENV_FILE_DEFAULT = ".env.braintrust"
 # Models run on the operator's OpenRouter key (configured as a Braintrust AI provider), never on
 # Braintrust's built-in models: same ledger and provider choices as the rest of the project.
 WORKHORSE_MODEL = "z-ai/glm-5.3-flash"
 JUDGE_MODELS = {"reasoning": "mistralai/mistral-small-3.2-24b-instruct", "evidence": "mistralai/mistral-small-3.2-24b-instruct",
                 "professional": "mistralai/mistral-small-3.2-24b-instruct", "trajectory": "bytedance-seed/seed-2.0-mini"}
-ENV_FILE = ".env.braintrust"
-LEDGER_PATH = Path("data/reports/braintrust_score_ledger.jsonl")
+ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
+LEDGER_PATH = Path(os.environ.get("BRAINTRUST_LEDGER_FILE", "data/reports/braintrust_score_ledger.jsonl"))   # one ledger per org: set BRAINTRUST_LEDGER_FILE for the demo org
 MANIFEST_PATH = Path("data/reports/showroom_manifest.json")
 STEPS = ("tag", "rows", "logs", "review", "params", "prompts", "judges", "views")
 
@@ -134,6 +136,15 @@ class Api:
 
     def post(self, path: str, body: dict) -> dict:
         return self._call("POST", path, json=body)
+
+    def resolve_project(self) -> tuple[str, str]:
+        """(project_id, owner_user_id) for PROJECT by name; sets the module globals."""
+        global PROJECT_ID, OWNER_USER_ID
+        objs = self.get("project", {"project_name": PROJECT, "limit": 5}).get("objects", [])
+        if not objs:
+            raise RuntimeError(f"Braintrust project {PROJECT!r} not found in this org (key from {ENV_FILE})")
+        PROJECT_ID, OWNER_USER_ID = objs[0]["id"], objs[0].get("user_id") or ""
+        return PROJECT_ID, OWNER_USER_ID
 
     def experiments(self) -> list[dict]:
         out, params = [], {"project_id": PROJECT_ID, "limit": 200}
@@ -454,7 +465,10 @@ def main(argv: list[str] | None = None) -> int:
         print("no BRAINTRUST_API_KEY; refusing a live run", file=sys.stderr)
         return 2
     api = Api(key or "")
-    manifest = {"mode": "live" if live else "dry-run", "started_at": datetime.now(UTC).isoformat(), "project_id": PROJECT_ID}
+    if key:
+        api.resolve_project()
+    manifest = {"mode": "live" if live else "dry-run", "started_at": datetime.now(UTC).isoformat(), "project": PROJECT,
+                "project_id": PROJECT_ID, "env_file": ENV_FILE}
     print(f"{'LIVE' if live else 'DRY RUN'}: showroom on {PROJECT} (scores written: 0 by construction)")
     for name in STEPS:
         if only and name not in only:
