@@ -193,8 +193,9 @@ Make the four roles explicit before showing any number:
 
 - **Deterministic MAUD metrics** are benchmark truth: did the answer and citation match the expert span.
 - **Human review** is the calibration reference: a lawyer scored 24 blinded packets on four dimensions,
-  1 to 5. The `professional` slider on the Human review page is that dimension; the 12 flagged traces are
-  the review set.
+  1 to 5. The Human review page has the same four sliders (`reasoning`, `evidence`, `trajectory`,
+  `professional`), so a reviewer scores a flagged trace exactly the way the lawyer did; the 12 flagged
+  traces are the review set.
 - **The multi-judge panel** is the calibrated qualitative evaluator: three small models from three families
   not in the candidate slate (Mistral, NVIDIA, ByteDance), reading the same blinded packet, 108 traces,
   324 calls, about a dollar. `judge/*` on the `judge-*` experiments is their mean; `human/*` on the same
@@ -261,6 +262,13 @@ This is the PROMPT axis with everything else pinned: same 18 packets (the exact 
 same model, same judges, only the system prompt changes. Four prompts side by side, judged live, about ten
 cents. Point at `contract_144__q05`: does "abstain first" make the baseline abstain more on the redacted
 twin without abstaining here, where the definition is in the passages?
+
+A second Playground, for the judges: the dataset `maud-dealpoint-judge-packets` holds the 24 packets the
+lawyer scored, rendered exactly as the M5 judges saw them, with the lawyer's four scores as `expected` and
+each judge family's scores in metadata. Open the prompt `judge-panel-rubric` (the frozen rubric) over it
+with three model columns, Mistral Small, NVIDIA Nemotron and ByteDance Seed on OpenRouter, and you watch
+the panel argue with the lawyer live on `contract_144__q05`; no scorer needed, `expected` is the answer
+key. About two cents.
 
 Pre-run fallback: the same four runs are saved as experiments `playground-arm-A-base`, `-terse`,
 `-cite-first`, `-abstain-first` (axis PROMPT in the Experiments tab) and mirrored into the dashboard's two
@@ -347,13 +355,17 @@ as fast as anything on the slate, at twice Qwen's cost. Qwen is the cost floor: 
 per dollar, with the worst cap-hit and failure rates. Haiku is the same quality as GLM and DeepSeek at
 sixteen times the cost, and the dashboard shows it at six correct outcomes per dollar.
 
-The decision, written down: **Gemini 3.1 flash lite for production**, with the cap-hit stopping rule
-from stop 8 as the precondition (it would lift every model, but Gemini and GLM least need it), Qwen as
-the cost-floor fallback if volume makes the 2x matter, GLM staying the development workhorse, Haiku out.
-The online `judge-professional` score from stop 5 is the monitor that says whether quality moves after
-we ship.
+The decision, written down, and it is not the one the arm-D table alone suggests. The "Pareto" chart on the
+"Which model?" dashboard puts every system@model on the same 18 cases, and the winner is **A@haiku, the
+single-shot baseline on Claude Haiku 4.5**: 56% correct outcomes, zero fabrication, zero cap-hits, zero
+failures, 3.7 seconds and $0.0034 per case. It gets there by abstaining on 39% of cases, right on every
+counterfactual, wrong on a few answerable ones. The best agentic configuration is **D@gemini** (50%, the only
+agent that never fabricates, 12.7 seconds, $0.0055). So: ship A on Haiku today; the agent earns its place
+only when the stopping rule from stop 8 lands, and then on Gemini, with the online `judge-professional`
+score from stop 5 as the monitor that says whether quality moved after we shipped. Haiku inside the agent
+loop is out: same quality as GLM at sixteen times the cost.
 
-One-liner: "Count every case, not just the ones that finished, and the winner changes. That is why the dashboard counts every case."
+One-liner: "Count every case, not just the ones that finished, and the winner is the boring one: single shot on Haiku. The agent has to earn its keep."
 
 ---
 

@@ -4,6 +4,7 @@ org's ledger state or overwrites its manifest. Offline: no test touches the netw
 
 from __future__ import annotations
 
+import json
 from itertools import pairwise
 
 import pytest
@@ -266,3 +267,14 @@ def test_prompt_variant_log_rows_join_judges_to_roots():
     m = rows[0]["metadata"]
     assert m["prompt_variant"] == "terse" and m["case_id"] == "contract_144__q05" and m["category"] == "prompt-variant"
     assert m["judge_evidence"] == 0.75 and m["judge_professional"] == 1.0 and rows[0]["output"] == "Actual knowledge"
+
+
+def test_judge_packet_rows_are_the_lawyers_24_packets_as_the_judges_saw_them():
+    from dealpoint.eval.braintrust_showroom import judge_packet_rows
+
+    rows = judge_packet_rows()
+    assert len(rows) == 24
+    hero = next(r for r in rows if r["metadata"]["case_id"] == "contract_144__q05" and r["metadata"]["variant_id"] == "D@glm")
+    assert "Knowledge" in hero["input"] and "## " in hero["input"]
+    assert json.loads(hero["expected"]) == {"reasoning": 5, "evidence": 5, "trajectory": 3, "professional": 5}
+    assert hero["metadata"]["judge_mistral"]["reasoning"] == 5 and set(hero["metadata"]) >= {"judge_nvidia", "judge_bytedance", "lawyer"}

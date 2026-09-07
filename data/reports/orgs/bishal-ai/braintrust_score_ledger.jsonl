@@ -756,3 +756,4 @@
 {"experiment": "logs", "key": "mirror:266", "n_scores": 0, "ts": "2026-09-07T15:59:26.429211+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "mirror:266", "n_scores": 0, "ts": "2026-09-07T16:16:51.829552+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "mirror:266", "n_scores": 0, "ts": "2026-09-07T16:19:29.769027+00:00", "source": "showroom"}
+{"experiment": "playground", "key": "judge-packets+prompt", "n_scores": 0, "ts": "2026-09-07T16:32:15.923703+00:00", "source": "showroom"}

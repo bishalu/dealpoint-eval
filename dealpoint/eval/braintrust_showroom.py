@@ -68,7 +68,7 @@ ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
 # (tests) or BRAINTRUST_LEDGER_FILE (explicit override) wins over the org-derived path.
 LEDGER_PATH: Path | None = None
 MANIFEST_PATH: Path | None = None
-STEPS = ("tag", "rows", "logs", "mirror", "raglogs", "review", "params", "prompts", "judges", "views", "playground", "promptlogs")
+STEPS = ("tag", "rows", "logs", "mirror", "raglogs", "review", "params", "prompts", "judges", "views", "playground", "judgeplayground", "promptlogs")
 
 _ARM = re.compile(r"^(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
 _JUDGED = re.compile(r"^judged-(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
@@ -864,6 +864,62 @@ def playground_prompts() -> list[dict]:
     base = {"slug": "arm-a-prompt-base", "name": "Arm A prompt: base", "content": system_prompt()}
     return [{**v, "messages": [{"role": "system", "content": v["content"]}, {"role": "user", "content": PLAYGROUND_USER_TURN}]}
             for v in [base, *arm_a_prompt_variants()]]
+
+
+JUDGE_PACKETS_DATASET = "maud-dealpoint-judge-packets"
+JUDGE_PANEL_PROMPT_SLUG = "judge-panel-rubric"
+JUDGE_PANEL_MODELS = {"Mistral": "mistralai/mistral-small-3.2-24b-instruct", "NVIDIA": "nvidia/nemotron-3-super-120b-a12b", "ByteDance": "bytedance-seed/seed-2.0-mini"}
+
+
+def judge_packet_rows() -> list[dict]:
+    """The 24 lawyer-scored blinded packets exactly as the M5 judges saw them (`render_packet_text`), with the
+    lawyer's four scores as `expected` and each judge family's scores in metadata. A Playground of the
+    rubric prompt over these rows, one column per judge model, is "watch the judges argue with the lawyer"."""
+    from dealpoint.eval.blinding import render_packet_text
+    from dealpoint.eval.braintrust_cockpit import _load_jsonl
+
+    packets = {p["packet_id"]: p for p in _load_jsonl("data/eval/calibration/packets.jsonl")}
+    human = {h["packet_id"]: h for h in _load_jsonl("data/eval/calibration/human_scores.jsonl")}
+    key = json.loads(Path("data/eval/calibration/variant_key.json").read_text(encoding="utf-8"))
+    judges = _load_jsonl("data/eval/judge_scores.jsonl")
+    out: list[dict] = []
+    for pid, h in sorted(human.items()):
+        packet = packets.get(pid)
+        if not packet:
+            continue
+        meta = key.get(pid, {})
+        per_judge = {r["judge_family"].lower(): {d: r.get(d) for d in JUDGE_DIMS} for r in judges if r.get("packet_id") == pid and r.get("ok", True)}
+        expected = {d: h.get(d) for d in JUDGE_DIMS}
+        out.append({"id": pid, "input": render_packet_text(packet),
+                    "expected": json.dumps(expected),
+                    "metadata": {"packet_id": pid, "case_id": meta.get("case_id"), "variant_id": meta.get("variant_id"), "arm": meta.get("arm"),
+                                 "model": meta.get("model"), "status": packet.get("status"), "lawyer": expected,
+                                 **{f"judge_{f}": v for f, v in per_judge.items()}, "rubric_version": packet.get("rubric_version")}})
+    return out
+
+
+def step_judgeplayground(api: Api, live: bool, manifest: dict) -> None:
+    from dealpoint.eval.judge_run import _system_prompt
+
+    rows = judge_packet_rows()
+    print(f"judgeplayground: dataset {JUDGE_PACKETS_DATASET} ({len(rows)} lawyer-scored packets, lawyer scores as expected) + chat prompt "
+          f"{JUDGE_PANEL_PROMPT_SLUG} (the frozen M5 rubric); run it in the Playground over {', '.join(JUDGE_PANEL_MODELS.values())}")
+    manifest["judgeplayground"] = {"dataset": JUDGE_PACKETS_DATASET, "rows": len(rows), "prompt": JUDGE_PANEL_PROMPT_SLUG, "models": JUDGE_PANEL_MODELS}
+    if not live:
+        return
+    import braintrust
+    ds = braintrust.init_dataset(project=PROJECT, name=JUDGE_PACKETS_DATASET,
+                                 description="The 24 blinded packets the lawyer scored, rendered exactly as the M5 judges saw them; expected = the lawyer's reasoning/evidence/trajectory/professional (1-5); each judge family's scores in metadata.")
+    for r in rows:
+        ds.insert(input=r["input"], expected=r["expected"], metadata=r["metadata"], id=r["id"])
+    ds.flush()
+    project = braintrust.projects.create(name=PROJECT)
+    project.prompts.create(name="Judge panel: the M5 rubric", slug=JUDGE_PANEL_PROMPT_SLUG, model=JUDGE_PANEL_MODELS["Mistral"], if_exists="replace",
+                           messages=[{"role": "system", "content": _system_prompt()}, {"role": "user", "content": "{{input}}"}],
+                           metadata={"purpose": "Playground: the same packet judged by Mistral, NVIDIA and ByteDance side by side, against the lawyer in expected",
+                                     "models": JUDGE_PANEL_MODELS})
+    project.publish()
+    _ledger("playground", "judge-packets+prompt")
 
 
 def step_playground(api: Api, live: bool, manifest: dict) -> None:

@@ -1,15 +1,20 @@
 {
   "mode": "live",
-  "started_at": "2026-09-07T16:19:18.233303+00:00",
+  "started_at": "2026-09-07T16:32:13.638649+00:00",
   "project": "dealpoint-eval",
   "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
   "org": "bishal-ai",
   "env_file": ".env.braintrust",
   "ledger": "/home/exedev/repos/dealpoint-eval/data/reports/orgs/bishal-ai/braintrust_score_ledger.jsonl",
-  "mirror": {
-    "rows_indexed": 426,
-    "logs_updated": 266,
-    "logs_unmatched": 0
+  "judgeplayground": {
+    "dataset": "maud-dealpoint-judge-packets",
+    "rows": 24,
+    "prompt": "judge-panel-rubric",
+    "models": {
+      "Mistral": "mistralai/mistral-small-3.2-24b-instruct",
+      "NVIDIA": "nvidia/nemotron-3-super-120b-a12b",
+      "ByteDance": "bytedance-seed/seed-2.0-mini"
+    }
   },
-  "finished_at": "2026-09-07T16:19:29.777840+00:00"
+  "finished_at": "2026-09-07T16:32:15.923807+00:00"
 }
