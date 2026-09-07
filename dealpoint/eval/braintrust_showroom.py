@@ -6,8 +6,9 @@ So this module never writes a score. It only adds the things Braintrust does not
     tag      experiment-level metadata, tags and descriptions, so the Experiments tab reads as a story
     rows     row-level metadata merged onto existing rows (arm, model, variant, case_type), so
              group-by and filters work; merge-updates on `metadata` do not touch scores
-    logs     the 108 judged traces plus the six representative ones replayed into Logs as full
-             span trees with NO scores (Topics, Patterns, Debugger and Loop need Logs, not experiments)
+    logs     every stored agent run replayed into Logs as a full span tree with NO scores: the 108
+             judged traces, the six representative ones, and the rest of the four-arm and Pareto
+             sweeps (Topics, Patterns, Debugger, online scoring and Loop need Logs, not experiments)
     review   the 12-trace review set flagged for human review on the judge experiments
     params   four Parameters objects, one per arm, so "change one parameter, rerun, compare" is a real object
     prompts  three arm-A prompt variants for the Playground A/B/C, next to the base prompt
@@ -21,6 +22,7 @@ score ledger with n_scores=0, and a guard asserts no payload ever carries a `sco
     uv run python -m dealpoint.eval.braintrust_showroom              # dry run
     uv run python -m dealpoint.eval.braintrust_showroom --live       # execute
     uv run python -m dealpoint.eval.braintrust_showroom --live --only tag,rows
+    uv run python -m dealpoint.eval.braintrust_showroom --live --replay contract_144__q05:D@glm   # one new log, now
 """
 
 from __future__ import annotations
@@ -178,6 +180,12 @@ class Api:
                 return out
 
 
+def _is_root(event: dict) -> bool:
+    """Root spans: the fetch API's `is_root`, else no parents. (`span_id == root_span_id` is NOT
+    reliable on fetched events and silently matched nothing.)"""
+    return bool(event.get("is_root")) if event.get("is_root") is not None else not event.get("span_parents")
+
+
 def _assert_scoreless(events: list[dict]) -> None:
     for e in events:
         if "scores" in e:
@@ -254,8 +262,7 @@ def step_rows(api: Api, live: bool, manifest: dict) -> None:
         rows = api.fetch_rows(e["id"]) if live else []
         events = []
         for r in rows:
-            is_root = r.get("is_root") if r.get("is_root") is not None else not r.get("span_parents")
-            if not is_root:
+            if not _is_root(r):
                 continue
             case_id = r.get("input") if isinstance(r.get("input"), str) else (r.get("metadata") or {}).get("case_id")
             meta = {k: v for k, v in c.items() if k in ("stage", "family", "arm", "model", "variant_id", "config")}
@@ -275,11 +282,30 @@ def step_rows(api: Api, live: bool, manifest: dict) -> None:
     manifest["rows_merged"] = total
 
 
+def agent_run_log_plan(already_planned: set[tuple[str, str]]) -> list[dict]:
+    """Every stored agent run (the four-arm and Pareto sweeps, one row per case) as a log
+    tree, category `agent`, minus the (case, variant) pairs the judged/representative plan
+    already covers under their short variant ids (`D@glm`) or full ones (`D@z-ai/glm-5.3-flash`).
+    Logs cost processed data only, never scores; the fuller the Logs tab, the more Topics,
+    Patterns and online scoring have to work with."""
+    from dealpoint.eval.braintrust_sync import _agent_experiment_plans, _judged_variant_id_for
+
+    out: list[dict] = []
+    for plan in _agent_experiment_plans():
+        arm, model = plan["metadata"]["arm"], plan["metadata"]["model"]
+        variant_id = f"{arm}@{model}"
+        short = _judged_variant_id_for(arm, model)
+        for row in plan["rows"]:
+            case_id = row.get("case_id")
+            if not case_id or (case_id, variant_id) in already_planned or (short and (case_id, short) in already_planned):
+                continue
+            out.append({"case_id": case_id, "variant_id": variant_id, "category": "agent", "row": row})
+    return out
+
+
 def step_logs(api: Api, live: bool, manifest: dict) -> None:
-    from dealpoint.corpus.document import load_document
     from dealpoint.eval.braintrust_cockpit import _judged_subset, _load_jsonl, _variant_results
-    from dealpoint.eval.braintrust_sync import _emit_span_tree, log_hierarchy, representative_cases
-    from dealpoint.eval.cases import find_case, resolve_document_id
+    from dealpoint.eval.braintrust_sync import representative_cases
 
     subset = _judged_subset()
     plan: list[dict] = []
@@ -290,6 +316,7 @@ def step_logs(api: Api, live: bool, manifest: dict) -> None:
     for sel in representative_cases().get("selections", []):
         rows = {r.get("case_id"): r for r in _load_jsonl(sel["results_path"])} if sel.get("results_path") else {}
         plan.append({"case_id": sel["case_id"], "variant_id": sel["variant_id"], "category": sel["category"], "row": rows.get(sel["case_id"])})
+    plan += agent_run_log_plan({(p["case_id"], p["variant_id"]) for p in plan})
     seen = _ledger_keys()
     todo = [p for p in plan if ("logs", f"{p['case_id']}:{p['variant_id']}:{p['category']}") not in seen]
     print(f"logs: {len(plan)} trace trees planned, {len(todo)} not yet in the ledger, 0 scores")
@@ -299,30 +326,71 @@ def step_logs(api: Api, live: bool, manifest: dict) -> None:
     import braintrust
     logger = braintrust.init_logger(project=PROJECT, set_current=True)
     for p in todo:
-        row = p["row"] or {"case_id": p["case_id"], "scores": {}, "record": {"trajectory": []}}
-        try:
-            case = find_case(p["case_id"]); doc = load_document(resolve_document_id(case))
-        except (KeyError, FileNotFoundError):
-            case, doc = {}, None
-        hierarchy = log_hierarchy(row, case, doc, judge_dims=None)
-        arm, _, model = p["variant_id"].partition("@")
-        meta = {"case_id": p["case_id"], "variant_id": p["variant_id"], "arm": arm, "model": model, "category": p["category"],
-                "status": (row.get("record") or {}).get("status") or row.get("status"),
-                "obj_grounded_accuracy": (row.get("scores") or {}).get("grounded_accuracy"), **_case_info(p["case_id"])}
-        root = logger.start_span(name=f"{p['case_id']} | {p['variant_id']}")
-        root.log(input=(case or {}).get("question_text") or p["case_id"], metadata=meta)
-        n = 0
-        for child in hierarchy.get("children", []):
-            n += _emit_span_tree(logger, child, parent_span=root, allowed_score_names=set())
-        if n:
-            raise RuntimeError(f"replay emitted {n} scores; expected zero")
-        finding = row.get("finding") or (row.get("record") or {}).get("finding")
-        root.log(output=finding if finding is not None else "(no finding)")
-        root.end()
-        manifest["logs"]["roots"].append({"case_id": p["case_id"], "variant_id": p["variant_id"], "category": p["category"], "root_span_id": getattr(root, "id", None)})
-        _ledger("logs", f"{p['case_id']}:{p['variant_id']}:{p['category']}")
-        manifest["logs"]["written_this_run"] += 1
+        _log_one_tree(logger, p, manifest)
     logger.flush()
+
+
+def _log_one_tree(logger, p: dict, manifest: dict) -> str | None:
+    """Replay one stored result row into Logs as a full span tree with zero scores; returns the root id."""
+    from dealpoint.corpus.document import load_document
+    from dealpoint.eval.braintrust_sync import _emit_span_tree, log_hierarchy
+    from dealpoint.eval.cases import find_case, resolve_document_id
+
+    row = p["row"] or {"case_id": p["case_id"], "scores": {}, "record": {"trajectory": []}}
+    try:
+        case = find_case(p["case_id"]); doc = load_document(resolve_document_id(case))
+    except (KeyError, FileNotFoundError):
+        case, doc = {}, None
+    hierarchy = log_hierarchy(row, case, doc, judge_dims=None)
+    arm, _, model = p["variant_id"].partition("@")
+    meta = {"case_id": p["case_id"], "variant_id": p["variant_id"], "arm": arm, "model": model, "category": p["category"],
+            "status": (row.get("record") or {}).get("status") or row.get("status"),
+            "obj_grounded_accuracy": (row.get("scores") or {}).get("grounded_accuracy"), **_case_info(p["case_id"])}
+    root = logger.start_span(name=f"{p['case_id']} | {p['variant_id']}")
+    root.log(input=(case or {}).get("question_text") or p["case_id"], metadata=meta)
+    n = 0
+    for child in hierarchy.get("children", []):
+        n += _emit_span_tree(logger, child, parent_span=root, allowed_score_names=set())
+    if n:
+        raise RuntimeError(f"replay emitted {n} scores; expected zero")
+    finding = row.get("finding") or (row.get("record") or {}).get("finding")
+    root.log(output=finding if finding is not None else "(no finding)")
+    root.end()
+    root_id = getattr(root, "id", None)
+    manifest.setdefault("logs", {"planned": 0, "written_this_run": 0, "roots": []})
+    manifest["logs"]["roots"].append({"case_id": p["case_id"], "variant_id": p["variant_id"], "category": p["category"], "root_span_id": root_id})
+    _ledger("logs", f"{p['case_id']}:{p['variant_id']}:{p['category']}")
+    manifest["logs"]["written_this_run"] += 1
+    return root_id
+
+
+def replay_plan_entry(case_id: str, variant_id: str) -> dict:
+    """The stored row for `case_id` under a judged short id (`D@glm`) or a full one
+    (`D@z-ai/glm-5.3-flash`), as a log-plan entry whose category carries a timestamp, so the
+    ledger never treats it as already logged: this is the demo's "a new trace lands" action."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _variant_results
+
+    subset = _judged_subset()
+    row = _variant_results(subset, variant_id).get(case_id) if any(v["variant_id"] == variant_id for v in subset.get("variants", [])) else None
+    if row is None:
+        row = next((p["row"] for p in agent_run_log_plan(set()) if p["case_id"] == case_id and p["variant_id"] == variant_id), None)
+    if row is None:
+        raise SystemExit(f"no stored result row for {case_id} {variant_id}")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    return {"case_id": case_id, "variant_id": variant_id, "category": f"live-replay-{stamp}", "row": row}
+
+
+def step_replay(api: Api, live: bool, manifest: dict, target: str) -> None:
+    case_id, _, variant_id = target.partition(":")
+    p = replay_plan_entry(case_id, variant_id)
+    print(f"replay: {case_id} as {variant_id} -> Logs, category {p['category']}, 0 scores (online scoring picks it up)")
+    if not live:
+        return
+    import braintrust
+    logger = braintrust.init_logger(project=PROJECT, set_current=True)
+    root_id = _log_one_tree(logger, p, manifest)
+    logger.flush()
+    print(f"  logged root span {root_id}")
 
 
 def step_review(api: Api, live: bool, manifest: dict) -> None:
@@ -343,7 +411,7 @@ def step_review(api: Api, live: bool, manifest: dict) -> None:
     for f in flagged:
         by_exp.setdefault(f["experiment"], []).append(f["case_id"])
     for exp_name, case_ids in by_exp.items():
-        rows = {r.get("input"): r["id"] for r in api.fetch_rows(exps[exp_name]) if r.get("span_id") == r.get("root_span_id")}
+        rows = {r.get("input"): r["id"] for r in api.fetch_rows(exps[exp_name]) if _is_root(r)}
         events = [{"id": rows[c], "metadata": {"~__bt_review_lists": {"__bt_default_review_list": {"status": "PENDING"}},
                                                 "~__bt_assignments": [OWNER_USER_ID]},
                    "_is_merge": True, "_merge_paths": [["metadata", "~__bt_review_lists"], ["metadata", "~__bt_assignments"]]}
@@ -481,9 +549,12 @@ def main(argv: list[str] | None = None) -> int:
     argv = list(argv) if argv is not None else sys.argv[1:]
     live = "--live" in argv
     only = None
+    replay = None
     for i, a in enumerate(argv):
         if a == "--only" and i + 1 < len(argv):
             only = set(argv[i + 1].split(","))
+        if a == "--replay" and i + 1 < len(argv):
+            replay = argv[i + 1]
     key = load_braintrust_key()
     if live and not key:
         print("no BRAINTRUST_API_KEY; refusing a live run", file=sys.stderr)
@@ -496,6 +567,9 @@ def main(argv: list[str] | None = None) -> int:
     manifest = {"mode": "live" if live else "dry-run", "started_at": datetime.now(UTC).isoformat(), "project": PROJECT,
                 "project_id": PROJECT_ID, "org": org, "env_file": ENV_FILE, "ledger": str(_ledger_path())}
     print(f"{'LIVE' if live else 'DRY RUN'}: showroom on {PROJECT} in org {org} (scores written: 0 by construction; ledger {_ledger_path()})")
+    if replay:
+        step_replay(api, live, manifest, replay)
+        return 0
     for name in STEPS:
         if only and name not in only:
             continue

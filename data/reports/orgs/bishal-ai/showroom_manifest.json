@@ -1,0 +1,922 @@
+{
+  "mode": "live",
+  "started_at": "2026-09-07T14:28:46.426774+00:00",
+  "project": "dealpoint-eval",
+  "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
+  "org": "bishal-ai",
+  "env_file": ".env.braintrust",
+  "ledger": "/home/exedev/repos/dealpoint-eval/data/reports/orgs/bishal-ai/braintrust_score_ledger.jsonl",
+  "logs": {
+    "planned": 265,
+    "written_this_run": 151,
+    "roots": [
+      {
+        "case_id": "contract_144__q05",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9a1b97b5-517c-4b5c-9b0c-9ed298c25b75"
+      },
+      {
+        "case_id": "contract_32__q06",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "bbe0c771-10fd-4830-8474-7b7a5a8a84ba"
+      },
+      {
+        "case_id": "contract_7__q07",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "c7c81fdb-fb61-4e45-b4d0-6cffb2d3bd69"
+      },
+      {
+        "case_id": "contract_32__q08",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "10e9ff06-a9e8-4af6-9e7f-497b340e4219"
+      },
+      {
+        "case_id": "contract_144__q09",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "a51fc12a-7e45-424a-962d-d589f6c828ee"
+      },
+      {
+        "case_id": "contract_103__q10",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "193e5fb2-6162-4ccc-816f-73f1a9eade41"
+      },
+      {
+        "case_id": "contract_99__q11",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "08699da6-f457-49f5-ac32-be7c233d931a"
+      },
+      {
+        "case_id": "contract_4__q12",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "5319c6a8-b5cf-4952-84b4-9d635b266c6d"
+      },
+      {
+        "case_id": "contract_39__q01",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "3f56a175-2ed0-424f-abc1-4ab6620be221"
+      },
+      {
+        "case_id": "contract_14__q02",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d6362fb0-e88a-40a6-a052-cc1c676acf90"
+      },
+      {
+        "case_id": "contract_32__q03",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "a51c716f-7011-4fd0-acf2-a2e6958b115c"
+      },
+      {
+        "case_id": "contract_32__q04",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d88545bc-c7a1-4cd7-8a39-6e94bb886a9a"
+      },
+      {
+        "case_id": "contract_39__redacted_q05",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "32ea757f-8439-4422-803c-8f3bc93e9625"
+      },
+      {
+        "case_id": "contract_99__redacted_q06",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9d96d36e-1685-4adf-a476-42128c37168d"
+      },
+      {
+        "case_id": "contract_75__redacted_q07",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "b3034e05-a259-4ded-8cae-25ecbfa37f2b"
+      },
+      {
+        "case_id": "contract_103__redacted_q08",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "05afac16-d3a7-4c60-b63c-d827e66762d9"
+      },
+      {
+        "case_id": "contract_75__oos09",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "ff42df44-c84c-43d0-9270-f9cfbd32ed62"
+      },
+      {
+        "case_id": "contract_14__oos04",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "ec44ec8a-f52d-4a9a-b688-1c3ccaf299f5"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "8e575c05-055d-4f3a-8ddd-a949d569447e"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "bcb5ba9a-ae55-4a7b-80d4-d33e16664123"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "8ca7ee69-355c-4f2d-b595-8ae8b9a4dcd5"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "4dc3db9d-a6f8-439a-be24-2f307653e87b"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "59693909-b1f1-406f-aa94-32ccfbf30a67"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "c16f2d8c-566c-4d77-b73e-5e87095345d5"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9c237d2a-9f2b-48a2-8c68-3df135dddf9c"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "fdd8abc3-6515-4397-8ed6-142a94db9cae"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "8c41d496-d3d4-4786-9999-9189e466a986"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "24a7c962-e87f-4f27-abd5-3ad8b327512f"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "06525905-0818-43f5-8bfb-334932fa5377"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "0c3d0d48-d3d8-40b6-8f73-2f9805d4ca77"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "8bed1d63-155f-4c05-9cfe-6085059ca127"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "A@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "072ed917-0aa8-4301-80a3-57002fa6b975"
+      },
+      {
+        "case_id": "contract_144__q05",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "796d5f9e-8351-4e7e-af7f-644a05042a45"
+      },
+      {
+        "case_id": "contract_32__q06",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "fe5de568-7f59-4d26-b7ea-7c4b308e7d45"
+      },
+      {
+        "case_id": "contract_7__q07",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "ef64a8b2-705e-4085-8c0d-983a426ad6d9"
+      },
+      {
+        "case_id": "contract_32__q08",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "1eaa8bd8-2c0d-4a24-a6ee-4c88ba3776f1"
+      },
+      {
+        "case_id": "contract_144__q09",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "497580d7-9e89-4cef-bb0b-410d81e4240f"
+      },
+      {
+        "case_id": "contract_103__q10",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "92cdc520-7153-4aab-b9bf-ef8903a15eaf"
+      },
+      {
+        "case_id": "contract_99__q11",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "ddd2f4af-8b09-4072-89a8-f449e33f7871"
+      },
+      {
+        "case_id": "contract_4__q12",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "e091ab7b-1548-4cf9-84ad-415fdb1ab778"
+      },
+      {
+        "case_id": "contract_39__q01",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "0dfc3293-79f9-4e08-81e4-7988717a7d06"
+      },
+      {
+        "case_id": "contract_14__q02",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "0a7f1750-d749-48d9-af58-47162619c9da"
+      },
+      {
+        "case_id": "contract_32__q03",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "62e84f92-c71c-492d-bdf0-8b58d5d13b72"
+      },
+      {
+        "case_id": "contract_32__q04",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "b097e78d-68df-4e51-bd65-851ab2ad7cff"
+      },
+      {
+        "case_id": "contract_39__redacted_q05",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "0cb6666f-bb38-4496-837d-da22590c66bb"
+      },
+      {
+        "case_id": "contract_99__redacted_q06",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "cb1f18eb-2f90-4e82-b081-93de1be33acf"
+      },
+      {
+        "case_id": "contract_75__redacted_q07",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "f9e85488-fdec-45f3-8911-a111123c78e0"
+      },
+      {
+        "case_id": "contract_103__redacted_q08",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9d068aaf-3f50-4d5c-8093-ad9d2eb02bb7"
+      },
+      {
+        "case_id": "contract_75__oos09",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "6247c0b1-4214-4761-a170-0b3a18bf1f60"
+      },
+      {
+        "case_id": "contract_14__oos04",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "83e9c771-1e22-4bde-9c53-9ae3a78d99c4"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "5cdf6b06-0155-4bb4-970e-87395bcc9ce8"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "1214fef7-17ca-41e5-b696-f0261f2a2d52"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "34593375-5d4d-481d-b2b4-500af84d8421"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9e8e6245-a531-44a2-88f7-df30083a64e2"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "4694ceb8-69cf-48f5-8862-53adfdaa79c8"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "2f063190-b622-44f5-9eb7-a984da86e214"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "583a96d9-72d1-49f7-8c9d-fff46b1c76bb"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "b4d9dcc3-9e78-42e2-80e2-161c8c160d60"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "39a46497-6e6c-460a-ba83-8e3b6df57947"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "a6742c01-177f-47ff-ba77-2dad67d7bae1"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d259795d-ca7f-4fde-b728-2f7f1b5a5194"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "fd784ce9-a2a6-4a8c-b5a7-1a4f455c6ff3"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "9e6ff200-51dc-4f6a-a5e9-a3845e2db8af"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "B@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "e1af35dd-82ea-42ff-adfe-f18a922b51f9"
+      },
+      {
+        "case_id": "contract_144__q05",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "bc87c9f1-f302-40f6-ae36-0ee0c5b6beab"
+      },
+      {
+        "case_id": "contract_32__q06",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "333da6c2-de4e-49de-b659-f2c48a889876"
+      },
+      {
+        "case_id": "contract_7__q07",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "810b7c59-a47c-439d-9a2e-f5316ebb264e"
+      },
+      {
+        "case_id": "contract_32__q08",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "6adedebd-4b07-4bb6-8305-f2a36ba2501b"
+      },
+      {
+        "case_id": "contract_144__q09",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "f14b16ff-7fbc-45c7-afb9-d97c39b60caa"
+      },
+      {
+        "case_id": "contract_103__q10",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "da217b36-d4a2-4404-baa8-696784b419d4"
+      },
+      {
+        "case_id": "contract_99__q11",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "a961ad60-59f5-435d-bea5-51cef4acf250"
+      },
+      {
+        "case_id": "contract_4__q12",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "68ae6752-6d5f-4671-94c8-ef3660a31b4c"
+      },
+      {
+        "case_id": "contract_39__q01",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "2d70c275-70f2-485a-8d91-7809d7db2808"
+      },
+      {
+        "case_id": "contract_14__q02",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "7c659239-065c-477e-97ff-3cff42f2f8fe"
+      },
+      {
+        "case_id": "contract_32__q03",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "33d57db9-56ca-4132-9750-22d8eec9843f"
+      },
+      {
+        "case_id": "contract_32__q04",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "602b7715-cd49-486b-8482-ba72a77c7460"
+      },
+      {
+        "case_id": "contract_39__redacted_q05",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "61e037b7-ea82-4383-9701-6daa4271cbe8"
+      },
+      {
+        "case_id": "contract_99__redacted_q06",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "5a6dc08d-c43c-4bc4-86a8-f0f4cae7fd6f"
+      },
+      {
+        "case_id": "contract_75__redacted_q07",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "aa2f3d75-8148-42c6-bee2-b4a86eba06c7"
+      },
+      {
+        "case_id": "contract_103__redacted_q08",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "220e485a-dc83-416a-a0d8-8458cb01cdfc"
+      },
+      {
+        "case_id": "contract_75__oos09",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "31639935-48d9-4cdc-ab45-b7dcea50be4c"
+      },
+      {
+        "case_id": "contract_14__oos04",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "2487699b-0b94-4b9b-bcbb-61048f1f05d3"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "1a9898fd-4c48-4e9b-ab44-9f8724414383"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "2f452f7c-7597-4c8b-8e7d-ca71aa344080"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d42359ae-998a-49c0-a392-6ec76f62daed"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "2c679513-7c6a-4c6d-bdd0-95a9cbef83d0"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "f342130b-d88f-48c0-8a37-05cfc1017244"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "38f1b1b9-41e0-40a2-b082-2c2e4766fd27"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "cf499fa3-9346-4fe7-8606-6ad54986c9ba"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "4312dc4a-a2e3-47b7-bb13-4c7c49e42978"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "c26b677a-208e-43c6-986e-bfa54a4d0356"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d8726c5a-00c1-437a-b5bd-61c16ba8d924"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "b96d889c-f6c9-46c8-827f-adfc19a1bada"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d4d5ff53-5d02-47bd-86fe-06a985540947"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "f4d7515e-dc1f-47c4-af9e-51d0760fe343"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "C@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "d2f0d714-9157-4051-840f-ad0f0bad4d85"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "0a3679fa-f1c3-41c7-83a0-988bbda20410"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "bb70695d-2f08-4b47-bed4-87560c52ca2d"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "85c125a3-6e66-4d48-a9a3-2e2749f4692d"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "3fd452a0-3a54-40f7-b3b6-d406f8789084"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "c29ef933-7ef4-4e0d-b7d7-58973b4f1318"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "df4cf65b-f707-4d07-8733-9b93c68f9b83"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "3c7b9fa1-26cd-4fdb-b32d-82533c6d0593"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "1880a312-7750-4fd5-b73e-ee876afd891e"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "833d5017-6255-452d-a1b8-ee65d82e269f"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "350ee496-3e07-43fe-a267-716c70d68469"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "de698c7d-cfaf-4a03-b3f8-6cbf0ac43aee"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "7471d51e-2dca-4a2f-940a-4e78d87d4f37"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "43a5b29f-b10c-43b4-b246-5829a0980e01"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "D@z-ai/glm-5.3-flash",
+        "category": "agent",
+        "root_span_id": "bff9c309-8ecc-4d05-8f48-e3621979139e"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "9a9c846d-68ff-4f63-91bf-e03b2211861b"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "9b295931-1315-4ac7-a319-e16b01489e37"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "3ec89d35-5226-4281-a13c-585e5996fd19"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "3642eafc-85e9-4091-a975-8b84c00ca941"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "8ebfc71c-66d5-48ec-ab81-0daafdf3501c"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "cabb0e74-3ae2-41c8-8c4f-bbba838013f5"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "509a8397-6866-4e5e-beb4-87755aa487de"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "1776f81c-5bd2-45a0-b824-15baddd20625"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "7e1e0e99-1445-4794-a838-e32d296cc6f1"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "3d1422da-76d3-4aab-b075-303a88e4d220"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "15b2f6c8-64cb-493f-8b78-65646af7b945"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "b54c2ca5-4cd7-4e09-9abd-d6998eaeaac9"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "9e64a7fd-983d-4d77-a5b2-d1a4bf7b0c47"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "D@deepseek/deepseek-v4-flash",
+        "category": "agent",
+        "root_span_id": "c7e3f597-4004-4399-aeb5-7894fb8602fb"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "a884b39c-7d5c-46a9-8d23-87c46b20601b"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "ca03f975-25d1-40dd-a44c-203320adfa54"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "7f4ace18-c787-496f-8807-9294c9e06c66"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "fe3a97fd-a249-4fbb-ada5-339c8ca567c4"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "72a5635f-3a02-46ac-b69d-251d84421ca4"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "6febee3f-ae3d-4398-80b1-5f2a4294f67e"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "79fb271d-6fbc-4176-9f92-babf97c594a5"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "0e589cd3-3185-40a1-b5d1-aaf82a86b5b8"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "833173ec-2424-4537-a8c6-618ce1efa222"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "b4d7d16f-c940-4edd-915d-cb644f150a85"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "a3ab9161-6dee-4837-9798-ef15489759e7"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "c24c65ef-6297-4ce4-89c8-edb1990f78d1"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "D@qwen/qwen3.7-flash",
+        "category": "agent",
+        "root_span_id": "f3bc8bf7-2262-4da9-beb8-6de53b170e4e"
+      },
+      {
+        "case_id": "contract_128__q05",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "4170b984-8541-4c70-8016-aad0f3421348"
+      },
+      {
+        "case_id": "contract_6__q06",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "6ad04795-0f5c-4c8c-8298-7acee64acc76"
+      },
+      {
+        "case_id": "contract_39__q07",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "62c897f0-16fa-4fef-9bca-77a505909fd5"
+      },
+      {
+        "case_id": "contract_103__q08",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "3aa7dc14-3ff6-46e8-963a-f4912d29d0fb"
+      },
+      {
+        "case_id": "contract_39__q09",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "18c0a591-322c-4647-b7a8-c884c1c60250"
+      },
+      {
+        "case_id": "contract_14__q10",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "72667004-8d9e-4c59-a50c-524e14bbe63c"
+      },
+      {
+        "case_id": "contract_39__q11",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "eeb6a622-1ff3-4989-b55f-51661d8b79b0"
+      },
+      {
+        "case_id": "contract_77__q12",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "f07c19e9-b817-40e5-a0c8-e97b790dcaa3"
+      },
+      {
+        "case_id": "contract_77__q01",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "142cadeb-2389-4163-8935-1659ac4b2102"
+      },
+      {
+        "case_id": "contract_103__q02",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "65de5895-6016-426a-bd5f-a8a3f0416b44"
+      },
+      {
+        "case_id": "contract_99__q03",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "0335bff3-daef-498f-8324-bb85ef611323"
+      },
+      {
+        "case_id": "contract_4__q04",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "fe47d987-5dc4-4ea2-9894-cf32b4fb9fb6"
+      },
+      {
+        "case_id": "contract_6__redacted_q09",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "7e4308bb-0959-47a8-89f5-0ed1c91a7061"
+      },
+      {
+        "case_id": "contract_14__redacted_q10",
+        "variant_id": "D@google/gemini-3.1-flash-lite",
+        "category": "agent",
+        "root_span_id": "c1dfb89e-2858-461c-9046-59cbd99ec9b4"
+      }
+    ]
+  },
+  "finished_at": "2026-09-07T14:28:54.761592+00:00"
+}
