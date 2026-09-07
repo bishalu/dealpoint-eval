@@ -66,6 +66,11 @@ SEQUENCE: list[MilestoneSpec] = [
                   absolute_usd=2.50),
     MilestoneSpec(id="m7b", title="Braintrust cockpit and the multi-judge demo (reproducible layer)",
                   spec_path="specs/milestones/m7b.md", gate_marker="gate_m7b"),
+    # M9: the MLflow mirror of the Braintrust showroom (engineer's hand-off 2026-09-07). Spend is
+    # capped inside the milestone's own steps (judge alignment $1.50, prompt optimization $1.00),
+    # so no factory spend gate; the gate itself is offline.
+    MilestoneSpec(id="m9", title="MLflow mirror of the Braintrust showroom: same rows, second cockpit, judge alignment",
+                  spec_path="specs/milestones/m9.md", gate_marker="gate_m9", needs_model=True),
     # M8 is registered but its spec is a DRAFT (engineer's retrieval/benchmark directive of
     # 2026-09-06); `adw_mvp.py` must not launch it until the deliverables, budget and gate are set.
     # Run with `--only m8` after the spec is finalised.
