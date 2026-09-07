@@ -21,7 +21,7 @@
       "name": "synthetic_query"
     }
   ],
-  "dry_run": true,
+  "dry_run": false,
   "experiments": [
     "rag-m3-dense",
     "rag-m3-bm25",
@@ -58,10 +58,12 @@
     "braintrust": "0.37.0",
     "deepeval": "4.2.1",
     "fastembed": "0.8.0",
-    "git_sha7": "d418929",
+    "git_sha7": "db6f899",
     "llama-index-core": "0.14.24",
     "llama-index-retrievers-bm25": "0.8.0",
     "openai": "3.8.0",
+    "pi": "0.84.4",
+    "pi-mcp-extension": "1.5.0",
     "pydantic": "2.13.5",
     "python": "3.12.3",
     "qdrant-client": "1.19.0"
@@ -250,7 +252,7 @@
       "skill-adherence"
     ]
   },
-  "synced_at": "2026-09-06T22:21:11.023891+00:00",
+  "synced_at": "2026-09-07T13:56:41.828827+00:00",
   "tools": {
     "exposed": false,
     "reason": "search_agreement/get_section/lookup_defined_term each need the 68 MB Qdrant index (data/index/), the 64 MB derived canonical corpus (data/derived/) and fastembed's ONNX embedding weights loaded in-process. None of this can run inside Braintrust's function execution environment without duplicating this project's entire index/data layer -- exactly what the no-bloat rule and the brief's 'no second tracing/data architecture' guidance forbid. Documented decision, not an omission; no placeholder stubs are shipped."

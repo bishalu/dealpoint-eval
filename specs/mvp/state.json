@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m7b",
+  "current_milestone": "m9",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -1193,9 +1193,28 @@
         "rubric_version": "cfda9f8cc401",
         "skill_version": "f8d255cc169b"
       }
+    },
+    "m9": {
+      "adw_ids": [
+        "056fb019"
+      ],
+      "attempts": 1,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m9",
+      "infra_retries": 0,
+      "last_failure": "",
+      "last_failure_class": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "2026-09-07T17:33:22.614+00:00",
+      "status": "running",
+      "versions": {}
     }
   },
-  "next_action": "core eval MVP complete",
+  "next_action": "m9 running in session 056fb019 (attempt 1)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1316,5 +1335,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-07T01:05:23.500+00:00"
+  "updated_at": "2026-09-07T17:33:22.614+00:00"
 }
