@@ -227,6 +227,7 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
     assert 0 < m["judge_mistral_usd"] < 0.01 and 0 <= m["judge_mistral_mean_abs_err"] <= 1
     assert abs(m["judge_mistral_agreement_per_dollar"] - (1 - m["judge_mistral_mean_abs_err"]) / m["judge_mistral_usd"]) < 1e-6
     assert m["deepeval_task_completion"] is not None and m["deepeval_agrees_with_truth"] in (0, 1)
+    assert m["deepeval_agrees_with_judges"] in (0, 1) and m["deepeval_agrees_with_lawyer"] in (0, 1)
     # the same row under the full model id maps to the same judged packet
     m2 = mirror_for("contract_144__q05", "D@z-ai/glm-5.3-flash", idx[("contract_144__q05", "D@z-ai/glm-5.3-flash")], ctx)
     assert m2["variant_label"] == "D@glm" and m2["judge_reasoning"] == m["judge_reasoning"]
@@ -244,7 +245,11 @@ def test_retrieval_log_rows_cover_the_tournament_once():
     from dealpoint.eval.braintrust_showroom import retrieval_log_rows
 
     rows = retrieval_log_rows()
-    assert len(rows) == 58 * 6
+    assert len(rows) == 58 * 7, "six tournament retrievers plus LlamaIndex's native bm25"
+    native = [r for r in rows if r["retriever"] == "li_native_bm25"]
+    assert len(native) == 58 and all(r["metadata"]["scored_by_ours"] == 0 and "hit_at_5" not in r["metadata"] and r["metadata"]["li_hit_rate"] is not None for r in native)
+    hyb = next(r for r in rows if r["retriever"] == "hybrid_rrf" and r["case_id"] == "contract_46__q05")
+    assert hyb["metadata"]["li_hit_rate"] is not None and hyb["metadata"]["scored_by_ours"] == 1
     by = {(r["case_id"], r["retriever"]): r for r in rows}
     assert len(by) == len(rows)
     q05 = {r["retriever"]: r["metadata"]["first_hit_rank"] for r in rows if r["case_id"] == "contract_46__q05"}

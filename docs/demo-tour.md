@@ -9,7 +9,7 @@ quality cockpit. Nothing you click was made by hand: two commands rebuilt this p
 
 Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
 
-**Six dashboards, one question each.** Braintrust's dashboards are the monitor over project logs, so
+**Seven dashboards, one question each.** Braintrust's dashboards are the monitor over project logs, so
 they cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
 therefore mirrors every number into log metadata (free; scores are the metered thing), every chart is a
 ranked bar list with the groups on the axis, the dashboard's name is the question, and the time range is
@@ -24,6 +24,7 @@ description saying what it compares and how to read it top to bottom; rows are n
 | Which model? | arm D on the same 18 cases, five models: correct outcome, dollars, seconds, p90, cap-hits, execution failures, per dollar, dollars per correct outcome, the Pareto list across every system@model, and the judge panel's view of the same race | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
 | Which retriever? | six retrievers on the 58 dev queries: hit@5, hit@10, MRR | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/32c5a4be-7898-4630-af11-ca40e743e9e4 |
 | Judges and the lawyer | seven charts about judges only: can the panel be trusted (its mean next to the lawyer per dimension), which judge for which dimension (signed bias, closest to zero wins), what a call costs, and DeepEval as one second-opinion number | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
+| Second opinions | DeepEval's agreement with truth, with the judge panel and with the lawyer, its own four metrics by system@model; LlamaIndex's hit rate and MRR by retriever next to ours (including its native bm25) | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards (Second opinions) |
 | Which prompt? | the four arm-A prompts, judged on professional quality, evidence and reasoning | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
 
 Every ranking chart compares one case pool at a time (the five arm-D models on the same 18 judged cases,
@@ -241,7 +242,7 @@ Three judges gave 4s and 5s to two confidently wrong pieces of legal reasoning b
 cited something. Only the lawyer checked whether the citation proved the claim. That is why the panel is
 calibrated against a human and not trusted on its own, and why the human review page exists in the loop.
 
-Close with DeepEval: open `deepeval-crosscheck` and the view **DeepEval vs judge disagreement**
+Close with DeepEval, on the **Second opinions** dashboard: open `deepeval-crosscheck` and the view **DeepEval vs judge disagreement**
 (https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=db7fbd81-8c86-4a24-b048-a0fe27cac616).
 DeepEval read the same 108 traces with its own metrics. Its task-completion score correlates weakly with
 grounded accuracy (Spearman 0.21) and well with our judges, but its evaluator model is one of the three judge

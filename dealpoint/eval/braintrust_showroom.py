@@ -414,6 +414,9 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
         out[f"deepeval_{k}"] = v
     tc = out["deepeval_task_completion"]
     out["deepeval_agrees_with_truth"] = None if (tc is None or ga is None) else int((tc >= 0.5) == bool(ga))
+    jr, hr = out.get("judge_reasoning"), out.get("human_reasoning")
+    out["deepeval_agrees_with_judges"] = None if (tc is None or jr is None) else int((tc >= 0.5) == (jr >= 0.5))
+    out["deepeval_agrees_with_lawyer"] = None if (tc is None or hr is None) else int((tc >= 0.5) == (hr >= 0.5))
     return out
 
 
@@ -475,28 +478,50 @@ def stored_row_index() -> dict[tuple[str, str], dict]:
     return idx
 
 
+def llamaindex_per_case() -> dict[tuple[str, str], dict]:
+    """(case_id, retriever) -> LlamaIndex's own hit_rate and mrr for that query, from data/reports/li_rag_eval.json."""
+    path = Path("data/reports/li_rag_eval.json")
+    if not path.exists():
+        return {}
+    li = json.loads(path.read_text(encoding="utf-8")).get("retrievers", {})
+    out: dict[tuple[str, str], dict] = {}
+    for config, block in li.items():
+        for r in (block.get("li") or {}).get("per_case", []):
+            out[(r["case_id"], config)] = {"li_hit_rate": r.get("hit_rate"), "li_mrr": r.get("mrr")}
+    return out
+
+
 def retrieval_log_rows() -> list[dict]:
     """The M3 tournament, one score-free log per (dev case, retriever config) on the canonical query:
     gold-span rank as metadata (`hit_at_5`, `hit_at_10`, `mrr`), so the dashboard can rank retrievers."""
     from dealpoint.eval.cases import find_case, resolve_question
 
     t = json.loads(Path("data/reports/tournament.json").read_text(encoding="utf-8"))
+    li = llamaindex_per_case()
+    per_case = [r for r in t.get("per_case", []) if r.get("query_type") == "canonical"]
+    # LlamaIndex's genuinely native config (li_native_bm25) has no tournament row: its rows come from the
+    # LlamaIndex report alone, with our obj/ scorer's verdict absent (that is the cross-check's point).
+    seen = {(r["case_id"], r["config"]) for r in per_case}
+    for (case_id, config), v in li.items():
+        if config == "li_native_bm25" and (case_id, config) not in seen:
+            per_case.append({"case_id": case_id, "config": config, "query_type": "canonical", "first_hit_rank": None, "agreement_id": case_id.split("__")[0],
+                             "question_id": case_id.split("__")[-1], "li_only": True})
     out: list[dict] = []
-    for r in t.get("per_case", []):
-        if r.get("query_type") != "canonical":
-            continue
+    for r in per_case:
         rank = r.get("first_hit_rank")
         try:
             q = resolve_question(find_case(r["case_id"]))
             query, gloss = q.canonical_query, q.gloss
         except KeyError:
             query, gloss = r["case_id"], ""
-        out.append({"case_id": r["case_id"], "retriever": r["config"], "input": query,
-                    "output": f"first gold-span hit at rank {rank}" if rank else "no gold-span hit in the top 20",
-                    "metadata": {"category": "retrieval", "retriever": r["config"], "case_id": r["case_id"], "question_id": r.get("question_id"),
-                                 "agreement_id": r.get("agreement_id"), "gloss": gloss, "first_hit_rank": rank,
-                                 "hit_at_5": int(bool(rank and rank <= 5)), "hit_at_10": int(bool(rank and rank <= 10)),
-                                 "mrr": (1.0 / rank) if rank else 0.0, "stages": r.get("stages")}})
+        li_only = bool(r.get("li_only"))
+        meta = {"category": "retrieval", "retriever": r["config"], "case_id": r["case_id"], "question_id": r.get("question_id"),
+                "agreement_id": r.get("agreement_id"), "gloss": gloss, "first_hit_rank": rank, "stages": r.get("stages"),
+                "scored_by_ours": int(not li_only), **li.get((r["case_id"], r["config"]), {})}
+        if not li_only:
+            meta.update({"hit_at_5": int(bool(rank and rank <= 5)), "hit_at_10": int(bool(rank and rank <= 10)), "mrr": (1.0 / rank) if rank else 0.0})
+        output = ("LlamaIndex-native config: li/hit_rate %s" % meta.get("li_hit_rate")) if li_only else (f"first gold-span hit at rank {rank}" if rank else "no gold-span hit in the top 20")
+        out.append({"case_id": r["case_id"], "retriever": r["config"], "input": query, "output": output, "metadata": meta})
     return out
 
 
@@ -658,9 +683,15 @@ def step_mirror(api: Api, live: bool, manifest: dict) -> None:
     ctx = _mirror_context()
     roots = _all_root_logs(api)
     events, unmatched = [], 0
+    li = llamaindex_per_case()
     for e in roots:
         m = e.get("metadata") or {}
-        if m.get("category") in ("retrieval", "prompt-variant") or not m.get("case_id") or not m.get("variant_id"):
+        if m.get("category") == "retrieval":
+            extra = li.get((m.get("case_id"), m.get("retriever")))
+            if extra:
+                events.append({"id": e["id"], "metadata": {**extra, "scored_by_ours": int(m.get("retriever") != "li_native_bm25")}, "_is_merge": True})
+            continue
+        if m.get("category") == "prompt-variant" or not m.get("case_id") or not m.get("variant_id"):
             continue
         row = idx.get((m["case_id"], m["variant_id"]))
         if row is None:
@@ -679,7 +710,7 @@ def step_raglogs(api: Api, live: bool, manifest: dict) -> None:
     rows = retrieval_log_rows()
     seen = _ledger_keys()
     todo = [r for r in rows if ("logs", f"retrieval:{r['case_id']}:{r['retriever']}") not in seen]
-    print(f"raglogs: {len(rows)} retrieval logs (58 dev queries x 6 retrievers, gold-span rank as metadata), {len(todo)} not yet in the ledger, 0 scores")
+    print(f"raglogs: {len(rows)} retrieval logs (58 dev queries x 6 tournament retrievers + LlamaIndex's native bm25; gold-span rank and LlamaIndex's own hit/mrr as metadata), {len(todo)} not yet in the ledger, 0 scores")
     manifest["raglogs"] = {"planned": len(rows), "written_this_run": 0}
     if not live or not todo:
         return
