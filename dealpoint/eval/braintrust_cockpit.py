@@ -454,6 +454,9 @@ def chart_catalogue() -> dict[str, dict]:
                                       "measure": [f"avg(metadata.judge_{f}_professional_abs_err)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         "judge_family_overall": {"title": "Overall distance from the lawyer per judge family, mean of the four dimensions (lower is better, 24 packets)",
                                  "measure": [f"avg(metadata.judge_{f}_mean_abs_err)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
+        **{f"judge_bias_{d}": {"title": f"Signed bias per judge family, {d}: judge minus lawyer, + runs high, - runs low (24 packets)",
+                               "measure": [f"avg(metadata.judge_{f}_{d}_bias)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
+           for d in JUDGE_DIMS_},
         "judge_family_usd": {"title": "Cost per judged trace per judge family, realized (108 traces)",
                              "measure": [f"avg(metadata.judge_{f}_usd)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
         "judge_family_per_dollar": {"title": "Agreement with the lawyer per dollar per judge family: (1 - overall distance) / cost of the call (higher is better)",
@@ -473,7 +476,8 @@ DASHBOARDS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Which model?", ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto")),
     ("Which retriever?", ("ret_hit5", "ret_hit10", "ret_mrr")),
     ("Judges and the lawyer", ("judge_vs_lawyer", "judge_family_overall", "judge_family_reasoning", "judge_family_evidence", "judge_family_trajectory",
-                               "judge_family_professional", "judge_family_usd", "judge_family_per_dollar", "panel_professional", "panel_evidence", "deepeval")),
+                               "judge_family_professional", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional",
+                               "judge_family_usd", "judge_family_per_dollar", "panel_professional", "panel_evidence", "deepeval")),
     ("Which prompt?", ("prompt_professional", "prompt_evidence", "prompt_reasoning")),
 )
 
