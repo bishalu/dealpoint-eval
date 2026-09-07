@@ -499,29 +499,49 @@ PATTERN_REST_LIMITATION = (
 )
 
 
+PREPROCESSOR_SLUG = "dealpoint-trace-preprocessor"
+
+
 def topics_preprocessor_code() -> str:
-    """Renders one `case > agent` span as text (question, tool sequence,
-    final answer, obj/grounded_accuracy) for Topics clustering. A plain
-    string of JS, matching `test_preprocessor_on_trace`'s inline-code shape
-    -- never a new dependency.
+    """Renders one DealPoint log as text for Topics: agent traces (system, model, question, status, tool
+    calls, answer, rationale, objective grounding, from the showroom's metadata mirror on the root span),
+    retrieval logs and prompt-variant runs. A plain string of JS (the inline-code preprocessor shape);
+    installed as the project's default preprocessor by `sync_topics_and_pattern`.
     """
-    return (
-        "function handler(span) {\n"
-        "  const meta = span.metadata || {};\n"
-        "  const trajectory = (span.metadata && span.metadata.trajectory) || [];\n"
-        "  const tools = trajectory.map((s) => s.tool).filter(Boolean).join(' -> ');\n"
-        "  const finding = meta.finding || {};\n"
-        "  const question = span.input || meta.question || '';\n"
-        "  const answer = finding.answer || meta.answer || '';\n"
-        "  const grounded = meta['obj/grounded_accuracy'];\n"
-        "  return [\n"
-        "    `question: ${question}`,\n"
-        "    `tool sequence: ${tools || '(none)'}`,\n"
-        "    `final answer: ${answer}`,\n"
-        "    `obj/grounded_accuracy: ${grounded}`,\n"
-        "  ].join('\\n');\n"
-        "}\n"
-    )
+    return """function handler(span) {
+  const m = span.metadata || {};
+  const out = span.output || {};
+  if (m.category === "retrieval") {
+    return [
+      "retrieval log",
+      `retriever: ${m.retriever}`,
+      `question: ${span.input || ""}`,
+      `gold span first hit at rank: ${m.first_hit_rank == null ? "none in top 20" : m.first_hit_rank}`,
+    ].join("\\n");
+  }
+  if (m.category === "prompt-variant") {
+    return [
+      "arm-A prompt variant run",
+      `prompt variant: ${m.prompt_variant}`,
+      `answer: ${typeof span.output === "string" ? span.output : (out.answer || JSON.stringify(out)).slice(0, 300)}`,
+      `judge evidence: ${m.judge_evidence}, judge professional: ${m.judge_professional}`,
+    ].join("\\n");
+  }
+  const answer = typeof out === "string" ? out : (out.answer || "(no finding)");
+  const rationale = typeof out === "object" && out.rationale ? String(out.rationale).slice(0, 400) : "";
+  return [
+    "agent trace",
+    `system: ${m.system_label || m.arm || ""}`,
+    `model: ${m.model_label || m.model || ""}`,
+    `question: ${span.input || ""}`,
+    `status: ${m.status || ""} (tool calls: ${m.tool_calls == null ? "n/a" : m.tool_calls}; cap hit: ${m.cap_hit ? "yes" : "no"})`,
+    `final answer: ${answer}`,
+    rationale ? `rationale: ${rationale}` : "",
+    `objectively grounded (matches the expert span): ${m.ga_scored == null ? "no finding to score" : (m.ga_scored ? "yes" : "no")}`,
+    m.fabrication ? "fabrication: the citation does not support the answer" : "",
+  ].filter(Boolean).join("\\n");
+}
+"""
 
 
 TOPICS_FACET_PROMPT = (
@@ -888,6 +908,22 @@ def sync_topics_and_pattern(rest_client, project_id: str) -> dict:
     # invented here. `clusters` stays empty with the reason recorded rather
     # than faked; a later `just braintrust-cockpit` run can populate it once
     # a topic map exists to read (spec section 7's honest-gap precedent).
+    # The preprocessor is a real function (`function_type == "preprocessor"`, inline node code) and the
+    # project's default preprocessor points at it (PATCH /v1/project settings.default_preprocessor),
+    # so the facet above reads the metadata mirror rather than the built-in thread rendering.
+    pre_body = {
+        "project_id": project_id, "name": PREPROCESSOR_SLUG, "slug": PREPROCESSOR_SLUG, "function_type": "preprocessor",
+        "description": "Renders each DealPoint log for Topics: agent traces (system, model, question, status, answer, grounded), retrieval logs and prompt-variant runs.",
+        "function_data": {"type": "code", "data": {"type": "inline", "runtime_context": {"runtime": "node", "version": "22"}, "code": cfg["preprocessor_code"]}},
+    }
+    try:
+        pre = rest_client.post("/v1/function", pre_body)
+        topics_result["preprocessor"] = {"id": pre.get("id"), "slug": PREPROCESSOR_SLUG}
+        rest_client.patch(f"/v1/project/{project_id}", {"settings": {"default_preprocessor": {"type": "function", "id": pre.get("id")}}})
+        topics_result["preprocessor"]["set_as_default"] = True
+    except Exception as exc:  # noqa: BLE001 - recorded, never faked
+        topics_result.setdefault("preprocessor", {})["error"] = str(exc)
+        topics_result["preprocessor"]["set_as_default"] = False
     topics_result["clusters"] = []
     topics_result["clusters_limitation"] = (
         "Topic clustering runs asynchronously in Braintrust's product UI over "

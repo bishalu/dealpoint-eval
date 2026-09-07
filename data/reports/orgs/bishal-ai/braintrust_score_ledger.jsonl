@@ -750,3 +750,4 @@
 {"experiment": "logs", "key": "prompt:abstain-first:contract_144__q09", "n_scores": 0, "ts": "2026-09-07T15:16:37.434300+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "prompt:abstain-first:contract_39__q01", "n_scores": 0, "ts": "2026-09-07T15:16:37.434638+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "prompt:abstain-first:contract_4__q12", "n_scores": 0, "ts": "2026-09-07T15:16:37.434963+00:00", "source": "showroom"}
+{"experiment": "playground-arm-A-base", "key": "playground-eval", "n_scores": 27, "ts": "2026-09-07T15:26:43.446062+00:00", "source": "showroom", "note": "27 scorer spans observed via API (13/18 rows; Mistral 429s); a first, deleted run of this variant wrote ~27 more that the meter still counts"}

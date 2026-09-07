@@ -860,10 +860,13 @@ def step_playground(api: Api, live: bool, manifest: dict) -> None:
 
 
 def _eval_progress(api: Api, experiment_id: str) -> tuple[int, int]:
-    """(root rows with an output, root rows with at least one non-null score) for an experiment."""
-    roots = [r for r in api.fetch_rows(experiment_id) if _is_root(r)]
-    return (sum(1 for r in roots if r.get("output") is not None),
-            sum(1 for r in roots if any(v is not None for v in (r.get("scores") or {}).values())))
+    """(root rows with an output, scorer spans that produced a score) for an experiment. Scores live on
+    the scorer spans (`span_attributes.type == "score"`), not on the root rows the fetch API returns."""
+    events = api.fetch_rows(experiment_id)
+    roots = [r for r in events if _is_root(r)]
+    scored = sum(1 for e in events if (e.get("span_attributes") or {}).get("type") == "score"
+                 and any(v is not None for v in (e.get("scores") or {}).values()))
+    return sum(1 for r in roots if r.get("output") is not None), scored
 
 
 def run_playground(api: Api, manifest: dict, judges: tuple[str, ...] = PLAYGROUND_JUDGES, variants: set[str] | None = None,
@@ -907,9 +910,9 @@ def run_playground(api: Api, manifest: dict, judges: tuple[str, ...] = PLAYGROUN
                 break
             time.sleep(30)
         ok = outputs >= n_rows
-        print(f"  {name}: {'complete' if ok else 'INCOMPLETE'} ({outputs}/{n_rows} outputs, {scored} rows scored)")
-        manifest["playground_run"].append({"experiment": name, "id": exp[0]["id"], "ok": ok, "outputs": outputs, "rows_scored": scored})
-        _ledger(name, "playground-eval", scored * len(judges))
+        print(f"  {name}: {'complete' if ok else 'INCOMPLETE'} ({outputs}/{n_rows} outputs, {scored} scores written)")
+        manifest["playground_run"].append({"experiment": name, "id": exp[0]["id"], "ok": ok, "outputs": outputs, "scores_written": scored})
+        _ledger(name, "playground-eval", scored)
 
 
 JUDGE_DIMENSIONS = ("reasoning", "evidence", "trajectory", "professional")

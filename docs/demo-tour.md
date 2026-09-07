@@ -329,8 +329,10 @@ Everything below needs a browser session or the `braintrust-demo` MCP OAuth; the
    entry is still bound to the old org).
 2. Settings, bishal.ai: **Allow built-in models** (Topics clustering, Loop, Debugger draw on the $10 model
    credit). The Human review score `professional` (1 to 5 slider) and the online scoring rule already exist.
-3. Logs, Topics: run the `DealPoint agent traces` facet over the 266 logs once, look at the clusters, then
-   pause the daily job after Wednesday (model credit is the one meter no code guards).
+3. Topics (enabled 2026-09-07): the facet `trace-outcome-summary` runs through the project's default
+   preprocessor `dealpoint-trace-preprocessor`, which renders system, model, question, status, answer and
+   objective grounding for every log. Look at the clusters once they materialise, then pause the daily
+   job after Wednesday (model credit is the one meter no code guards).
 4. One Loop thread with the stop-8 prompt, saved. One Pattern via the MCP `new_pattern` tool with the
    stop-8 wording.
 5. Playground: open the four `arm-a-prompt-*` prompts over `maud-dealpoint-playground-armA` with the three

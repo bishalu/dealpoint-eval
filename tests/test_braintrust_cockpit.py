@@ -124,6 +124,9 @@ class FakeRestClient:
         raise ValueError(path)
 
     def patch(self, path, json_body):
+        if path.startswith("/v1/project/"):
+            self.project_settings = json_body.get("settings")
+            return {"id": path.rsplit("/", 1)[-1], "settings": self.project_settings}
         view_id = path.rsplit("/", 1)[-1]
         for v in self.views:
             if v["id"] == view_id:
@@ -590,3 +593,24 @@ def test_ledger_active_second_live_run_emits_zero_spans_and_zero_scores(monkeypa
     assert n_spans_2 == n_spans_1, "the ledger must stop a second live run from re-emitting the replay"
     assert n_logs_2 == n_logs_1, "the ledger must stop a second live run from re-pushing human scores"
     assert ledger_lines_2 == ledger_lines_1, "a second live run must add zero ledger lines"
+
+
+def test_topics_installs_a_preprocessor_function_and_sets_it_as_the_project_default():
+    from dealpoint.eval.braintrust_cockpit import (
+        PREPROCESSOR_SLUG,
+        sync_topics_and_pattern,
+        topics_preprocessor_code,
+    )
+
+    rest = FakeRestClient()
+    result = sync_topics_and_pattern(rest, "proj-1")
+    pre = next(f for f in rest.functions if f.get("function_type") == "preprocessor")
+    assert pre["slug"] == PREPROCESSOR_SLUG
+    assert pre["function_data"]["data"]["code"] == topics_preprocessor_code()
+    assert "function handler(span)" in topics_preprocessor_code() and "system_label" in topics_preprocessor_code()
+    assert rest.project_settings == {"default_preprocessor": {"type": "function", "id": pre["id"]}}
+    assert result["topics"]["preprocessor"] == {"id": pre["id"], "slug": PREPROCESSOR_SLUG, "set_as_default": True}
+    # idempotent: a second run upserts the same slug and creates nothing new
+    n = len(rest.functions)
+    sync_topics_and_pattern(rest, "proj-1")
+    assert len(rest.functions) == n
