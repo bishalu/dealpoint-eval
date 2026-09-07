@@ -461,19 +461,12 @@ def chart_catalogue() -> dict[str, dict]:
         "judge_family_usd": {"title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
                              "measure": [{"btql": f"avg(metadata.judge_{f}_usd)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
         "panel_professional": {"title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval": {"kind": "bignumber", "title": "DeepEval agrees with deterministic truth (task completion >= 0.5 vs the expert span), 108 judged traces",
-                     "measure": [{"btql": "avg(metadata.deepeval_agrees_with_truth)", "name": "agreement with truth"}], "group_by": [], "filters": [JUDGED18]},
-        "deepeval_vs_judges": {"kind": "bignumber", "title": "DeepEval agrees with our judge panel (task completion vs judges' reasoning), 108 judged traces; its evaluator is one of the three judges, so read this as partly self-agreement",
-                               "measure": [{"btql": "avg(metadata.deepeval_agrees_with_judges)", "name": "agreement with the panel"}], "group_by": [], "filters": [JUDGED18]},
-        "deepeval_vs_lawyer": {"kind": "bignumber", "title": "DeepEval agrees with the lawyer (task completion vs the lawyer's reasoning), 24 packets",
-                               "measure": [{"btql": "avg(metadata.deepeval_agrees_with_lawyer)", "name": "agreement with the lawyer"}], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        "deepeval_task": {"title": "DeepEval task completion by system@model (its own metric, 0-1)", "measure": "avg(metadata.deepeval_task_completion)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval_tools": {"title": "DeepEval tool correctness by system@model (agrees with our required-evidence check 89% of the time)", "measure": "avg(metadata.deepeval_tool_correctness)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval_steps": {"title": "DeepEval step efficiency by system@model (a written-down GEval; the trajectory dimension from outside)", "measure": "avg(metadata.deepeval_step_efficiency)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "deepeval_args": {"title": "DeepEval argument correctness by system@model: were the tool calls made with the right arguments (DeepEval's metric; nothing of ours measures this)",
+                          "measure": "avg(metadata.deepeval_argument_correctness)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "deepeval_tools": {"title": "DeepEval tool correctness by system@model: were the right tools called and selected (DeepEval's metric; our closest check is required-evidence-met, and they agree 89% of the time)", "measure": "avg(metadata.deepeval_tool_correctness)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "deepeval_steps": {"title": "DeepEval step efficiency by system@model: redundant or wasted tool calls (DeepEval's GEval; the trajectory dimension graded from outside our rubric)", "measure": "avg(metadata.deepeval_step_efficiency)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "li_hit_rate": {"title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)", "measure": "avg(metadata.li_hit_rate)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "li_mrr": {"title": "LlamaIndex's own MRR by retriever, 58 dev queries", "measure": "avg(metadata.li_mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
-        "li_vs_ours": {"kind": "bignumber", "title": "LlamaIndex vs our gold-span scorer on the same hybrid_rrf hits: LlamaIndex's hit rate (ours is 91.4%; the two rank the six retrievers identically, Spearman 0.99)",
-                       "measure": [{"btql": "avg(metadata.li_hit_rate)", "name": "LlamaIndex hit rate, hybrid_rrf"}], "group_by": [], "filters": ["metadata.category = 'retrieval' and metadata.retriever = 'hybrid_rrf'"]},
         "prompt_professional": {"title": "Judge: professional by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
         "prompt_evidence": {"title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
         "prompt_reasoning": {"title": "Judge: reasoning by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_reasoning)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
@@ -521,13 +514,11 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
      "call (a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
      ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional", "judge_family_usd")),
     ("Second opinions",
-     ("VERDICT: keep both frameworks as cross-checks, never as gates. DeepEval (an off-the-shelf agent-eval framework: task completion, tool "
-      "correctness, argument correctness, step efficiency) read the same 108 traces our judges scored. It agrees with the judge panel far more than "
-      "with deterministic truth, and its evaluator model is one of our three judges, so that agreement is partly self-agreement; its tool-correctness "
-      "metric is the one that tracks our required-evidence check. LlamaIndex's RetrieverEvaluator scored the same six retrievers and ranks them "
-      "exactly as our gold-span scorer does (Spearman 0.99); its genuinely native bm25 config disagrees with ours on three queries, all explained by "
-      "duplicate relevant chunks. Read: the tiles, then DeepEval's own metrics by system, then LlamaIndex's numbers next to ours."),
-     ("deepeval", "deepeval_vs_judges", "deepeval_vs_lawyer", "li_vs_ours", "deepeval_task", "deepeval_tools", "deepeval_steps", "li_hit_rate", "li_mrr")),
+     ("VERDICT: cross-checks, never gates. Only what each outside framework uniquely adds is here. DeepEval's three trajectory metrics (tool "
+      "correctness, argument correctness, step efficiency) grade HOW the agent worked, which none of our deterministic scorers measure; its task-completion "
+      "score is omitted because it duplicates our judges (and its evaluator model is one of them). LlamaIndex's RetrieverEvaluator is an independent read "
+      "of the same retrievers, including its genuinely native bm25 that our scorer cannot see; it ranks the six shared retrievers exactly as we do."),
+     ("deepeval_tools", "deepeval_args", "deepeval_steps", "li_hit_rate", "li_mrr")),
     ("Which prompt?",
      ("VERDICT: cite-first (best evidence score); terse loses everywhere; abstain-first buys nothing. Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
      "judged on professional quality, evidence and reasoning by the LLM scorers. Only the prompt varies."),
