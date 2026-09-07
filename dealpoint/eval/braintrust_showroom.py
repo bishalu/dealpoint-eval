@@ -394,6 +394,16 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
             out[f"judge_{family.lower()}_{d}"] = _rescale(v.get(d))
             if human and v.get(d) is not None and human.get(d) is not None:
                 out[f"judge_{family.lower()}_{d}_abs_err"] = abs(_rescale(v[d]) - _rescale(human[d]))
+    # Per judge family: the realized cost of its call on this packet, the mean distance from the lawyer
+    # over the four dimensions, and agreement per dollar ((1 - distance) / usd), so "which judge" can be
+    # answered per dimension, overall, and with cost in the picture.
+    for family, v in (per_judge or {}).items():
+        f = family.lower()
+        out[f"judge_{f}_usd"] = v.get("usd")
+        errs = [out[k] for k in (f"judge_{f}_{d}_abs_err" for d in JUDGE_DIMS) if out.get(k) is not None]
+        if errs:
+            out[f"judge_{f}_mean_abs_err"] = sum(errs) / len(errs)
+            out[f"judge_{f}_agreement_per_dollar"] = (1 - out[f"judge_{f}_mean_abs_err"]) / v["usd"] if v.get("usd") else None
     for k in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
         v = ((deepeval or {}).get(k) or {}).get("score") if deepeval else None
         out[f"deepeval_{k}"] = v
