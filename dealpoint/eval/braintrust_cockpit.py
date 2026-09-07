@@ -461,10 +461,19 @@ def chart_catalogue() -> dict[str, dict]:
 
 DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("DealPoint eval overview",
-     ("One headline chart per question. Every chart is a ranked list over the traces in Logs (metadata mirrored from the stored results; "
-     "the Starter plan meters scores, metadata is free). Ranking charts compare one case pool of comparable traces at a time. "
-     "'Correct outcome' counts an unanswered case as wrong and a correct abstention as right. Open the question dashboards for the detail."),
-     ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_professional")),
+     ("VERDICTS (from the question dashboards, 2026-09-07; small samples, one run each). "
+      "SEARCH: hybrid (dense + BM25, reciprocal-rank fusion), no reranker: 91% gold-span hit@5 vs 81% dense. "
+      "SYSTEM: C, the agent on hybrid search without the skill, once a stopping rule ends the search-in-circles cap-hits; "
+      "until then A, the single-shot baseline, has the most correct outcomes, zero fabrication and a quarter of the cost. The skill (D) trades "
+      "cap-hits for fabrication and loses. "
+      "MODEL: Gemini 3.1 flash lite for quality (most correct outcomes, zero execution failures, 13 s per case); Qwen 3.7 flash for the "
+      "cost floor (most correct outcomes per dollar, but two runs in three cap out or fail); Haiku out at sixteen times the cost for the same quality. "
+      "JUDGES: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory; two judges, not three; no judge "
+      "is trustworthy on trajectory, keep the lawyer there. "
+      "PROMPT: cite-first for the baseline (best evidence score), terse loses everywhere. "
+      "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
+      "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
+     ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_evidence")),
     ("Which system?",
      ("Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
      "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
