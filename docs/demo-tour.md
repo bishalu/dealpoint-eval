@@ -21,9 +21,11 @@ failures, arm D on five models), the cost series (dollars, seconds and tool call
 correct answers per dollar by system, by model and across every system@model; dollars per correct answer
 and p90 latency by model), *Judges vs the lawyer* (four dimensions, 24 packets), *Which judge?*
 (each family's distance from the lawyer on reasoning and on trajectory), the judge panel by system@model,
-DeepEval's agreement with truth, and *Which prompt?* (the four arm-A prompts, judged). Accuracy there counts an unanswered case as
-wrong, so it reads lower than the "of scored cases" figures in the reports; both are true, say which one
-you mean. If you only get one screen, this is it; every chart has a stop below that explains it.
+DeepEval's agreement with truth, and *Which prompt?* (the four arm-A prompts, judged). Every ranking chart compares one case pool at a time (the five arm-D models on
+the same 18 judged cases, the four systems on the same 32) and only canonical traces (`comparable = 1`:
+no representative picks, live replays or partial runs). Accuracy there is "correct outcome over every
+case": an unanswered case is wrong, a correct abstention on a counterfactual is right. It reads lower than
+the "of scored cases" figures in the reports; both are true, say which one you mean. If you only get one screen, this is it; every chart has a stop below that explains it.
 
 **The spine.** One question, MAUD's `q05`: *Does the agreement's definition of Knowledge include
 constructive knowledge?* Two options, "Constructive knowledge" or "Actual knowledge", plus "ABSTAIN" when
@@ -307,25 +309,34 @@ code."
 Experiments tab, view **Models (arm D fixed)**, sort by `$/case`.
 https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=8ea97ad4-ef60-40fd-a84c-7d5c444b93f1
 
-The MODEL axis: arm D held fixed, five models, same 32 cases (18 for Haiku), one row per case with realized
-cost and latency from the local ledger, not list price.
+The MODEL axis: arm D held fixed, five models, one row per case with realized cost and latency from the
+local ledger, not list price. Two accountings exist and the demo names both: the milestone report's
+"accuracy of scored cases" (a cap-hit or execution failure is dropped from the denominator) and the
+dashboard's "correct outcome over every case" (an unanswered case is wrong, a correct abstention on a
+counterfactual is right). The second is the deployment number.
 
-| model | grounded accuracy | cap-hit | execution failed | p50 latency | $/case | frontier |
-|---|---|---|---|---|---|---|
-| GLM 5.3 flash | 64.7% | 15.6% | 15.6% | 30.6 s | $0.0028 | no |
-| Claude Haiku 4.5 (18 cases) | 62.5% | 50.0% | 5.6% | 18.2 s | $0.0458 | no |
-| DeepSeek v4 flash | 69.2% | 50.0% | 6.2% | 17.7 s | $0.0023 | **yes** |
-| Qwen 3.7 flash | 63.6% | 50.0% | 15.6% | 13.9 s | $0.0011 | **yes** |
-| Gemini 3.1 flash lite | 63.2% | 21.9% | 0.0% | 11.4 s | $0.0055 | no |
+| model | correct outcome, every case | accuracy of scored cases | cap-hit | execution failed | p50 latency | $/case | correct outcomes per $ |
+|---|---|---|---|---|---|---|---|
+| Gemini 3.1 flash lite | **46.9%** | 63.2% | 21.9% | **0.0%** | 13.4 s | $0.0055 | 85 |
+| GLM 5.3 flash | 37.5% | 64.7% | **15.6%** | 15.6% | 33.1 s | $0.0028 | 135 |
+| DeepSeek v4 flash | 28.1% | **69.2%** | 50.0% | 6.2% | 18.5 s | $0.0023 | 125 |
+| Claude Haiku 4.5 (18 cases) | 27.8% | 62.5% | 50.0% | 5.6% | 25.8 s | $0.0458 | 6 |
+| Qwen 3.7 flash | 22.6% | 63.6% | 48.4% | 16.1% | 13.9 s | $0.0011 | **206** |
 
-The decision, and the reasoning the viewer should hear: DeepSeek v4 flash for accuracy per dollar, Qwen as
-the cheap fallback, GLM stays the development workhorse, Haiku is off the frontier at sixteen times the
-cost. No model is on the frontier for all four of quality, reliability, latency and cost: the two frontier
-models cap-hit half the time, which is exactly the failure stop 8 diagnosed. So the deployment call is
-conditional and written down: DeepSeek, with the stopping rule from stop 8 as the precondition, and the
-online `judge-professional` score from stop 5 as the monitor that tells us if quality moves after we ship.
+The two accountings disagree on the winner, and that is the point of the stop. Scored accuracy crowns
+DeepSeek because it only counts the runs that finished; counting every case, DeepSeek caps out half the
+time and lands third. Gemini answers the most cases correctly, never fails to produce a finding, and is
+as fast as anything on the slate, at twice Qwen's cost. Qwen is the cost floor: the most correct outcomes
+per dollar, with the worst cap-hit and failure rates. Haiku is the same quality as GLM and DeepSeek at
+sixteen times the cost, and the dashboard shows it at six correct outcomes per dollar.
 
-One-liner: "The expensive model is not on the frontier, and the frontier models fail in a way we can name."
+The decision, written down: **Gemini 3.1 flash lite for production**, with the cap-hit stopping rule
+from stop 8 as the precondition (it would lift every model, but Gemini and GLM least need it), Qwen as
+the cost-floor fallback if volume makes the 2x matter, GLM staying the development workhorse, Haiku out.
+The online `judge-professional` score from stop 5 is the monitor that says whether quality moves after
+we ship.
+
+One-liner: "Count every case, not just the ones that finished, and the winner changes. That is why the dashboard counts every case."
 
 ---
 
@@ -346,21 +357,22 @@ Everything below needs a browser session or the `braintrust-demo` MCP OAuth; the
    entry is still bound to the old org).
 2. Settings, bishal.ai: **Allow built-in models** (Topics clustering, Loop, Debugger draw on the $10 model
    credit). The Human review score `professional` (1 to 5 slider) and the online scoring rule already exist.
-3. Topics (enabled 2026-09-07): the facet `trace-outcome-summary` runs through the project's default
+3. Patterns (enabled 2026-09-07): its automatic discovery is a scheduled Loop run on model credit and it
+   already minted one misleading Pattern (see "If someone asks"). Delete or rewrite that one, create the
+   stop-8 Pattern, then set discovery to manual after Wednesday so credit is not spent unattended.
+4. Topics (enabled 2026-09-07): the facet `trace-outcome-summary` runs through the project's default
    preprocessor `dealpoint-trace-preprocessor`, which renders system, model, question, status, answer and
    objective grounding for every log. Look at the clusters once they materialise, then pause the daily
    job after Wednesday (model credit is the one meter no code guards).
-4. One Loop thread with the stop-8 prompt, saved. Patterns is enabled (2026-09-07); create the one
-   Pattern from the paste-ready block in stop 8 (UI, or the `new_pattern` MCP tool after the OAuth
-   restart), then let the automation match new logs against it.
-5. Playground: open the four `arm-a-prompt-*` prompts over `maud-dealpoint-playground-armA` with the three
+5. One Loop thread with the stop-8 prompt, saved.
+6. Playground: open the four `arm-a-prompt-*` prompts over `maud-dealpoint-playground-armA` with the three
    judges, run once (about $0.10 OpenRouter), save the session. The `playground-arm-A-*` experiments are the
    fallback.
-6. Optional: a threshold alert on `Judge: professional` below 0.5 over the last day (MCP
+7. Optional: a threshold alert on `Judge: professional` below 0.5 over the last day (MCP
    `create_threshold_alert`), configured, not triggered.
-7. Rehearse once with the fallbacks: stop 5's replay may 429 on Mistral; stop 7's live run may be slow;
+8. Rehearse once with the fallbacks: stop 5's replay may 429 on Mistral; stop 7's live run may be slow;
    both have saved results.
-8. After recording: rotate the API key (it passed through chat) and re-run `just braintrust-showroom --live`
+9. After recording: rotate the API key (it passed through chat) and re-run `just braintrust-showroom --live`
    only if something was deleted; the ledger under `data/reports/orgs/bishal-ai/` keeps every re-run
    idempotent.
 
@@ -377,6 +389,14 @@ Retention: logs written 2026-09-07 expire around 2026-09-21 on Starter; experime
   lawyer's review is its spec.
 - "Is the lawyer's scoring real?" AI-drafted, reviewed and adopted by the lawyer, provenance recorded next
   to the scores (`data/eval/calibration/human_scores.provenance.json`). Say that, do not hide it.
+- "Patterns said Haiku was a cost outlier with no quality gain, 26% versus 31 to 47%." Half right. The
+  cost is real (sixteen times GLM). The accuracy comparison was not: Braintrust's pattern discovery ranked
+  Haiku's 18 judged cases (a third of them counterfactuals, where the metric then counted a correct
+  abstention as wrong) against other models' 32-case sweeps, and treated one partial luna-pro trace as a
+  variant. On the same 18 cases Haiku, GLM and DeepSeek each get 5 right. The mirror now carries
+  `correct_all`, `comparable` and `case_pool` so neither the dashboard nor the pattern engine can mix
+  pools again; the Pattern itself should be deleted or rewritten to "same quality as GLM and DeepSeek at
+  sixteen times the cost".
 - "Why does the dashboard say 46% for arm D when the report says 65%?" The dashboard counts every
   answerable test case, so a cap-hit or an execution failure counts as wrong; the report's headline is
   over the cases that produced a finding. Both are on the row (`ga_all` vs `ga_scored`); the honest number
