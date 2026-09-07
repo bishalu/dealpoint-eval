@@ -267,6 +267,37 @@ demo-manifest-record *ARGS:
 gate-m7b:
     uv run pytest -m "gate_m7b and not needs_network and not needs_model" -q
 
+# ── dealpoint (M9 MLflow mirror of the Braintrust showroom) ────────────────
+
+# M9: self-hosted MLflow tracking server, SQLite backend, artifacts under data/mlflow/ (gitignored)
+mlflow-server:
+    mlflow server --backend-store-uri sqlite:///data/mlflow/mlflow.db \
+      --artifacts-destination data/mlflow/artifacts --host 127.0.0.1 --port 5000
+
+# M9: recreate every MLflow artifact from Git/local sources; idempotent. Dry run by default; --live writes.
+mlflow-sync *ARGS:
+    uv run python -m dealpoint.eval.mlflow_mirror "$@"
+
+# M9: offline, zero-network regeneration of the mlflow mirror plan from current code
+mlflow-sync-dry-run:
+    uv run python -m dealpoint.eval.mlflow_mirror --dry-run
+
+# M9 D3: judge alignment against the lawyer's 24 packets (MLflow-unique, spend-gated, cap $1.50)
+mlflow-align-judges *ARGS:
+    uv run python -m dealpoint.eval.mlflow_judges align "$@"
+
+# M9 D4: GEPA prompt optimization on arm-a-prompt-base (MLflow-unique, spend-gated, cap $1.00)
+mlflow-optimize-prompt *ARGS:
+    uv run python -m dealpoint.eval.mlflow_judges optimize "$@"
+
+# M9: batch stand-in for Databricks-only online scoring -- re-score traces newer than --since
+mlflow-score-new *ARGS:
+    uv run python -m dealpoint.eval.mlflow_judges score-new "$@"
+
+# milestone 9 acceptance gates only, offline
+gate-m9:
+    uv run pytest -m "gate_m9 and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

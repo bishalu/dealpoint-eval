@@ -1,0 +1,45 @@
+{
+  "milestone_tag": "m9",
+  "purpose": "judge_alignment",
+  "before": {
+    "per_dimension": {
+      "reasoning": 0.9375,
+      "evidence": 0.9444444444444445,
+      "trajectory": 0.7847222222222222,
+      "professional": 0.9166666666666666
+    },
+    "per_family": {
+      "mistral": {
+        "reasoning": 0.9375,
+        "evidence": 0.96875,
+        "trajectory": 0.7083333333333334,
+        "professional": 0.9270833333333334
+      },
+      "nvidia": {
+        "reasoning": 0.90625,
+        "evidence": 0.9375,
+        "trajectory": 0.8229166666666666,
+        "professional": 0.9166666666666666
+      },
+      "bytedance": {
+        "reasoning": 0.9270833333333334,
+        "evidence": 0.90625,
+        "trajectory": 0.8020833333333334,
+        "professional": 0.8645833333333334
+      }
+    }
+  },
+  "after": {
+    "per_dimension": {
+      "reasoning": 0.9375,
+      "evidence": 0.9270833333333334,
+      "trajectory": 0.7604166666666666,
+      "professional": 0.9583333333333334
+    }
+  },
+  "n_calls_estimated": 528,
+  "n_traces_rescored": 108,
+  "est_usd": 0.2112,
+  "ran_at": "2026-09-07T22:50:25.304517+00:00",
+  "trajectory_note": "trajectory closeness moved from 0.785 to 0.760"
+}

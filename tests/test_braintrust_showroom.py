@@ -44,7 +44,8 @@ def test_org_slug_resolves_the_single_org_bound_to_the_key(monkeypatch):
 
     calls: list[str] = []
 
-    def _get(url, headers=None, timeout=None):
+    def _get(url, headers: dict | None = None, timeout=None):
+        assert headers is not None
         calls.append(headers["Authorization"])
         return _Resp()
 

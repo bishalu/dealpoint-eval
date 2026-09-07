@@ -1,0 +1,362 @@
+[
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "avg(metadata.safe)",
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent), every system@model on the same 18 cases"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "sum(metadata.correct_answered) / sum(metadata.answered)",
+    "title": "PRECISION WHEN IT ANSWERS across every system@model on the same 18 cases: right when it speaks"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "avg(metadata.net_accuracy)",
+    "title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.safe)",
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.correct_all)",
+    "title": "Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash; a correct abstention counts)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.safe)",
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer, correct or silent (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.correct_all)",
+    "title": "Correct outcome over every case (arm D on the same 18 cases, five models; a correct abstention counts)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.hit_at_5)",
+    "title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
+    "title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Which judge? Closeness of each judge to the lawyer on evidence, the dimension that decides (100% = identical; tallest bar wins)",
+    "title": "Which judge? Closeness of each judge to the lawyer on evidence, the dimension that decides (100% = identical; tallest bar wins)"
+  },
+  {
+    "question": "DealPoint eval overview",
+    "tag_filter": "metadata.category = 'prompt-variant'",
+    "metric": "avg(metadata.judge_evidence)",
+    "title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.safe)",
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "sum(metadata.correct_answered) / sum(metadata.answered)",
+    "title": "PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right; the check on safe rate, since silence cannot inflate this (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "sum(metadata.cite_verbatim_answered) / sum(metadata.answered)",
+    "title": "VERBATIM QUOTES: of the answers given, how many cited a span that appears word for word in the agreement (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.net_accuracy)",
+    "title": "NET ACCURACY, the headline: correct minus misleading over every case. A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.correct_all)",
+    "title": "Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash; a correct abstention counts)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.misleading)",
+    "title": "Misleading answers: answered and wrong, or answered when the agreement does not address it (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.silent_failure)",
+    "title": "Silent failures: abstained wrongly, hit the tool cap, or failed to produce a finding (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.cap_hit)",
+    "title": "Cap-hit rate, the loop never stops (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.fabrication)",
+    "title": "Fabrication rate, invented clauses (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.case_set = 'counterfactual'",
+    "metric": "avg(metadata.abstain_correct)",
+    "title": "Correct abstention when the definition is not there (counterfactual cases, all comparable traces)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged' and (metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku')",
+    "metric": "avg(metadata.correct_all)",
+    "title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku, the same 18 cases, correct outcome"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.usd)",
+    "title": "Dollars per case, realized from the local ledger (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.wall_s)",
+    "title": "Seconds per case (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "avg(metadata.tool_calls)",
+    "title": "Tool calls per case (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which system?",
+    "tag_filter": "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')",
+    "metric": "sum(metadata.correct_all) / sum(metadata.usd)",
+    "title": "Correct outcomes per dollar (the four systems on the same 32 cases, GLM 5.3 flash)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.safe)",
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer, correct or silent (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "sum(metadata.correct_answered) / sum(metadata.answered)",
+    "title": "PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "sum(metadata.cite_verbatim_answered) / sum(metadata.answered)",
+    "title": "VERBATIM QUOTES: of the answers given, how many cited a word-for-word span of the agreement (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.net_accuracy)",
+    "title": "NET ACCURACY, the headline: correct minus misleading over every case (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.correct_all)",
+    "title": "Correct outcome over every case (arm D on the same 18 cases, five models; a correct abstention counts)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.misleading)",
+    "title": "Misleading answers: answered and wrong, or answered on a counterfactual (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.usd)",
+    "title": "Dollars per case, realized from the local ledger (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.wall_s)",
+    "title": "Seconds per case (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "percentile(metadata.wall_s, 0.9)",
+    "title": "Tail latency, p90 seconds per case (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.cap_hit)",
+    "title": "Cap-hit rate (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "avg(metadata.execution_failed)",
+    "title": "Execution-failure rate, no finding produced (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "sum(metadata.correct_all) / sum(metadata.usd)",
+    "title": "Correct outcomes per dollar (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'",
+    "metric": "sum(metadata.usd) / sum(metadata.correct_all)",
+    "title": "Dollars per correct outcome (arm D on the same 18 cases, five models)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "avg(metadata.net_accuracy)",
+    "title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "sum(metadata.correct_all) / sum(metadata.usd)",
+    "title": "Correct outcomes per dollar across every system@model on the same 18 cases (the Pareto question in one list)"
+  },
+  {
+    "question": "Which model?",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "avg(metadata.judge_professional)",
+    "title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)"
+  },
+  {
+    "question": "Which retriever?",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.hit_at_5)",
+    "title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)"
+  },
+  {
+    "question": "Which retriever?",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.hit_at_10)",
+    "title": "Gold-span hit@10 on the 58 dev queries"
+  },
+  {
+    "question": "Which retriever?",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.mrr)",
+    "title": "Mean reciprocal rank of the gold span, 58 dev queries"
+  },
+  {
+    "question": "Which retriever?",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.li_hit_rate)",
+    "title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
+    "title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Which judge for reasoning? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "title": "Which judge for reasoning? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Which judge for evidence? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "title": "Which judge for evidence? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Which judge for trajectory? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "title": "Which judge for trajectory? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.has_human = 1 and metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "Which judge for professional? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "title": "Which judge for professional? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)"
+  },
+  {
+    "question": "Judges and the lawyer",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged'",
+    "metric": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
+    "title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)"
+  },
+  {
+    "question": "DeepEval",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged' and metadata.arm != 'A'",
+    "metric": "avg(metadata.deepeval_tool_correctness)",
+    "title": "DeepEval tool correctness by system@model: were the right tools called and selected (DeepEval's metric; our closest check is required-evidence-met, and they agree 89% of the time)"
+  },
+  {
+    "question": "DeepEval",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged' and metadata.arm != 'A'",
+    "metric": "avg(metadata.deepeval_argument_correctness)",
+    "title": "DeepEval argument correctness by system@model: were the tool calls made with the right arguments (DeepEval's metric; nothing of ours measures this)"
+  },
+  {
+    "question": "DeepEval",
+    "tag_filter": "metadata.comparable = 1 and metadata.category = 'judged' and metadata.arm != 'A'",
+    "metric": "avg(metadata.deepeval_step_efficiency)",
+    "title": "DeepEval step efficiency by system@model: redundant or wasted tool calls (DeepEval's GEval; the trajectory dimension graded from outside our rubric)"
+  },
+  {
+    "question": "LlamaIndex",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.li_hit_rate)",
+    "title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)"
+  },
+  {
+    "question": "LlamaIndex",
+    "tag_filter": "metadata.category = 'retrieval'",
+    "metric": "avg(metadata.li_mrr)",
+    "title": "LlamaIndex's own MRR by retriever, 58 dev queries"
+  },
+  {
+    "question": "Which prompt?",
+    "tag_filter": "metadata.category = 'prompt-variant'",
+    "metric": "avg(metadata.judge_professional)",
+    "title": "Judge: professional by arm-A prompt variant, 18 packets, GLM"
+  },
+  {
+    "question": "Which prompt?",
+    "tag_filter": "metadata.category = 'prompt-variant'",
+    "metric": "avg(metadata.judge_evidence)",
+    "title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM"
+  },
+  {
+    "question": "Which prompt?",
+    "tag_filter": "metadata.category = 'prompt-variant'",
+    "metric": "avg(metadata.judge_reasoning)",
+    "title": "Judge: reasoning by arm-A prompt variant, 18 packets, GLM"
+  }
+]

@@ -9,6 +9,9 @@ quality cockpit. Nothing you click was made by hand: two commands rebuilt this p
 
 Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
 
+Second cockpit, same rows: [`docs/mlflow-tour.md`](mlflow-tour.md) walks the identical evidence through
+a self-hosted MLflow tracking server (M9). Neither tour replaces the other.
+
 **Eight dashboards, one question each.** Braintrust's dashboards are the monitor over project logs, so
 they cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
 therefore mirrors every number into log metadata (free; scores are the metered thing), every chart is a

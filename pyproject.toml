@@ -19,6 +19,13 @@ api = ["fastapi", "uvicorn"]
 rag-lab = ["llama-index-core", "llama-index-retrievers-bm25"]
 # M7a: DeepEval independent agent-evaluation cross-check -- optional, disk-guarded.
 deepeval = ["deepeval"]
+mlflow = [
+    "mlflow>=3.16",
+]
+mlflow-optimize = [
+    "dspy>=3.3",
+    "gepa>=0.1",
+]
 
 [dependency-groups]
 dev = [
@@ -47,6 +54,7 @@ markers = [
     "gate_m6: milestone 6 gate",
     "gate_m7: milestone 7 gate",
     "gate_m7b: milestone 7b gate",
+    "gate_m9: milestone 9 gate",
     "needs_network: requires internet access",
     "needs_model: spends money against OPENROUTER_API_KEY",
 ]

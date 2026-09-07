@@ -1,0 +1,125 @@
+{
+  "mode": "live",
+  "started_at": "2026-09-07T20:42:13.268455+00:00",
+  "experiment": "dealpoint-eval",
+  "tracking_uri": "sqlite:///data/mlflow/mlflow.db",
+  "prompt_variant_outputs": "absent",
+  "datasets": {
+    "maud-dealpoint-dev": 58,
+    "maud-dealpoint-test": 167,
+    "maud-dealpoint-counterfactual": 40,
+    "maud-dealpoint-judged_calibration": 18,
+    "maud-dealpoint-synthetic_query": 106,
+    "maud-dealpoint-review-set": 12,
+    "maud-dealpoint-playground-armA": 18,
+    "maud-dealpoint-judge-packets": 24,
+    "maud-dealpoint-retrieval-dev": 58
+  },
+  "prompts": [
+    "agent-base-system-prompt",
+    "agent-arm-d-skill-injection",
+    "judge-calibrated-rubric",
+    "arm-a-prompt-base",
+    "arm-a-prompt-terse",
+    "arm-a-prompt-cite-first",
+    "arm-a-prompt-abstain-first",
+    "judge-panel-rubric"
+  ],
+  "runs": {
+    "planned": 33,
+    "names": [
+      "rag-m3-dense",
+      "rag-m3-bm25",
+      "rag-m3-hybrid",
+      "rag-m3-hybrid-rerank",
+      "rag-m3-fusion",
+      "rag-m3-fusion-rerank",
+      "rag-m7-li-crosscheck",
+      "rag-m7-synthetic",
+      "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "B-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "C-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "D-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+      "A-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+      "D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc",
+      "D-deepseek_deepseek-v4-flash-e2b4a2b97561-3fcdae7",
+      "D-qwen_qwen3.7-flash-e2b4a2b97561-3fcdae7",
+      "D-google_gemini-3.1-flash-lite-e2b4a2b97561-3fcdae7",
+      "judge-A@haiku",
+      "judge-D@haiku",
+      "judge-D@glm",
+      "judge-D@deepseek-v4-flash",
+      "judge-D@qwen3.7-flash",
+      "judge-D@gemini-3.1-flash-lite",
+      "deepeval-crosscheck",
+      "pareto-anthropic_claude-haiku-4.5",
+      "pareto-deepseek_deepseek-v4-flash",
+      "pareto-google_gemini-3.1-flash-lite",
+      "pareto-qwen_qwen3.7-flash",
+      "pareto-z-ai_glm-5.3-flash",
+      "playground-arm-A-base",
+      "playground-arm-A-terse",
+      "playground-arm-A-cite-first",
+      "playground-arm-A-abstain-first"
+    ],
+    "created_this_run": 0
+  },
+  "traces": {
+    "planned": 738,
+    "agent": 265,
+    "retrieval": 406,
+    "prompt_variant": 67,
+    "written_this_run": 0
+  },
+  "assessments": {
+    "obj_traces": 265,
+    "obj_values": 4770,
+    "llm_judge": 1296,
+    "human": 96,
+    "deepeval": 432,
+    "retrieval_code": 1044,
+    "li_code": 812,
+    "written_this_run": 0
+  },
+  "scorers": {
+    "deterministic": [
+      "grounded_accuracy",
+      "answer_correct",
+      "citation_gold_overlap",
+      "citation_verbatim",
+      "abstain_correct",
+      "skill_adherence"
+    ],
+    "judges": [
+      "reasoning",
+      "evidence",
+      "trajectory",
+      "professional"
+    ],
+    "note": "the six deterministic scorers run in-process here; Braintrust could not run them server-side"
+  },
+  "evaluations": {
+    "axes": [
+      "crosscheck",
+      "judge",
+      "model",
+      "prompt",
+      "retrieval",
+      "system"
+    ],
+    "written_this_run": 5
+  },
+  "registry": {
+    "versions": 9,
+    "aliases": {
+      "champion": "D@gemini-3.1-flash-lite",
+      "baseline": "A@haiku",
+      "cost-floor": "D@qwen3.7-flash"
+    }
+  },
+  "views": {
+    "entries": 60
+  },
+  "finished_at": "2026-09-07T21:07:17.742277+00:00",
+  "mlflow_version": "3.16.0"
+}

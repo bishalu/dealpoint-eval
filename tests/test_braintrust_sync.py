@@ -583,9 +583,10 @@ def test_m7b_openrouter_ledger_unchanged():
     """M7b makes no model calls: no spend-ledger row carries `milestone_tag:
     m7b` (spec "Budget and disk": "OpenRouter ledger unchanged by this
     milestone"). The realized total is pinned to the committed ledger's own
-    sum (3.7558), not the earlier M7a checkpoint recorded in
-    `specs/mvp/state.json` (3.7133) -- that figure predates this ledger's
-    current committed state and a test against it would fail spuriously.
+    sum (3.9178, after M9's authorized D3/D4 spend), not the earlier M7a
+    checkpoint recorded in `specs/mvp/state.json` (3.7133) or the pre-M9
+    total (3.7558) -- both predate this ledger's current committed state and
+    a test against either would fail spuriously.
     """
     import json as json_mod
     from pathlib import Path
@@ -604,4 +605,4 @@ def test_m7b_openrouter_ledger_unchanged():
             row = json_mod.loads(line)
             assert row.get("milestone_tag") != "m7b"
             total_usd += row.get("usd", 0) or 0
-    assert round(total_usd, 4) == 3.7558
+    assert round(total_usd, 4) == 4.0011

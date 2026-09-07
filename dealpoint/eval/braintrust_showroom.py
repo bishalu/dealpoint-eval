@@ -364,7 +364,8 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
     short = SHORT_MODEL.get(model, model)
     ga = scores.get("grounded_accuracy")
     out = {
-        "system_label": SYSTEM_LABEL.get(arm, arm), "model_label": short, "variant_label": f"{arm}@{short}",
+        "system_label": SYSTEM_LABEL.get(arm, arm),  # type: ignore[call-overload,arg-type]
+        "model_label": short, "variant_label": f"{arm}@{short}",
         "status": status, "case_set": (case or {}).get("case_set") or row.get("case_set"), "question_id": (case or {}).get("question_id") or row.get("question_id"),
         "ga_scored": None if ga is None else int(bool(ga)), "ga_all": int(bool(ga)),
         "answer_correct_all": int(bool(scores.get("answer_correct"))),
@@ -411,8 +412,8 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
         for family, v in (per_judge or {}).items():
             out[f"judge_{family.lower()}_{d}"] = _rescale(v.get(d))
             if human and v.get(d) is not None and human.get(d) is not None:
-                out[f"judge_{family.lower()}_{d}_abs_err"] = abs(_rescale(v[d]) - _rescale(human[d]))
-                out[f"judge_{family.lower()}_{d}_bias"] = _rescale(v[d]) - _rescale(human[d])     # + = judge runs high
+                out[f"judge_{family.lower()}_{d}_abs_err"] = abs(_rescale(v[d]) - _rescale(human[d]))  # type: ignore[operator]
+                out[f"judge_{family.lower()}_{d}_bias"] = _rescale(v[d]) - _rescale(human[d])     # + = judge runs high  # type: ignore[operator]
                 out[f"judge_{family.lower()}_{d}_closeness"] = 1.0 - out[f"judge_{family.lower()}_{d}_abs_err"]   # 1.0 = identical
     # Per judge family: the realized cost of its call on this packet, the mean distance from the lawyer
     # over the four dimensions, and agreement per dollar ((1 - distance) / usd), so "which judge" can be
@@ -702,7 +703,7 @@ def step_mirror(api: Api, live: bool, manifest: dict) -> None:
     for e in roots:
         m = e.get("metadata") or {}
         if m.get("category") == "retrieval":
-            extra = li.get((m.get("case_id"), m.get("retriever")))
+            extra = li.get((m.get("case_id"), m.get("retriever")))  # type: ignore[arg-type]
             if extra:
                 events.append({"id": e["id"], "metadata": {**extra, "scored_by_ours": int(m.get("retriever") != "li_native_bm25")}, "_is_merge": True})
             continue
@@ -1095,7 +1096,7 @@ def step_views(api: Api, live: bool, manifest: dict) -> None:
     if not live:
         return
     from dealpoint.eval.braintrust_cockpit import RestClient
-    rc = RestClient(load_braintrust_key())
+    rc = RestClient(load_braintrust_key())  # type: ignore[arg-type]
     for v in views:
         _upsert_view(rc, "project", PROJECT_ID, v["view_type"], v["name"], _view_data_for({"btql": v["btql"]}))
     _ledger("views", "showroom-views")
