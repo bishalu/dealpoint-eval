@@ -471,9 +471,9 @@ def chart_catalogue() -> dict[str, dict]:
                              "measure": [{"btql": f"avg(metadata.judge_{f}_usd)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
         "panel_professional": {"title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "deepeval_args": {"title": "DeepEval argument correctness by system@model: were the tool calls made with the right arguments (DeepEval's metric; nothing of ours measures this)",
-                          "measure": "avg(metadata.deepeval_argument_correctness)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval_tools": {"title": "DeepEval tool correctness by system@model: were the right tools called and selected (DeepEval's metric; our closest check is required-evidence-met, and they agree 89% of the time)", "measure": "avg(metadata.deepeval_tool_correctness)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval_steps": {"title": "DeepEval step efficiency by system@model: redundant or wasted tool calls (DeepEval's GEval; the trajectory dimension graded from outside our rubric)", "measure": "avg(metadata.deepeval_step_efficiency)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+                          "measure": "avg(metadata.deepeval_argument_correctness)", "group_by": ["metadata.variant_label"], "filters": [f"{JUDGED18} and metadata.arm != 'A'"]},
+        "deepeval_tools": {"title": "DeepEval tool correctness by system@model: were the right tools called and selected (DeepEval's metric; our closest check is required-evidence-met, and they agree 89% of the time)", "measure": "avg(metadata.deepeval_tool_correctness)", "group_by": ["metadata.variant_label"], "filters": [f"{JUDGED18} and metadata.arm != 'A'"]},
+        "deepeval_steps": {"title": "DeepEval step efficiency by system@model: redundant or wasted tool calls (DeepEval's GEval; the trajectory dimension graded from outside our rubric)", "measure": "avg(metadata.deepeval_step_efficiency)", "group_by": ["metadata.variant_label"], "filters": [f"{JUDGED18} and metadata.arm != 'A'"]},
         "li_hit_rate": {"title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)", "measure": "avg(metadata.li_hit_rate)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "li_mrr": {"title": "LlamaIndex's own MRR by retriever, 58 dev queries", "measure": "avg(metadata.li_mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "prompt_professional": {"title": "Judge: professional by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
@@ -529,7 +529,8 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
      ("VERDICT: a cross-check, never a gate. Only what DeepEval uniquely adds is here: its three trajectory metrics grade HOW the agent worked, "
       "which none of our deterministic scorers measure. Tool correctness (right tools called and selected; agrees with our required-evidence check "
       "89% of the time), argument correctness (right arguments to those tools; nothing of ours checks this), step efficiency (redundant or wasted "
-      "calls). Its task-completion score is omitted: it duplicates our judges, and its evaluator model is one of them. Same 108 judged traces, "
+      "calls). Its task-completion score is omitted: it duplicates our judges, and its evaluator model is one of them. Agent arms only: the "
+      "single-shot baseline A calls no tools, so DeepEval's tool metrics score it zero by construction, not by judgement. 90 judged agent traces, "
       "one row per system@model."),
      ("deepeval_tools", "deepeval_args", "deepeval_steps")),
     ("LlamaIndex",
