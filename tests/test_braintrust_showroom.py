@@ -219,6 +219,7 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
     assert 0 < m["usd"] < 0.01 and 30 < m["wall_s"] < 60
     assert m["judge_reasoning"] == 1.0 and abs(m["judge_evidence"] - (4.6667 - 1) / 4) < 1e-3
     assert m["has_human"] == 1 and m["human_professional"] == 1.0 and m["human_trajectory"] == 0.5
+    assert abs(m["panel_trajectory_closeness"] - (1 - abs(m["judge_trajectory"] - 0.5))) < 1e-9 and m["panel_reasoning_closeness"] == 1.0
     assert m["judge_mistral_reasoning"] == 1.0 and m["judge_bytedance_trajectory"] == 0.5 and m["judge_nvidia_trajectory_abs_err"] == 0.25
     assert m["judge_nvidia_trajectory_bias"] == 0.25 and m["judge_mistral_reasoning_bias"] == 0.0
     assert 0 < m["judge_mistral_usd"] < 0.01 and 0 <= m["judge_mistral_mean_abs_err"] <= 1

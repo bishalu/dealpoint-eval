@@ -390,6 +390,9 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
     for d in JUDGE_DIMS:
         out[f"judge_{d}"] = _rescale((judge_dims or {}).get(d))
         out[f"human_{d}"] = _rescale((human or {}).get(d))
+        if out[f"judge_{d}"] is not None and out[f"human_{d}"] is not None:
+            # panel closeness: 1 - |panel mean - lawyer| on the 0..1 scale; 1.0 means identical
+            out[f"panel_{d}_closeness"] = 1.0 - abs(out[f"judge_{d}"] - out[f"human_{d}"])
         for family, v in (per_judge or {}).items():
             out[f"judge_{family.lower()}_{d}"] = _rescale(v.get(d))
             if human and v.get(d) is not None and human.get(d) is not None:

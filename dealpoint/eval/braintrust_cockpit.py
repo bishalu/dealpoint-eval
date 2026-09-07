@@ -442,8 +442,8 @@ def chart_catalogue() -> dict[str, dict]:
         "mod_usd_per_correct": {"title": f"Dollars per correct outcome ({MOD_POOL})", "measure": "sum(metadata.usd) / sum(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
         "pareto": {"title": "Correct outcomes per dollar across every system@model on the same 18 cases (the Pareto question in one list)",
                    "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18], "unit": "count"},
-        "judge_vs_lawyer": {"title": "Can the panel be trusted? Mean of the three judges next to the lawyer, per dimension, 24 blinded packets (rubric 1-5 as 0-1)",
-                            "measure": [m for d in JUDGE_DIMS_ for m in ({"btql": f"avg(metadata.judge_{d})", "name": f"judges: {d}"}, {"btql": f"avg(metadata.human_{d})", "name": f"lawyer: {d}"})],
+        "judge_vs_lawyer": {"title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
+                            "measure": [{"btql": f"avg(metadata.panel_{d}_closeness)", "name": d} for d in JUDGE_DIMS_],
                             "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         **{f"judge_bias_{d}": {"title": f"Which judge for {d}? Signed bias, judge minus lawyer: + runs high, - runs low, closest to 0 wins (24 packets)",
                                "measure": [{"btql": f"avg(metadata.judge_{f}_{d}_bias)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
