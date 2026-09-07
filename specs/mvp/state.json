@@ -1201,13 +1201,15 @@
       "attempts": 2,
       "blocker": "",
       "commits": [
-        "21e1527"
+        "21e1527",
+        "ecee5b0",
+        "5ddee2b"
       ],
-      "ended_at": "2026-09-07T22:39:26.761+00:00",
+      "ended_at": "2026-09-07T23:21:38.805+00:00",
       "exclusions": [],
       "id": "m9",
       "infra_retries": 0,
-      "last_failure": "Reviewer disposition REVISE:\n- D3: \"one paragraph in the walkthrough: did alignment move the trajectory dimension, the one no judge gets right?\" \u2014 report the measured answer, whichever way it falls (also DoD 6: the judge-alignment run and the `optimized` prompt version appear in docs/mlflow-tour.md): docs/mlflow-tour.md mtime 18:39 predates the D3 run (21:17) and live sync (21:07) and is absent from previous_envelope.changed_files. Stop 6 (docs/mlflow-tour.md:71-75) still reads prospectively \u2014 the command \"runs judge.align() ... and writes data/reports/judge_alignment.json ... including whether alignment moved trajectory\" \u2014 and never states what happened. Stop 7 (:85-88) says the command \"registers the result as a new version with alias `optimized`\" without recording that arm-a-prompt-base version 2 now holds it. The measured facts (before.trajectory 0.785; after.trajectory null because none of trajectory's re-scores survived OpenRouter 429s; 317 of 432 re-scores landed) exist only in judge_alignment.json.\nBlocking:\n- docs/mlflow-tour.md does not report the measured result of D3 or D4. Spec D3 requires \"one paragraph in the walkthrough: did alignment move the trajectory dimension, the one no judge gets right?\" and plan \u00a75.6 requires the measured answer \"whichever way it falls\"; DoD bullet 6 additionally requires the judge-alignment run and the `optimized` prompt version to appear there. Stop 6 (docs/mlflow-tour.md:71-75) and Stop 7 (:85-88) still describe both commands prospectively, and the file's mtime (18:39) predates both live runs (21:07 / 21:17).\n- The trajectory question the milestone is built around has no measured answer: data/reports/judge_alignment.json has after.per_dimension.trajectory = null because all 108 trajectory re-scores were lost to transient OpenRouter 429s (317 of 432 overall landed). This is retryable inside budget \u2014 $0.1285 of the $1.50 D3 cap is spent and the org cap has ~$2.08 of headroom.\nCorrective task:\nIn the dealpoint-eval repo on branch braintrust-org-scoped-ledger, close the last M9 gap: docs/mlflow-tour.md must report the measured results of the D3 judge-alignment and D4 prompt-optimization runs that have already been executed, instead of describing them prospectively. Two steps. (1) Recover the missing trajectory measurement. data/reports/judge_alignment.json currently has after.per_dimension.trajectory = null because all 108 trajectory re-score calls failed on transient OpenRouter 429 rate-limiting against mistralai/mistral-small-3.2-24b-instruct (317 of 432 re-scores landed overall). Re-run only the missing re-scores: `uv run python -m dealpoint.eval.mlflow_judges align --live`. cmd_align in dealpoint/eval/mlflow_judges.py already skips any trace whose `judge/<dim>/aligned` assessment exists, so a re-run only retries the ~115 failures; add a bounded retry with backoff around the `or_client.chat(...)` call inside the re-score loop (retry a 429 up to 3 times with exponential sleep, keep the existing per-call `except` so a persistent failure still prints and continues rather than aborting) so the retry actually survives the rate limiter. This is spend-gated and already inside its cap: $0.1285 of the $1.50 D3 cap is used and the org cap has ~$2.08 of headroom, so ~108 additional calls (~$0.05) is affordable \u2014 the existing assert_within_cap guard must remain in force. Afterwards judge_alignment.json must be rewritten with a real after.per_dimension.trajectory value and a trajectory_note stating the before/after movement. If trajectory still cannot be scored after the retries, leave the value null and make the note state plainly that it could not be measured and why \u2014 do not invent a number. (2) Update docs/mlflow-tour.md to report what was measured. In Stop 6, replace the prospective sentence at lines 71-75 with the actual outcome: the per-dimension closeness-to-lawyer before and after (before: reasoning 0.9375, evidence 0.9444, trajectory 0.7847, professional 0.9167; after: reasoning 0.9375, evidence 0.9205, professional 0.9583, plus whatever trajectory value step 1 produces), how many of the 432 re-scores landed, and a direct answer to the milestone's headline question \u2014 did alignment move trajectory, the dimension no judge gets right? Name the 429 rate-limiting honestly if it still bounds the answer. In Stop 7 at lines 85-88, record that the run completed and that `arm-a-prompt-base` version 2 is registered with alias `optimized` (verified in data/mlflow/mlflow.db). Every number in the tour must be read from data/reports/judge_alignment.json and the store, never retyped from memory, so the tour's 'no number differs from docs/demo-tour.md' invariant holds. Do not edit specs/milestones/m9.md, specs/grilled-product-brief.md, the agent, the benchmark, the rubric or any frozen artifact. Verify with: `uv run pytest -m \"gate_m9 and not needs_network\" -q` (24 tests, must stay green \u2014 test_mlflow_tour_names_every_unique_feature_and_gap asserts the nine stops and the adds/gaps sections survive the edit), `uv run pytest -m \"not needs_network and not needs_model\" -q`, `uv run ruff check .`, `uv run pyright` \u2014 all must exit 0. If the re-run adds spend-ledger rows, bump the pinned total in tests/test_braintrust_sync.py:608 to the new real sum and say so in the report, exactly as the previous session did.",
+      "last_failure": "",
       "last_failure_class": "product",
       "metrics": {
         "braintrust_sync": {
@@ -1287,10 +1289,10 @@
           "est_usd": 0.2112,
           "milestone_tag": "m9",
           "n_calls_estimated": 528,
-          "n_traces_rescored": 317,
+          "n_traces_rescored": 108,
           "purpose": "judge_alignment",
-          "ran_at": "2026-09-07T21:17:48.998669+00:00",
-          "trajectory_note": "trajectory was not re-scored (no aligned judge covered it)"
+          "ran_at": "2026-09-07T22:50:25.304517+00:00",
+          "trajectory_note": "trajectory closeness moved from 0.785 to 0.760"
         },
         "judge_slate": {
           "price_basis": "live",
@@ -1399,11 +1401,12 @@
       },
       "models": {
         "builder": "claude-bridge/claude-sonnet-5",
+        "documenter": "claude-bridge/claude-haiku-4-5",
         "planner": "claude-bridge/claude-opus-5",
         "reviewer": "claude-bridge/claude-opus-5"
       },
       "started_at": "2026-09-07T17:33:22.614+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -1419,7 +1422,7 @@
       }
     }
   },
-  "next_action": "m9 running in session 056fb019 (attempt 2)",
+  "next_action": "core eval MVP complete",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1540,5 +1543,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-07T22:40:06.805+00:00"
+  "updated_at": "2026-09-07T23:21:38.805+00:00"
 }
