@@ -1,6 +1,6 @@
 {
   "mode": "live",
-  "started_at": "2026-09-07T16:53:48.141309+00:00",
+  "started_at": "2026-09-07T17:03:48.160238+00:00",
   "project": "dealpoint-eval",
   "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
   "org": "bishal-ai",
@@ -11,5 +11,5 @@
     "logs_updated": 672,
     "logs_unmatched": 0
   },
-  "finished_at": "2026-09-07T16:54:53.151009+00:00"
+  "finished_at": "2026-09-07T17:04:52.661195+00:00"
 }

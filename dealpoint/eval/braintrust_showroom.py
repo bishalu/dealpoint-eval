@@ -392,6 +392,14 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
     out["misleading"] = int(status == "ANSWERED" and not out["correct_all"])
     out["silent_failure"] = int(not out["correct_all"] and not out["misleading"])
     out["net_accuracy"] = out["correct_all"] - out["misleading"]
+    # The trust pair. safe = did not mislead (correct or silent); it is inflated by silence, so it is always
+    # charted next to precision-when-answering (sum(correct_answered)/sum(answered)), which punishes silence.
+    # verbatim: when it answered, was the quoted evidence a verbatim span of the agreement.
+    out["safe"] = 1 - out["misleading"]
+    out["answered"] = int(status == "ANSWERED")
+    out["correct_answered"] = int(out["answered"] and out["correct_all"])
+    out["cite_verbatim_answered"] = int(out["answered"] and bool(scores.get("citation_verbatim"))) if out["answered"] else None
+    out["cite_gold_answered"] = int(out["answered"] and bool(scores.get("citation_gold_overlap"))) if out["answered"] else None
     out["comparable"] = int(category in CANONICAL_CATEGORIES and short in SHORT_MODEL.values())
     out["case_pool"] = {"judged": "judged-18 (the same 18 cases for every variant)", "agent": "test-32 (the frozen 32-case subset)"}.get(category or "", "other")
     for d in JUDGE_DIMS:

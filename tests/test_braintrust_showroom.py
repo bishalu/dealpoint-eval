@@ -240,6 +240,9 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
     assert m["net_accuracy"] == 1 and m["misleading"] == 0 and t["net_accuracy"] == 0 and t["silent_failure"] == 1, "a cap-hit is a silent failure, not a misleading answer"
     w = mirror_for("contract_99__redacted_q06", "A@haiku", idx[("contract_99__redacted_q06", "A@haiku")], ctx, category="judged")
     assert w["misleading"] == 1 and w["net_accuracy"] == -1, "answering a question the agreement does not address is misleading"
+    assert w["safe"] == 0 and w["answered"] == 1 and w["correct_answered"] == 0
+    assert m["safe"] == 1 and m["answered"] == 1 and m["correct_answered"] == 1 and m["cite_verbatim_answered"] == 1
+    assert t["safe"] == 1 and t["answered"] == 0 and t["cite_verbatim_answered"] is None, "a silent failure is safe and has no answer to grade"
     r = mirror_for("contract_0__q01", "D@openai/gpt-5.6-luna-pro", idx[("contract_0__q01", "D@openai/gpt-5.6-luna-pro")], ctx, category="successful_direct")
     assert r["comparable"] == 0, "a representative trace of a partial run never ranks against the slate"
 

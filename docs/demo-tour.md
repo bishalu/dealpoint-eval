@@ -357,30 +357,34 @@ as fast as anything on the slate, at twice Qwen's cost. Qwen is the cost floor: 
 per dollar, with the worst cap-hit and failure rates. Haiku is the same quality as GLM and DeepSeek at
 sixteen times the cost, and the dashboard shows it at six correct outcomes per dollar.
 
-The scoring system that decides is **net accuracy**: correct answers minus misleading ones, over every
-case. A correct abstention on a counterfactual is correct. A wrong answer, or any answer when the
-agreement does not address the question, is misleading. An abstention, a cap-hit or an execution failure
-is a silent failure and counts zero. In a legal tool a silent failure costs a lookup; a misleading answer
-costs a client. The overview dashboard's first chart ranks every system@model by it on the same 18 cases:
+The scoring system is two numbers read together, and one tie-breaker. **Safe rate**: the share of
+cases where the system did not mislead, a correct answer, a correct abstention, or a silent failure
+(abstained wrongly, hit the tool cap, failed to produce a finding). **Precision when it answers**: of the
+cases it answered, how many were right; silence cannot inflate this one, which is why it always sits next
+to safe rate. A misleading answer is a wrong answer, or any answer when the agreement does not address the
+question. **Net accuracy**, correct minus misleading over every case, is the tie-breaker. In a legal tool
+a silent failure costs a lookup; a misleading answer costs a client. The overview dashboard's first three
+charts rank every system@model by these on the same 18 cases:
 
-| system@model, same 18 cases | correct | misleading | silent | **net** | $/case |
-|---|---|---|---|---|---|
-| **D@gemini** | 50% | 17% | 33% | **33%** | $0.0055 |
-| A@haiku | 56% | 33% | 11% | 22% | $0.0034 |
-| D@glm | 33% | 17% | 50% | 17% | $0.0028 |
-| D@deepseek | 28% | 11% | 61% | 17% | $0.0024 |
-| D@haiku | 28% | 17% | 56% | 11% | $0.0458 |
-| D@qwen | 22% | 17% | 61% | 6% | $0.0011 |
+| system@model, same 18 cases | safe | precision when answering | answered | quotes verbatim | net | $/case |
+|---|---|---|---|---|---|---|
+| **D@gemini** | 83% | 67% | 50% | **100%** | **33%** | $0.0055 |
+| D@deepseek | **89%** | **71%** | 39% | 71% | 17% | $0.0024 |
+| D@glm | 83% | 62% | 44% | 62% | 17% | $0.0028 |
+| D@haiku | 83% | 62% | 44% | 88% | 11% | $0.0458 |
+| D@qwen | 83% | 57% | 39% | 43% | 6% | $0.0011 |
+| A@haiku | 67% | 45% | 61% | 100% | 22% | $0.0034 |
 
-The decision, written down: **D@gemini, the agent on Gemini 3.1 flash lite**. The single-shot baseline on
-Haiku has the highest raw rate but answers wrongly one case in three; the Gemini agent fails silently
-instead, and silence is the failure we can afford. On GLM, the four systems net A 28%, C 25%, D 9%, B 6%:
+The decision, written down: **D@gemini, the agent on Gemini 3.1 flash lite**: safe on 83% of cases,
+right two times in three when it speaks, every quote verbatim, and it speaks on half the cases. DeepSeek
+is safer and more precise but answers only 39% of the time; the single-shot baseline on Haiku answers the
+most and is the least safe, wrong one case in three. Silence is the failure we can afford. On GLM, the four systems net A 28%, C 25%, D 9%, B 6%:
 the skill as written is the worst step in the ladder (it raises misleading answers to 28%), so the agent
 to ship is C's shape on Gemini, with the stopping rule from stop 8 to convert cap-hits into answers, and
 the online `judge-professional` score from stop 5 as the monitor after we ship. Haiku inside the loop is
 out at sixteen times the cost.
 
-One-liner: "Score what a wrong answer costs, not just what a right one earns, and the winner is the agent that knows when to shut up."
+One-liner: "Safe on five cases in six, right two times in three when it speaks, never a made-up quote. That is a tool a lawyer can use."
 
 ---
 

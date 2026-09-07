@@ -416,6 +416,12 @@ def chart_catalogue() -> dict[str, dict]:
     """Every chart, keyed, with a short title (the dashboard's name carries the question). Each is a
     toplist over the metadata mirror: see `dashboard_definitions` for why nothing here is a time series."""
     return {
+        "sys_safe": {"title": f"SAFE RATE, the headline: share of cases where the system did not mislead (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL})",
+                     "measure": "avg(metadata.safe)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_precision": {"title": f"PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right; the check on safe rate, since silence cannot inflate this ({SYS_POOL})",
+                          "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_verbatim": {"title": f"VERBATIM QUOTES: of the answers given, how many cited a span that appears word for word in the agreement ({SYS_POOL})",
+                         "measure": "sum(metadata.cite_verbatim_answered) / sum(metadata.answered)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_net": {"title": f"NET ACCURACY, the headline: correct minus misleading over every case. A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL})", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_misleading": {"title": f"Misleading answers: answered and wrong, or answered when the agreement does not address it ({SYS_POOL})", "measure": "avg(metadata.misleading)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_silent": {"title": f"Silent failures: abstained wrongly, hit the tool cap, or failed to produce a finding ({SYS_POOL})", "measure": "avg(metadata.silent_failure)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
@@ -435,6 +441,11 @@ def chart_catalogue() -> dict[str, dict]:
         "ret_hit5": {"title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)", "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_mrr": {"title": "Mean reciprocal rank of the gold span, 58 dev queries", "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_hit10": {"title": "Gold-span hit@10 on the 58 dev queries", "measure": "avg(metadata.hit_at_10)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        "mod_safe": {"title": f"SAFE RATE, the headline: share of cases where the model did not mislead, correct or silent ({MOD_POOL})", "measure": "avg(metadata.safe)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_precision": {"title": f"PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right ({MOD_POOL})", "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_verbatim": {"title": f"VERBATIM QUOTES: of the answers given, how many cited a word-for-word span of the agreement ({MOD_POOL})", "measure": "sum(metadata.cite_verbatim_answered) / sum(metadata.answered)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "pareto_safe": {"title": "SAFE RATE across every system@model on the same 18 cases: did not mislead (correct, or silent)", "measure": "avg(metadata.safe)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "pareto_precision": {"title": "PRECISION WHEN IT ANSWERS across every system@model on the same 18 cases: right when it speaks", "measure": "sum(metadata.correct_answered) / sum(metadata.answered)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "mod_net": {"title": f"NET ACCURACY, the headline: correct minus misleading over every case ({MOD_POOL})", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "mod_misleading": {"title": f"Misleading answers: answered and wrong, or answered on a counterfactual ({MOD_POOL})", "measure": "avg(metadata.misleading)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "pareto_net": {"title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
@@ -475,34 +486,34 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("DealPoint eval overview",
      ("VERDICTS (from the question dashboards, 2026-09-07; small samples, one run each). "
       "SEARCH: hybrid (dense + BM25, reciprocal-rank fusion), no reranker: 91% gold-span hit@5 vs 81% dense. "
-      "SCORING: the headline is NET ACCURACY = correct answers minus misleading answers, over every case. A correct abstention on a counterfactual is "
-      "correct; a wrong answer, or any answer when the agreement does not address the question, is misleading; an abstention, cap-hit or execution "
-      "failure is a silent failure that counts zero. In a legal tool a silent failure costs a lookup and a misleading answer costs a client. "
-      "BEST MEASURED CONFIG (every system@model on the same 18 cases): D@gemini, the agent on Gemini 3.1 flash lite: 33% net (50% correct, 17% "
-      "misleading), 12.7 s, $0.0055 per case. The single-shot baseline A@haiku has the highest raw rate (56% correct) but misleads one case in "
-      "three, so it nets 22%. "
-      "SYSTEM (four systems on GLM, same 32 cases, net accuracy): A 28%, C 25%, D 9%, B 6%. The skill (D) is the worst step: it raises misleading "
-      "answers to 28%. The agent only pays off once a stopping rule ends its search-in-circles cap-hits, and only without the skill as written. "
-      "MODEL (arm D, same 18 cases): Gemini is the model that fails silently rather than misleadingly; Qwen is the cost floor; Haiku is out of the "
-      "loop at sixteen times the cost. "
+      "SCORING: two numbers, read together. SAFE RATE = share of cases where the system did not mislead (a correct answer, a correct abstention, or "
+      "a silent failure: abstained wrongly, hit the tool cap, failed to produce a finding). PRECISION WHEN IT ANSWERS = of the cases it answered, how "
+      "many were right; silence cannot inflate this one, which is why it sits next to safe rate. A misleading answer is a wrong answer, or any answer "
+      "when the agreement does not address the question. NET ACCURACY (correct minus misleading, over every case) is the tie-breaker. "
+      "BEST MEASURED CONFIG (every system@model on the same 18 cases): D@gemini, the agent on Gemini 3.1 flash lite: safe 83%, precise 67% when it "
+      "answers, every quote verbatim, net 33%, 12.7 s, $0.0055 per case. DeepSeek is the safest (89%) and most precise (71%) but answers only 39% of "
+      "cases; the single-shot baseline A@haiku answers the most (61%) and is the least safe (67%): wrong one case in three. "
+      "SYSTEM (four systems on GLM, same 32 cases): see that dashboard; the skill (D) is the worst step because it raises misleading answers. "
+      "MODEL (arm D, same 18): Gemini balances safety and coverage; DeepSeek is safest; Qwen is the cost floor; Haiku is out of the loop at sixteen "
+      "times the cost. "
       "JUDGES: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory; two judges, not three; no judge "
       "is trustworthy on trajectory, keep the lawyer there. "
       "PROMPT: cite-first for the baseline (best evidence score), terse loses everywhere. "
-      "Every chart is a comparison, never a lone number: the first ranks every system@model by net accuracy on the same 18 cases. "
+      "Every chart is a comparison, never a lone number: the first two rank every system@model by safe rate and by precision on the same 18 cases. "
       "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
       "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
-     ("pareto_net", "sys_net", "mod_net", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
+     ("pareto_safe", "pareto_precision", "pareto_net", "sys_safe", "mod_safe", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
     ("Which system?",
      ("VERDICT on net accuracy (correct minus misleading): see the first chart; the agent arms fail silently (cap-hits) where the baseline answers wrongly, and the skill trades cap-hits for fabrication. Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
      "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
      "abstention), whether the loop pays off more on a stronger model, then dollars, seconds, tool calls and correct outcomes per dollar."),
-     ("sys_net", "sys_correct", "sys_misleading", "sys_silent", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
+     ("sys_safe", "sys_precision", "sys_verbatim", "sys_net", "sys_correct", "sys_misleading", "sys_silent", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
     ("Which model?",
      ("VERDICT on net accuracy (correct minus misleading): Gemini 3.1 flash lite, the model that fails silently rather than misleadingly; Qwen 3.7 flash the cost floor; Haiku out of the loop. The net-accuracy list across every system@model is the deployment ranking. Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
      "then reliability (cap-hits, execution failures), then the two numbers a deployment decision turns on: correct outcomes per dollar and "
      "dollars per correct outcome. The Pareto list ranks every system@model by correct outcomes per dollar; the judge panel's chart is the "
      "judges' view of the same race."),
-     ("mod_net", "mod_correct", "mod_misleading", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto_net", "pareto", "panel_professional")),
+     ("mod_safe", "mod_precision", "mod_verbatim", "mod_net", "mod_correct", "mod_misleading", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto_net", "pareto", "panel_professional")),
     ("Which retriever?",
      ("VERDICT: hybrid_rrf, no reranker. Six retrievers on the same 58 dev queries, scored against the expert's gold span: hit@5, hit@10 and mean reciprocal rank. "
      "Hybrid (dense + BM25 with reciprocal-rank fusion) wins; reranking adds nothing."),
