@@ -71,6 +71,10 @@ SEQUENCE: list[MilestoneSpec] = [
     # so no factory spend gate; the gate itself is offline.
     MilestoneSpec(id="m9", title="MLflow mirror of the Braintrust showroom: same rows, second cockpit, judge alignment",
                   spec_path="specs/milestones/m9.md", gate_marker="gate_m9", needs_model=True),
+    # M9b: the config decision on MLflow's own strengths (nested run tree, multi-metric charts, Pareto
+    # artifacts, metric search, registry). No model calls by contract.
+    MilestoneSpec(id="m9b", title="The config decision on MLflow's own strengths: quality, dollars and latency across A-D and the models",
+                  spec_path="specs/milestones/m9b.md", gate_marker="gate_m9b"),
     # M8 is registered but its spec is a DRAFT (engineer's retrieval/benchmark directive of
     # 2026-09-06); `adw_mvp.py` must not launch it until the deliverables, budget and gate are set.
     # Run with `--only m8` after the spec is finalised.
