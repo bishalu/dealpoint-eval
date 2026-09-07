@@ -1,19 +1,15 @@
 {
   "mode": "live",
-  "started_at": "2026-09-07T15:16:34.128231+00:00",
+  "started_at": "2026-09-07T15:45:16.295248+00:00",
   "project": "dealpoint-eval",
   "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
   "org": "bishal-ai",
   "env_file": ".env.braintrust",
   "ledger": "/home/exedev/repos/dealpoint-eval/data/reports/orgs/bishal-ai/braintrust_score_ledger.jsonl",
-  "promptlogs": {
-    "variants": [
-      "base",
-      "terse",
-      "cite-first",
-      "abstain-first"
-    ],
-    "written_this_run": 67
+  "mirror": {
+    "rows_indexed": 426,
+    "logs_updated": 266,
+    "logs_unmatched": 0
   },
-  "finished_at": "2026-09-07T15:16:38.335334+00:00"
+  "finished_at": "2026-09-07T15:45:21.971220+00:00"
 }

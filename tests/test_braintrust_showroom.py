@@ -212,7 +212,8 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
 
     idx = stored_row_index()
     ctx = _mirror_context()
-    m = mirror_for("contract_144__q05", "D@glm", idx[("contract_144__q05", "D@glm")], ctx)
+    m = mirror_for("contract_144__q05", "D@glm", idx[("contract_144__q05", "D@glm")], ctx, category="judged")
+    assert m["correct_all"] == 1 and m["comparable"] == 1 and m["case_pool"].startswith("judged-18")
     assert m["system_label"] == "D: agent + hybrid + skill" and m["model_label"] == "glm" and m["variant_label"] == "D@glm"
     assert m["ga_all"] == 1 and m["ga_scored"] == 1 and m["cap_hit"] == 0 and m["tool_calls"] == 5
     assert 0 < m["usd"] < 0.01 and 30 < m["wall_s"] < 60
@@ -224,8 +225,13 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
     m2 = mirror_for("contract_144__q05", "D@z-ai/glm-5.3-flash", idx[("contract_144__q05", "D@z-ai/glm-5.3-flash")], ctx)
     assert m2["variant_label"] == "D@glm" and m2["judge_reasoning"] == m["judge_reasoning"]
     # the redacted twin: a cap-hit with no grounded accuracy, counted as 0 over all cases, abstain wrong
-    t = mirror_for("contract_39__redacted_q05", "D@glm", idx[("contract_39__redacted_q05", "D@glm")], ctx)
+    t = mirror_for("contract_39__redacted_q05", "D@glm", idx[("contract_39__redacted_q05", "D@glm")], ctx, category="judged")
     assert t["cap_hit"] == 1 and t["ga_scored"] is None and t["ga_all"] == 0 and t["abstain_correct"] == 0 and t["case_set"] == "counterfactual"
+    assert t["correct_all"] == 0
+    a = mirror_for("contract_39__redacted_q05", "A@haiku", idx[("contract_39__redacted_q05", "A@haiku")], ctx, category="judged")
+    assert a["abstain_correct"] == 1 and a["correct_all"] == 1, "a correct abstention on a counterfactual is a correct outcome"
+    r = mirror_for("contract_0__q01", "D@openai/gpt-5.6-luna-pro", idx[("contract_0__q01", "D@openai/gpt-5.6-luna-pro")], ctx, category="successful_direct")
+    assert r["comparable"] == 0, "a representative trace of a partial run never ranks against the slate"
 
 
 def test_retrieval_log_rows_cover_the_tournament_once():

@@ -396,6 +396,13 @@ def view_definitions() -> list[dict]:
     ]
 
 
+# Every ranking chart compares like with like: canonical traces only (`comparable = 1`: the judged and
+# sweep traces of the five slate models; no representative picks, live replays or partial runs) and one
+# case pool at a time. The five arm-D models share the 18 judged cases; the four GLM systems share the
+# 32-case subset. `correct_all` credits a correct abstention on a counterfactual as a correct outcome.
+GLM32 = "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.category = 'agent' or metadata.category = 'judged')"
+D18 = "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'"
+JUDGED18 = "metadata.comparable = 1 and metadata.category = 'judged'"
 AGENT_LOGS = "(metadata.category = 'agent' or metadata.category = 'judged')"
 
 
@@ -409,67 +416,70 @@ def dashboard_charts() -> list[dict]:
     of this dashboard did; (2) a monitor chart is either a time series (x = time, right for production
     traffic) or a `scalars` toplist (groups ranked by an aggregate, x = the group). Experiment comparisons
     are not time series. So every chart here is a toplist over the METADATA MIRROR the showroom merges
-    onto each log (`braintrust_showroom.metadata_mirror`: self-describing labels, obj/judge/human/DeepEval
-    numbers rescaled to 0..1, cost, latency, cap-hits), plus the retrieval and prompt-variant logs.
+    onto each log (`braintrust_showroom.metadata_mirror`: self-describing labels, one short model
+    vocabulary, obj/judge/human/DeepEval numbers rescaled to 0..1, cost, latency, cap-hits, the fair
+    `correct_all` and `comparable` fields), plus the retrieval and prompt-variant logs.
     """
+    sys_t = "the four systems on the same 32 cases, GLM 5.3 flash"
+    mod_t = "arm D on the same 18 cases, five models"
     return [
-        {"title": "Which system? A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill: grounded accuracy over every answerable test case (unanswered = 0), GLM", "kind": "toplist",
-         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"]},
-        {"title": "Which system? Cap-hit rate (loop never stops), GLM", "kind": "toplist",
-         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
-        {"title": "Which system? Fabrication rate (invented clauses), GLM", "kind": "toplist",
-         "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
-        {"title": "Which system? Correct abstention on counterfactuals (the definition is not there)", "kind": "toplist",
-         "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": [f"metadata.case_set = 'counterfactual' and {AGENT_LOGS}"]},
-        {"title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku (answerable test cases)", "kind": "toplist",
-         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.variant_label"],
-         "filters": [f"(metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku') and metadata.case_set = 'test' and {AGENT_LOGS}"]},
+        {"title": f"Which system? A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill: correct outcome over every case ({sys_t}; a correct abstention counts)", "kind": "toplist",
+         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        {"title": f"Which system? Cap-hit rate, the loop never stops ({sys_t})", "kind": "toplist",
+         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        {"title": f"Which system? Fabrication rate, invented clauses ({sys_t})", "kind": "toplist",
+         "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        {"title": "Which system? Correct abstention when the definition is not there (counterfactual cases, all comparable traces)", "kind": "toplist",
+         "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": ["metadata.comparable = 1 and metadata.case_set = 'counterfactual'"]},
+        {"title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku, the same 18 cases, correct outcome", "kind": "toplist",
+         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.variant_label"],
+         "filters": [f"{JUDGED18} and (metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku')"]},
         {"title": "Which retriever? Gold-span hit@5 on the 58 dev queries", "kind": "toplist",
          "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         {"title": "Which retriever? Mean reciprocal rank of the gold span", "kind": "toplist",
          "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
-        {"title": "Which model? Grounded accuracy over every answerable test case, arm D (agent + hybrid + skill)", "kind": "toplist",
-         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and metadata.case_set = 'test' and {AGENT_LOGS}"]},
-        {"title": "Which model? Dollars per case, arm D (realized, from the local ledger)", "kind": "toplist",
-         "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"], "unit": "cost"},
-        {"title": "Which model? Seconds per case, arm D", "kind": "toplist",
-         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"], "unit": "duration"},
-        {"title": "Which model? Cap-hit rate, arm D", "kind": "toplist",
-         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"]},
-        {"title": "Which model? Execution-failure rate (no finding produced), arm D", "kind": "toplist",
-         "measure": "avg(metadata.execution_failed)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"]},
-        {"title": "What does each system cost? Dollars per case, GLM (realized, local ledger)", "kind": "toplist",
-         "measure": "avg(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "cost"},
-        {"title": "How long does each system take? Seconds per case, GLM", "kind": "toplist",
-         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "duration"},
-        {"title": "How much does each system search? Tool calls per case, GLM", "kind": "toplist",
-         "measure": "avg(metadata.tool_calls)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "count"},
-        {"title": "Accuracy per dollar: correct answers per $ by system, GLM", "kind": "toplist",
-         "measure": "sum(metadata.ga_all) / sum(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "count"},
-        {"title": "Accuracy per dollar: correct answers per $ by model, arm D", "kind": "toplist",
-         "measure": "sum(metadata.ga_all) / sum(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "count"},
-        {"title": "Cost of a correct answer: dollars per correct answer by model, arm D", "kind": "toplist",
-         "measure": "sum(metadata.usd) / sum(metadata.ga_all)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "cost"},
-        {"title": "Tail latency: p90 seconds per case by model, arm D", "kind": "toplist",
-         "measure": "percentile(metadata.wall_s, 0.9)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "duration"},
-        {"title": "Accuracy per dollar across every system@model (the Pareto question in one list)", "kind": "toplist",
-         "measure": "sum(metadata.ga_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [f"metadata.case_set = 'test' and {AGENT_LOGS}"], "unit": "count"},
+        {"title": f"Which model? Correct outcome over every case ({mod_t}; a correct abstention counts)", "kind": "toplist",
+         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        {"title": f"Which model? Dollars per case, realized from the local ledger ({mod_t})", "kind": "toplist",
+         "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
+        {"title": f"Which model? Seconds per case ({mod_t})", "kind": "toplist",
+         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
+        {"title": f"Which model? Cap-hit rate ({mod_t})", "kind": "toplist",
+         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        {"title": f"Which model? Execution-failure rate, no finding produced ({mod_t})", "kind": "toplist",
+         "measure": "avg(metadata.execution_failed)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        {"title": f"What does each system cost? Dollars per case ({sys_t})", "kind": "toplist",
+         "measure": "avg(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "cost"},
+        {"title": f"How long does each system take? Seconds per case ({sys_t})", "kind": "toplist",
+         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "duration"},
+        {"title": f"How much does each system search? Tool calls per case ({sys_t})", "kind": "toplist",
+         "measure": "avg(metadata.tool_calls)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
+        {"title": f"Accuracy per dollar: correct outcomes per $ by system ({sys_t})", "kind": "toplist",
+         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
+        {"title": f"Accuracy per dollar: correct outcomes per $ by model ({mod_t})", "kind": "toplist",
+         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "count"},
+        {"title": f"Cost of a correct outcome: dollars per correct outcome by model ({mod_t})", "kind": "toplist",
+         "measure": "sum(metadata.usd) / sum(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
+        {"title": f"Tail latency: p90 seconds per case by model ({mod_t})", "kind": "toplist",
+         "measure": "percentile(metadata.wall_s, 0.9)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
+        {"title": "Accuracy per dollar across every system@model on the same 18 cases (the Pareto question in one list)", "kind": "toplist",
+         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18], "unit": "count"},
         {"title": "Judges vs the lawyer: mean of three judges next to the human, 24 blinded packets (rubric 1-5 as 0-1)", "kind": "toplist",
          "measure": [f"avg(metadata.judge_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")]
          + [f"avg(metadata.human_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")],
-         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         {"title": "Which judge? Distance from the lawyer per judge family, reasoning (lower is better, 24 packets)", "kind": "toplist",
          "measure": [f"avg(metadata.judge_{f}_reasoning_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
-         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         {"title": "Which judge? Distance from the lawyer per judge family, trajectory (the dimension judges get wrong)", "kind": "toplist",
          "measure": [f"avg(metadata.judge_{f}_trajectory_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
-         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         {"title": "Judge panel: professional quality by system@model, 108 judged traces", "kind": "toplist",
-         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         {"title": "Judge panel: evidence quality by system@model, 108 judged traces", "kind": "toplist",
-         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         {"title": "DeepEval vs deterministic truth: task-completion agreement rate by system@model", "kind": "toplist",
-         "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},
+         "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         {"title": "Which prompt? Judge: professional by arm-A prompt variant, 18 packets, GLM", "kind": "toplist",
          "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
         {"title": "Which prompt? Judge: evidence by arm-A prompt variant", "kind": "toplist",

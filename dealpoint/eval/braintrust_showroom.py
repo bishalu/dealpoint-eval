@@ -348,8 +348,11 @@ def _flag(v) -> int | None:
     return None if v is None else int(bool(v))
 
 
+CANONICAL_CATEGORIES = ("judged", "agent")
+
+
 def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | None = None, human: dict | None = None,
-                    deepeval: dict | None = None, per_judge: dict | None = None) -> dict:
+                    deepeval: dict | None = None, per_judge: dict | None = None, category: str | None = None) -> dict:
     """Every number the dashboard needs, as log METADATA (free) rather than scores (metered), with one
     label vocabulary across all log families (short model names, self-describing system labels).
     The same values live as real scores on the experiments; this is the mirror the Monitor page can see."""
@@ -374,6 +377,16 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
         "tool_calls": scores.get("tool_calls") if scores.get("tool_calls") is not None else rec.get("tool_calls"),
         "has_human": int(bool(human)),
     }
+    # Fair comparison fields. `correct_all` credits a correct abstention on a counterfactual case (where
+    # there is nothing to ground) as a correct outcome, so an "accuracy over all cases" that includes
+    # counterfactuals is not rigged against them. `comparable` marks the canonical sweep and judged
+    # traces of the five slate models; representative picks, live replays and partial runs (a model that
+    # never completed its sweep) are excluded from any chart or Pattern that ranks variants.
+    # `case_pool` names the case set the trace belongs to, so a comparison stays within one pool.
+    case_set = out["case_set"]
+    out["correct_all"] = int(bool(ga) or (case_set == "counterfactual" and bool(scores.get("abstain_correct"))))
+    out["comparable"] = int(category in CANONICAL_CATEGORIES and short in SHORT_MODEL.values())
+    out["case_pool"] = {"judged": "judged-18 (the same 18 cases for every variant)", "agent": "test-32 (the frozen 32-case subset)"}.get(category or "", "other")
     for d in JUDGE_DIMS:
         out[f"judge_{d}"] = _rescale((judge_dims or {}).get(d))
         out[f"human_{d}"] = _rescale((human or {}).get(d))
@@ -405,7 +418,7 @@ def _mirror_context() -> dict:
             "packet_id_for": _packet_id_for, "judge_dims_for": _mean_judge_dims_for_packet}
 
 
-def mirror_for(case_id: str, variant_id: str, row: dict, ctx: dict) -> dict:
+def mirror_for(case_id: str, variant_id: str, row: dict, ctx: dict, category: str | None = None) -> dict:
     """`metadata_mirror` for one (case, variant) under either id convention (`D@glm` or `D@z-ai/glm-5.3-flash`)."""
     from dealpoint.eval.braintrust_sync import _judged_variant_id_for
     from dealpoint.eval.cases import find_case
@@ -422,7 +435,7 @@ def mirror_for(case_id: str, variant_id: str, row: dict, ctx: dict) -> dict:
     human = ctx["human"].get(pid)
     deepeval = ctx["deepeval"].get((case_id, short_variant))
     row = {**row, "arm": row.get("arm") or arm, "model": row.get("model") or model}
-    return metadata_mirror(row, case=case, judge_dims=judge_dims, human=human, deepeval=deepeval, per_judge=per_judge or None)
+    return metadata_mirror(row, case=case, judge_dims=judge_dims, human=human, deepeval=deepeval, per_judge=per_judge or None, category=category)
 
 
 def stored_row_index() -> dict[tuple[str, str], dict]:
@@ -560,7 +573,7 @@ def _log_one_tree(logger, p: dict, manifest: dict) -> str | None:
     meta = {"case_id": p["case_id"], "variant_id": p["variant_id"], "arm": arm, "model": model, "category": p["category"],
             "status": (row.get("record") or {}).get("status") or row.get("status"),
             "obj_grounded_accuracy": (row.get("scores") or {}).get("grounded_accuracy"), **_case_info(p["case_id"]),
-            **mirror_for(p["case_id"], p["variant_id"], row, p.get("ctx") or _mirror_context())}
+            **mirror_for(p["case_id"], p["variant_id"], row, p.get("ctx") or _mirror_context(), category=p["category"])}
     root = logger.start_span(name=f"{p['case_id']} | {p['variant_id']}")
     root.log(input=(case or {}).get("question_text") or p["case_id"], metadata=meta)
     n = 0
@@ -638,7 +651,7 @@ def step_mirror(api: Api, live: bool, manifest: dict) -> None:
         if row is None:
             unmatched += 1
             continue
-        events.append({"id": e["id"], "metadata": mirror_for(m["case_id"], m["variant_id"], row, ctx), "_is_merge": True})
+        events.append({"id": e["id"], "metadata": mirror_for(m["case_id"], m["variant_id"], row, ctx, category=m.get("category")), "_is_merge": True})
     _assert_scoreless(events)
     for i in range(0, len(events), 100):
         api.post(f"project_logs/{PROJECT_ID}/insert", {"events": events[i:i + 100]})

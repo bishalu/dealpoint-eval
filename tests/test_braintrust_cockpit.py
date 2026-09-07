@@ -187,6 +187,10 @@ def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
             assert "scores." not in m
         assert all(g.startswith("metadata.") for g in chart["group_by"])
         assert chart["filters"], "every chart names the log family it aggregates"
+        f = " ".join(chart["filters"])
+        if "system_label" in str(chart["group_by"]) or "model_label" in str(chart["group_by"]) or "variant_label" in str(chart["group_by"]):
+            assert "metadata.comparable = 1" in f, chart["title"]
+        assert "ga_all" not in str(chart["measure"]), "rank on correct_all, which credits correct abstentions"
         rest = _chart_rest_definition(chart)
         assert rest["type"] == "scalars" and rest["viz"]["type"] == "toplist"
         assert rest["filters"] == [{"btql": f} for f in chart["filters"]]
