@@ -8,24 +8,28 @@ quality cockpit. Nothing you click was made by hand: two commands rebuilt this p
 `data/reports/` in Git.
 
 Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
-Dashboard: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2
 
-**The dashboard, one question per chart.** Braintrust's dashboard is the monitor over project logs, so it
-cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
-therefore mirrors every number into log metadata (free; scores are the metered thing) and the dashboard is
-twenty-eight ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
-abstention on counterfactuals, A to D on GLM, the ladder spelled out in the first title), *Does the loop
-pay off more on the stronger model?* (A and D on GLM and Haiku), *Which retriever?* (hit@5 and MRR, six
-retrievers on the 58 dev queries), *Which model?* (accuracy, dollars, seconds, cap-hits, execution
-failures, arm D on five models), the cost series (dollars, seconds and tool calls per case by system;
-correct answers per dollar by system, by model and across every system@model; dollars per correct answer
-and p90 latency by model), *Judges vs the lawyer* (four dimensions, 24 packets), *Which judge?*
-(each family's distance from the lawyer on reasoning and on trajectory), the judge panel by system@model,
-DeepEval's agreement with truth, and *Which prompt?* (the four arm-A prompts, judged). Every ranking chart compares one case pool at a time (the five arm-D models on
-the same 18 judged cases, the four systems on the same 32) and only canonical traces (`comparable = 1`:
-no representative picks, live replays or partial runs). Accuracy there is "correct outcome over every
-case": an unanswered case is wrong, a correct abstention on a counterfactual is right. It reads lower than
-the "of scored cases" figures in the reports; both are true, say which one you mean. If you only get one screen, this is it; every chart has a stop below that explains it.
+**Six dashboards, one question each.** Braintrust's dashboards are the monitor over project logs, so
+they cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
+therefore mirrors every number into log metadata (free; scores are the metered thing), every chart is a
+ranked bar list with the groups on the axis, the dashboard's name is the question, and the time range is
+pinned to 30 days so batch-ingested logs never fall out of a sliding window.
+
+| dashboard | what it ranks | link |
+|---|---|---|
+| DealPoint eval overview | the six headline charts, one per question below | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2 |
+| Which system? | A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill on the same 32 cases: correct outcome, cap-hits, fabrication, abstention, the loop on GLM vs Haiku, dollars, seconds, tool calls, correct outcomes per dollar | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/8e0003f4-5840-45b3-bc9a-86fcb686ec1a |
+| Which model? | arm D on the same 18 cases, five models: correct outcome, dollars, seconds, p90, cap-hits, execution failures, per dollar, dollars per correct outcome, the Pareto list across every system@model | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
+| Which retriever? | six retrievers on the 58 dev queries: hit@5, hit@10, MRR | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/32c5a4be-7898-4630-af11-ca40e743e9e4 |
+| Judges and the lawyer | mean of three judges next to the lawyer, each judge family's distance from the lawyer, the panel by system@model, DeepEval's agreement with truth | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
+| Which prompt? | the four arm-A prompts, judged on professional quality, evidence and reasoning | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
+
+Every ranking chart compares one case pool at a time (the five arm-D models on the same 18 judged cases,
+the four systems on the same 32) and only canonical traces (`comparable = 1`: no representative picks,
+live replays or partial runs). Accuracy there is "correct outcome over every case": an unanswered case
+is wrong, a correct abstention on a counterfactual is right. It reads lower than the "of scored cases"
+figures in the reports; both are true, say which one you mean. If you only get one screen, the overview
+is it; every chart has a stop below that explains it.
 
 **The spine.** One question, MAUD's `q05`: *Does the agreement's definition of Knowledge include
 constructive knowledge?* Two options, "Constructive knowledge" or "Actual knowledge", plus "ABSTAIN" when
@@ -267,8 +271,8 @@ https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=a82535ee
 https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=3fbc27c3-463f-4ff7-9b4b-60f11413d446
 
 Failure attribution is the numeric version of stop 4: across the 266 logs, arm D hit the tool cap 54 times
-in 149 runs, arm B 14 in 32, the pipeline never (it cannot). The dashboard's first chart, "Traces by status,
-grouped by arm", is the same picture over the Logs.
+in 149 runs, arm B 14 in 32, the pipeline never (it cannot). The "Which system?" dashboard's cap-hit chart
+is the same picture over the Logs.
 
 One investigation, three tools, in this order:
 

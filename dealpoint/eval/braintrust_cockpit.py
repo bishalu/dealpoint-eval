@@ -404,91 +404,92 @@ GLM32 = "metadata.comparable = 1 and metadata.model_label = 'glm' and (metadata.
 D18 = "metadata.comparable = 1 and metadata.arm = 'D' and metadata.category = 'judged'"
 JUDGED18 = "metadata.comparable = 1 and metadata.category = 'judged'"
 AGENT_LOGS = "(metadata.category = 'agent' or metadata.category = 'judged')"
+DASHBOARD_RANGE = "30d"      # pinned on every dashboard: the logs were batch-ingested in one afternoon, and a
+                             # "recent window" default blanks every chart as soon as that window slides past them
+SYS_POOL = "the four systems on the same 32 cases, GLM 5.3 flash"
+MOD_POOL = "arm D on the same 18 cases, five models"
+JUDGE_DIMS_ = ("reasoning", "evidence", "trajectory", "professional")
+
+
+def chart_catalogue() -> dict[str, dict]:
+    """Every chart, keyed, with a short title (the dashboard's name carries the question). Each is a
+    toplist over the metadata mirror: see `dashboard_definitions` for why nothing here is a time series."""
+    return {
+        "sys_correct": {"title": f"Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL}; a correct abstention counts)",
+                        "measure": "avg(metadata.correct_all)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_cap": {"title": f"Cap-hit rate, the loop never stops ({SYS_POOL})", "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_fab": {"title": f"Fabrication rate, invented clauses ({SYS_POOL})", "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_abstain": {"title": "Correct abstention when the definition is not there (counterfactual cases, all comparable traces)",
+                        "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": ["metadata.comparable = 1 and metadata.case_set = 'counterfactual'"]},
+        "loop_x_model": {"title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku, the same 18 cases, correct outcome",
+                         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.variant_label"],
+                         "filters": [f"{JUDGED18} and (metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku')"]},
+        "sys_usd": {"title": f"Dollars per case, realized from the local ledger ({SYS_POOL})", "measure": "avg(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "cost"},
+        "sys_sec": {"title": f"Seconds per case ({SYS_POOL})", "measure": "avg(metadata.wall_s)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "duration"},
+        "sys_calls": {"title": f"Tool calls per case ({SYS_POOL})", "measure": "avg(metadata.tool_calls)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
+        "sys_per_dollar": {"title": f"Correct outcomes per dollar ({SYS_POOL})", "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
+        "ret_hit5": {"title": "Gold-span hit@5 on the 58 dev queries", "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        "ret_mrr": {"title": "Mean reciprocal rank of the gold span, 58 dev queries", "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        "ret_hit10": {"title": "Gold-span hit@10 on the 58 dev queries", "measure": "avg(metadata.hit_at_10)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        "mod_correct": {"title": f"Correct outcome over every case ({MOD_POOL}; a correct abstention counts)", "measure": "avg(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_usd": {"title": f"Dollars per case, realized from the local ledger ({MOD_POOL})", "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
+        "mod_sec": {"title": f"Seconds per case ({MOD_POOL})", "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
+        "mod_p90": {"title": f"Tail latency, p90 seconds per case ({MOD_POOL})", "measure": "percentile(metadata.wall_s, 0.9)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
+        "mod_cap": {"title": f"Cap-hit rate ({MOD_POOL})", "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_fail": {"title": f"Execution-failure rate, no finding produced ({MOD_POOL})", "measure": "avg(metadata.execution_failed)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_per_dollar": {"title": f"Correct outcomes per dollar ({MOD_POOL})", "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "count"},
+        "mod_usd_per_correct": {"title": f"Dollars per correct outcome ({MOD_POOL})", "measure": "sum(metadata.usd) / sum(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
+        "pareto": {"title": "Correct outcomes per dollar across every system@model on the same 18 cases (the Pareto question in one list)",
+                   "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18], "unit": "count"},
+        "judge_vs_lawyer": {"title": "Mean of three judges next to the lawyer, four dimensions, 24 blinded packets (rubric 1-5 as 0-1)",
+                            "measure": [f"avg(metadata.judge_{d})" for d in JUDGE_DIMS_] + [f"avg(metadata.human_{d})" for d in JUDGE_DIMS_],
+                            "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
+        "judge_family_reasoning": {"title": "Distance from the lawyer per judge family, reasoning (lower is better, 24 packets)",
+                                   "measure": [f"avg(metadata.judge_{f}_reasoning_abs_err)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
+        "judge_family_trajectory": {"title": "Distance from the lawyer per judge family, trajectory (the dimension judges get wrong)",
+                                    "measure": [f"avg(metadata.judge_{f}_trajectory_abs_err)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
+        "panel_professional": {"title": "Judge panel, professional quality by system@model, 108 judged traces", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "panel_evidence": {"title": "Judge panel, evidence quality by system@model, 108 judged traces", "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "deepeval": {"title": "DeepEval vs deterministic truth: task-completion agreement rate by system@model", "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "prompt_professional": {"title": "Judge: professional by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
+        "prompt_evidence": {"title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
+        "prompt_reasoning": {"title": "Judge: reasoning by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_reasoning)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
+    }
+
+
+DASHBOARDS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("DealPoint eval overview", ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_professional")),
+    ("Which system?", ("sys_correct", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
+    ("Which model?", ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto")),
+    ("Which retriever?", ("ret_hit5", "ret_hit10", "ret_mrr")),
+    ("Judges and the lawyer", ("judge_vs_lawyer", "judge_family_reasoning", "judge_family_trajectory", "panel_professional", "panel_evidence", "deepeval")),
+    ("Which prompt?", ("prompt_professional", "prompt_evidence", "prompt_reasoning")),
+)
 
 
 def dashboard_charts() -> list[dict]:
-    """The `DealPoint eval overview` dashboard, one engineering question per chart, as data (never a
-    string template) so a fake-client test can assert on the structure directly.
+    """The overview dashboard's charts (the first entry of DASHBOARDS)."""
+    return dashboard_definitions()[0]["charts"]
+
+
+def dashboard_definitions() -> list[dict]:
+    """One dashboard per engineering question, plus a short overview, as data (never a string template).
 
     The dashboard is Braintrust's *monitor* surface over PROJECT LOGS. Two facts shape it: (1) the logs
     carry zero obj/*, judge/*, human/* or li/* scores (those live in experiments, where the Starter plan
     meters them), so a chart over those names is blank by construction, which is what the first version
     of this dashboard did; (2) a monitor chart is either a time series (x = time, right for production
     traffic) or a `scalars` toplist (groups ranked by an aggregate, x = the group). Experiment comparisons
-    are not time series. So every chart here is a toplist over the METADATA MIRROR the showroom merges
-    onto each log (`braintrust_showroom.metadata_mirror`: self-describing labels, one short model
-    vocabulary, obj/judge/human/DeepEval numbers rescaled to 0..1, cost, latency, cap-hits, the fair
-    `correct_all` and `comparable` fields), plus the retrieval and prompt-variant logs.
+    are not time series. So every chart is a toplist over the METADATA MIRROR the showroom merges onto
+    each log (`braintrust_showroom.metadata_mirror`), the dashboard's name carries the question, and the
+    time range is pinned (DASHBOARD_RANGE) so a sliding default window cannot blank batch-ingested logs.
     """
-    sys_t = "the four systems on the same 32 cases, GLM 5.3 flash"
-    mod_t = "arm D on the same 18 cases, five models"
-    return [
-        {"title": f"Which system? A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill: correct outcome over every case ({sys_t}; a correct abstention counts)", "kind": "toplist",
-         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
-        {"title": f"Which system? Cap-hit rate, the loop never stops ({sys_t})", "kind": "toplist",
-         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
-        {"title": f"Which system? Fabrication rate, invented clauses ({sys_t})", "kind": "toplist",
-         "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
-        {"title": "Which system? Correct abstention when the definition is not there (counterfactual cases, all comparable traces)", "kind": "toplist",
-         "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": ["metadata.comparable = 1 and metadata.case_set = 'counterfactual'"]},
-        {"title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku, the same 18 cases, correct outcome", "kind": "toplist",
-         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.variant_label"],
-         "filters": [f"{JUDGED18} and (metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku')"]},
-        {"title": "Which retriever? Gold-span hit@5 on the 58 dev queries", "kind": "toplist",
-         "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
-        {"title": "Which retriever? Mean reciprocal rank of the gold span", "kind": "toplist",
-         "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
-        {"title": f"Which model? Correct outcome over every case ({mod_t}; a correct abstention counts)", "kind": "toplist",
-         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18]},
-        {"title": f"Which model? Dollars per case, realized from the local ledger ({mod_t})", "kind": "toplist",
-         "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
-        {"title": f"Which model? Seconds per case ({mod_t})", "kind": "toplist",
-         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
-        {"title": f"Which model? Cap-hit rate ({mod_t})", "kind": "toplist",
-         "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [D18]},
-        {"title": f"Which model? Execution-failure rate, no finding produced ({mod_t})", "kind": "toplist",
-         "measure": "avg(metadata.execution_failed)", "group_by": ["metadata.model_label"], "filters": [D18]},
-        {"title": f"What does each system cost? Dollars per case ({sys_t})", "kind": "toplist",
-         "measure": "avg(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "cost"},
-        {"title": f"How long does each system take? Seconds per case ({sys_t})", "kind": "toplist",
-         "measure": "avg(metadata.wall_s)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "duration"},
-        {"title": f"How much does each system search? Tool calls per case ({sys_t})", "kind": "toplist",
-         "measure": "avg(metadata.tool_calls)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
-        {"title": f"Accuracy per dollar: correct outcomes per $ by system ({sys_t})", "kind": "toplist",
-         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.system_label"], "filters": [GLM32], "unit": "count"},
-        {"title": f"Accuracy per dollar: correct outcomes per $ by model ({mod_t})", "kind": "toplist",
-         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "count"},
-        {"title": f"Cost of a correct outcome: dollars per correct outcome by model ({mod_t})", "kind": "toplist",
-         "measure": "sum(metadata.usd) / sum(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
-        {"title": f"Tail latency: p90 seconds per case by model ({mod_t})", "kind": "toplist",
-         "measure": "percentile(metadata.wall_s, 0.9)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
-        {"title": "Accuracy per dollar across every system@model on the same 18 cases (the Pareto question in one list)", "kind": "toplist",
-         "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18], "unit": "count"},
-        {"title": "Judges vs the lawyer: mean of three judges next to the human, 24 blinded packets (rubric 1-5 as 0-1)", "kind": "toplist",
-         "measure": [f"avg(metadata.judge_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")]
-         + [f"avg(metadata.human_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")],
-         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        {"title": "Which judge? Distance from the lawyer per judge family, reasoning (lower is better, 24 packets)", "kind": "toplist",
-         "measure": [f"avg(metadata.judge_{f}_reasoning_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
-         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        {"title": "Which judge? Distance from the lawyer per judge family, trajectory (the dimension judges get wrong)", "kind": "toplist",
-         "measure": [f"avg(metadata.judge_{f}_trajectory_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
-         "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        {"title": "Judge panel: professional quality by system@model, 108 judged traces", "kind": "toplist",
-         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        {"title": "Judge panel: evidence quality by system@model, 108 judged traces", "kind": "toplist",
-         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        {"title": "DeepEval vs deterministic truth: task-completion agreement rate by system@model", "kind": "toplist",
-         "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        {"title": "Which prompt? Judge: professional by arm-A prompt variant, 18 packets, GLM", "kind": "toplist",
-         "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
-        {"title": "Which prompt? Judge: evidence by arm-A prompt variant", "kind": "toplist",
-         "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
-    ]
+    cat = chart_catalogue()
+    return [{"name": name, "view_type": "monitor", "charts": [{**cat[k], "kind": "toplist"} for k in keys]} for name, keys in DASHBOARDS]
 
 
 def dashboard_definition() -> dict:
-    return {"name": "DealPoint eval overview", "view_type": "monitor", "charts": dashboard_charts()}
+    return dashboard_definitions()[0]
 
 
 # --- Topics + one Pattern (spec section 7) ----------------------------------
@@ -881,7 +882,8 @@ def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, 
         # confirmed live 2026-09-06: a monitor view needs `options.viewType ==
         # "monitor"` alongside `view_data.custom_charts`, or the dashboard
         # renders with no chart layout even though the POST succeeds.
-        body["options"] = {"viewType": "monitor", "options": {"projectId": object_id, "type": object_type}}
+        body["options"] = {"viewType": "monitor", "options": {"projectId": object_id, "type": object_type,
+                                                              "spanType": "range", "rangeValue": DASHBOARD_RANGE}}
     if match is None:
         result = rest_client.post("/v1/view", body)
         return {"id": result.get("id"), "created": True}
@@ -901,11 +903,13 @@ def sync_views_and_dashboard(rest_client, hero_experiment_id: str | None = None)
             {"name": v["name"], "view_type": v["view_type"], "caption": v["caption"], "object_type": object_type, "object_id": object_id, **upserted}
         )
 
-    dash = dashboard_definition()
-    dash_upserted = _upsert_view(rest_client, "project", project_id, dash["view_type"], dash["name"], _view_data_for({"custom_charts": dash["charts"]}))
-    dashboard_result = {"name": dash["name"], **dash_upserted}
+    dashboards_result = []
+    for dash in dashboard_definitions():
+        dash_upserted = _upsert_view(rest_client, "project", project_id, dash["view_type"], dash["name"], _view_data_for({"custom_charts": dash["charts"]}))
+        dashboards_result.append({"name": dash["name"], "n_charts": len(dash["charts"]), **dash_upserted})
+    dashboard_result = dashboards_result[0]
 
-    return {"project_id": project_id, "views": views_result, "dashboard": dashboard_result}
+    return {"project_id": project_id, "views": views_result, "dashboard": dashboard_result, "dashboards": dashboards_result}
 
 
 def sync_topics_and_pattern(rest_client, project_id: str) -> dict:

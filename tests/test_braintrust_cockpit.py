@@ -166,34 +166,52 @@ def test_view_btql_filters_match_the_documented_queries_verbatim():
     assert by_name["Trajectory inefficiency"]["definition"]["btql"] == documented_btql_query(6)
 
 
-def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
+def test_dashboards_are_one_question_each_over_the_metadata_mirror():
     """The dashboard is the monitor surface over project logs; the logs carry no obj/*, judge/*,
     human/* or li/* scores (those live in experiments), so every chart aggregates the metadata mirror
-    the showroom merges onto logs, as a toplist (groups on the axis, not time), one question each."""
-    from dealpoint.eval.braintrust_cockpit import _chart_rest_definition, dashboard_definition
+    the showroom merges onto logs, as a toplist (groups on the axis, not time). The dashboard name is
+    the question, chart titles carry no prefix, ranking charts compare one case pool of comparable traces."""
+    from dealpoint.eval.braintrust_cockpit import (
+        DASHBOARDS,
+        _chart_rest_definition,
+        chart_catalogue,
+        dashboard_definitions,
+    )
 
-    dash = dashboard_definition()
-    assert dash["name"] == "DealPoint eval overview"
-    assert len(dash["charts"]) == 28
-    assert sum(1 for c in dash["charts"] if "usd" in str(c["measure"]) or "wall_s" in str(c["measure"]) or "tool_calls" in str(c["measure"])) == 10
-    assert "A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill" in dash["charts"][0]["title"]
-    questions = [c["title"].split("?")[0] for c in dash["charts"] if "?" in c["title"]]
-    assert {"Which system", "Which retriever", "Which model", "Which prompt"} <= set(questions)
-    assert any("lawyer" in c["title"] for c in dash["charts"]) and any("DeepEval" in c["title"] for c in dash["charts"])
-    for chart in dash["charts"]:
-        measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
-        for m in measures:
-            assert m.startswith(("avg(metadata.", "count(", "sum(metadata.", "percentile(metadata.")), m
-            assert "scores." not in m
-        assert all(g.startswith("metadata.") for g in chart["group_by"])
-        assert chart["filters"], "every chart names the log family it aggregates"
-        f = " ".join(chart["filters"])
-        if "system_label" in str(chart["group_by"]) or "model_label" in str(chart["group_by"]) or "variant_label" in str(chart["group_by"]):
-            assert "metadata.comparable = 1" in f, chart["title"]
-        assert "ga_all" not in str(chart["measure"]), "rank on correct_all, which credits correct abstentions"
-        rest = _chart_rest_definition(chart)
-        assert rest["type"] == "scalars" and rest["viz"]["type"] == "toplist"
-        assert rest["filters"] == [{"btql": f} for f in chart["filters"]]
+    dashes = dashboard_definitions()
+    assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "Which prompt?"]
+    assert len(dashes[0]["charts"]) == 6
+    used = {k for _, keys in DASHBOARDS for k in keys}
+    assert used == set(chart_catalogue()), "every catalogued chart is on some dashboard"
+    for dash in dashes:
+        for chart in dash["charts"]:
+            assert not chart["title"].startswith("Which "), chart["title"]
+            measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
+            for m in measures:
+                assert m.startswith(("avg(metadata.", "count(", "sum(metadata.", "percentile(metadata.")), m
+                assert "scores." not in m and "ga_all" not in m
+            assert all(g.startswith("metadata.") for g in chart["group_by"])
+            assert chart["filters"], "every chart names the log family it aggregates"
+            if any(g.endswith(("system_label", "model_label", "variant_label")) for g in chart["group_by"]):
+                assert "metadata.comparable = 1" in " ".join(chart["filters"]), chart["title"]
+            rest = _chart_rest_definition(chart)
+            assert rest["type"] == "scalars" and rest["viz"]["type"] == "toplist"
+    assert "A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill" in dashes[1]["charts"][0]["title"]
+
+
+def test_monitor_views_pin_a_time_range():
+    from dealpoint.eval.braintrust_cockpit import (
+        DASHBOARD_RANGE,
+        _upsert_view,
+        _view_data_for,
+        dashboard_definitions,
+    )
+
+    rest = FakeRestClient()
+    dash = dashboard_definitions()[0]
+    _upsert_view(rest, "project", "proj-1", "monitor", dash["name"], _view_data_for({"custom_charts": dash["charts"]}))
+    body = rest.post_calls[-1][1]
+    assert body["options"]["options"]["spanType"] == "range" and body["options"]["options"]["rangeValue"] == DASHBOARD_RANGE
 
 
 def test_sync_views_and_dashboard_idempotent_second_run_creates_nothing_new():
@@ -202,13 +220,13 @@ def test_sync_views_and_dashboard_idempotent_second_run_creates_nothing_new():
     rest = FakeRestClient()
     r1 = sync_views_and_dashboard(rest)
     n1 = len(rest.views)
-    ids1 = sorted(v["id"] for v in r1["views"]) + [r1["dashboard"]["id"]]
+    ids1 = sorted(v["id"] for v in r1["views"]) + sorted(d["id"] for d in r1["dashboards"])
 
     r2 = sync_views_and_dashboard(rest)
     n2 = len(rest.views)
-    ids2 = sorted(v["id"] for v in r2["views"]) + [r2["dashboard"]["id"]]
+    ids2 = sorted(v["id"] for v in r2["views"]) + sorted(d["id"] for d in r2["dashboards"])
 
-    assert n1 == n2 == 9  # 8 views + 1 dashboard
+    assert n1 == n2 == 14  # 8 views + 6 dashboards
     assert ids1 == ids2
     assert all(not v["created"] for v in r2["views"])
     assert r2["dashboard"]["created"] is False
