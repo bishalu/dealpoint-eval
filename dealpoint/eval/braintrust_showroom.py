@@ -15,6 +15,9 @@ So this module never writes a score. It only adds the things Braintrust does not
     judges   the calibrated rubric as four Braintrust LLM scorers on the OpenRouter judge models (your key,
              your ledger; creation is free, invocation is an OpenRouter call) via `bt scorers create`
     views    saved comparison views: arms, models, judges, RAG
+    playground  the 18 judged cases as the exact arm-A packets (a dataset) + base/terse/cite-first/abstain-first
+             as chat prompts, so the Playground prompt A/B/C holds everything but the system prompt fixed;
+             `--live --run-playground` pre-runs it server-side (POST /v1/eval) as four experiments (scores!)
 
 Dry run is the default and prints the plan; `--live` executes. Every live write is recorded in the
 score ledger with n_scores=0, and a guard asserts no payload ever carries a `scores` key.
@@ -61,7 +64,7 @@ ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
 # (tests) or BRAINTRUST_LEDGER_FILE (explicit override) wins over the org-derived path.
 LEDGER_PATH: Path | None = None
 MANIFEST_PATH: Path | None = None
-STEPS = ("tag", "rows", "logs", "review", "params", "prompts", "judges", "views")
+STEPS = ("tag", "rows", "logs", "review", "params", "prompts", "judges", "views", "playground")
 
 _ARM = re.compile(r"^(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
 _JUDGED = re.compile(r"^judged-(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
@@ -75,46 +78,91 @@ def _model_from_slug(slug: str) -> str:
     return slug.replace("_", "/", 1)
 
 
+SHORT_MODEL = {"z-ai/glm-5.3-flash": "glm", "anthropic/claude-haiku-4.5": "haiku", "deepseek/deepseek-v4-flash": "deepseek-v4-flash",
+               "qwen/qwen3.7-flash": "qwen3.7-flash", "google/gemini-3.1-flash-lite": "gemini-3.1-flash-lite"}
+ARM_SHAPE = {"A": ("pipeline", "dense", "off"), "B": ("agent", "dense", "off"), "C": ("agent", "hybrid_rrf", "off"), "D": ("agent", "hybrid_rrf", "on")}
+ARM_STEP = {"A": "the control", "B": "differs from A by: loop (pipeline -> agent)", "C": "differs from B by: retriever (dense -> hybrid_rrf)",
+            "D": "differs from C by: skill (off -> on)"}
+RAG_CONFIG = {"m3-dense": "dense", "m3-bm25": "bm25", "m3-hybrid": "hybrid_rrf", "m3-hybrid-rerank": "hybrid_rrf_rerank",
+              "m3-fusion": "multi_query_fusion", "m3-fusion-rerank": "multi_query_fusion_rerank",
+              "m7-li-crosscheck": "li_native_bm25", "m7-synthetic": "hybrid_rrf"}
+
+
+def _short(model: str) -> str:
+    return SHORT_MODEL.get(model, model)
+
+
+def _factorial(axis: str, *, varies: str, holds: str, cases: str, scorers: str, description: str, **fields) -> dict:
+    """One schema for every experiment, so the Experiments table reads as a grid once the metadata
+    columns axis / arm / loop / retriever / skill / model / cases are shown: `axis` is the question the
+    experiment belongs to, `varies` the one variable that changes along that axis, `holds` what is fixed."""
+    arm = fields.get("arm")
+    if arm in ARM_SHAPE and "loop" not in fields:
+        fields["loop"], fields["retriever"], fields["skill"] = ARM_SHAPE[arm]
+    tags = [f"axis:{axis}"] + [f"{k}:{fields[k]}" for k in ("arm", "model") if fields.get(k)] + [f"cases:{cases}"]
+    return {"axis": axis, "varies": varies, "holds": holds, "cases": cases, "scorers": scorers, **fields,
+            "tags": tags, "description": f"{axis.upper()} axis. {description} Varies: {varies}. Holds: {holds}. Cases: {cases}. Scores: {scorers}."}
+
+
 def classify_experiment(name: str) -> dict:
-    """Experiment name -> {stage, family, arm, model, tags, description}. Pure, testable."""
+    """Experiment name -> factorial metadata (axis, varies, holds, cases, arm, loop, retriever, skill,
+    model, ...) plus tags and a one-line description. Pure, testable."""
     if m := _ARM.match(name):
         arm, model, sha = m["arm"], _model_from_slug(m["model"]), m["sha"]
-        stage = "arms" if model in (GLM, "anthropic/claude-haiku-4.5") else "models"
-        run = {"e3ee9cc": "M4/M6 canonical run (32-case test subset)", "4d2e361": "M4 first run (original)",
-               "3fcdae7": "M6 Pareto sweep", "c96758b": "M2 smoke", "a357949": "M2 smoke"}.get(sha, sha)
-        return {"stage": stage, "family": "agent", "arm": arm, "model": model, "git_sha": sha,
-                "tags": [f"stage:{stage}", f"arm:{arm}", f"model:{model}"],
-                "description": f"Arm {arm} on {model}. {run}. Same 32 test cases as its siblings; compare case by case."}
+        short = _short(model)
+        cases = "test-18" if short == "haiku" else "test-32"
+        if sha == "3fcdae7" or short not in ("glm", "haiku"):
+            return _factorial("model", varies="model", holds=f"system=D (agent, hybrid_rrf, skill on); cases={cases}", cases=cases,
+                              scorers="obj/* (deterministic, MAUD gold spans)", arm="D", model=short, git_sha=sha, milestone="M6",
+                              description=f"Arm D on {model}, the Pareto sweep run.")
+        return _factorial("system", varies="system A->B->C->D, one config key per step", holds=f"model={short}; cases={cases}; index e2b4a2b97561",
+                          cases=cases, scorers="obj/* (deterministic, MAUD gold spans)", arm=arm, model=short, git_sha=sha, milestone="M4/M4.1",
+                          description=f"Arm {arm} = {ARM_SHAPE[arm][0]} + {ARM_SHAPE[arm][1]}, skill {ARM_SHAPE[arm][2]}, on {model}; {ARM_STEP[arm]}.")
     if m := _JUDGED.match(name):
         arm, model = m["arm"], _model_from_slug(m["model"])
-        return {"stage": "evaluation", "family": "judged-original", "arm": arm, "model": model, "git_sha": m["sha"],
-                "tags": ["stage:evaluation", f"arm:{arm}", f"model:{model}", "milestone:M5"],
-                "description": f"M5 original judged run, arm {arm} on {model}: 18 judged cases, mean-of-three-judges scores."}
+        return _factorial("judge", varies="variant (arm@model) under the same three judges", holds="cases=judged-18; rubric cfda9f8cc401",
+                          cases="judged-18", scorers="judge/* (mean of Mistral, NVIDIA, ByteDance)", arm=arm, model=_short(model), git_sha=m["sha"],
+                          milestone="M5", description=f"Original M5 judged run of {arm}@{_short(model)}.")
     if m := _JUDGE.match(name):
         variant = m["variant"]; arm, short = variant.split("@", 1)
-        return {"stage": "evaluation", "family": "judge", "arm": arm, "model": short, "variant_id": variant,
-                "tags": ["stage:evaluation", f"arm:{arm}", f"variant:{variant}", "milestone:M7"],
-                "description": f"Judge scores (judge/<dimension>, three families averaged) and the lawyer's human/<dimension> scores for {variant} on the 18 judged cases."}
+        return _factorial("judge", varies="variant (arm@model) under the same three judges and the same lawyer", holds="cases=judged-18; rubric cfda9f8cc401; blinded packets",
+                          cases="judged-18", scorers="judge/* (mean of three judge families) + human/* (the lawyer, 24 packets)", arm=arm, model=short,
+                          variant_id=variant, milestone="M5/M7b", description=f"{variant}: judge scores and the lawyer's scores on the same 18 rows.")
     if m := _PARETO.match(name):
-        model = _model_from_slug(m["model"])
-        return {"stage": "economics", "family": "pareto", "arm": "D", "model": model,
-                "tags": ["stage:economics", "arm:D", f"model:{model}", "milestone:M6"],
-                "description": f"M6 Pareto sweep: arm D fixed, model {model}. obj/* scores plus $/case in metadata."}
+        model = _model_from_slug(m["model"]); short = _short(model)
+        cases = "test-18" if short == "haiku" else "test-32"
+        return _factorial("model", varies="model (economics view: $/case, latency in row metadata)", holds=f"system=D; cases={cases}", cases=cases,
+                          scorers="obj/* + $/case, wall_ms in metadata", arm="D", model=short, milestone="M6",
+                          description=f"Arm D on {model}: the same run as D-{m['model']}, one row per case with cost and latency.")
     if m := _RAG.match(name):
-        return {"stage": "rag", "family": "rag", "config": m["config"],
-                "tags": ["stage:rag", f"config:{m['config']}", "milestone:M3/M7a"],
-                "description": f"RAG lab: retriever config {m['config']} on the 58 dev queries; li/* (LlamaIndex) next to obj/* (MAUD gold spans)."}
+        cfg = m["config"]; retriever = RAG_CONFIG.get(cfg, cfg)
+        if cfg == "m7-synthetic":
+            return _factorial("retrieval", varies="query distribution (58 canonical dev queries -> 106 LlamaIndex-generated ones)", holds="retriever=hybrid_rrf (the frozen winner)",
+                              cases="synthetic-106", scorers="li/hit_rate, li/mrr", retriever=retriever, milestone="M7a",
+                              description="Does the tournament winner hold up on questions it was not tuned on?")
+        if cfg == "m7-li-crosscheck":
+            return _factorial("retrieval", varies="scorer (LlamaIndex-native li/* vs our obj/* on the same hits)", holds="retriever=li_native_bm25; cases=dev-58",
+                              cases="dev-58", scorers="li/* + obj/*", retriever=retriever, milestone="M7a",
+                              description="Two independent scorers on one retriever; the three disagreements are real and explained.")
+        return _factorial("retrieval", varies="retriever (dense / bm25 / hybrid_rrf / +rerank / fusion / +rerank)", holds="cases=dev-58; index e2b4a2b97561; k=5,10",
+                          cases="dev-58", scorers="obj/hit@5, obj/hit@10, obj/mrr + li/hit_rate, li/mrr", retriever=retriever, milestone="M3/M7a",
+                          description=f"Retriever {retriever} on the 58 dev queries.")
     if name == "deepeval-crosscheck":
-        return {"stage": "evaluation", "family": "deepeval", "tags": ["stage:evaluation", "milestone:M7a"],
-                "description": "DeepEval's independent read on the 108 judged traces (task completion, tool correctness, step efficiency)."}
+        return _factorial("crosscheck", varies="evaluator framework (DeepEval vs our judges vs deterministic truth)", holds="cases=judged-18 x 6 variants (108 traces)",
+                          cases="judged-18", scorers="deepeval/task_completion, tool_correctness, argument_correctness, step_efficiency", milestone="M7a",
+                          description="DeepEval's independent read of the 108 judged traces; its evaluator model is a judge-trio member (contamination recorded).")
     if name == "m7b-hero-case":
-        return {"stage": "traces", "family": "hero", "tags": ["stage:traces", "milestone:M7b"],
-                "description": "The hero case: three judge spans plus aggregate under scoring, for A@haiku and D@haiku, replayed with zero model calls."}
+        return _factorial("traces", varies="-", holds="one case, two variants", cases="hero-1", scorers="judge/<family> spans + judge/aggregate", milestone="M7b",
+                          description="Hero case replay: three judge spans plus aggregate under scoring, A@haiku vs D@haiku, zero model calls.")
     if name == "m7-representative-traces":
-        return {"stage": "traces", "family": "representative", "tags": ["stage:traces", "milestone:M7b"],
-                "description": "Six rule-chosen representative traces, one per failure shape, score-free."}
-    return {"stage": "other", "family": "other", "tags": ["stage:other"], "description": ""}
-
+        return _factorial("traces", varies="-", holds="six rule-chosen traces, one per failure shape", cases="representative-6", scorers="none (score-free replay)",
+                          milestone="M7b", description="Six representative traces: clean success, retrieval rescue, defined-term cross-ref, inefficient trajectory, wrong answer, abstention.")
+    if name.startswith("playground-arm-A-"):
+        variant = name.removeprefix("playground-arm-A-")
+        return _factorial("prompt", varies="arm-A system prompt (base / terse / cite-first / abstain-first)", holds="system=A (pipeline, dense top-5, no skill); model=glm; cases=judged-18; the exact passages arm A retrieved",
+                          cases="judged-18", scorers="judge/* LLM scorers (evidence, professional, reasoning)", arm="A", model="glm", prompt_variant=variant, milestone="demo",
+                          description=f"Arm A prompt variant '{variant}' over the 18 arm-A packets, judged by the LLM scorers.")
+    return _factorial("other", varies="-", holds="-", cases="-", scorers="-", description="Unclassified experiment.")
 
 # --- plumbing -------------------------------------------------------------------
 
@@ -200,11 +248,11 @@ def _manifest_path() -> Path:
     return MANIFEST_PATH or org_report_path("showroom_manifest.json")
 
 
-def _ledger(experiment: str, key: str) -> None:
+def _ledger(experiment: str, key: str, n_scores: int = 0) -> None:
     path = _ledger_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps({"experiment": experiment, "key": key, "n_scores": 0,
+        fh.write(json.dumps({"experiment": experiment, "key": key, "n_scores": n_scores,
                              "ts": datetime.now(UTC).isoformat(), "source": "showroom"}) + "\n")
 
 
@@ -240,16 +288,18 @@ def step_tag(api: Api, live: bool, manifest: dict) -> None:
     plan = []
     for e in exps:
         c = classify_experiment(e["name"])
-        plan.append({"id": e["id"], "name": e["name"], **{k: c[k] for k in ("stage", "family", "tags")}})
+        plan.append({"id": e["id"], "name": e["name"], **{k: c.get(k) for k in ("axis", "arm", "model", "cases", "tags")}})
         if live:
-            body = {"metadata": {**(e.get("metadata") or {}), **{k: v for k, v in c.items() if k not in ("tags", "description")}},
+            stale = {"stage", "family", "config", "variant_id", "git_sha", "arm", "model"}
+            kept = {k: v for k, v in (e.get("metadata") or {}).items() if k not in stale}
+            body = {"metadata": {**kept, **{k: v for k, v in c.items() if k not in ("tags", "description")}},
                     "tags": c["tags"], "description": c["description"]}
             api.patch(f"experiment/{e['id']}", body)
     manifest["experiments"] = plan
-    by_stage: dict[str, int] = {}
+    by_axis: dict[str, int] = {}
     for p in plan:
-        by_stage[p["stage"]] = by_stage.get(p["stage"], 0) + 1
-    print(f"tag: {len(plan)} experiments by stage {by_stage}")
+        by_axis[p["axis"]] = by_axis.get(p["axis"], 0) + 1
+    print(f"tag: {len(plan)} experiments by axis {by_axis}")
 
 
 def step_rows(api: Api, live: bool, manifest: dict) -> None:
@@ -265,7 +315,7 @@ def step_rows(api: Api, live: bool, manifest: dict) -> None:
             if not _is_root(r):
                 continue
             case_id = r.get("input") if isinstance(r.get("input"), str) else (r.get("metadata") or {}).get("case_id")
-            meta = {k: v for k, v in c.items() if k in ("stage", "family", "arm", "model", "variant_id", "config")}
+            meta = {k: v for k, v in c.items() if k in ("axis", "arm", "loop", "retriever", "skill", "model", "variant_id", "cases")}
             if isinstance(case_id, str):
                 meta["case_id"] = case_id
                 meta.update(_case_info(case_id))
@@ -489,6 +539,101 @@ def step_prompts(api: Api, live: bool, manifest: dict) -> None:
     _ledger("prompts", "arm-a-variants")
 
 
+PLAYGROUND_DATASET = "maud-dealpoint-playground-armA"
+PLAYGROUND_USER_TURN = "{{input}}\n\nGive your final answer based only on the passages above."
+PLAYGROUND_JUDGES = ("evidence", "professional", "reasoning")     # trajectory is meaningless for a single-shot prompt
+
+
+def playground_rows() -> list[dict]:
+    """The 18 judged cases as arm-A packets: the question block and the five dense top-5 passages arm A
+    actually retrieved (from the stored A@haiku trajectory's char ranges), rendered exactly as the pipeline
+    rendered them. A Playground run over these rows is an arm-A prompt A/B/C with everything but the
+    system prompt held fixed. `expected` carries the gold answer and gold span for the evidence judge."""
+    from types import SimpleNamespace
+
+    from dealpoint.agent.pipeline import _render_context
+    from dealpoint.agent.prompts import out_of_scope_question_block, question_spec_block
+    from dealpoint.corpus.document import load_document
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _variant_results
+    from dealpoint.eval.cases import find_case, resolve_document_id, resolve_question
+
+    subset = _judged_subset()
+    rows = _variant_results(subset, "A@haiku")
+    out: list[dict] = []
+    for case_id in subset.get("case_ids", []):
+        row = rows.get(case_id)
+        if not row:
+            continue
+        case = find_case(case_id); doc = load_document(resolve_document_id(case)); q = resolve_question(case)
+        step = ((row.get("record") or {}).get("trajectory") or [{}])[0]
+        chunks = [SimpleNamespace(text=doc.text[a:b], section_ref=None, start=a, end=b) for a, b in step.get("char_ranges") or []]
+        block = question_spec_block(q) if q.options else out_of_scope_question_block(q.gloss)
+        spans = [doc.text[sp["start"]:sp["end"]] for sp in case.get("gold_spans") or []]
+        expected = case.get("gold_answer", "ABSTAIN") + (("\n\nGold span: " + " ... ".join(spans)) if spans else "")
+        out.append({"id": case_id, "input": block + "\n\nRetrieved passages from this agreement:\n" + _render_context(doc, chunks),
+                    "expected": expected,
+                    "metadata": {"case_id": case_id, "question_id": q.id, "gloss": q.gloss, "gold_answer": case.get("gold_answer"),
+                                 "case_set": case.get("case_set"), "reasoning_type": q.reasoning_type, "n_passages": len(chunks), "arm": "A"}})
+    return out
+
+
+def playground_prompts() -> list[dict]:
+    """Base arm-A system prompt plus the three variants, as chat prompts with a `{{input}}` user turn."""
+    from dealpoint.agent.prompts import system_prompt
+
+    base = {"slug": "arm-a-prompt-base", "name": "Arm A prompt: base", "content": system_prompt()}
+    return [{**v, "messages": [{"role": "system", "content": v["content"]}, {"role": "user", "content": PLAYGROUND_USER_TURN}]}
+            for v in [base, *arm_a_prompt_variants()]]
+
+
+def step_playground(api: Api, live: bool, manifest: dict) -> None:
+    rows = playground_rows(); prompts = playground_prompts()
+    print(f"playground: dataset {PLAYGROUND_DATASET} ({len(rows)} arm-A packets) + {len(prompts)} chat prompts "
+          f"({', '.join(p['slug'] for p in prompts)}); scorers judge-{', judge-'.join(PLAYGROUND_JUDGES)}")
+    manifest["playground"] = {"dataset": PLAYGROUND_DATASET, "rows": len(rows), "prompts": [p["slug"] for p in prompts]}
+    if not live:
+        return
+    import braintrust
+    ds = braintrust.init_dataset(project=PROJECT, name=PLAYGROUND_DATASET,
+                                 description="18 judged cases as the exact arm-A packet (question block + the 5 dense passages arm A retrieved). Playground input for the prompt A/B/C.")
+    for r in rows:
+        ds.insert(input=r["input"], expected=r["expected"], metadata=r["metadata"], id=r["id"])
+    ds.flush()
+    project = braintrust.projects.create(name=PROJECT)
+    for pr in prompts:
+        project.prompts.create(name=pr["name"], slug=pr["slug"], messages=pr["messages"], model=WORKHORSE_MODEL, if_exists="replace",
+                               metadata={"purpose": "playground arm-A prompt A/B/C", "user_turn": "the arm-A packet from " + PLAYGROUND_DATASET})
+    project.publish()
+    _ledger("playground", "dataset+prompts")
+
+
+def run_playground(api: Api, manifest: dict, judges: tuple[str, ...] = PLAYGROUND_JUDGES) -> None:
+    """Pre-run the Playground server-side (POST /v1/eval): one experiment per prompt over the arm-A
+    packets, scored by the LLM judges. Scores: len(prompts) x 18 x len(judges); OpenRouter: cents."""
+    prompts = playground_prompts()
+    ds = api.get("dataset", {"project_id": PROJECT_ID, "dataset_name": PLAYGROUND_DATASET}).get("objects", [])
+    if not ds:
+        raise SystemExit("playground dataset missing; run --only playground first")
+    fid = {o["slug"]: o["id"] for o in api.get("function", {"project_id": PROJECT_ID, "limit": 200}).get("objects", [])}
+    scores = [{"function_id": fid[f"judge-{d}"]} for d in judges]
+    n_scores = len(prompts) * 18 * len(judges)
+    print(f"playground run: {len(prompts)} experiments x 18 rows x {len(judges)} judges = {n_scores} scores")
+    manifest["playground_run"] = []
+    for pr in prompts:
+        variant = pr["slug"].removeprefix("arm-a-prompt-")
+        name = f"playground-arm-A-{variant}"
+        body = {"project_id": PROJECT_ID, "data": {"dataset_id": ds[0]["id"]}, "task": {"function_id": fid[pr["slug"]]}, "scores": scores,
+                "experiment_name": name, "metadata": {k: v for k, v in classify_experiment(name).items() if k not in ("tags", "description")},
+                "max_concurrency": 2, "stream": False}
+        r = requests.post(f"{API}/eval", headers=api.h, json=body, timeout=1800)
+        ok = r.status_code < 300
+        print(f"  {name}: {'ok' if ok else 'FAILED'} {r.text[:300] if not ok else ''}")
+        manifest["playground_run"].append({"experiment": name, "ok": ok, "response": r.json() if ok else r.text[:300]})
+        if ok:
+            _ledger(name, "playground-eval", 18 * len(judges))
+    manifest["playground_run_scores_planned"] = n_scores
+
+
 JUDGE_DIMENSIONS = ("reasoning", "evidence", "trajectory", "professional")
 
 
@@ -555,6 +700,7 @@ def main(argv: list[str] | None = None) -> int:
             only = set(argv[i + 1].split(","))
         if a == "--replay" and i + 1 < len(argv):
             replay = argv[i + 1]
+    run_pg = "--run-playground" in argv
     key = load_braintrust_key()
     if live and not key:
         print("no BRAINTRUST_API_KEY; refusing a live run", file=sys.stderr)
@@ -569,6 +715,12 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{'LIVE' if live else 'DRY RUN'}: showroom on {PROJECT} in org {org} (scores written: 0 by construction; ledger {_ledger_path()})")
     if replay:
         step_replay(api, live, manifest, replay)
+        return 0
+    if run_pg:
+        if not live:
+            print("playground run needs --live (it writes scores and spends OpenRouter cents)")
+            return 2
+        run_playground(api, manifest)
         return 0
     for name in STEPS:
         if only and name not in only:

@@ -1,5 +1,19 @@
 # Braintrust demo: plan (as of 2026-09-07)
 
+> **Revisit outcome (2026-09-07, afternoon).** The fourteen-stop tab tour below is superseded by the
+> nine-stop, three-act walkthrough in `docs/demo-tour.md` (one question as the spine, `contract_144__q05`
+> and its redacted twin; the multi-judge/human calibration stop is the peak; recording Wednesday).
+> State of the `bishal.ai` org after the showroom and cockpit runs: 31 experiments carrying one factorial
+> metadata schema (`axis`, `varies`, `holds`, `arm`, `loop`, `retriever`, `skill`, `model`, `cases`),
+> 7 datasets (the new `maud-dealpoint-playground-armA` holds the exact arm-A packets), 266 traces in Logs,
+> 12 review flags, 4 arm Parameters, 4 chat prompts for the prompt A/B/C, 4 LLM judge scorers, 11 saved
+> views, the dashboard rebuilt over log fields, a Human review `professional` slider, and an online scoring
+> rule running `judge-professional` on new logs. Scores: 3,755 (sync) + 104 (cockpit: the lawyer's 96 and
+> the hero replay) + the Playground pre-run. The ledger and manifest are org-scoped under
+> `data/reports/orgs/<org>/`, derived from the API key, so `just braintrust-sync` / `just braintrust-showroom`
+> bootstrap a fresh org without inheriting another org's state. What is left for you is in the tour's
+> "Before Wednesday" list (MCP OAuth, built-in models, Topics, one Loop thread, one Pattern, Playground save).
+
 Goal: a clean Braintrust project you can walk tab to tab, where every tab shows a real Braintrust strength on
 DealPoint data, rebuilt from Git by one command, inside a fresh org's free tier.
 

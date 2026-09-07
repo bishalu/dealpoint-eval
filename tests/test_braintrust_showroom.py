@@ -158,3 +158,50 @@ def test_replay_plan_entry_resolves_short_and_full_variant_ids_and_never_collide
     assert a["category"].startswith("live-replay-") and b["category"].startswith("live-replay-")
     with pytest.raises(SystemExit):
         replay_plan_entry("contract_144__q05", "Z@nope")
+
+
+@pytest.mark.parametrize("name,axis,arm,model,cases", [
+    ("A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc", "system", "A", "glm", "test-32"),
+    ("D-anthropic_claude-haiku-4.5-e2b4a2b97561-e3ee9cc", "system", "D", "haiku", "test-18"),
+    ("D-qwen_qwen3.7-flash-e2b4a2b97561-3fcdae7", "model", "D", "qwen3.7-flash", "test-32"),
+    ("pareto-deepseek_deepseek-v4-flash", "model", "D", "deepseek-v4-flash", "test-32"),
+    ("judge-D@glm", "judge", "D", "glm", "judged-18"),
+    ("rag-m3-hybrid", "retrieval", None, None, "dev-58"),
+    ("rag-m7-synthetic", "retrieval", None, None, "synthetic-106"),
+    ("deepeval-crosscheck", "crosscheck", None, None, "judged-18"),
+    ("playground-arm-A-terse", "prompt", "A", "glm", "judged-18"),
+])
+def test_classify_experiment_gives_every_experiment_one_factorial_schema(name, axis, arm, model, cases):
+    from dealpoint.eval.braintrust_showroom import classify_experiment
+
+    c = classify_experiment(name)
+    assert c["axis"] == axis and c.get("arm") == arm and c.get("model") == model and c["cases"] == cases
+    for key in ("varies", "holds", "scorers", "description"):
+        assert c[key]
+    assert f"axis:{axis}" in c["tags"] and f"cases:{cases}" in c["tags"]
+    if arm:
+        assert c["loop"] == ARMS[arm]["loop"] and c["retriever"] == ARMS[arm]["retriever"]["name"]
+        assert c["skill"] == ("on" if ARMS[arm]["skill"] else "off")
+
+
+def test_system_axis_descriptions_name_the_one_key_that_changes():
+    from dealpoint.eval.braintrust_showroom import classify_experiment
+
+    d = {arm: classify_experiment(f"{arm}-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc")["description"] for arm in ARM_ORDER}
+    assert "control" in d["A"] and "loop" in d["B"] and "retriever" in d["C"] and "skill" in d["D"]
+
+
+def test_playground_rows_are_the_exact_arm_a_packets_with_gold_expected():
+    from dealpoint.eval.braintrust_showroom import playground_prompts, playground_rows
+
+    rows = playground_rows()
+    assert len(rows) == 18
+    hero = next(r for r in rows if r["id"] == "contract_144__q05")
+    assert "Knowledge" in hero["input"] and "Retrieved passages from this agreement:" in hero["input"]
+    assert hero["metadata"]["n_passages"] == 5 and hero["input"].count("[section") == 5
+    assert hero["expected"].startswith("Actual knowledge") and "Gold span:" in hero["expected"]
+    redacted = next(r for r in rows if r["id"] == "contract_39__redacted_q05")
+    assert redacted["expected"] == "ABSTAIN"
+    prompts = playground_prompts()
+    assert [p["slug"] for p in prompts] == ["arm-a-prompt-base", "arm-a-prompt-terse", "arm-a-prompt-cite-first", "arm-a-prompt-abstain-first"]
+    assert all(p["messages"][1]["content"].startswith("{{input}}") and p["messages"][0]["role"] == "system" for p in prompts)

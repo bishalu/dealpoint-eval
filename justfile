@@ -246,6 +246,15 @@ braintrust-cockpit *ARGS:
 braintrust-cockpit-dry-run:
     uv run python -m dealpoint.eval.braintrust_cockpit --dry-run
 
+# Demo showroom: tags/metadata, row metadata, Logs, review flags, parameters, prompts, LLM judge scorers, views,
+# Playground dataset+prompts; org resolved from the key, ledger under data/reports/orgs/<org>/. Dry run by default.
+#   just braintrust-showroom --live                                   # everything (0 scores)
+#   just braintrust-showroom --live --only logs                       # one step
+#   just braintrust-showroom --live --replay contract_144__q05:D@glm  # one new log, for online scoring
+#   just braintrust-showroom --live --run-playground                  # pre-run the prompt A/B/C (scores + cents)
+braintrust-showroom *ARGS:
+    uv run python -m dealpoint.eval.braintrust_showroom "$@"
+
 # M7b: regenerate docs/demo-walkthrough.md from data/reports/demo_manifest.json
 demo-walkthrough:
     uv run python -m dealpoint.eval.demo_walkthrough

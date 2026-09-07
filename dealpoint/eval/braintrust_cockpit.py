@@ -397,43 +397,31 @@ def view_definitions() -> list[dict]:
 
 
 def dashboard_charts() -> list[dict]:
-    """The six `DealPoint eval overview` dashboard charts, in spec order,
-    as data (never a string template) so a fake-client test can assert on
-    the structure directly.
+    """The `DealPoint eval overview` dashboard charts, as data (never a string template) so a
+    fake-client test can assert on the structure directly.
+
+    The dashboard is Braintrust's *monitor* surface over PROJECT LOGS. Two facts shape it: (1) the logs
+    carry zero obj/*, judge/*, human/* or li/* scores (those live in experiments), so a chart over those
+    names is blank by construction, which is what the first version of this dashboard did; (2) a monitor
+    chart is either a time series (x = time, right for production traffic) or a `scalars` toplist (groups
+    ranked by an aggregate, x = the group). Experiment comparisons are not time series, so every chart
+    here is a toplist over log fields the logs actually carry (counts by metadata, the boolean
+    `metadata.obj_grounded_accuracy` mirrored from each stored row, the online rule's `Judge: professional`
+    score), except the last, where time is the point: the online score as new logs land.
     """
     return [
-        {
-            "title": "obj/grounded_accuracy by arm, grouped by model",
-            "measure": "avg(scores.\"obj/grounded_accuracy\")",
-            "group_by": ["metadata.arm", "metadata.model"],
-        },
-        {
-            "title": "judge/<dimension> mean by variant",
-            "measure": [f'avg(scores."judge/{dim}")' for dim in JUDGE_DIMENSIONS],
-            "group_by": ["metadata.variant_id"],
-        },
-        {
-            "title": "judge vs human per dimension (review set)",
-            "measure": [f'avg(scores."judge/{dim}")' for dim in JUDGE_DIMENSIONS]
-            + [f'avg(scores."human/{dim}")' for dim in JUDGE_DIMENSIONS],
-            "group_by": ["metadata.variant_id"],
-            "caption_if_empty": "pending human calibration",
-        },
-        {
-            "title": "RAG tournament: hit@5, hit@10 and MRR by retriever",
-            "measure": ['avg(scores."obj/gold_span_hit_at_5")', 'avg(scores."obj/gold_span_hit_at_10")', 'avg(scores."li/mrr")'],
-            "group_by": ["metadata.config"],
-        },
-        {
-            "title": "$/case by model",
-            "measure": "avg(metadata.secondary_diagnostics.\"obj/usd\")",
-            "group_by": ["metadata.model"],
-        },
-        {
-            "title": "DeepEval vs obj/ agreement rate",
-            "measure": "avg(if(sign(scores.\"deepeval/task_completion\" - 0.5) = sign(scores.\"obj/grounded_accuracy\" - 0.5), 1, 0))",
-            "group_by": [],
-        },
+        {"title": "Grounded accuracy (row metadata) by arm", "kind": "toplist",
+         "measure": "avg(metadata.obj_grounded_accuracy)", "group_by": ["metadata.arm"]},
+        {"title": "Grounded accuracy (row metadata) by model, arm D", "kind": "toplist",
+         "measure": "avg(metadata.obj_grounded_accuracy)", "group_by": ["metadata.model"], "filters": ["metadata.arm = 'D'"]},
+        {"title": "Traces by status and arm (cap-hits are the failure story)", "kind": "toplist",
+         "measure": "count(1)", "group_by": ["metadata.status", "metadata.arm"], "unit": "count"},
+        {"title": "Online judge: professional by model", "kind": "toplist",
+         "measure": 'avg(scores."Judge: professional")', "group_by": ["metadata.model"]},
+        {"title": "Traces by category (judged, agent sweep, representative, live replay)", "kind": "toplist",
+         "measure": "count(1)", "group_by": ["metadata.category"], "unit": "count"},
+        {"title": "Online judge: professional as new logs land",
+         "measure": 'avg(scores."Judge: professional")', "group_by": ["metadata.arm"]},
     ]
 
 
@@ -744,11 +732,16 @@ def _measure_rest(measure_btql: str) -> dict:
 def _chart_rest_definition(chart: dict) -> dict:
     measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
     group_bys = [{"btql": g, "displayName": g.rsplit(".", 1)[-1]} for g in chart.get("group_by", [])]
-    unit_type = "cost" if "usd" in str(chart["measure"]) else "percent"
+    unit_type = chart.get("unit") or ("cost" if "usd" in str(chart["measure"]) else "percent")
+    filters = [{"btql": f} for f in chart.get("filters", [])]
+    if chart.get("kind") == "toplist":
+        return {"type": "scalars", "measures": [_measure_rest(m) for m in measures], "groupBys": group_bys, "filters": filters,
+                "sortByOptions": {"type": "value", "direction": "desc"}, "viz": {"type": "toplist", "unitType": unit_type}}
     return {
         "type": "monitorTimeseries",
         "measures": [_measure_rest(m) for m in measures],
         "groupBys": group_bys,
+        "filters": filters,
         "viz": {"type": "timeseries", "timeseriesVizType": "bars", "unitType": unit_type},
     }
 

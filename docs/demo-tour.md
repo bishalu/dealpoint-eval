@@ -1,122 +1,348 @@
 # The DealPoint tour
 
-Ten minutes, eleven stops, one contract question you will get sick of hearing. Everything you click was made by `just braintrust-cockpit` from files in Git; nothing here exists because someone clicked it once. Numbers come from `data/reports/`, Braintrust is the window we look through.
+Ten minutes, nine stops, three acts, one contract question. The story: how Braintrust took an agentic
+legal application from a baseline to a system we can trust, with objective evaluation, a multi-judge panel,
+human calibration, failure diagnosis and model economics. DealPoint is the case study; Braintrust is the
+quality cockpit. Nothing you click was made by hand: two commands rebuilt this project in a fresh org
+(`just braintrust-sync --live`, `just braintrust-showroom --live`), and every number below comes from
+`data/reports/` in Git.
 
-Open two tabs before you start:
+Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
+Dashboard (Monitor): https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2
 
-- the dashboard: https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval/dashboards/b3122524-c555-4599-8544-f302bc284b52
-- the project: https://www.braintrust.dev/app/Vibeset%20Technologies/p/dealpoint-eval
+**The spine.** One question, MAUD's `q05`: *Does the agreement's definition of Knowledge include
+constructive knowledge?* Two options, "Constructive knowledge" or "Actual knowledge", plus "ABSTAIN" when
+the agreement does not say. The majority of agreements say constructive, so a system that pattern-matches
+gets it wrong on the ones that say actual. The case we follow is `contract_144__q05`: the agreement's
+Section 9.03 limits knowledge to the *actual* knowledge of six named officers. Its twin is
+`contract_39__redacted_q05`: the same question on an agreement whose Knowledge definition was redacted, so the
+only right answer is to abstain.
 
-Say this once, at the top: "Custom Python decides who wins. LlamaIndex, DeepEval and Braintrust are there to check its work and to show it off."
+**How to read the Experiments tab.** Every experiment carries the same metadata schema: `axis` (the question
+it belongs to), `varies` (the one variable that changes along that axis), `holds` (what is fixed), plus
+`arm`, `loop`, `retriever`, `skill`, `model`, `cases`. Turn on those columns once and the table reads as a
+grid: SYSTEM (A to D, one config key per step), MODEL (arm D, five models), RETRIEVAL (six retrievers, one
+scorer cross-check, one query-distribution check), JUDGE (six variants under three judges and one lawyer),
+CROSSCHECK (DeepEval), PROMPT (four arm-A prompts), TRACES. The saved views below are those axes.
 
-## Stop 1: the question everyone gets asked
+Say this once, at the top: "Custom Python decides who wins. Braintrust is where I look at the evidence,
+compare case by case, and let a lawyer and three judges argue about it."
 
-Open the dataset `maud-dealpoint-dev-v1`.
+---
 
-Every row is a real merger agreement and a question a lawyer actually cares about, with the expert-marked span of the contract that answers it (that is MAUD, the public benchmark underneath all this). 58 dev cases, 167 test cases, 40 counterfactuals where the honest answer is "this contract does not say". The counterfactuals are the trap: a system that never abstains looks great right up until it invents a clause.
+## Act I. Build a measurable agent
 
-Pick one row and read the question aloud. "Does the definition of Knowledge include constructive knowledge?" You will see this question again. Several times. That is the point.
+### Stop 1. The question, and the trap
 
-## Stop 2: the retriever bake-off
+Open the dataset `maud-dealpoint-playground-armA`, row `contract_144__q05`.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/datasets/maud-dealpoint-playground-armA
 
-Open the view `RAG tournament`, then the chart "RAG tournament: hit@5, hit@10 and MRR by retriever" on the dashboard.
+This row is the exact packet the baseline system saw: the question block (MAUD question, plain-English
+gloss, the two allowed answers plus ABSTAIN) and the five passages dense retrieval pulled for it. `expected`
+is the expert answer, "Actual knowledge", followed by the gold span from Section 9.03. Every comparison in the
+next nine minutes joins on rows like this one.
 
-Six ways of finding the right paragraph, all frozen from milestone 3 and wrapped in LlamaIndex so its own evaluator can score them next to ours:
+Then open `maud-dealpoint-counterfactual` and find `contract_39__redacted_q05`: same question, the
+definition removed, `expected` = ABSTAIN. Forty of these. They are the trap: a system that never abstains
+looks fine right up until it invents a clause.
+
+Sizes, for the record: 58 dev cases, 167 test cases (32-case frozen subset for the sweeps), 40
+counterfactuals, 18 judged cases, 106 synthetic queries, 12-trace review set.
+
+One-liner: "Truth here is a character span a lawyer marked, not a model's opinion."
+
+### Stop 2. Can it retrieve the right evidence?
+
+Experiments tab, view **RAG tournament**.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=c9ab8582-0d44-4381-a7a9-c203a1727d82
+
+Six retrievers, same 58 dev queries, same index, two independent scorers on every row: our `obj/*`
+(gold-span hit) and LlamaIndex's `li/*`.
 
 | retriever | hit@5 | hit@10 | MRR |
 |---|---|---|---|
 | dense | 81.0% | 84.5% | 0.626 |
 | bm25 | 86.2% | 94.8% | 0.673 |
-| hybrid (rrf), the winner | 91.4% | 96.6% | 0.732 |
-| hybrid + rerank | 91.4% | 94.8% | 0.727 |
+| **hybrid_rrf** (winner) | **91.4%** | **96.6%** | **0.732** |
+| hybrid_rrf + rerank | 91.4% | 94.8% | 0.727 |
+| multi-query fusion | 82.8% | | 0.690 |
+| fusion + rerank | 87.9% | | 0.718 |
 
-The fun part is the agreement: LlamaIndex's hit rate and our gold-span hit rate line up perfectly (Spearman 1.0) for the six wrapped configs, and the one genuinely native LlamaIndex config that disagreed with ours did so for a boring, real reason (duplicate relevant chunks), which we wrote down. Cross-checks that agree are only interesting when they can disagree.
+On the Knowledge question specifically (five dev contracts), dense puts the definition at rank 1 on two of
+them and at ranks 4, 7 and 2 on the rest; hybrid puts it at rank 1 on four of five. `rag-m7-synthetic`
+re-asks the winner 106 LlamaIndex-generated questions (94.3% hit rate: it holds). `rag-m7-li-crosscheck`
+is the honesty check: LlamaIndex's native scorer and ours agree at Spearman 0.99, and the three rows where
+they disagree have a written cause (duplicate relevant chunks).
 
-One-liner: "Hybrid wins, reranking does not buy anything here, and two independent scorers say the same thing."
+One-liner: "Hybrid wins, reranking buys nothing here, and two scorers that could disagree don't."
 
-## Stop 3: four ways to build the agent
+### Stop 3. Does agency help? Does better RAG help? Does the skill help?
 
-Open the experiments that start with `A-`, `B-`, `C-`, `D-` (the unsuffixed ones, for example `A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc`).
+Experiments tab, view **Arms A to D (same 32 cases)**. Select the four `*-z-ai_glm-5.3-flash-*-e3ee9cc`
+experiments, open the Summary table, then the Grid, then search `contract_144__q05`.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=693c6c36-ad62-4bde-9b14-87d4314f24aa
 
-Same question set, same retriever, four architectures: A answers in one shot from the top hits, B and C add structure, D is the full agent loop with tools (`search_agreement`, `get_section`, `lookup_defined_term`). Every experiment carries the same six scores, so the "obj/grounded_accuracy by arm, grouped by model" chart is the whole comparison in one picture.
+Four systems, one config key changed per step, all on the cheap workhorse model and the same 32 cases:
 
-Point at the surprise: on the cheap workhorse model, arm A (0.76 grounded accuracy) is not embarrassed by arm D. The agent loop wins when it finds the defined term and loses when it goes searching in circles. Hold that thought for stop 5.
+| arm | loop | retriever | skill | grounded accuracy (scored cases) | cap-hit | fabrication | execution failed |
+|---|---|---|---|---|---|---|---|
+| A | pipeline | dense | off | 76.5% (17/32 scored) | 0% | 0% | 25.0% |
+| B | agent | dense | off | 58.8% | 43.8% | 11.1% | 0% |
+| C | agent | hybrid_rrf | off | 66.7% | 31.2% | 19.0% | 0% |
+| D | agent | hybrid_rrf | on | 64.7% | 15.6% | 35.0% | 15.6% |
 
-## Stop 4: the model shootout
+The Grid row for `contract_144__q05` is the whole argument in one line: **A abstained** (it had the passages
+and still said the agreement does not address it), **B, C and D answered "Actual knowledge"** with the
+Section 9.03 quote. The loop finds the defined term the pipeline could not commit to.
 
-Open the `pareto-*` experiments and the "$/case by model" chart.
+Then say the honest aggregate. On this model, A's scored accuracy is highest but a quarter of its runs fail
+to produce a finding at all; the loop trades execution failures for cap-hits (B) and fabrication (D). Better
+retrieval (C) recovers accuracy; the skill (D) halves the cap-hits and raises fabrication. Each step is a
+trade, and the trade is visible per case, not just in a mean. The four `arm-*-config` Parameters objects
+are these rows as first-class, versioned configs.
 
-Arm D fixed, model swapped: GLM 5.3 flash, Haiku 4.5, DeepSeek v4 flash, Qwen 3.7 flash, Gemini 3.1 flash lite. Two land on the frontier (best accuracy for the money): Qwen 3.7 flash and DeepSeek v4 flash (0.69 grounded accuracy). Every metered call is in a local ledger, so the dollar axis is real money, not list price.
+One-liner: "Does agency help? On this question, yes. In aggregate it's a trade, and now the trade has a
+grid."
 
-One-liner: "The expensive model is not on the frontier. That is why we keep the cheap ones in the race."
+---
 
-## Stop 5: watch one agent think
+## Act II. Correctness is not enough
 
-Open the experiment `m7-representative-traces`.
+### Stop 4. Watch one agent think
 
-Six traces, chosen by a rule (not by us cherry-picking), one per failure shape: a clean success, a retrieval rescue (the second search found what the first missed), a defined-term cross-reference, an inefficient trajectory, a wrong answer, and an abstention on a counterfactual. Expand one: `case > agent > search_agreement > lookup_defined_term > final_answer > scoring`, replayed from the stored trajectory with zero model calls.
+Logs tab, filter `metadata.case_id = 'contract_144__q05'`, open `contract_144__q05 | D@glm`.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/logs
 
-Open the inefficient one and count the tool calls. Then say: "This is the whole bug. It found section 12.1 on call two and kept searching until it hit the cap." That sentence is milestone 8.
+Expand the tree: `agent > lookup_defined_term("Knowledge") > search_agreement("Knowledge means the actual
+knowledge of the individuals listed") > lookup_defined_term("knowledge") > search_agreement(...) >
+search_agreement("due inquiry diligent search should have known reasonable inquiry knowledge") >
+final_answer`. Five tool calls, 20.9k input tokens, 40 seconds, $0.0019. It found the definition on call
+one and spent four more calls looking for a constructive-knowledge carve-out that is not there. That is
+diligence; it is also the bill.
 
-## Stop 6: three cheap judges
+Now the twin: filter `metadata.case_id = 'contract_39__redacted_q05'` and open any `D@*` trace. Status
+`CAP_HIT`: eight calls searching for a definition that was redacted, then the cap. Every arm-D model did
+this; only the single-shot pipeline abstained. Hold that thought for stop 8.
 
-Open `judge-D@haiku` (and its siblings `judge-A@haiku`, `judge-D@glm`, and so on).
+266 traces live here (108 judged, 151 from the sweeps, six representative, one live replay), every one
+replayed from stored trajectories with zero model calls, and zero scores: Logs are for looking, Experiments
+are for scoring.
 
-Deterministic scores tell you whether the answer matched the gold span. They cannot tell you whether the reasoning was any good. So three small models from three families that are not in the candidate slate (Mistral, NVIDIA, ByteDance) each read the same blinded packet, the question, the trajectory, the finding, and for the evidence dimension the gold span, and score four things from 1 to 5: reasoning, evidence, trajectory, professional quality. One call per trace, all four numbers back as JSON. 108 traces, 324 calls, about a dollar.
+One-liner: "Same loop that verifies a definition loops forever when the definition is missing."
 
-Show the "judge/<dimension> mean by variant" chart. The judges are not the truth. They are cheap, consistent readers whose blind spots we are about to measure.
+### Stop 5. What deterministic truth captures, and scoring in production
 
-## Stop 7: the lawyer versus the judges
+Scorers tab, then Configuration.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/scorers
 
-Open the experiment `m7b-hero-case`, and the view `Judge disagreement`.
+Six objective scores sit on every experiment row: `obj/grounded_accuracy`, `answer_correct`,
+`citation_gold_overlap`, `citation_verbatim`, `abstain_correct`, `skill_adherence`. They are deterministic
+Python over MAUD's expert spans, computed in Git, and they decide who wins. They cannot run inside Braintrust
+(they need the corpus and the index), and that is fine: Braintrust displays them, Python owns them.
 
-The hero case is `contract_32__q04`, picked by rule: arm A and arm D disagree on it (A wrong, D right), and it is where the three judges disagree most with each other (a spread of 4 on a 5-point scale). Expand `scoring` and you get the three judge spans and the aggregate, with the lawyer's scores on the same rows.
+What deterministic truth cannot capture is whether the reasoning was any good. So the Scorers tab holds four
+LLM judges, `judge-reasoning`, `judge-evidence`, `judge-trajectory`, `judge-professional`, each the frozen
+M5 rubric for one dimension, on the same OpenRouter models the calibration used (Mistral Small for three,
+ByteDance Seed for trajectory).
 
-Now the table that makes the whole exercise worth it. A lawyer (24 packets, blind) against the three judges on the packets where legal judgment mattered:
+The payoff, under Configuration: the online scoring rule **"online: judge-professional on new logs"** runs
+`judge-professional` on every new root log as it lands. Live action (30 seconds):
+
+```
+just braintrust-showroom --live --replay contract_144__q05:D@glm
+```
+
+One new trace appears in Logs with category `live-replay-<timestamp>`; within a minute a `Judge: professional`
+score attaches to it. Fallback if OpenRouter's Mistral endpoint is rate-limited that minute (it was during
+setup): the 266 existing logs already carry the score where it succeeded (average 0.65), and the trace from
+the previous replay is scored, `779b4ef5-cde7-4211-b988-10bf7fb5a3c2`.
+
+One-liner: "Offline the scorers grade experiments; online the same scorer grades production as it lands."
+
+### Stop 6. Human review, three judges, and where they disagree (the peak)
+
+Three views: **Review set (12)**, **Judges and the lawyer**, **Judge disagreement**.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=f21728ce-ac6b-46c9-a88c-c35cf074b031
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=173420b9-ee31-4c91-83bd-f0dc5a358490
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=54edf525-6932-41b2-a8a6-8f2e35505c8b
+
+Make the four roles explicit before showing any number:
+
+- **Deterministic MAUD metrics** are benchmark truth: did the answer and citation match the expert span.
+- **Human review** is the calibration reference: a lawyer scored 24 blinded packets on four dimensions,
+  1 to 5. The `professional` slider on the Human review page is that dimension; the 12 flagged traces are
+  the review set.
+- **The multi-judge panel** is the calibrated qualitative evaluator: three small models from three families
+  not in the candidate slate (Mistral, NVIDIA, ByteDance), reading the same blinded packet, 108 traces,
+  324 calls, about a dollar. `judge/*` on the `judge-*` experiments is their mean; `human/*` on the same
+  rows is the lawyer.
+- **DeepEval** is the independent framework cross-check (stop 6, last paragraph).
+
+Open `judge-A@haiku` and `judge-D@haiku` side by side in the Grid on `contract_144__q05`:
+
+| packet | system | lawyer (reasoning/evidence/trajectory/professional) | Mistral | NVIDIA | ByteDance |
+|---|---|---|---|---|---|
+| `0f0ddb6b0896` | A@haiku, abstained | 4 / 1 / 3 / 3 | 3 / 1 / 3 / 4 | 1 / 1 / 3 / 1 | 5 / 5 / 4 / 4 |
+| `257db09a639b` | D@haiku, "Actual knowledge" | 5 / 5 / 3 / 5 | 5 / 5 / 4 / 5 | 5 / 5 / 4 / 5 | 5 / 4 / 4 / 4 |
+
+On the good answer everyone agrees. On the abstention the panel splits by four points: ByteDance rewards a
+tidy, well-hedged refusal; NVIDIA punishes it; the lawyer's read is "reasonable, but the evidence was right
+there". A spread like that is information, not noise: it tells you which judge is credulous about fluent
+hedging before you deploy that judge.
+
+Then the twin, `contract_39__redacted_q05`: every arm-D run hit the cap, the lawyer gave them 1s, and the
+judges agreed, except on trajectory, where Mistral gives 3s for "targeted progress" on a run that produced
+nothing. Trajectory is where the judges cannot do the job (weighted kappa 0.55 against the lawyer); on
+reasoning, evidence and professional quality they can (0.94, 0.95, 0.90 over 24 packets).
+
+Now the reveal, the two packets where all three judges were wrong and the lawyer was right:
 
 | packet | what happened | lawyer | Mistral | NVIDIA | ByteDance |
 |---|---|---|---|---|---|
-| `32fc075d8413` | answered a definition question from clauses that merely use the term | 2/2/3/1 | 4/1/4/4 | 4/5/4/4 | 4/3/5/4 |
-| `790521a3adab` | said "no carve-out" from the intro to the list, without the list | 2/2/3/2 | 4/4/4/4 | 5/5/4/5 | 4/3/5/4 |
-| `01de6203baeb` | quoted the actual Knowledge definition, clean | 5/5/4/5 | 5/5/4/5 | 5/5/4/5 | 5/5/4/4 |
+| `32fc075d8413` | A@haiku answered a redacted definition question from clauses that merely *use* the term | 2 / 2 / 3 / 1 | 4 / 1 / 4 / 4 | 4 / 5 / 4 / 4 | 4 / 3 / 5 / 4 |
+| `790521a3adab` | A@haiku said "no carve-out" from the introduction to a list, without reading the list; the answer happened to be right | 2 / 2 / 3 / 2 | 4 / 4 / 4 / 4 | 5 / 5 / 4 / 5 | 4 / 3 / 5 / 4 |
 
-All three judges gave 4s and 5s to two confidently wrong legal answers. They reward a fluent, well-cited answer without checking that the citation proves the specific claim. Agreement overall is high (Spearman 0.99 on reasoning, 0.95 on evidence), but that is inflated by fourteen cap-hit packets everyone scores 1. Trajectory is where the judges genuinely cannot do it (weighted kappa 0.55; Mistral alone 0.18), because the rubric gives credit for targeted progress even when the run failed, and only the human noticed.
+Three judges gave 4s and 5s to two confidently wrong pieces of legal reasoning because the prose was fluent and
+cited something. Only the lawyer checked whether the citation proved the claim. That is why the panel is
+calibrated against a human and not trusted on its own, and why the human review page exists in the loop.
 
-Say it plainly: "Three judges agreeing is not evidence. One lawyer disagreeing for a reason you can write down is."
+Close with DeepEval: open `deepeval-crosscheck` and the view **DeepEval vs judge disagreement**
+(https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=db7fbd81-8c86-4a24-b048-a0fe27cac616).
+DeepEval read the same 108 traces with its own metrics. Its task-completion score correlates weakly with
+grounded accuracy (Spearman 0.21) and well with our judges, but its evaluator model is one of the three judge
+models, so that agreement is partly contamination, and the report says so. Verdict on the record: keep it as
+a second opinion, never as a gate.
 
-## Stop 8: the second opinion
+Say it plainly: "Three judges agreeing is not evidence. One lawyer disagreeing for a reason you can write
+down is."
 
-Open `deepeval-crosscheck`.
+### Stop 7. Iterate on the prompt before touching code
 
-DeepEval reads the same 108 traces with its own metrics (task completion, tool correctness, step efficiency as a written-down GEval). Correlation with grounded accuracy is weak (0.21), correlation with the judges is high (0.84) but contaminated: its evaluator is one of the three judge models. Verdict, recorded in the report: keep it as optional analysis, not as a gate. Frameworks that get tested and demoted on evidence are the healthy kind.
+Playground. Prompts `arm-a-prompt-base`, `arm-a-prompt-terse`, `arm-a-prompt-cite-first`,
+`arm-a-prompt-abstain-first`; dataset `maud-dealpoint-playground-armA`; scorers `judge-evidence`,
+`judge-professional`, `judge-reasoning`; model GLM 5.3 flash via your OpenRouter key.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/playgrounds
 
-## Stop 9: ask the logs a question
+This is the PROMPT axis with everything else pinned: same 18 packets (the exact passages arm A retrieved),
+same model, same judges, only the system prompt changes. Four prompts side by side, judged live, about ten
+cents. Point at `contract_144__q05`: does "abstain first" make the baseline abstain more on the redacted
+twin without abstaining here, where the definition is in the passages?
 
-Open the views `Failure attribution`, `Retrieval rescue`, `DeepEval vs judge disagreement`, `Trajectory inefficiency`.
+Pre-run fallback: the same four runs are saved as experiments `playground-arm-A-base`, `-terse`,
+`-cite-first`, `-abstain-first` (axis PROMPT in the Experiments tab), so the comparison exists even if the
+live run stalls.
 
-Each is a saved BTQL query, the same text as in `docs/braintrust-queries.md`, so the doc and the view cannot drift. `Failure attribution` groups cap-hits and execution failures by model and arm; it is the numeric version of stop 5.
+One-liner: "The prompt is a versioned object, the packet is a dataset row, the judges are scorers: iterating
+is a table, not a notebook."
 
-Three things need a human in the browser, and this is the moment to do them (each takes a minute; record it with the command so the walkthrough doc picks up the URL):
+---
 
-1. Loop: on the hero case, ask "which model and arm combinations hit CAP_HIT or EXECUTION_FAILED, and how often?" and save the thread. `just demo-manifest-record --step 2 --url <thread-url> --note "<does it match Failure attribution>"`
-2. Playground: the hero packet against the published prompt `judge-calibrated-rubric`, the three judge models side by side. `just demo-manifest-record --step 3 --url <playground-url> --note "<match stored judge JSON?>"`
-3. Custom trace view: ask Loop for "the three judge spans as a 3 by 4 grid of scores with the human row beneath", save it project-wide. `just demo-manifest-record --step 4 --tv <tv-param> --note "<what it showed>"`
+## Act III. Turn evidence into a deployment decision
 
-Then `just demo-walkthrough` and the generated doc carries the links.
+### Stop 8. Diagnose the real failure
 
-## Stop 10: the dashboard
+Views **Failure attribution** and **Trajectory inefficiency**, then Logs on the twin.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=a82535ee-8eb8-4bd4-83b0-9a183ab2a041
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=3fbc27c3-463f-4ff7-9b4b-60f11413d446
 
-Back to the first tab. Six charts, top to bottom: accuracy by arm and model, judge dimensions by variant, judge versus human on the review set, the retriever bake-off, dollars per case, DeepEval agreement. If you only get one screen, this is it.
+Failure attribution is the numeric version of stop 4: across the 266 logs, arm D hit the tool cap 54 times
+in 149 runs, arm B 14 in 32, the pipeline never (it cannot). The dashboard's first chart, "Traces by status,
+grouped by arm", is the same picture over the Logs.
 
-## Stop 11: what it cost
+One investigation, three tools, in this order:
 
-Braintrust's monthly score quota went in a day, and not on this demo: every re-sync minted a copy of every experiment and re-logged every score. The fix is in the code now (dry run by default, `--live` to write, a hard cap of 600 scores per run, and a ledger so a score is never written twice). The entire milestone that built this demo wrote 104 scores, about 26 cents, and the re-run that added the six trace trees wrote zero.
+1. **Debugger** on `contract_39__redacted_q05 | D@glm` (Logs): step through the eight calls. Every one is a
+   search for a definition that is not in the document; the loop has no notion of "I have looked
+   everywhere".
+2. **Topics** over the Logs (facet `DealPoint agent traces`, already configured): the clusters separate
+   "found the defined term and answered", "searched in circles until the cap", "abstained". Cap-hit is a
+   trajectory shape, not a model property.
+3. **Loop**, one thread, saved: *"Across the project logs, which arm and model combinations hit CAP_HIT most,
+   and what did those trajectories search for on their last three calls? Is there a stopping rule that
+   would have ended them early?"* The answer is the spec for the next milestone: a "definition absent"
+   stopping rule for the loop.
+
+One Pattern records it ("agent searches repeatedly for a defined term the agreement does not contain, then
+hits the tool cap") so the next batch of logs gets matched against it automatically.
+
+One-liner: "The bug is retrieval control flow, not model IQ, and the fix has a name before anyone writes
+code."
+
+### Stop 9. What should we deploy?
+
+Experiments tab, view **Models (arm D fixed)**, sort by `$/case`.
+https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/experiments?v=8ea97ad4-ef60-40fd-a84c-7d5c444b93f1
+
+The MODEL axis: arm D held fixed, five models, same 32 cases (18 for Haiku), one row per case with realized
+cost and latency from the local ledger, not list price.
+
+| model | grounded accuracy | cap-hit | execution failed | p50 latency | $/case | frontier |
+|---|---|---|---|---|---|---|
+| GLM 5.3 flash | 64.7% | 15.6% | 15.6% | 30.6 s | $0.0028 | no |
+| Claude Haiku 4.5 (18 cases) | 62.5% | 50.0% | 5.6% | 18.2 s | $0.0458 | no |
+| DeepSeek v4 flash | 69.2% | 50.0% | 6.2% | 17.7 s | $0.0023 | **yes** |
+| Qwen 3.7 flash | 63.6% | 50.0% | 15.6% | 13.9 s | $0.0011 | **yes** |
+| Gemini 3.1 flash lite | 63.2% | 21.9% | 0.0% | 11.4 s | $0.0055 | no |
+
+The decision, and the reasoning the viewer should hear: DeepSeek v4 flash for accuracy per dollar, Qwen as
+the cheap fallback, GLM stays the development workhorse, Haiku is off the frontier at sixteen times the
+cost. No model is on the frontier for all four of quality, reliability, latency and cost: the two frontier
+models cap-hit half the time, which is exactly the failure stop 8 diagnosed. So the deployment call is
+conditional and written down: DeepSeek, with the stopping rule from stop 8 as the precondition, and the
+online `judge-professional` score from stop 5 as the monitor that tells us if quality moves after we ship.
+
+One-liner: "The expensive model is not on the frontier, and the frontier models fail in a way we can name."
+
+---
+
+## Close (thirty seconds)
+
+"Every object you saw was rebuilt from Git into a fresh Braintrust org today by two commands, inside the
+free tier: 31 experiments, 7 datasets, 266 traces, about 4,000 scores, zero dollars. The implementation and
+the evaluation infrastructure were built milestone by milestone through my SSSF software factory; Braintrust
+is the quality cockpit the factory feeds."
+
+---
+
+## Before Wednesday (you, about twenty minutes)
+
+Everything below needs a browser session or the `braintrust-demo` MCP OAuth; the code-side work is done.
+
+1. Restart Claude Code and approve the `braintrust-demo` MCP OAuth for `bishal.ai` (the `braintrust` MCP
+   entry is still bound to the old org).
+2. Settings, bishal.ai: **Allow built-in models** (Topics clustering, Loop, Debugger draw on the $10 model
+   credit). The Human review score `professional` (1 to 5 slider) and the online scoring rule already exist.
+3. Logs, Topics: run the `DealPoint agent traces` facet over the 266 logs once, look at the clusters, then
+   pause the daily job after Wednesday (model credit is the one meter no code guards).
+4. One Loop thread with the stop-8 prompt, saved. One Pattern via the MCP `new_pattern` tool with the
+   stop-8 wording.
+5. Playground: open the four `arm-a-prompt-*` prompts over `maud-dealpoint-playground-armA` with the three
+   judges, run once (about $0.10 OpenRouter), save the session. The `playground-arm-A-*` experiments are the
+   fallback.
+6. Optional: a threshold alert on `Judge: professional` below 0.5 over the last day (MCP
+   `create_threshold_alert`), configured, not triggered.
+7. Rehearse once with the fallbacks: stop 5's replay may 429 on Mistral; stop 7's live run may be slow;
+   both have saved results.
+8. After recording: rotate the API key (it passed through chat) and re-run `just braintrust-showroom --live`
+   only if something was deleted; the ledger under `data/reports/orgs/bishal-ai/` keeps every re-run
+   idempotent.
+
+Retention: logs written 2026-09-07 expire around 2026-09-21 on Starter; experiments keep for a year.
 
 ## If someone asks
 
-- "Why isn't Braintrust the source of truth?" Fourteen-day retention on this plan; the reports in Git are forever, and one command rebuilds the Braintrust side.
-- "Why three judges instead of one good one?" Because one judge's blind spot looks like a fact. Three disagreeing is a signal; three agreeing with each other and not with the lawyer is a better one.
-- "Why so many cap-hits?" Retrieval control flow, not model IQ. The agent finds the definitions section and keeps searching. That is the next milestone, and the lawyer's review is its spec.
-- "Is the lawyer's scoring real?" AI-drafted, reviewed and adopted by the lawyer, provenance recorded next to the scores. Say that, do not hide it.
-
-Dates: the scored experiments were created on 2026-09-06; on this plan they expire around 2026-09-20. Record the demo before then, or re-sync (a few hundred scores) after.
+- "Why isn't Braintrust the source of truth?" Fourteen-day log retention on this plan; the reports in Git are
+  forever, and two commands rebuild the Braintrust side in a fresh org.
+- "Why three cheap judges instead of one strong one?" One judge's blind spot looks like a fact. Three
+  disagreeing is a signal; three agreeing with each other and not with the lawyer is a better one.
+- "Why so many cap-hits?" Retrieval control flow, not model IQ. The agent finds the definitions section and
+  keeps searching; when the definition is absent it never stops. That is the next milestone, and the
+  lawyer's review is its spec.
+- "Is the lawyer's scoring real?" AI-drafted, reviewed and adopted by the lawyer, provenance recorded next
+  to the scores (`data/eval/calibration/human_scores.provenance.json`). Say that, do not hide it.
+- "Why does the dashboard look different from the Experiments page?" The dashboard is the monitor over
+  Logs, which carry no experiment scores by construction; it charts trace counts by status and arm, row
+  metadata accuracy, and the online judge score. Experiment comparison lives on the Experiments page, which
+  is built for it.
+- "Where do the deterministic scorers run?" In Git, in `dealpoint/eval/scorers.py`, over the corpus and index
+  that cannot live inside Braintrust's function runtime. The LLM judges run in Braintrust. Honest split.
