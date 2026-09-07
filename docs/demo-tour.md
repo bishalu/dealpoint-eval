@@ -357,17 +357,30 @@ as fast as anything on the slate, at twice Qwen's cost. Qwen is the cost floor: 
 per dollar, with the worst cap-hit and failure rates. Haiku is the same quality as GLM and DeepSeek at
 sixteen times the cost, and the dashboard shows it at six correct outcomes per dollar.
 
-The decision, written down, and it is not the one the arm-D table alone suggests. The "Pareto" chart on the
-"Which model?" dashboard puts every system@model on the same 18 cases, and the winner is **A@haiku, the
-single-shot baseline on Claude Haiku 4.5**: 56% correct outcomes, zero fabrication, zero cap-hits, zero
-failures, 3.7 seconds and $0.0034 per case. It gets there by abstaining on 39% of cases, right on every
-counterfactual, wrong on a few answerable ones. The best agentic configuration is **D@gemini** (50%, the only
-agent that never fabricates, 12.7 seconds, $0.0055). So: ship A on Haiku today; the agent earns its place
-only when the stopping rule from stop 8 lands, and then on Gemini, with the online `judge-professional`
-score from stop 5 as the monitor that says whether quality moved after we shipped. Haiku inside the agent
-loop is out: same quality as GLM at sixteen times the cost.
+The scoring system that decides is **net accuracy**: correct answers minus misleading ones, over every
+case. A correct abstention on a counterfactual is correct. A wrong answer, or any answer when the
+agreement does not address the question, is misleading. An abstention, a cap-hit or an execution failure
+is a silent failure and counts zero. In a legal tool a silent failure costs a lookup; a misleading answer
+costs a client. The overview dashboard's first chart ranks every system@model by it on the same 18 cases:
 
-One-liner: "Count every case, not just the ones that finished, and the winner is the boring one: single shot on Haiku. The agent has to earn its keep."
+| system@model, same 18 cases | correct | misleading | silent | **net** | $/case |
+|---|---|---|---|---|---|
+| **D@gemini** | 50% | 17% | 33% | **33%** | $0.0055 |
+| A@haiku | 56% | 33% | 11% | 22% | $0.0034 |
+| D@glm | 33% | 17% | 50% | 17% | $0.0028 |
+| D@deepseek | 28% | 11% | 61% | 17% | $0.0024 |
+| D@haiku | 28% | 17% | 56% | 11% | $0.0458 |
+| D@qwen | 22% | 17% | 61% | 6% | $0.0011 |
+
+The decision, written down: **D@gemini, the agent on Gemini 3.1 flash lite**. The single-shot baseline on
+Haiku has the highest raw rate but answers wrongly one case in three; the Gemini agent fails silently
+instead, and silence is the failure we can afford. On GLM, the four systems net A 28%, C 25%, D 9%, B 6%:
+the skill as written is the worst step in the ladder (it raises misleading answers to 28%), so the agent
+to ship is C's shape on Gemini, with the stopping rule from stop 8 to convert cap-hits into answers, and
+the online `judge-professional` score from stop 5 as the monitor after we ship. Haiku inside the loop is
+out at sixteen times the cost.
+
+One-liner: "Score what a wrong answer costs, not just what a right one earns, and the winner is the agent that knows when to shut up."
 
 ---
 

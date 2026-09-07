@@ -385,6 +385,13 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
     # `case_pool` names the case set the trace belongs to, so a comparison stays within one pool.
     case_set = out["case_set"]
     out["correct_all"] = int(bool(ga) or (case_set == "counterfactual" and bool(scores.get("abstain_correct"))))
+    # The headline scoring system. Failures are not equal in a legal tool: an answer that is wrong (or any
+    # answer at all when the agreement does not address the question) MISLEADS; an abstention, a cap-hit or
+    # an execution failure is a SILENT failure that costs a lookup, not a lawsuit. net_accuracy per row is
+    # +1 correct, -1 misleading, 0 silent; its mean over a case pool is "correct minus misleading".
+    out["misleading"] = int(status == "ANSWERED" and not out["correct_all"])
+    out["silent_failure"] = int(not out["correct_all"] and not out["misleading"])
+    out["net_accuracy"] = out["correct_all"] - out["misleading"]
     out["comparable"] = int(category in CANONICAL_CATEGORIES and short in SHORT_MODEL.values())
     out["case_pool"] = {"judged": "judged-18 (the same 18 cases for every variant)", "agent": "test-32 (the frozen 32-case subset)"}.get(category or "", "other")
     for d in JUDGE_DIMS:

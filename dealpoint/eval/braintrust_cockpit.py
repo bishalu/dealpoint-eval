@@ -416,16 +416,9 @@ def chart_catalogue() -> dict[str, dict]:
     """Every chart, keyed, with a short title (the dashboard's name carries the question). Each is a
     toplist over the metadata mirror: see `dashboard_definitions` for why nothing here is a time series."""
     return {
-        "big_best_config": {"kind": "bignumber", "title": "BEST MEASURED CONFIG: A@haiku (single shot on Claude Haiku 4.5), correct outcome on the same 18 cases; 0 fabrication, 0 cap-hits, 3.7 s, $0.0034",
-                            "measure": [{"btql": "avg(metadata.correct_all)", "name": "A@haiku"}], "group_by": [], "filters": [f"{JUDGED18} and metadata.variant_label = 'A@haiku'"]},
-        "big_best_agent": {"kind": "bignumber", "title": "BEST AGENT: D@gemini (agent + hybrid + skill on Gemini 3.1 flash lite), correct outcome on the same 18 cases; the only agent that never fabricates",
-                           "measure": [{"btql": "avg(metadata.correct_all)", "name": "D@gemini"}], "group_by": [], "filters": [f"{JUDGED18} and metadata.variant_label = 'D@gemini-3.1-flash-lite'"]},
-        "big_best_retriever": {"kind": "bignumber", "title": "BEST RETRIEVER: hybrid_rrf (dense + BM25, reciprocal-rank fusion, no reranker), gold-span hit@5 on the 58 dev queries",
-                               "measure": [{"btql": "avg(metadata.hit_at_5)", "name": "hybrid_rrf"}], "group_by": [], "filters": ["metadata.category = 'retrieval' and metadata.retriever = 'hybrid_rrf'"]},
-        "big_judges": {"kind": "bignumber", "title": "BEST JUDGE PANEL: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory. Shown: Mistral's closeness to the lawyer on evidence",
-                       "measure": [{"btql": "avg(metadata.judge_mistral_evidence_closeness)", "name": "Mistral on evidence"}], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        "big_best_prompt": {"kind": "bignumber", "title": "BEST BASELINE PROMPT: cite-first, Judge: evidence over the 18 arm-A packets",
-                            "measure": [{"btql": "avg(metadata.judge_evidence)", "name": "cite-first"}], "group_by": [], "filters": ["metadata.category = 'prompt-variant' and metadata.prompt_variant = 'cite-first'"]},
+        "sys_net": {"title": f"NET ACCURACY, the headline: correct minus misleading over every case. A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL})", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_misleading": {"title": f"Misleading answers: answered and wrong, or answered when the agreement does not address it ({SYS_POOL})", "measure": "avg(metadata.misleading)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
+        "sys_silent": {"title": f"Silent failures: abstained wrongly, hit the tool cap, or failed to produce a finding ({SYS_POOL})", "measure": "avg(metadata.silent_failure)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_correct": {"title": f"Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill ({SYS_POOL}; a correct abstention counts)",
                         "measure": "avg(metadata.correct_all)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
         "sys_cap": {"title": f"Cap-hit rate, the loop never stops ({SYS_POOL})", "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [GLM32]},
@@ -442,6 +435,9 @@ def chart_catalogue() -> dict[str, dict]:
         "ret_hit5": {"title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)", "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_mrr": {"title": "Mean reciprocal rank of the gold span, 58 dev queries", "measure": "avg(metadata.mrr)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         "ret_hit10": {"title": "Gold-span hit@10 on the 58 dev queries", "measure": "avg(metadata.hit_at_10)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
+        "mod_net": {"title": f"NET ACCURACY, the headline: correct minus misleading over every case ({MOD_POOL})", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "mod_misleading": {"title": f"Misleading answers: answered and wrong, or answered on a counterfactual ({MOD_POOL})", "measure": "avg(metadata.misleading)", "group_by": ["metadata.model_label"], "filters": [D18]},
+        "pareto_net": {"title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)", "measure": "avg(metadata.net_accuracy)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
         "mod_correct": {"title": f"Correct outcome over every case ({MOD_POOL}; a correct abstention counts)", "measure": "avg(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18]},
         "mod_usd": {"title": f"Dollars per case, realized from the local ledger ({MOD_POOL})", "measure": "avg(metadata.usd)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
         "mod_sec": {"title": f"Seconds per case ({MOD_POOL})", "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "duration"},
@@ -458,6 +454,8 @@ def chart_catalogue() -> dict[str, dict]:
         **{f"judge_bias_{d}": {"title": f"Which judge for {d}? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
                                "measure": [{"btql": f"avg(metadata.judge_{f}_{d}_closeness)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
            for d in JUDGE_DIMS_},
+        "judge_evidence_pick": {"title": "Which judge? Closeness of each judge to the lawyer on evidence, the dimension that decides (100% = identical; tallest bar wins)",
+                                "measure": [{"btql": f"avg(metadata.judge_{f}_evidence_closeness)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
         "judge_family_usd": {"title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
                              "measure": [{"btql": f"avg(metadata.judge_{f}_usd)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
         "panel_professional": {"title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
@@ -477,31 +475,34 @@ DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("DealPoint eval overview",
      ("VERDICTS (from the question dashboards, 2026-09-07; small samples, one run each). "
       "SEARCH: hybrid (dense + BM25, reciprocal-rank fusion), no reranker: 91% gold-span hit@5 vs 81% dense. "
-      "BEST MEASURED CONFIG (the Pareto list, every system@model on the same 18 cases): A@haiku, the single-shot baseline on Claude Haiku 4.5: 56% "
-      "correct outcomes, zero fabrication, zero cap-hits, zero failures, 3.7 s and $0.0034 per case; it abstains on 39% of cases, right on the "
-      "counterfactuals, costly on a few answerable ones. Best agentic config: D@gemini (50%, the only agent that never fabricates, 12.7 s). "
-      "SYSTEM (four systems on GLM, same 32 cases): the loop only pays off once a stopping rule ends the search-in-circles cap-hits; C beats D "
-      "(the skill trades cap-hits for fabrication and loses); until the rule lands, A wins on correct outcomes, fabrication and cost. "
-      "MODEL (arm D, same 18 cases): Gemini 3.1 flash lite for quality (most correct outcomes, zero execution failures); Qwen 3.7 flash for the cost "
-      "floor (most correct outcomes per dollar, but two runs in three cap out or fail); Haiku out of the agent at sixteen times the cost. "
+      "SCORING: the headline is NET ACCURACY = correct answers minus misleading answers, over every case. A correct abstention on a counterfactual is "
+      "correct; a wrong answer, or any answer when the agreement does not address the question, is misleading; an abstention, cap-hit or execution "
+      "failure is a silent failure that counts zero. In a legal tool a silent failure costs a lookup and a misleading answer costs a client. "
+      "BEST MEASURED CONFIG (every system@model on the same 18 cases): D@gemini, the agent on Gemini 3.1 flash lite: 33% net (50% correct, 17% "
+      "misleading), 12.7 s, $0.0055 per case. The single-shot baseline A@haiku has the highest raw rate (56% correct) but misleads one case in "
+      "three, so it nets 22%. "
+      "SYSTEM (four systems on GLM, same 32 cases, net accuracy): A 28%, C 25%, D 9%, B 6%. The skill (D) is the worst step: it raises misleading "
+      "answers to 28%. The agent only pays off once a stopping rule ends its search-in-circles cap-hits, and only without the skill as written. "
+      "MODEL (arm D, same 18 cases): Gemini is the model that fails silently rather than misleadingly; Qwen is the cost floor; Haiku is out of the "
+      "loop at sixteen times the cost. "
       "JUDGES: Mistral Small for reasoning, evidence and professional quality, NVIDIA Nemotron for trajectory; two judges, not three; no judge "
       "is trustworthy on trajectory, keep the lawyer there. "
       "PROMPT: cite-first for the baseline (best evidence score), terse loses everywhere. "
+      "Every chart is a comparison, never a lone number: the first ranks every system@model by net accuracy on the same 18 cases. "
       "How to read any chart here: a ranked list over the traces in Logs (metadata mirrored from the stored results; scores are metered, metadata is free), "
       "one case pool of comparable traces at a time; 'correct outcome' counts an unanswered case as wrong and a correct abstention as right."),
-     ("big_best_config", "big_best_agent", "big_best_retriever", "big_judges", "big_best_prompt",
-      "pareto", "sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "prompt_evidence")),
+     ("pareto_net", "sys_net", "mod_net", "ret_hit5", "judge_vs_lawyer", "judge_evidence_pick", "prompt_evidence")),
     ("Which system?",
-     ("VERDICT: A wins today (most correct outcomes, zero fabrication, a quarter of the cost); C beats D and earns its place once a stopping rule ends the cap-hits. Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
+     ("VERDICT on net accuracy (correct minus misleading): see the first chart; the agent arms fail silently (cap-hits) where the baseline answers wrongly, and the skill trades cap-hits for fabrication. Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
      "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
      "abstention), whether the loop pays off more on a stronger model, then dollars, seconds, tool calls and correct outcomes per dollar."),
-     ("sys_correct", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
+     ("sys_net", "sys_correct", "sys_misleading", "sys_silent", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
     ("Which model?",
-     ("VERDICT: Gemini 3.1 flash lite for quality, Qwen 3.7 flash for the cost floor, Haiku out of the loop; and the Pareto list says the best config overall is the single-shot baseline on Haiku. Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
+     ("VERDICT on net accuracy (correct minus misleading): Gemini 3.1 flash lite, the model that fails silently rather than misleadingly; Qwen 3.7 flash the cost floor; Haiku out of the loop. The net-accuracy list across every system@model is the deployment ranking. Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
      "then reliability (cap-hits, execution failures), then the two numbers a deployment decision turns on: correct outcomes per dollar and "
      "dollars per correct outcome. The Pareto list ranks every system@model by correct outcomes per dollar; the judge panel's chart is the "
      "judges' view of the same race."),
-     ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto", "panel_professional")),
+     ("mod_net", "mod_correct", "mod_misleading", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto_net", "pareto", "panel_professional")),
     ("Which retriever?",
      ("VERDICT: hybrid_rrf, no reranker. Six retrievers on the same 58 dev queries, scored against the expert's gold span: hit@5, hit@10 and mean reciprocal rank. "
      "Hybrid (dense + BM25 with reciprocal-rank fusion) wins; reranking adds nothing."),

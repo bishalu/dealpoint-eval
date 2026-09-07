@@ -180,7 +180,9 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
 
     dashes = dashboard_definitions()
     assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "DeepEval", "LlamaIndex", "Which prompt?"]
-    assert len(dashes[0]["charts"]) == 11 and sum(1 for c in dashes[0]["charts"] if c.get("kind") == "bignumber") == 5
+    assert len(dashes[0]["charts"]) == 7
+    assert not any(c.get("kind") == "bignumber" for d in dashes for c in d["charts"]), "no lone numbers: every chart compares"
+    assert "net_accuracy" in str(dashes[0]["charts"][0]["measure"]) and "NET ACCURACY" in dashes[0]["charts"][0]["title"]
     assert all(d["description"].startswith("VERDICT") for d in dashes), "every dashboard leads with its verdict"
     judges = next(d for d in dashes if d["name"] == "Judges and the lawyer")
     assert [c["group_by"] for c in judges["charts"]] == [[]] * len(judges["charts"]), "the judges page never ranks systems"
