@@ -13,11 +13,13 @@ Dashboard: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/
 **The dashboard, one question per chart.** Braintrust's dashboard is the monitor over project logs, so it
 cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
 therefore mirrors every number into log metadata (free; scores are the metered thing) and the dashboard is
-sixteen ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
-abstention on counterfactuals, A to D on GLM), *Which retriever?* (hit@5 and MRR, six retrievers on the
-58 dev queries), *Which model?* (accuracy, dollars, seconds, cap-hits, arm D on five models), *Judges vs
-the lawyer* (four dimensions, 24 packets), the judge panel by system@model, DeepEval's agreement with
-truth, and *Which prompt?* (the four arm-A prompts, judged). Accuracy there counts an unanswered case as
+twenty ranked bar lists, groups on the axis: *Which system?* (accuracy, cap-hits, fabrication,
+abstention on counterfactuals, A to D on GLM, the ladder spelled out in the first title), *Does the loop
+pay off more on the stronger model?* (A and D on GLM and Haiku), *Which retriever?* (hit@5 and MRR, six
+retrievers on the 58 dev queries), *Which model?* (accuracy, dollars, seconds, cap-hits, execution
+failures, arm D on five models), *Judges vs the lawyer* (four dimensions, 24 packets), *Which judge?*
+(each family's distance from the lawyer on reasoning and on trajectory), the judge panel by system@model,
+DeepEval's agreement with truth, and *Which prompt?* (the four arm-A prompts, judged). Accuracy there counts an unanswered case as
 wrong, so it reads lower than the "of scored cases" figures in the reports; both are true, say which one
 you mean. If you only get one screen, this is it; every chart has a stop below that explains it.
 
@@ -240,8 +242,12 @@ cents. Point at `contract_144__q05`: does "abstain first" make the baseline abst
 twin without abstaining here, where the definition is in the passages?
 
 Pre-run fallback: the same four runs are saved as experiments `playground-arm-A-base`, `-terse`,
-`-cite-first`, `-abstain-first` (axis PROMPT in the Experiments tab), so the comparison exists even if the
-live run stalls.
+`-cite-first`, `-abstain-first` (axis PROMPT in the Experiments tab) and mirrored into the dashboard's two
+*Which prompt?* charts. Result: cite-first wins on evidence (0.71 vs 0.61 for terse), abstain-first
+costs evidence (0.60) for no professional gain, terse loses on every dimension. The base run is partial
+(13 of 18 rows; Mistral's endpoint was rate-limiting the judges); to complete it, delete
+`playground-arm-A-base` and run `just braintrust-showroom --live --run-playground --variants base`
+(54 scores), then `--only promptlogs`.
 
 One-liner: "The prompt is a versioned object, the packet is a dataset row, the judges are scorers: iterating
 is a table, not a notebook."

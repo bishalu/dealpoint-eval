@@ -413,7 +413,7 @@ def dashboard_charts() -> list[dict]:
     numbers rescaled to 0..1, cost, latency, cap-hits), plus the retrieval and prompt-variant logs.
     """
     return [
-        {"title": "Which system? Grounded accuracy over every answerable test case (unanswered = 0), GLM 5.3 flash", "kind": "toplist",
+        {"title": "Which system? A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill: grounded accuracy over every answerable test case (unanswered = 0), GLM", "kind": "toplist",
          "measure": "avg(metadata.ga_all)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and metadata.case_set = 'test' and {AGENT_LOGS}"]},
         {"title": "Which system? Cap-hit rate (loop never stops), GLM", "kind": "toplist",
          "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
@@ -421,6 +421,9 @@ def dashboard_charts() -> list[dict]:
          "measure": "avg(metadata.fabrication)", "group_by": ["metadata.system_label"], "filters": [f"metadata.model_label = 'glm' and {AGENT_LOGS}"]},
         {"title": "Which system? Correct abstention on counterfactuals (the definition is not there)", "kind": "toplist",
          "measure": "avg(metadata.abstain_correct)", "group_by": ["metadata.system_label"], "filters": [f"metadata.case_set = 'counterfactual' and {AGENT_LOGS}"]},
+        {"title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku (answerable test cases)", "kind": "toplist",
+         "measure": "avg(metadata.ga_all)", "group_by": ["metadata.variant_label"],
+         "filters": [f"(metadata.arm = 'A' or metadata.arm = 'D') and (metadata.model_label = 'glm' or metadata.model_label = 'haiku') and metadata.case_set = 'test' and {AGENT_LOGS}"]},
         {"title": "Which retriever? Gold-span hit@5 on the 58 dev queries", "kind": "toplist",
          "measure": "avg(metadata.hit_at_5)", "group_by": ["metadata.retriever"], "filters": ["metadata.category = 'retrieval'"]},
         {"title": "Which retriever? Mean reciprocal rank of the gold span", "kind": "toplist",
@@ -433,9 +436,17 @@ def dashboard_charts() -> list[dict]:
          "measure": "avg(metadata.wall_s)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"], "unit": "duration"},
         {"title": "Which model? Cap-hit rate, arm D", "kind": "toplist",
          "measure": "avg(metadata.cap_hit)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"]},
+        {"title": "Which model? Execution-failure rate (no finding produced), arm D", "kind": "toplist",
+         "measure": "avg(metadata.execution_failed)", "group_by": ["metadata.model_label"], "filters": [f"metadata.arm = 'D' and {AGENT_LOGS}"]},
         {"title": "Judges vs the lawyer: mean of three judges next to the human, 24 blinded packets (rubric 1-5 as 0-1)", "kind": "toplist",
          "measure": [f"avg(metadata.judge_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")]
          + [f"avg(metadata.human_{d})" for d in ("reasoning", "evidence", "trajectory", "professional")],
+         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+        {"title": "Which judge? Distance from the lawyer per judge family, reasoning (lower is better, 24 packets)", "kind": "toplist",
+         "measure": [f"avg(metadata.judge_{f}_reasoning_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
+         "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
+        {"title": "Which judge? Distance from the lawyer per judge family, trajectory (the dimension judges get wrong)", "kind": "toplist",
+         "measure": [f"avg(metadata.judge_{f}_trajectory_abs_err)" for f in ("mistral", "nvidia", "bytedance")],
          "group_by": [], "filters": ["metadata.has_human = 1 and metadata.category = 'judged'"]},
         {"title": "Judge panel: professional quality by system@model, 108 judged traces", "kind": "toplist",
          "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": ["metadata.category = 'judged'"]},

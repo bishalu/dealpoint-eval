@@ -218,6 +218,7 @@ def test_metadata_mirror_on_the_spine_case_is_numeric_labelled_and_rescaled():
     assert 0 < m["usd"] < 0.01 and 30 < m["wall_s"] < 60
     assert m["judge_reasoning"] == 1.0 and abs(m["judge_evidence"] - (4.6667 - 1) / 4) < 1e-3
     assert m["has_human"] == 1 and m["human_professional"] == 1.0 and m["human_trajectory"] == 0.5
+    assert m["judge_mistral_reasoning"] == 1.0 and m["judge_bytedance_trajectory"] == 0.5 and m["judge_nvidia_trajectory_abs_err"] == 0.25
     assert m["deepeval_task_completion"] is not None and m["deepeval_agrees_with_truth"] in (0, 1)
     # the same row under the full model id maps to the same judged packet
     m2 = mirror_for("contract_144__q05", "D@z-ai/glm-5.3-flash", idx[("contract_144__q05", "D@z-ai/glm-5.3-flash")], ctx)

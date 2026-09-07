@@ -349,7 +349,7 @@ def _flag(v) -> int | None:
 
 
 def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | None = None, human: dict | None = None,
-                    deepeval: dict | None = None) -> dict:
+                    deepeval: dict | None = None, per_judge: dict | None = None) -> dict:
     """Every number the dashboard needs, as log METADATA (free) rather than scores (metered), with one
     label vocabulary across all log families (short model names, self-describing system labels).
     The same values live as real scores on the experiments; this is the mirror the Monitor page can see."""
@@ -377,6 +377,10 @@ def metadata_mirror(row: dict, *, case: dict | None = None, judge_dims: dict | N
     for d in JUDGE_DIMS:
         out[f"judge_{d}"] = _rescale((judge_dims or {}).get(d))
         out[f"human_{d}"] = _rescale((human or {}).get(d))
+        for family, v in (per_judge or {}).items():
+            out[f"judge_{family.lower()}_{d}"] = _rescale(v.get(d))
+            if human and v.get(d) is not None and human.get(d) is not None:
+                out[f"judge_{family.lower()}_{d}_abs_err"] = abs(_rescale(v[d]) - _rescale(human[d]))
     for k in ("task_completion", "tool_correctness", "argument_correctness", "step_efficiency"):
         v = ((deepeval or {}).get(k) or {}).get("score") if deepeval else None
         out[f"deepeval_{k}"] = v
@@ -414,10 +418,11 @@ def mirror_for(case_id: str, variant_id: str, row: dict, ctx: dict) -> dict:
         case = {}
     pid = ctx["packet_id_for"](case_id, short_variant)
     judge_dims = ctx["judge_dims_for"](ctx["judge_rows"], pid) or None
+    per_judge = {r["judge_family"]: r for r in ctx["judge_rows"] if r.get("packet_id") == pid and r.get("ok", True)}
     human = ctx["human"].get(pid)
     deepeval = ctx["deepeval"].get((case_id, short_variant))
     row = {**row, "arm": row.get("arm") or arm, "model": row.get("model") or model}
-    return metadata_mirror(row, case=case, judge_dims=judge_dims, human=human, deepeval=deepeval)
+    return metadata_mirror(row, case=case, judge_dims=judge_dims, human=human, deepeval=deepeval, per_judge=per_judge or None)
 
 
 def stored_row_index() -> dict[tuple[str, str], dict]:

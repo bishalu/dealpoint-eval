@@ -171,14 +171,15 @@ def test_dashboard_charts_are_question_toplists_over_the_metadata_mirror():
 
     dash = dashboard_definition()
     assert dash["name"] == "DealPoint eval overview"
-    assert len(dash["charts"]) == 16
+    assert len(dash["charts"]) == 20
+    assert "A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill" in dash["charts"][0]["title"]
     questions = [c["title"].split("?")[0] for c in dash["charts"] if "?" in c["title"]]
     assert {"Which system", "Which retriever", "Which model", "Which prompt"} <= set(questions)
     assert any("lawyer" in c["title"] for c in dash["charts"]) and any("DeepEval" in c["title"] for c in dash["charts"])
     for chart in dash["charts"]:
         measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
         for m in measures:
-            assert m.startswith("avg(metadata.") or m.startswith("count("), m
+            assert m.startswith(("avg(metadata.", "count(")), m
             assert "scores." not in m
         assert all(g.startswith("metadata.") for g in chart["group_by"])
         assert chart["filters"], "every chart names the log family it aggregates"
