@@ -181,15 +181,23 @@ def test_dashboards_are_one_question_each_over_the_metadata_mirror():
     dashes = dashboard_definitions()
     assert [d["name"] for d in dashes] == ["DealPoint eval overview", "Which system?", "Which model?", "Which retriever?", "Judges and the lawyer", "Which prompt?"]
     assert len(dashes[0]["charts"]) == 6
-    used = {k for _, keys in DASHBOARDS for k in keys}
+    judges = next(d for d in dashes if d["name"] == "Judges and the lawyer")
+    assert [c["group_by"] for c in judges["charts"]] == [[]] * len(judges["charts"]), "the judges page never ranks systems"
+    used = {k for _, _, keys in DASHBOARDS for k in keys}
+    assert all(len(d["description"]) > 80 for d in dashes), "every dashboard says what a reader needs to know"
     assert used == set(chart_catalogue()), "every catalogued chart is on some dashboard"
     for dash in dashes:
         for chart in dash["charts"]:
-            assert not chart["title"].startswith("Which "), chart["title"]
+            assert not chart["title"].startswith(("Which system?", "Which model?", "Which retriever?", "Which prompt?")), chart["title"]
             measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
             for m in measures:
-                assert m.startswith(("avg(metadata.", "count(", "sum(metadata.", "percentile(metadata.")), m
-                assert "scores." not in m and "ga_all" not in m
+                btql = m["btql"] if isinstance(m, dict) else m
+                assert btql.startswith(("avg(metadata.", "count(", "sum(metadata.", "percentile(metadata.")), btql
+                assert "scores." not in btql and "ga_all" not in btql
+            if len(measures) > 1:
+                assert all(isinstance(m, dict) and m.get("name") for m in measures), f"multi-measure rows need display names: {chart['title']}"
+                assert len(_chart_rest_definition(chart)["measures"]) == len(measures)
+                assert _chart_rest_definition(chart)["measures"][0]["displayName"] == measures[0]["name"]
             assert all(g.startswith("metadata.") for g in chart["group_by"])
             assert chart["filters"], "every chart names the log family it aggregates"
             if any(g.endswith(("system_label", "model_label", "variant_label")) for g in chart["group_by"]):

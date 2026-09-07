@@ -13,15 +13,17 @@ Project: https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval
 they cannot read experiment scores and cannot put anything but time on a time-series axis. The showroom
 therefore mirrors every number into log metadata (free; scores are the metered thing), every chart is a
 ranked bar list with the groups on the axis, the dashboard's name is the question, and the time range is
-pinned to 30 days so batch-ingested logs never fall out of a sliding window.
+pinned to 30 days so batch-ingested logs never fall out of a sliding window. Each dashboard carries a
+description saying what it compares and how to read it top to bottom; rows are named for what they are
+(Mistral Small, "lawyer: evidence"), groups for what they group (system, model, system@model).
 
 | dashboard | what it ranks | link |
 |---|---|---|
 | DealPoint eval overview | the six headline charts, one per question below | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2 |
 | Which system? | A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill on the same 32 cases: correct outcome, cap-hits, fabrication, abstention, the loop on GLM vs Haiku, dollars, seconds, tool calls, correct outcomes per dollar | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/8e0003f4-5840-45b3-bc9a-86fcb686ec1a |
-| Which model? | arm D on the same 18 cases, five models: correct outcome, dollars, seconds, p90, cap-hits, execution failures, per dollar, dollars per correct outcome, the Pareto list across every system@model | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
+| Which model? | arm D on the same 18 cases, five models: correct outcome, dollars, seconds, p90, cap-hits, execution failures, per dollar, dollars per correct outcome, the Pareto list across every system@model, and the judge panel's view of the same race | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
 | Which retriever? | six retrievers on the 58 dev queries: hit@5, hit@10, MRR | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/32c5a4be-7898-4630-af11-ca40e743e9e4 |
-| Judges and the lawyer | the panel's mean next to the lawyer; signed bias per judge family per dimension (every judge runs high; how high, and where); cost per call per family; the panel by system@model; DeepEval's agreement with truth | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
+| Judges and the lawyer | seven charts about judges only: can the panel be trusted (its mean next to the lawyer per dimension), which judge for which dimension (signed bias, closest to zero wins), what a call costs, and DeepEval as one second-opinion number | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
 | Which prompt? | the four arm-A prompts, judged on professional quality, evidence and reasoning | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
 
 Every ranking chart compares one case pool at a time (the five arm-D models on the same 18 judged cases,

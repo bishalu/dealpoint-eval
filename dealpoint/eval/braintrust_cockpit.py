@@ -409,6 +409,7 @@ DASHBOARD_RANGE = "30d"      # pinned on every dashboard: the logs were batch-in
 SYS_POOL = "the four systems on the same 32 cases, GLM 5.3 flash"
 MOD_POOL = "arm D on the same 18 cases, five models"
 JUDGE_DIMS_ = ("reasoning", "evidence", "trajectory", "professional")
+FAMILIES = (("mistral", "Mistral Small"), ("nvidia", "NVIDIA Nemotron"), ("bytedance", "ByteDance Seed"))
 
 
 def chart_catalogue() -> dict[str, dict]:
@@ -441,30 +442,54 @@ def chart_catalogue() -> dict[str, dict]:
         "mod_usd_per_correct": {"title": f"Dollars per correct outcome ({MOD_POOL})", "measure": "sum(metadata.usd) / sum(metadata.correct_all)", "group_by": ["metadata.model_label"], "filters": [D18], "unit": "cost"},
         "pareto": {"title": "Correct outcomes per dollar across every system@model on the same 18 cases (the Pareto question in one list)",
                    "measure": "sum(metadata.correct_all) / sum(metadata.usd)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18], "unit": "count"},
-        "judge_vs_lawyer": {"title": "Mean of three judges next to the lawyer, four dimensions, 24 blinded packets (rubric 1-5 as 0-1)",
-                            "measure": [f"avg(metadata.judge_{d})" for d in JUDGE_DIMS_] + [f"avg(metadata.human_{d})" for d in JUDGE_DIMS_],
+        "judge_vs_lawyer": {"title": "Can the panel be trusted? Mean of the three judges next to the lawyer, per dimension, 24 blinded packets (rubric 1-5 as 0-1)",
+                            "measure": [m for d in JUDGE_DIMS_ for m in ({"btql": f"avg(metadata.judge_{d})", "name": f"judges: {d}"}, {"btql": f"avg(metadata.human_{d})", "name": f"lawyer: {d}"})],
                             "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]},
-        **{f"judge_bias_{d}": {"title": f"Signed bias per judge family, {d}: judge minus lawyer, + runs high, - runs low (24 packets)",
-                               "measure": [f"avg(metadata.judge_{f}_{d}_bias)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
+        **{f"judge_bias_{d}": {"title": f"Which judge for {d}? Signed bias, judge minus lawyer: + runs high, - runs low, closest to 0 wins (24 packets)",
+                               "measure": [{"btql": f"avg(metadata.judge_{f}_{d}_bias)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [f"metadata.has_human = 1 and {JUDGED18}"]}
            for d in JUDGE_DIMS_},
-        "judge_family_usd": {"title": "Cost per judged trace per judge family, realized (108 traces)",
-                             "measure": [f"avg(metadata.judge_{f}_usd)" for f in ("mistral", "nvidia", "bytedance")], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
-        "panel_professional": {"title": "Judge panel, professional quality by system@model, 108 judged traces", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
-        "deepeval": {"title": "DeepEval vs deterministic truth: task-completion agreement rate by system@model", "measure": "avg(metadata.deepeval_agrees_with_truth)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "judge_family_usd": {"title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
+                             "measure": [{"btql": f"avg(metadata.judge_{f}_usd)", "name": label} for f, label in FAMILIES], "group_by": [], "filters": [JUDGED18], "unit": "cost"},
+        "panel_professional": {"title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.variant_label"], "filters": [JUDGED18]},
+        "deepeval": {"title": "Second opinion: how often DeepEval's task-completion score agrees with deterministic truth, all judged traces",
+                     "measure": [{"btql": "avg(metadata.deepeval_agrees_with_truth)", "name": "DeepEval agrees with the expert span"}], "group_by": [], "filters": [JUDGED18]},
         "prompt_professional": {"title": "Judge: professional by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_professional)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
         "prompt_evidence": {"title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_evidence)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
         "prompt_reasoning": {"title": "Judge: reasoning by arm-A prompt variant, 18 packets, GLM", "measure": "avg(metadata.judge_reasoning)", "group_by": ["metadata.prompt_variant"], "filters": ["metadata.category = 'prompt-variant'"]},
     }
 
 
-DASHBOARDS: tuple[tuple[str, tuple[str, ...]], ...] = (
-    ("DealPoint eval overview", ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_professional")),
-    ("Which system?", ("sys_correct", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
-    ("Which model?", ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto")),
-    ("Which retriever?", ("ret_hit5", "ret_hit10", "ret_mrr")),
-    ("Judges and the lawyer", ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional",
-                               "judge_family_usd", "panel_professional", "deepeval")),
-    ("Which prompt?", ("prompt_professional", "prompt_evidence", "prompt_reasoning")),
+DASHBOARDS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
+    ("DealPoint eval overview",
+     ("One headline chart per question. Every chart is a ranked list over the traces in Logs (metadata mirrored from the stored results; "
+     "the Starter plan meters scores, metadata is free). Ranking charts compare one case pool of comparable traces at a time. "
+     "'Correct outcome' counts an unanswered case as wrong and a correct abstention as right. Open the question dashboards for the detail."),
+     ("sys_correct", "mod_correct", "ret_hit5", "judge_vs_lawyer", "pareto", "prompt_professional")),
+    ("Which system?",
+     ("Four systems, one config key changed per step (A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill), all on GLM 5.3 flash "
+     "and the same 32 test cases. Read top to bottom: does agency help (correct outcome), what it costs in failure modes (cap-hits, fabrication, "
+     "abstention), whether the loop pays off more on a stronger model, then dollars, seconds, tool calls and correct outcomes per dollar."),
+     ("sys_correct", "sys_cap", "sys_fab", "sys_abstain", "loop_x_model", "sys_usd", "sys_sec", "sys_calls", "sys_per_dollar")),
+    ("Which model?",
+     ("Arm D held fixed, five models on the same 18 judged cases. Quality first (correct outcome), then price and speed (dollars, seconds, p90), "
+     "then reliability (cap-hits, execution failures), then the two numbers a deployment decision turns on: correct outcomes per dollar and "
+     "dollars per correct outcome. The Pareto list ranks every system@model by correct outcomes per dollar; the judge panel's chart is the "
+     "judges' view of the same race."),
+     ("mod_correct", "mod_usd", "mod_sec", "mod_p90", "mod_cap", "mod_fail", "mod_per_dollar", "mod_usd_per_correct", "pareto", "panel_professional")),
+    ("Which retriever?",
+     ("Six retrievers on the same 58 dev queries, scored against the expert's gold span: hit@5, hit@10 and mean reciprocal rank. "
+     "Hybrid (dense + BM25 with reciprocal-rank fusion) wins; reranking adds nothing."),
+     ("ret_hit5", "ret_hit10", "ret_mrr")),
+    ("Judges and the lawyer",
+     ("Three cheap LLM judges (Mistral Small, NVIDIA Nemotron, ByteDance Seed) scored 108 blinded traces on four dimensions; a lawyer scored 24 of "
+     "the same packets. First chart: can the panel be trusted (panel mean next to the lawyer, per dimension). Next four: which judge for which "
+     "dimension, as signed bias against the lawyer; every judge runs high, the one closest to zero wins that dimension. Then cost per call "
+     "(a wash). Last: DeepEval as an independent second opinion against deterministic truth."),
+     ("judge_vs_lawyer", "judge_bias_reasoning", "judge_bias_evidence", "judge_bias_trajectory", "judge_bias_professional", "judge_family_usd", "deepeval")),
+    ("Which prompt?",
+     ("Four system prompts for the single-shot baseline (base, terse, cite-first, abstain-first) over the same 18 packets and the same model, "
+     "judged on professional quality, evidence and reasoning by the LLM scorers. Only the prompt varies."),
+     ("prompt_professional", "prompt_evidence", "prompt_reasoning")),
 )
 
 
@@ -486,7 +511,8 @@ def dashboard_definitions() -> list[dict]:
     time range is pinned (DASHBOARD_RANGE) so a sliding default window cannot blank batch-ingested logs.
     """
     cat = chart_catalogue()
-    return [{"name": name, "view_type": "monitor", "charts": [{**cat[k], "kind": "toplist"} for k in keys]} for name, keys in DASHBOARDS]
+    return [{"name": name, "description": desc, "view_type": "monitor", "charts": [{**cat[k], "kind": "toplist"} for k in keys]}
+            for name, desc, keys in DASHBOARDS]
 
 
 def dashboard_definition() -> dict:
@@ -799,23 +825,28 @@ _SCORE_AVG_RE = re.compile(r'^avg\(scores\."([^"]+)"\)$')
 _CHART_ID_NAMESPACE = uuid.UUID("6b3f9e0a-8f3a-4b7f-9b3e-b7f3a4b7f9b3")
 
 
-def _measure_rest(measure_btql: str) -> dict:
-    """One `dashboard_charts()` measure string -> the real `custom_charts`
-    measure shape, confirmed live 2026-09-06 via `create_monitoring_view` +
-    `GET /v1/view`: a bare `avg(scores."X")` is `{type: aggregateScore,
-    scoreName, aggregator}`; anything else (a full BTQL expression, e.g. the
-    `$/case` or DeepEval-agreement measures) is `{type: expression, btql}`.
+GROUP_DISPLAY = {"metadata.system_label": "system", "metadata.model_label": "model", "metadata.variant_label": "system@model",
+                 "metadata.retriever": "retriever", "metadata.prompt_variant": "prompt variant"}
+
+
+def _measure_rest(measure) -> dict:
+    """One `chart_catalogue()` measure -> the real `custom_charts` measure shape, confirmed live 2026-09-06
+    via `create_monitoring_view` + `GET /v1/view`: a bare `avg(scores."X")` is `{type: aggregateScore,
+    scoreName, aggregator}`; anything else (a full BTQL expression) is `{type: expression, btql}`.
+    A measure may be a string or `{"btql": ..., "name": ...}`; `name` is what the chart shows as the row
+    label, so a multi-measure chart reads "Mistral / NVIDIA / ByteDance", not three BTQL expressions.
     """
-    match = _SCORE_AVG_RE.match(measure_btql)
+    btql, name = (measure["btql"], measure.get("name")) if isinstance(measure, dict) else (measure, None)
+    match = _SCORE_AVG_RE.match(btql)
     if match:
         score_name = match.group(1)
-        return {"type": "aggregateScore", "scoreName": score_name, "aggregator": {"type": "avg"}, "displayName": score_name}
-    return {"type": "expression", "btql": measure_btql, "displayName": measure_btql}
+        return {"type": "aggregateScore", "scoreName": score_name, "aggregator": {"type": "avg"}, "displayName": name or score_name}
+    return {"type": "expression", "btql": btql, "displayName": name or btql}
 
 
 def _chart_rest_definition(chart: dict) -> dict:
     measures = chart["measure"] if isinstance(chart["measure"], list) else [chart["measure"]]
-    group_bys = [{"btql": g, "displayName": g.rsplit(".", 1)[-1]} for g in chart.get("group_by", [])]
+    group_bys = [{"btql": g, "displayName": GROUP_DISPLAY.get(g, g.rsplit(".", 1)[-1])} for g in chart.get("group_by", [])]
     unit_type = chart.get("unit") or ("cost" if "usd" in str(chart["measure"]) else "percent")
     filters = [{"btql": f} for f in chart.get("filters", [])]
     if chart.get("kind") == "toplist":
@@ -860,7 +891,7 @@ def _view_data_for(definition: dict) -> dict:
     return {"search": search} if search else {}
 
 
-def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, name: str, view_data: dict) -> dict:
+def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, name: str, view_data: dict, description: str | None = None) -> dict:
     """`GET /v1/view?object_type=...&object_id=...` then `POST /v1/view`
     (create) or `PATCH /v1/view/{id}` (update) -- confirmed live 2026-09-06:
     `GET /v1/view` takes `object_type`/`object_id`, not `project_id`; `POST
@@ -879,6 +910,8 @@ def _upsert_view(rest_client, object_type: str, object_id: str, view_type: str, 
         "name": name,
         "view_data": view_data,
     }
+    if description:
+        body["description"] = description
     if view_type == "monitor":
         # confirmed live 2026-09-06: a monitor view needs `options.viewType ==
         # "monitor"` alongside `view_data.custom_charts`, or the dashboard
@@ -906,7 +939,8 @@ def sync_views_and_dashboard(rest_client, hero_experiment_id: str | None = None)
 
     dashboards_result = []
     for dash in dashboard_definitions():
-        dash_upserted = _upsert_view(rest_client, "project", project_id, dash["view_type"], dash["name"], _view_data_for({"custom_charts": dash["charts"]}))
+        dash_upserted = _upsert_view(rest_client, "project", project_id, dash["view_type"], dash["name"], _view_data_for({"custom_charts": dash["charts"]}),
+                                     description=dash.get("description"))
         dashboards_result.append({"name": dash["name"], "n_charts": len(dash["charts"]), **dash_upserted})
     dashboard_result = dashboards_result[0]
 
