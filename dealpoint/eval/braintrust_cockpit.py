@@ -25,7 +25,6 @@ Two client seams, both optional:
 from __future__ import annotations
 
 import json
-import os
 import re
 import sys
 import uuid
@@ -974,7 +973,9 @@ def replay_hero_case(sdk_client, case_id: str) -> dict:
 # ledger so a re-run never re-logs a score that already exists.
 
 LIVE_SCORE_CAP = 600
-SCORE_LEDGER_PATH = Path(os.environ.get("BRAINTRUST_LEDGER_FILE", "data/reports/braintrust_score_ledger.jsonl"))   # one ledger per org: set BRAINTRUST_LEDGER_FILE for the demo org
+# One ledger per org, resolved lazily from the active key into data/reports/orgs/<org-slug>/
+# (shared with the showroom). A set value here (tests) or BRAINTRUST_LEDGER_FILE wins.
+SCORE_LEDGER_PATH: Path | None = None
 JUDGE_AGGREGATE_DIMENSIONS = 4          # judge/<dimension> scores per replayed tree
 
 
@@ -1005,11 +1006,16 @@ def assert_live_score_budget(planned: int, cap: int = LIVE_SCORE_CAP) -> int:
 _LEDGER_ACTIVE = False
 
 
+def _score_ledger_path() -> Path:
+    from dealpoint.eval.braintrust_adapter import org_report_path
+    return SCORE_LEDGER_PATH or org_report_path("braintrust_score_ledger.jsonl", override_env="BRAINTRUST_LEDGER_FILE")
+
+
 def _ledger_load() -> set[tuple[str, str]]:
-    if not _LEDGER_ACTIVE or not SCORE_LEDGER_PATH.exists():
+    if not _LEDGER_ACTIVE or not _score_ledger_path().exists():
         return set()
     seen: set[tuple[str, str]] = set()
-    with open(SCORE_LEDGER_PATH, encoding="utf-8") as fh:
+    with open(_score_ledger_path(), encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
             if line:
@@ -1021,8 +1027,9 @@ def _ledger_load() -> set[tuple[str, str]]:
 def _ledger_record(experiment: str, key: str, n_scores: int) -> None:
     if not _LEDGER_ACTIVE:
         return
-    SCORE_LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(SCORE_LEDGER_PATH, "a", encoding="utf-8") as fh:
+    path = _score_ledger_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps({"experiment": experiment, "key": key, "n_scores": n_scores,
                              "ts": datetime.now(UTC).isoformat()}) + "\n")
 
@@ -1311,9 +1318,10 @@ def ledger_totals() -> dict:
     """Live scores written so far, from the score ledger (read regardless of
     _LEDGER_ACTIVE: reporting is not writing)."""
     totals = {"n_live_scores": 0, "n_human_scores": 0, "n_entries": 0, "last_ts": None}
-    if not SCORE_LEDGER_PATH.exists():
+    path = _score_ledger_path()
+    if not path.exists():
         return totals
-    with open(SCORE_LEDGER_PATH, encoding="utf-8") as fh:
+    with open(path, encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
             if not line:

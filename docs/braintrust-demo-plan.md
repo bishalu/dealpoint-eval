@@ -16,7 +16,7 @@ Done in the new org today:
 | Auth | API key in `.env.braintrust` (old org's key kept as `.env.braintrust.legacy`); `bt` profile `demo`; Claude Code MCP entry `braintrust-demo` (needs your OAuth on restart); pi MCP entry; OpenRouter provider secret created |
 | Data | `just braintrust-sync --live` once: 30 experiments, 6 datasets, 986 rows, **3,755 scores** (3,986 planned; nulls are not counted), 6 replayed traces, 3 prompts, 1 parameters object. Verified by read-back. |
 | Free tier used (Braintrust's own meter, 2026-09-07) | scores **3,755 of 10,000**; logs (processed data) **0.0023 GB of 1 GB**; model credits **$0 of $10** |
-| Code | `braintrust-sync`, `braintrust-cockpit`, `braintrust-showroom`: org-switchable (`BRAINTRUST_PROJECT`, `BRAINTRUST_ENV_FILE`, `BRAINTRUST_LEDGER_FILE`), dry-run default, `--live` opt-in, exact score counts before writing, per-org ledgers, no hardcoded org ids |
+| Code | `braintrust-sync`, `braintrust-cockpit`, `braintrust-showroom`: org-switchable (`BRAINTRUST_PROJECT`, `BRAINTRUST_ENV_FILE`; the score ledger and showroom manifest live under `data/reports/orgs/<org>/`, derived from the key, `BRAINTRUST_LEDGER_FILE` only as an override), dry-run default, `--live` opt-in, exact score counts before writing, per-org ledgers, no hardcoded org ids |
 
 Not yet done (all free unless marked): showroom steps (experiment tags and descriptions, row-level metadata,
 the 114 log traces, review flags, arm parameters, arm-A prompt variants, four judge scorers, comparison views);

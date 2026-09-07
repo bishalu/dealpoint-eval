@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -47,6 +48,50 @@ METADATA_KEYS: tuple[str, ...] = (
 )
 
 BRAINTRUST_RUNS_PATH = REPORTS_DIR / "braintrust_runs.json"
+
+# --- per-org report paths -------------------------------------------------------
+# Braintrust API keys are org-bound, so the org is a property of the active key, never of
+# this repo's config. Anything that records what was written to an org (the score ledger,
+# the showroom manifest) lives under data/reports/orgs/<org-slug>/ so a fresh org starts
+# empty and never inherits or overwrites another org's state. BRAINTRUST_LEDGER_FILE stays
+# as an explicit override only.
+ORG_API_URL = "https://api.braintrust.dev/v1/organization"
+_ORG_SLUG_CACHE: dict[str, str] = {}
+
+
+def org_slug_from_name(name: str) -> str:
+    """Deterministic, filesystem-safe slug: 'Vibeset Technologies' -> 'vibeset-technologies'."""
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "org"
+
+
+def org_slug(key: str | None = None) -> str:
+    """Slug of the org the active API key belongs to; 'local' when no key is active.
+
+    The active key is the one exported to `BRAINTRUST_API_KEY` (every live entry point exports
+    the key it resolved, which is also what the `braintrust` SDK reads). Dry runs without a key
+    resolve to 'local' and never touch the network. One GET per key per process, cached.
+    """
+    key = key or os.environ.get("BRAINTRUST_API_KEY")
+    if not key:
+        return "local"
+    if key not in _ORG_SLUG_CACHE:
+        import requests
+
+        r = requests.get(ORG_API_URL, headers={"Authorization": f"Bearer {key}"}, timeout=30)
+        r.raise_for_status()
+        orgs = r.json().get("objects", [])
+        if len(orgs) != 1:
+            raise RuntimeError(f"expected the API key to be bound to exactly one org, found {len(orgs)}")
+        _ORG_SLUG_CACHE[key] = org_slug_from_name(orgs[0]["name"])
+    return _ORG_SLUG_CACHE[key]
+
+
+def org_report_path(name: str, override_env: str | None = None) -> Path:
+    """`data/reports/orgs/<org-slug>/<name>`, unless `override_env` names a set environment variable."""
+    override = os.environ.get(override_env) if override_env else None
+    if override:
+        return Path(override)
+    return REPORTS_DIR / "orgs" / org_slug() / name
 
 
 def experiment_name(arm: str, model: str, index_version: str, git_sha7: str) -> str:

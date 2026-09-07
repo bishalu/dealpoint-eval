@@ -471,6 +471,9 @@ def test_main_live_with_a_key_constructs_rest_client_with_a_nonempty_bearer(monk
     # through monkeypatch); restore it so this test cannot leak a "ledger
     # active" state into every later test in the session.
     monkeypatch.setattr(cockpit, "_LEDGER_ACTIVE", cockpit._LEDGER_ACTIVE)
+    # The ledger path is org-derived from the active key over the network; pin it so the fake key
+    # never triggers an org lookup.
+    monkeypatch.setattr(cockpit, "SCORE_LEDGER_PATH", tmp_path / "score_ledger.jsonl")
 
     captured: dict = {}
 

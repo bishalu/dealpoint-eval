@@ -37,7 +37,12 @@ from pathlib import Path
 
 import requests
 
-from dealpoint.eval.braintrust_adapter import PROJECT, load_braintrust_key
+from dealpoint.eval.braintrust_adapter import (
+    PROJECT,
+    load_braintrust_key,
+    org_report_path,
+    org_slug,
+)
 
 API = "https://api.braintrust.dev/v1"
 PROJECT_ID = ""          # resolved by name at runtime (see Api.resolve_project); never hardcode an org's ids
@@ -49,8 +54,11 @@ WORKHORSE_MODEL = "z-ai/glm-5.3-flash"
 JUDGE_MODELS = {"reasoning": "mistralai/mistral-small-3.2-24b-instruct", "evidence": "mistralai/mistral-small-3.2-24b-instruct",
                 "professional": "mistralai/mistral-small-3.2-24b-instruct", "trajectory": "bytedance-seed/seed-2.0-mini"}
 ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
-LEDGER_PATH = Path(os.environ.get("BRAINTRUST_LEDGER_FILE", "data/reports/braintrust_score_ledger.jsonl"))   # one ledger per org: set BRAINTRUST_LEDGER_FILE for the demo org
-MANIFEST_PATH = Path("data/reports/showroom_manifest.json")
+# Ledger and manifest are per org: resolved lazily from the active key into
+# data/reports/orgs/<org-slug>/ (see braintrust_adapter.org_report_path). A set value here
+# (tests) or BRAINTRUST_LEDGER_FILE (explicit override) wins over the org-derived path.
+LEDGER_PATH: Path | None = None
+MANIFEST_PATH: Path | None = None
 STEPS = ("tag", "rows", "logs", "review", "params", "prompts", "judges", "views")
 
 _ARM = re.compile(r"^(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
@@ -176,18 +184,28 @@ def _assert_scoreless(events: list[dict]) -> None:
             raise RuntimeError("showroom refuses to write scores; a payload carried a 'scores' key")
 
 
+def _ledger_path() -> Path:
+    return LEDGER_PATH or org_report_path("braintrust_score_ledger.jsonl", override_env="BRAINTRUST_LEDGER_FILE")
+
+
+def _manifest_path() -> Path:
+    return MANIFEST_PATH or org_report_path("showroom_manifest.json")
+
+
 def _ledger(experiment: str, key: str) -> None:
-    LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(LEDGER_PATH, "a", encoding="utf-8") as fh:
+    path = _ledger_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps({"experiment": experiment, "key": key, "n_scores": 0,
                              "ts": datetime.now(UTC).isoformat(), "source": "showroom"}) + "\n")
 
 
 def _ledger_keys() -> set[tuple[str, str]]:
-    if not LEDGER_PATH.exists():
+    path = _ledger_path()
+    if not path.exists():
         return set()
     seen = set()
-    for line in LEDGER_PATH.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         if line.strip():
             row = json.loads(line)
             seen.add((row["experiment"], row["key"]))
@@ -340,15 +358,21 @@ def arm_parameter_sets() -> list[dict]:
     from dealpoint.eval.braintrust_sync import parameters_schema
     s = parameters_schema()
     retr = s.get("arm_retrievers", {"A": "dense", "B": "dense", "C": "hybrid_rrf", "D": "hybrid_rrf"})
+    # dealpoint.config.ARMS is the truth: each arm differs from its predecessor by exactly one key
+    # (A->B the loop, B->C the retriever, C->D the skill), so these objects must say the same.
+    from dealpoint.config import ARM_ORDER, ARMS
+    descriptions = {
+        "A": "Pipeline, dense retrieval: top-k dense hits into one call, one answer. The control.",
+        "B": "Agent loop on dense retrieval: tools (search_agreement, get_section, lookup_defined_term), no skill. Isolates the loop.",
+        "C": "Agent loop on the tournament-winning hybrid retrieval (dense + BM25, RRF). Isolates the retriever.",
+        "D": "Agent loop, hybrid retrieval, skill injected into the system prompt. Isolates the skill.",
+    }
     return [
-        {"arm": "A", "retriever": retr["A"], "top_k": s.get("top_k", 5), "max_tool_calls": 0, "agent_loop": False, "skill": False,
-         "description": "Single shot: top-k dense hits into one answer. The control."},
-        {"arm": "B", "retriever": retr["B"], "top_k": s.get("top_k", 5), "max_tool_calls": 0, "agent_loop": False, "skill": False,
-         "description": "Structured single shot: same retrieval, structured reasoning and citation."},
-        {"arm": "C", "retriever": retr["C"], "top_k": s.get("top_k", 5), "max_tool_calls": 0, "agent_loop": False, "skill": False,
-         "description": "Hybrid retrieval (dense + BM25, RRF), still single shot."},
-        {"arm": "D", "retriever": retr["D"], "top_k": s.get("top_k", 5), "max_tool_calls": s.get("max_tool_calls", 8), "agent_loop": True, "skill": True,
-         "description": "The agent: hybrid retrieval, tool loop (search_agreement, get_section, lookup_defined_term), skill injected."},
+        {"arm": arm, "retriever": retr.get(arm, ARMS[arm]["retriever"]["name"]), "top_k": s.get("top_k", 5),
+         "max_tool_calls": s.get("max_tool_calls", 8) if ARMS[arm]["loop"] == "agent" else 0,
+         "agent_loop": ARMS[arm]["loop"] == "agent", "skill": bool(ARMS[arm]["skill"]),
+         "description": descriptions[arm]}
+        for arm in ARM_ORDER
     ]
 
 
@@ -466,18 +490,22 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     api = Api(key or "")
     if key:
+        os.environ["BRAINTRUST_API_KEY"] = key     # the SDK steps and the org lookup read the env
         api.resolve_project()
+    org = org_slug(key)
     manifest = {"mode": "live" if live else "dry-run", "started_at": datetime.now(UTC).isoformat(), "project": PROJECT,
-                "project_id": PROJECT_ID, "env_file": ENV_FILE}
-    print(f"{'LIVE' if live else 'DRY RUN'}: showroom on {PROJECT} (scores written: 0 by construction)")
+                "project_id": PROJECT_ID, "org": org, "env_file": ENV_FILE, "ledger": str(_ledger_path())}
+    print(f"{'LIVE' if live else 'DRY RUN'}: showroom on {PROJECT} in org {org} (scores written: 0 by construction; ledger {_ledger_path()})")
     for name in STEPS:
         if only and name not in only:
             continue
         globals()[f"step_{name}"](api, live, manifest)
     manifest["finished_at"] = datetime.now(UTC).isoformat()
     if live:
-        MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8")
-        print(f"manifest -> {MANIFEST_PATH}")
+        out = _manifest_path()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(manifest, indent=2, default=str) + "\n", encoding="utf-8")
+        print(f"manifest -> {out}")
     return 0
 
 
