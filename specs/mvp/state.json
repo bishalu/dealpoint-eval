@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m9b",
+  "current_milestone": "m9d",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -1657,9 +1657,47 @@
         "rubric_version": "cfda9f8cc401",
         "skill_version": "f8d255cc169b"
       }
+    },
+    "m9c": {
+      "adw_ids": [
+        "560b5aad"
+      ],
+      "attempts": 1,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m9c",
+      "infra_retries": 0,
+      "last_failure": "",
+      "last_failure_class": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "2026-09-08T02:00:11.955+00:00",
+      "status": "running",
+      "versions": {}
+    },
+    "m9d": {
+      "adw_ids": [
+        "7cecb33f"
+      ],
+      "attempts": 1,
+      "blocker": "",
+      "commits": [],
+      "ended_at": "",
+      "exclusions": [],
+      "id": "m9d",
+      "infra_retries": 0,
+      "last_failure": "",
+      "last_failure_class": "",
+      "metrics": {},
+      "models": {},
+      "started_at": "2026-09-08T02:09:37.788+00:00",
+      "status": "running",
+      "versions": {}
     }
   },
-  "next_action": "core eval MVP complete",
+  "next_action": "m9d running in session 7cecb33f (attempt 1)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -1780,5 +1818,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-08T00:54:14.657+00:00"
+  "updated_at": "2026-09-08T02:09:37.788+00:00"
 }
