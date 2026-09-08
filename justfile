@@ -270,9 +270,13 @@ gate-m7b:
 # ── dealpoint (M9 MLflow mirror of the Braintrust showroom) ────────────────
 
 # M9: self-hosted MLflow tracking server, SQLite backend, artifacts under data/mlflow/ (gitignored)
+# MLFLOW_PUBLIC_HOST is the exe.dev proxy name (balpad.exe.xyz); MLflow rejects any other Host header
+# (its DNS-rebinding guard), so the proxy's name must be allowed explicitly.
 mlflow-server:
-    mlflow server --backend-store-uri sqlite:///data/mlflow/mlflow.db \
-      --artifacts-destination data/mlflow/artifacts --host 127.0.0.1 --port 5000
+    uv run --extra mlflow mlflow server --backend-store-uri sqlite:///data/mlflow/mlflow.db \
+      --artifacts-destination data/mlflow/artifacts --host 127.0.0.1 --port 5000 \
+      --allowed-hosts "${MLFLOW_PUBLIC_HOST:-balpad.exe.xyz},${MLFLOW_PUBLIC_HOST:-balpad.exe.xyz}:5000,127.0.0.1:5000,localhost:5000" \
+      --cors-allowed-origins "https://${MLFLOW_PUBLIC_HOST:-balpad.exe.xyz},https://${MLFLOW_PUBLIC_HOST:-balpad.exe.xyz}:5000"
 
 # M9: recreate every MLflow artifact from Git/local sources; idempotent. Dry run by default; --live writes.
 mlflow-sync *ARGS:
