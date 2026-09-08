@@ -1,0 +1,86 @@
+[
+  {
+    "pool": "judged-18",
+    "kind": "parallel_coordinates",
+    "params": [
+      "loop",
+      "retriever",
+      "skill",
+      "model"
+    ],
+    "metrics": [
+      "safe_accuracy",
+      "precision_when_answering",
+      "usd_per_case",
+      "wall_s_p50"
+    ],
+    "title": "judged-18: parallel coordinates",
+    "clicks": "Experiment > Chart view > + > Parallel coordinates; params loop, retriever, skill, model; metrics safe_accuracy, precision_when_answering, usd_per_case, wall_s_p50."
+  },
+  {
+    "pool": "judged-18",
+    "kind": "scatter",
+    "x": "usd_per_case",
+    "y": "safe_accuracy",
+    "color": "model",
+    "title": "judged-18: usd_per_case vs safe_accuracy",
+    "clicks": "Experiment > Chart view > + > Scatter; x usd_per_case; y safe_accuracy; colour by model."
+  },
+  {
+    "pool": "judged-18",
+    "kind": "scatter",
+    "x": "wall_s_p50",
+    "y": "precision_when_answering",
+    "title": "judged-18: wall_s_p50 vs precision_when_answering",
+    "clicks": "Experiment > Chart view > + > Scatter; x wall_s_p50; y precision_when_answering."
+  },
+  {
+    "pool": "judged-18",
+    "kind": "bar",
+    "metric": "correct_per_dollar",
+    "title": "judged-18: correct_per_dollar by run",
+    "clicks": "Experiment > Chart view > + > Bar; metric correct_per_dollar; group by run."
+  },
+  {
+    "pool": "test-32",
+    "kind": "parallel_coordinates",
+    "params": [
+      "loop",
+      "retriever",
+      "skill",
+      "model"
+    ],
+    "metrics": [
+      "safe_accuracy",
+      "precision_when_answering",
+      "usd_per_case",
+      "wall_s_p50"
+    ],
+    "title": "test-32: parallel coordinates",
+    "clicks": "Experiment > Chart view > + > Parallel coordinates; params loop, retriever, skill, model; metrics safe_accuracy, precision_when_answering, usd_per_case, wall_s_p50."
+  },
+  {
+    "pool": "test-32",
+    "kind": "scatter",
+    "x": "usd_per_case",
+    "y": "safe_accuracy",
+    "color": "model",
+    "title": "test-32: usd_per_case vs safe_accuracy",
+    "clicks": "Experiment > Chart view > + > Scatter; x usd_per_case; y safe_accuracy; colour by model."
+  },
+  {
+    "pool": "test-32",
+    "kind": "scatter",
+    "x": "wall_s_p50",
+    "y": "precision_when_answering",
+    "title": "test-32: wall_s_p50 vs precision_when_answering",
+    "clicks": "Experiment > Chart view > + > Scatter; x wall_s_p50; y precision_when_answering."
+  },
+  {
+    "pool": "test-32",
+    "kind": "bar",
+    "metric": "correct_per_dollar",
+    "title": "test-32: correct_per_dollar by run",
+    "clicks": "Experiment > Chart view > + > Bar; metric correct_per_dollar; group by run."
+  }
+]

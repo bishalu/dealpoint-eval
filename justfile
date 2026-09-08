@@ -282,6 +282,10 @@ mlflow-sync *ARGS:
 mlflow-sync-dry-run:
     uv run python -m dealpoint.eval.mlflow_mirror --dry-run
 
+# M9b: the config decision run tree (nested runs, Pareto artifacts, registry versions). No model calls.
+mlflow-decision *ARGS:
+    uv run python -m dealpoint.eval.mlflow_decision "$@"
+
 # M9 D3: judge alignment against the lawyer's 24 packets (MLflow-unique, spend-gated, cap $1.50)
 mlflow-align-judges *ARGS:
     uv run python -m dealpoint.eval.mlflow_judges align "$@"

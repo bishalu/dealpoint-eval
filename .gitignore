@@ -84,6 +84,8 @@ data/mlflow/
 !data/reports/orgs/*/showroom_manifest.json
 !data/reports/mlflow_manifest.json
 !data/reports/mlflow_views.json
+!data/reports/mlflow_decision_manifest.json
+!data/reports/mlflow_decision_views.json
 !data/reports/judge_alignment.json
 __pycache__/
 .pytest_cache/

@@ -104,14 +104,83 @@ Pattern object here -- said plainly in "what only Braintrust has" below -- so th
 Braintrust's Topics facet does automatically has to be read off the assessment columns and tags by hand
 (`tags.category`, `tags.arm`, `tags.model`).
 
-### Stop 9. What should we deploy?
+### Stop 9. What should we deploy? (the config decision, M9b)
 
 The **`Which model?`** run comparison (tag `axis = 'model'`, arm D held fixed, five models on the 18
 judged cases): chart `net_accuracy`, `usd_per_case`, `wall_s_p50`/`wall_s_p90`, `cap_hit_rate`,
-`correct_per_dollar`. The registered model **`dealpoint-agent`** carries one version per system@model
-with those same metrics as version metadata; alias **`champion`** points at `D@gemini-3.1-flash-lite`,
-`baseline` at `A@haiku`, `cost-floor` at `D@qwen3.7-flash` -- the deployment decision as a first-class
-object, not a chart someone has to remember to reopen.
+`correct_per_dollar`. That is M9's mirror of the Braintrust dashboards -- one ranked bar list per metric.
+M9b (`just mlflow-decision --live`, no model calls, `dealpoint/eval/mlflow_decision.py`) turns the same
+rows into a multi-metric decision object MLflow is built for: a run tree, params as axes, search by
+metric, and a registry the deployment decision lives on.
+
+**The two parent runs.** `decision/judged-18` (A@haiku, D@haiku, D@glm, D@deepseek-v4-flash,
+`D@qwen3.7-flash`, D@gemini-3.1-flash-lite -- every system@model on the same 18 judged cases) and
+`decision/test-32` (the four GLM systems A/B/C/D on the same 32 test cases). No chart ever crosses the
+two: `comparable = 1` is the M9 rule (drops representative picks, live replays, the partial
+`D@openai/gpt-5.6-luna-pro` trace), and the parent boundary keeps every comparison inside one pool.
+
+**The nested run tree.** Six children under `decision/judged-18`, four under `decision/test-32`, each
+with params `arm`, `loop`, `retriever`, `skill`, `model`, `system_label` and fifteen metrics
+(`safe_accuracy`, `precision_when_answering`, `net_accuracy`, `correct_outcome_rate`,
+`misleading_rate`, `silent_failure_rate`, `cap_hit_rate`, `fabrication_rate`, `verbatim_quote_rate`,
+`usd_per_case`, `wall_s_p50`, `wall_s_p90`, `tool_calls_per_case`, `correct_per_dollar`,
+`usd_per_correct`) -- every one of them `mlflow_mirror._run_metrics_for_agent_rows`'s own number, never
+re-derived. Safe accuracy is the accuracy point (did not mislead), precision when answering its check,
+net accuracy the tie-breaker (`docs/demo-tour.md` stop 9).
+
+**parallel coordinates** -- `loop, retriever, skill, model -> safe_accuracy, precision_when_answering,
+usd_per_case, wall_s_p50` (OSS 3.16 has no chart API, so this is three clicks, not a saved object:
+Experiment > Chart view > + > Parallel coordinates; params `loop, retriever, skill, model`; metrics
+`safe_accuracy, precision_when_answering, usd_per_case, wall_s_p50`). This is the thing a Braintrust
+monitor dashboard cannot do: four metrics and four params on one chart instead of one ranked bar list
+per metric.
+
+**The two scatters.** `usd_per_case` vs `safe_accuracy` coloured by `model`; `wall_s_p50` vs
+`precision_when_answering`. Params become axes.
+
+**The Pareto artifact.** `pareto.json` and `pareto.svg` on each parent run: the M6 rule
+(`dealpoint.eval.pareto_report.pareto_frontier`, applied unchanged) over three axis pairs. Measured,
+`judged-18`'s safe-vs-dollars frontier is `D@qwen3.7-flash` and `D@deepseek-v4-flash`; its
+net-accuracy-vs-dollars frontier is `D@qwen3.7-flash`, `D@deepseek-v4-flash`, `A@haiku` and
+`D@gemini-3.1-flash-lite`. **Spec/data note:** `specs/milestones/m9b.md` section 2 expected D@gemini and
+D@qwen on safe-vs-dollars; measured, D@deepseek-v4-flash dominates D@gemini-3.1-flash-lite there
+(cheaper, $0.002358 vs $0.005134, and safer, 0.8889 vs 0.8333) -- D@gemini and D@qwen do share a
+frontier, but on net-accuracy-vs-dollars instead, the tie-breaker axis the deployment verdict actually
+turns on. This is recorded verbatim in `pareto.json`'s `spec_differences` block.
+
+**Cookbook: three metric-filtered searches** (scoped to `` tags.`dealpoint.decision` = 'config' `` so
+M9's 33 runs, which also carry `safe_accuracy` and `usd_per_case`, never leak in):
+
+```
+safe and cheap:                tags.`dealpoint.decision` = 'config' and metrics.safe_accuracy >= 0.8 and metrics.usd_per_case <= 0.003
+  -> D@deepseek-v4-flash, D@glm, D@qwen3.7-flash (judged-18)
+right and fast:                tags.`dealpoint.decision` = 'config' and metrics.precision_when_answering >= 0.65 and metrics.wall_s_p50 <= 15
+  -> D@gemini-3.1-flash-lite (judged-18), A@glm (test-32, sitting exactly on the 0.65 boundary -- and A is a pipeline, not an agent)
+agents that never invent a clause: tags.`dealpoint.decision` = 'config' and params.loop = 'agent' and metrics.fabrication_rate = 0
+  -> D@gemini-3.1-flash-lite only
+```
+
+Search by metric -- a Braintrust dashboard ranks, it does not filter.
+
+**The registry as the decision record.** Ten new `dealpoint-agent` versions, one per decision child,
+version tags carrying the same fifteen metrics; aliases **`champion`** -> `D@gemini-3.1-flash-lite`,
+**`baseline`** -> `A@haiku`, **`cost-floor`** -> `D@qwen3.7-flash`, **`safest`** -> `D@deepseek-v4-flash`
+(new). M9b re-points M9's three `champion`/`baseline`/`cost-floor` aliases at the decision versions --
+deliberate, idempotent, and the point of D8: the registry's version-comparison view is the deployment
+record, not a chart someone has to remember to reopen.
+
+**Row-level comparison at zero model calls.** `mlflow.genai.evaluate(data=<the pool's stored rows>,
+predict_fn=None)` per configuration with the six deterministic scorers plus three pure row scorers
+`safe`, `misleading` and **`deployable`** (`correct or silent`, never misleading). The Evaluations tab
+then compares any two configurations row by row on `contract_144__q05` and its redacted twin
+`contract_39__redacted_q05` -- the MLflow form of the Braintrust Grid, at zero model calls. Note:
+by `metadata_mirror`'s own definitions `deployable` is identical to `safe` (`1 - misleading`); it is
+stated the way a lawyer states it, not restated as an independent metric.
+
+**Not here.** The eight Braintrust dashboards' ranked single-metric lists over *logs*, each with a
+verdict paragraph attached to the dashboard object, and online scoring -- MLflow's run comparisons are
+run-level, rebuilt from `data/reports/mlflow_decision_views.json` by hand because OSS 3.16 has no
+chart/view API.
 
 ## What MLflow adds
 

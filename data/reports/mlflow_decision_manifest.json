@@ -1,0 +1,71 @@
+{
+  "mode": "live",
+  "started_at": "2026-09-08T00:29:47.853593+00:00",
+  "experiment": "dealpoint-eval",
+  "tracking_uri": "sqlite:///data/mlflow/mlflow.db",
+  "tree": {
+    "parents": 2,
+    "children": 10,
+    "created_this_run": 0
+  },
+  "pareto": {
+    "artifacts_per_parent": 3,
+    "frontiers": {
+      "judged-18": {
+        "usd_per_case|safe_accuracy": [
+          "D@qwen3.7-flash",
+          "D@deepseek-v4-flash"
+        ],
+        "wall_s_p50|precision_when_answering": [
+          "A@haiku",
+          "D@gemini-3.1-flash-lite",
+          "D@deepseek-v4-flash"
+        ],
+        "usd_per_case|net_accuracy": [
+          "D@qwen3.7-flash",
+          "D@deepseek-v4-flash",
+          "A@haiku",
+          "D@gemini-3.1-flash-lite"
+        ]
+      },
+      "test-32": {
+        "usd_per_case|safe_accuracy": [
+          "A@glm"
+        ],
+        "wall_s_p50|precision_when_answering": [
+          "A@glm",
+          "C@glm"
+        ],
+        "usd_per_case|net_accuracy": [
+          "A@glm"
+        ]
+      }
+    }
+  },
+  "views": {
+    "entries": 8,
+    "chart_api_available": false,
+    "probed": [
+      "create_chart",
+      "set_experiment_view",
+      "create_experiment_view",
+      "set_chart"
+    ]
+  },
+  "registry": {
+    "versions": 10,
+    "aliases": {
+      "champion": "judged-18/D@gemini-3.1-flash-lite",
+      "baseline": "judged-18/A@haiku",
+      "cost-floor": "judged-18/D@qwen3.7-flash",
+      "safest": "judged-18/D@deepseek-v4-flash"
+    },
+    "created_this_run": 0
+  },
+  "evaluate": {
+    "configs": 10,
+    "written_this_run": 0
+  },
+  "finished_at": "2026-09-08T00:29:53.126823+00:00",
+  "mlflow_version": "3.16.0"
+}
