@@ -20,5 +20,5 @@ def test_state_json_is_factory_owned_and_never_a_breach(monkeypatch):
     agent = type("A", (), {"name": "planner", "writes": ["specs/????????_*.md"]})()
     cfg = type("C", (), {"defaults": type("D", (), {"data_dir": "adws/adw_data", "protected_files": []})()})()
     run = type("R", (), {"cfg": cfg, "repo_root": "."})()
-    touched = permissions.enforce(run, None, agent, before)
+    touched = permissions.enforce(run, None, agent, before)  # type: ignore[arg-type]
     assert touched == [], "the factory's own checkpoint write is neither a breach nor a touched path"

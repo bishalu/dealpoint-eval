@@ -314,6 +314,32 @@ mlflow-score-new *ARGS:
 gate-m9:
     uv run pytest -m "gate_m9 and not needs_network and not needs_model" -q
 
+# ── M9c: every MLflow tab filled, and the eight dashboards ported word for word ────────────────
+
+# M9c D11-D15: sessions, judges, review queues, agent versions, gateway+playground. Dry run by default.
+mlflow-tabs *ARGS:
+    uv run python -m dealpoint.eval.mlflow_tabs "$@"
+
+# M9c D12: re-log one stored trace as a new trace tagged category=live-replay, e.g. `just mlflow-replay contract_144__q05:D@glm --live`
+mlflow-replay CASE_VARIANT *ARGS:
+    uv run python -m dealpoint.eval.mlflow_tabs replay {{CASE_VARIANT}} "$@"
+
+# M9c D16: the eight dashboards' numbers, offline (local evaluator) by default; --live runs real, read-only BTQL
+braintrust-dashboard-snapshot *ARGS:
+    uv run python -m dealpoint.eval.mlflow_dashboards snapshot "$@"
+
+# M9c D16: log the eight dashboard runs (HTML artifact + metrics) to MLflow. Dry run by default.
+mlflow-dashboards *ARGS:
+    uv run python -m dealpoint.eval.mlflow_dashboards runs "$@"
+
+# milestone 9c acceptance gates only, offline
+gate-m9c:
+    uv run pytest -m "gate_m9c and not needs_network and not needs_model" -q
+
+# milestone 9d acceptance gates only, offline
+gate-m9d:
+    uv run pytest -m "gate_m9d and not needs_network and not needs_model" -q
+
 # ── mvp orchestration (project-level autonomous loop) ──────────────────────
 
 # where the autonomous run stands; launches nothing

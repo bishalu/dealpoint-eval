@@ -41,8 +41,10 @@ def load_config(path: str = "adws/adw_sssf_config/sssf.config.yaml") -> SSSFConf
         agent.setdefault("harness_engineering", defaults.get("harness_engineering", []))
     cfg = SSSFConfig(**raw)
     # Headroom is a pi MCP server, so its tools are extension tools and must
-    # be named in each agent's allowlist to be offered at all. Flag off: no-op.
-    headroom.apply(cfg, tool_prefix=headroom.tool_prefix(git_helper.repo_root()))
+    # be named in each agent's allowlist to be offered at all. Flag off: no
+    # git subprocess, no file read, nothing.
+    if headroom.enabled(cfg):
+        headroom.apply(cfg, tool_prefix=headroom.tool_prefix(git_helper.repo_root()))
     return cfg
 
 

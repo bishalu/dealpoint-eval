@@ -56,6 +56,8 @@ markers = [
     "gate_m7b: milestone 7b gate",
     "gate_m9: milestone 9 gate",
     "gate_m9b: milestone 9b gate",
+    "gate_m9c: milestone 9c gate",
+    "gate_m9d: milestone 9d gate",
     "needs_network: requires internet access",
     "needs_model: spends money against OPENROUTER_API_KEY",
 ]

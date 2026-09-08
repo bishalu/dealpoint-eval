@@ -154,5 +154,55 @@ of this probe did exactly that to a concurrent milestone build). A worktree
 ### Results
 
 <!-- headroom-probe-results:start -->
-_Pending: filled from the isolated run of `just headroom-probe`._
+Isolated worktree at commit 1268eed, 2026-09-08, `claude-bridge/claude-haiku-4-5`,
+thinking `low`, 300 records (31 KB). All twelve checks passed: both arms exited
+0; the flag-off arm never had a `.pi/mcp.json` and saw only `read`; the flag-on
+arm had the entry while alive and not after; the worker invoked all three
+Headroom tools with no errors; both arms answered both questions exactly.
+
+| measure | baseline | headroom |
+|---|---|---|
+| adw_id | hrb3b87f3 | hrh319423 |
+| exit code | 0 | 0 |
+| phase failure | — | — |
+| answer read from | envelope.json | envelope.json |
+| wall time (s) | 18.3 | 106.9 |
+| assistant turns | 2 | 5 |
+| tool calls | 1 | 4 |
+| tools seen | read | mcp_headroom_headroom_compress, mcp_headroom_headroom_retrieve, mcp_headroom_headroom_stats, read |
+| Headroom tools invoked | none | mcp_headroom_headroom_compress, mcp_headroom_headroom_retrieve, mcp_headroom_headroom_stats |
+| tokens, sum over turns (pi total) | 20957 | 163748 |
+|   input (uncached) | 17 | 41 |
+|   cache read | 4641 | 102447 |
+|   cache write | 15493 | 49090 |
+|   output | 806 | 12170 |
+| context occupancy after last turn | 15978 | 49488 |
+| context occupancy (sssf.db) | 15978 | 49488 |
+| cost USD (pi) | 0.0 | 0.0 |
+| cost USD (sssf.db) | 0.0 | 0.0 |
+| read tool output truncated | False | False |
+| answer error_count correct | True | True |
+| answer needle host correct | True | True |
+| summary | `error_count=14; host_234=node-0` | `error_count=14; host_234=node-0` |
+
+Headroom calls in the flag-on arm:
+
+- `mcp_headroom_headroom_compress` ok=True {"result_chars": 14331, "original_tokens": 9609, "compressed_tokens": 5128, "tokens_saved": 4481, "savings_percent": 46.6, "transforms": ["router:mixed:0.35"]}
+- `mcp_headroom_headroom_retrieve` ok=True {"result_chars": 37698, "source": "local"}
+- `mcp_headroom_headroom_stats` ok=True {"result_chars": 1363, "savings_percent": 46.6, "compressions": 1, "retrievals": 1, "total_tokens_saved": 4481}
+
+Reading: **the mechanism works end to end, and MCP-only mode is a net cost on
+this task.** The worker reads the file (≈15 K tokens into context), then writes
+the whole content back out as the `content` argument of `headroom_compress`
+(that is the ≈12 K output tokens — output is the expensive kind), receives a 5 K
+compressed copy on top, then a 38 K-character retrieval on top of that. Final
+context is 3× the baseline's, summed tokens 8×, wall time 6×, and the answer was
+already right without any of it. Headroom's own accounting (46.6% saved,
+4 481 tokens) is true of the payload it was handed and says nothing about the
+session, which is what the proxy path would change and this flag does not.
+
+What this buys is the plumbing, verified: a Claude worker under SSSF can call a
+Headroom tool, and the flag can be turned off with nothing left behind. Where a
+compress-then-hand-off pattern (see above) would pay is a separate experiment
+on a multi-agent chain; this probe deliberately measures the simplest case.
 <!-- headroom-probe-results:end -->

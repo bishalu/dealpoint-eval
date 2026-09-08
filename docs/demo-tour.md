@@ -129,6 +129,16 @@ retrieval (C) recovers accuracy; the skill (D) halves the cap-hits and raises fa
 trade, and the trade is visible per case, not just in a mean. The four `arm-*-config` Parameters objects
 are these rows as first-class, versioned configs.
 
+`A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc` is now the project baseline, so opening any arm-D experiment
+shows the Summary's deltas against A and the Grid colours each case as an improvement or a regression.
+Three project scores -- `grounded and verbatim` (the floor: matched the expert span AND quoted it
+verbatim), `citation quality` and `headline composite` -- are exact aggregates of the six `obj/*` scores
+every row already carries; safe accuracy, precision when answering and net accuracy are NOT expressible
+this way (they need a per-row `misleading` score, and `obj/abstain_correct` is true on an answerable case
+whenever the system answered, right or wrong), so those three stay dashboard-only. How a live app (a
+FastAPI `POST /api/run`) would plug into these same objects, without building one, is written up in
+`docs/braintrust-live-app.md`.
+
 One-liner: "Does agency help? On this question, yes. In aggregate it's a trade, and now the trade has a
 grid."
 
@@ -151,6 +161,12 @@ diligence; it is also the bill.
 Now the twin: filter `metadata.case_id = 'contract_39__redacted_q05'` and open any `D@*` trace. Status
 `CAP_HIT`: eight calls searching for a definition that was redacted, then the cap. Every arm-D model did
 this; only the single-shot pipeline abstained. Hold that thought for stop 8.
+
+The twin is already a test case: click **Add to dataset** -> `maud-dealpoint-regressions` on this trace,
+and the row that appears is the one the rule already wrote -- every cap-hit on a counterfactual case, the
+two packets where all three judges were wrong and the lawyer right, every misleading single-shot-baseline
+answer, and this hero pair, all found by code before anyone clicked. `metadata.source_log_id` on that row
+points straight back to this trace.
 
 266 traces live here (108 judged, 151 from the sweeps, six representative, one live replay), every one
 replayed from stored trajectories with zero model calls, and zero scores: Logs are for looking, Experiments

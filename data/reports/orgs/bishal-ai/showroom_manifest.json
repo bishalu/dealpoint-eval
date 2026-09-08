@@ -1,15 +1,117 @@
 {
   "mode": "live",
-  "started_at": "2026-09-07T17:03:48.160238+00:00",
+  "started_at": "2026-09-08T20:08:08.030742+00:00",
   "project": "dealpoint-eval",
   "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
   "org": "bishal-ai",
   "env_file": ".env.braintrust",
   "ledger": "/home/exedev/repos/dealpoint-eval/data/reports/orgs/bishal-ai/braintrust_score_ledger.jsonl",
-  "mirror": {
-    "rows_indexed": 426,
-    "logs_updated": 672,
-    "logs_unmatched": 0
+  "baseline": {
+    "experiment": "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc",
+    "experiment_id": "fb6f0fc7-45fb-4fe1-a23b-01b6ee0b7ca0",
+    "comparison_key": [
+      "input",
+      "metadata.case_id"
+    ],
+    "comparison_key_offenders": [
+      "playground-arm-A-base",
+      "playground-arm-A-abstain-first",
+      "playground-arm-A-cite-first",
+      "playground-arm-A-terse"
+    ]
   },
-  "finished_at": "2026-09-07T17:04:52.661195+00:00"
+  "logtags": {
+    "planned": 743,
+    "tagged": 739,
+    "by_key": {
+      "status": {
+        "ABSTAINED": 21,
+        "ANSWERED": 145,
+        "CAP_HIT": 78,
+        "EXECUTION_FAILED": 21
+      },
+      "system": {
+        "A": 124,
+        "D": 148,
+        "C": 33,
+        "B": 32
+      },
+      "model": {
+        "haiku": 39,
+        "glm": 201,
+        "deepseek-v4-flash": 32,
+        "qwen3.7-flash": 32,
+        "gemini-3.1-flash-lite": 32,
+        "openai/gpt-5.6-luna-pro": 1
+      },
+      "pool": {
+        "judged-18": 108,
+        "test-32": 151,
+        "retrieval": 406,
+        "prompt-variant": 72
+      },
+      "category": {
+        "judged": 108,
+        "successful_direct": 1,
+        "retrieval_rescue": 1,
+        "defined_term_cross_ref": 1,
+        "inefficient_trajectory": 1,
+        "wrong_answer": 1,
+        "abstention_counterfactual": 1,
+        "agent": 151,
+        "retrieval": 406,
+        "prompt-variant": 72
+      },
+      "regression": 33
+    },
+    "views": [
+      {
+        "name": "Cap-hits",
+        "id": "73cdf5db-c920-4dc7-a088-9da47b53eb11",
+        "created": false
+      },
+      {
+        "name": "Regressions",
+        "id": "d32ba850-5b1e-49cc-87d1-71fa57ec7a6a",
+        "created": false
+      }
+    ],
+    "btql_tag_operator": "tags includes '<value>'"
+  },
+  "aggregate_scores": [
+    {
+      "name": "grounded and verbatim",
+      "score_type": "minimum",
+      "id": "d035c6bb-29d3-416a-b480-d9ed2ab905cc",
+      "created": false
+    },
+    {
+      "name": "citation quality",
+      "score_type": "weighted",
+      "id": "324d4206-d4a1-42df-a222-b8c07aaa68c5",
+      "created": false
+    },
+    {
+      "name": "headline composite",
+      "score_type": "weighted",
+      "id": "69cfb210-abda-43b7-ba43-5df3f212eb41",
+      "created": false
+    }
+  ],
+  "aggregate_scores_config_shape": {
+    "categories": "{score_name: weight} at the top level (NOT under config); config is null. Confirmed live 2026-09-08."
+  },
+  "regressions": {
+    "dataset": "maud-dealpoint-regressions",
+    "rows": 33,
+    "by_rule": {
+      "cap_hit_counterfactual": 25,
+      "lawyer_beats_judges": 2,
+      "misleading_single_shot_baseline": 5,
+      "hero_pair": 1
+    },
+    "log_ids_resolved": 33,
+    "unresolved": []
+  },
+  "finished_at": "2026-09-08T20:13:21.310067+00:00"
 }

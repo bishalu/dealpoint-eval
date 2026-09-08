@@ -23,18 +23,35 @@ So this module never writes a score. It only adds the things Braintrust does not
              as chat prompts, so the Playground prompt A/B/C holds everything but the system prompt fixed;
              `--live --run-playground` pre-runs it server-side (POST /v1/eval) as four experiments (scores!)
 
+    baseline     project baseline (D18): A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc, so the Summary and
+             Grid show deltas/regressions against a fixed control
+    aggscores  three project scores (D19), exactly derivable from the six obj/* scores every row
+             carries: `grounded and verbatim`, `citation quality`, `headline composite`
+    regressions  `maud-dealpoint-regressions` (D20): a rule-built dataset of every cap-hit on a
+             counterfactual case, the two lawyer-beats-judges packets, the misleading single-shot
+             baseline answers and the hero pair -- see `regression_rows()`
+    logtags  first-class tags on every root log (D21): status/system/model/pool/category + `regression`,
+             plus two saved Logs views, Cap-hits and Regressions
+
 Dry run is the default and prints the plan; `--live` executes. Every live write is recorded in the
-score ledger with n_scores=0, and a guard asserts no payload ever carries a `scores` key.
+score ledger with n_scores=0, and a guard asserts no payload ever carries a `scores` key. The one
+opt-in exception is `--score-trust-triple` (D19), which writes `trust/safe`, `trust/net` and
+`trust/correct_outcome` on the canonical experiments and is refused without both `--live` and the flag.
+
+How a live app (a FastAPI `POST /api/run`) would plug into Braintrust, without building one: see
+`docs/braintrust-live-app.md` (D22).
 
     uv run python -m dealpoint.eval.braintrust_showroom              # dry run
     uv run python -m dealpoint.eval.braintrust_showroom --live       # execute
     uv run python -m dealpoint.eval.braintrust_showroom --live --only tag,rows
     uv run python -m dealpoint.eval.braintrust_showroom --live --replay contract_144__q05:D@glm   # one new log, now
+    uv run python -m dealpoint.eval.braintrust_showroom --score-trust-triple                       # prints the count, writes nothing
 """
 
 from __future__ import annotations
 
 import contextlib
+import functools
 import json
 import os
 import re
@@ -68,7 +85,17 @@ ENV_FILE = os.environ.get("BRAINTRUST_ENV_FILE", ENV_FILE_DEFAULT)
 # (tests) or BRAINTRUST_LEDGER_FILE (explicit override) wins over the org-derived path.
 LEDGER_PATH: Path | None = None
 MANIFEST_PATH: Path | None = None
-STEPS = ("tag", "rows", "logs", "mirror", "raglogs", "review", "params", "prompts", "judges", "views", "playground", "judgeplayground", "promptlogs")
+STEPS = ("baseline", "tag", "rows", "logs", "mirror", "logtags", "aggscores", "regressions", "raglogs", "review",
+         "params", "prompts", "judges", "views", "playground", "judgeplayground", "promptlogs")
+
+# D18: the project baseline -- arm A on GLM, the control of the SYSTEM ladder and the cheapest configuration.
+BASELINE_EXPERIMENT = "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc"
+COMPARISON_KEY = "input"
+
+# D20: the regressions dataset -- rule-built, not hand-picked (see `regression_rows`).
+REGRESSIONS_DATASET = "maud-dealpoint-regressions"
+HERO_PAIR = (("contract_144__q05", "A@haiku"), ("contract_39__redacted_q05", "D@glm"))
+LAWYER_BEATS_JUDGES_PACKETS = ("32fc075d8413", "790521a3adab")
 
 _ARM = re.compile(r"^(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
 _JUDGED = re.compile(r"^judged-(?P<arm>[ABCD])-(?P<model>.+)-e2b4a2b97561-(?P<sha>[0-9a-f]{7})$")
@@ -284,7 +311,92 @@ def _case_info(case_id: str) -> dict:
         return {}
 
 
+def resolve_experiment_id(api: Api, name: str) -> str | None:
+    """An experiment's id, resolved by name over `api.experiments()`. Never hardcode an org's id."""
+    for e in api.experiments():
+        if e.get("name") == name:
+            return e["id"]
+    return None
+
+
+_COMPARABLE_AXES = ("system", "model", "judge", "prompt")
+
+
+def comparison_key_is_safe(rows_by_experiment: dict[str, list[dict]]) -> tuple[bool, list[str]]:
+    """D18: is `comparison_key = 'input'` safe to leave alone? True when every experiment whose axis
+    is system/model/judge/prompt has, for each of its root rows, an `input` equal to the row's
+    `metadata.case_id` (or, absent that, a non-empty string unique within the experiment). Retrieval
+    experiments are exempt: their `input` is the query and they are only ever compared with each other.
+    Pure over `{experiment_name: [root events]}`; returns `(ok, offending experiment names)`."""
+    offenders = []
+    for name, rows in rows_by_experiment.items():
+        if classify_experiment(name).get("axis") not in _COMPARABLE_AXES:
+            continue
+        seen_inputs: set[str] = set()
+        ok = True
+        for r in rows:
+            inp = r.get("input")
+            case_id = (r.get("metadata") or {}).get("case_id")
+            if case_id is not None:
+                if inp != case_id:
+                    ok = False
+                    break
+            elif not isinstance(inp, str) or not inp or inp in seen_inputs:
+                ok = False
+                break
+            else:
+                seen_inputs.add(inp)
+        if not ok:
+            offenders.append(name)
+    return (len(offenders) == 0, offenders)
+
+
 # --- steps ----------------------------------------------------------------------
+
+def step_baseline(api: Api, live: bool, manifest: dict) -> None:
+    """D18: set the project baseline and confirm (or widen) the comparison key. The Grid's
+    improvement/regression colouring and the Summary's deltas only exist relative to a baseline;
+    without one, none is set."""
+    print(f"baseline: {BASELINE_EXPERIMENT} (arm A on GLM, the control of the SYSTEM ladder and the cheapest configuration)")
+    print("baseline: comparison_key is [input, metadata.case_id] (the four playground-arm-A-* experiments do not use "
+          "the case id as input, so the key was widened; retrieval experiments use the query and are compared only "
+          "among themselves)")
+    manifest["baseline"] = {"experiment": BASELINE_EXPERIMENT, "experiment_id": None, "comparison_key": COMPARISON_KEY,
+                            "comparison_key_offenders": []}
+    if not live:
+        return
+    exp_id = resolve_experiment_id(api, BASELINE_EXPERIMENT)
+    if exp_id is None:
+        print(f"  FAILED: experiment {BASELINE_EXPERIMENT} not found; leaving project settings untouched")
+        return
+    print(f"  resolved id: {exp_id}")
+    exps = {e["name"]: e["id"] for e in api.experiments()}
+    rows_by_experiment = {name: [r for r in api.fetch_rows(eid) if _is_root(r)]
+                          for name, eid in exps.items() if classify_experiment(name).get("axis") != "retrieval"}
+    ok, offenders = comparison_key_is_safe(rows_by_experiment)
+    key: str | list[str] = COMPARISON_KEY if ok else ["input", "metadata.case_id"]
+    if not ok:
+        print(f"  comparison_key widened to {key}: forced by {offenders}")
+    manifest["baseline"] = {"experiment": BASELINE_EXPERIMENT, "experiment_id": exp_id, "comparison_key": key,
+                            "comparison_key_offenders": offenders}
+    current = api.get("project", {"project_name": PROJECT, "limit": 5}).get("objects", [])
+    existing_settings = (current[0].get("settings") or {}) if current else {}
+    already = ("project", "baseline") in _ledger_keys()
+    if already and existing_settings.get("baseline_experiment_id") == exp_id:
+        print("  already set; no write")
+        return
+    # 2026-09-08, confirmed live: PATCH /v1/project replaces `settings` wholesale rather than
+    # merging it (a PATCH carrying only baseline_experiment_id + comparison_key dropped the
+    # existing settings.default_preprocessor), and settings.comparison_key rejects a JSON array
+    # (400 invalid_type, expected string) -- the server wants the SQL-expression string the UI's
+    # "Comparison key" field accepts, e.g. "[input, metadata.case_id]", not a JSON list of paths.
+    # So this PATCH must read-modify-write the whole settings object.
+    key_expr = key if isinstance(key, str) else f"[{', '.join(key)}]"
+    new_settings = {**existing_settings, "baseline_experiment_id": exp_id, "comparison_key": key_expr}
+    api.patch(f"project/{PROJECT_ID}", {"settings": new_settings})
+    _ledger("project", "baseline", 0)
+    _ledger("project", "comparison-key", 0)
+
 
 def step_tag(api: Api, live: bool, manifest: dict) -> None:
     exps = api.experiments()
@@ -722,6 +834,473 @@ def step_mirror(api: Api, live: bool, manifest: dict) -> None:
     print(f"  merged onto {len(events)} logs ({unmatched} unmatched)")
 
 
+# --- D21: first-class tags on logs -----------------------------------------------
+
+_STATUS_TAGS = ("ANSWERED", "ABSTAINED", "CAP_HIT", "EXECUTION_FAILED")
+_POOL_BY_CATEGORY = {"judged": "judged-18", "agent": "test-32", "retrieval": "retrieval", "prompt-variant": "prompt-variant"}
+
+
+@functools.lru_cache(maxsize=1)
+def _regression_keys() -> frozenset[tuple[str, str]]:
+    return frozenset((r["input"], r["metadata"]["source_variant"]) for r in regression_rows())
+
+
+def tags_for_log(metadata: dict) -> list[str]:
+    """D21: the whole tag rule for one root log's metadata, sorted and deduplicated. A key absent
+    from the metadata simply produces no tag -- a retrieval log gets only `pool:retrieval` and
+    `category:retrieval`; representative and `live-replay-*` logs get no `pool:` tag at all (they
+    are single traces, not a comparison pool)."""
+    m = metadata or {}
+    tags: set[str] = set()
+    status = m.get("status")
+    if status in _STATUS_TAGS:
+        tags.add(f"status:{status}")
+    arm = m.get("arm") or ((m.get("variant_id") or "").partition("@")[0] or None)
+    if arm:
+        tags.add(f"system:{arm}")
+    model_label = m.get("model_label") or (_short(m["model"]) if m.get("model") else None)
+    if model_label:
+        tags.add(f"model:{model_label}")
+    category = m.get("category")
+    pool = _POOL_BY_CATEGORY.get(category or "")
+    if pool:
+        tags.add(f"pool:{pool}")
+    if category:
+        tags.add(f"category:{category}")
+    if (m.get("case_id"), m.get("variant_id")) in _regression_keys():
+        tags.add("regression")
+    return sorted(tags)
+
+
+def tag_plan() -> dict:
+    """D21, offline: every log D21 would tag, from the same local artifacts `step_logs`/`step_raglogs`/
+    `step_promptlogs` plan from -- `{"planned": n, "by_key": {...}}`."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _load_jsonl, _variant_results
+    from dealpoint.eval.braintrust_sync import representative_cases
+
+    subset = _judged_subset()
+    metas: list[dict] = []
+    for variant in subset.get("variants", []):
+        rows = _variant_results(subset, variant["variant_id"])
+        arm, _, model = variant["variant_id"].partition("@")
+        for case_id in subset.get("case_ids", list(rows)):
+            row = rows.get(case_id) or {}
+            metas.append({"category": "judged", "case_id": case_id, "variant_id": variant["variant_id"], "arm": arm,
+                         "model": model, "status": (row.get("record") or {}).get("status") or row.get("status")})
+    for sel in representative_cases().get("selections", []):
+        if not sel.get("case_id"):
+            continue
+        arm, _, model = (sel.get("variant_id") or "@").partition("@")
+        row = {}
+        if sel.get("results_path"):
+            row = next((r for r in _load_jsonl(sel["results_path"]) if r.get("case_id") == sel["case_id"]), {})
+        metas.append({"category": sel["category"], "case_id": sel["case_id"], "variant_id": sel.get("variant_id"),
+                     "arm": arm or None, "model": model or None, "status": (row.get("record") or {}).get("status") or row.get("status")})
+    already = {(m["case_id"], m["variant_id"]) for m in metas}
+    for p in agent_run_log_plan(already):
+        row = p["row"] or {}
+        arm, _, model = p["variant_id"].partition("@")
+        metas.append({"category": "agent", "case_id": p["case_id"], "variant_id": p["variant_id"], "arm": arm,
+                     "model": model, "status": (row.get("record") or {}).get("status") or row.get("status")})
+    for r in retrieval_log_rows():
+        metas.append({"category": "retrieval", "case_id": r["case_id"], "variant_id": None, "arm": None, "model": None, "status": None})
+    for _v in ("base", "terse", "cite-first", "abstain-first"):
+        for case_id in subset.get("case_ids", []):
+            metas.append({"category": "prompt-variant", "case_id": case_id, "variant_id": None, "arm": "A", "model": "glm", "status": None})
+
+    by_key: dict[str, dict[str, int]] = {"status": {}, "system": {}, "model": {}, "pool": {}, "category": {}}
+    regression = 0
+    for m in metas:
+        for tag in tags_for_log(m):
+            if tag == "regression":
+                regression += 1
+                continue
+            key, _, value = tag.partition(":")
+            by_key.setdefault(key, {})
+            by_key[key][value] = by_key[key].get(value, 0) + 1
+    return {"planned": len(metas), "by_key": {**by_key, "regression": regression}}
+
+
+def step_logtags(api: Api, live: bool, manifest: dict) -> None:
+    """D21: first-class tags on every root log, merged in one pass (free), plus two saved Logs views
+    keyed on them. Never touches the online scoring rule -- its filter can move to a tag-based one by
+    hand in the UI; nothing here creates or edits an automation."""
+    plan = tag_plan()
+    bk = plan["by_key"]
+    print(f"logtags: {plan['planned']} logs planned from local artifacts; tag counts by key: "
+          f"status={bk['status']} system={bk['system']} model={bk['model']} pool={bk['pool']} "
+          f"category={bk['category']} regression={bk['regression']}")
+    print("logtags: views Cap-hits, Regressions")
+    manifest["logtags"] = {"planned": plan["planned"], "tagged": 0, "by_key": bk, "views": []}
+    if not live:
+        return
+    roots = _all_root_logs(api)
+    events = [{"id": e["id"], "tags": tags_for_log(e.get("metadata") or {}), "_is_merge": True} for e in roots]
+    _assert_scoreless(events)
+    for i in range(0, len(events), 100):
+        api.post(f"project_logs/{PROJECT_ID}/insert", {"events": events[i:i + 100]})
+    if ("logs", "tags") not in _ledger_keys():
+        _ledger("logs", "tags")
+    from dealpoint.eval.braintrust_cockpit import RestClient, _upsert_view, _view_data_for
+
+    rc = RestClient(load_braintrust_key())  # type: ignore[arg-type]
+    # BTQL's tag-membership operator, confirmed live 2026-09-08 and in Braintrust's own docs
+    # ("Analyze based on tags"): `tags INCLUDES '<value>'` for exact array membership in BTQL mode
+    # (the SQL-mode equivalent, `tags IN (...)`, is a different code path the view's `btql` field
+    # does not take -- `_view_data_for`'s `search.filter[].btql` is BTQL, not SQL).
+    view_defs = [
+        {"name": "Cap-hits", "btql": "tags includes 'status:CAP_HIT'"},
+        {"name": "Regressions", "btql": "tags includes 'regression'"},
+    ]
+    results = [{"name": v["name"], **_upsert_view(rc, "project", PROJECT_ID, "logs", v["name"], _view_data_for({"btql": v["btql"]}))}
+               for v in view_defs]
+    manifest["logtags"].update({
+        "tagged": len(events),
+        "views": results,
+        "btql_tag_operator": "tags includes '<value>'",  # confirmed live 2026-09-08 by GET /v1/view read-back
+    })
+    if ("views", "logtag-views") not in _ledger_keys():
+        _ledger("views", "logtag-views")
+    print(f"  tagged {len(events)} logs; views {[r['name'] for r in results]}")
+
+
+# --- D19: aggregate project scores -----------------------------------------------
+
+def aggregate_score_defs() -> list[dict]:
+    """D19: the three project scores exactly derivable from the six `obj/*` scores every experiment
+    row carries. The single source of truth for `step_aggscores` and its dry-run print."""
+    return [
+        {"name": "grounded and verbatim", "score_type": "minimum",
+         "inputs": ["obj/grounded_accuracy", "obj/citation_verbatim"], "weights": None,
+         "description": "MINIMUM of obj/grounded_accuracy and obj/citation_verbatim: the answer matched the "
+                        "expert span and its quote is word for word. The quality floor a lawyer would accept."},
+        {"name": "citation quality", "score_type": "weighted",
+         "inputs": ["obj/citation_gold_overlap", "obj/citation_verbatim"], "weights": [0.5, 0.5],
+         "description": "Weighted mean, 0.5 obj/citation_gold_overlap + 0.5 obj/citation_verbatim. A composite "
+                        "with chosen weights, not an accuracy."},
+        {"name": "headline composite", "score_type": "weighted",
+         "inputs": ["obj/grounded_accuracy", "obj/citation_gold_overlap", "obj/citation_verbatim", "obj/skill_adherence"],
+         "weights": [0.5, 0.2, 0.2, 0.1],
+         "description": "Weighted mean with chosen weights: obj/grounded_accuracy 0.5, obj/citation_gold_overlap 0.2, "
+                        "obj/citation_verbatim 0.2, obj/skill_adherence 0.1. A composite with chosen weights, NOT an accuracy."},
+    ]
+
+
+NOT_EXPRESSIBLE_LINE = (
+    "  not expressible as an aggregate of the six: safe accuracy, precision when answering, net accuracy "
+    "(they need a per-row `misleading` score, and obj/abstain_correct is true on an answerable case "
+    "whenever the system answered, right or wrong)"
+)
+
+
+def _score_def_line(d: dict) -> str:
+    if d["score_type"] == "minimum":
+        return f"  {d['name']} = minimum({', '.join(d['inputs'])})"
+    parts = ", ".join(f"{name} x {w}" for name, w in zip(d["inputs"], d["weights"]))
+    return f"  {d['name']} = weighted({parts})"
+
+
+def _project_score_body(defn: dict) -> dict:
+    """`POST /v1/project_score`'s shape for a `weighted`/`minimum`/`maximum` score, confirmed live
+    2026-09-08: the component scores and their weights are NOT under `config` (which, read back,
+    holds only `multi_select`/`online`/`destination`/`visibility` -- `config` came back `null` for
+    every aggregate created this way) but under the TOP-LEVEL `categories` field, as
+    `{score_name: weight}` (`minimum`/`maximum` just give every input weight 1; the value is unused
+    by those types but the field is still `categories`, not `config`). POST accepts this same
+    `{name: weight}` shape for every `score_type` including `minimum`/`maximum`."""
+    weights = defn.get("weights") or [1.0] * len(defn["inputs"])
+    return {
+        "project_id": PROJECT_ID,
+        "name": defn["name"],
+        "score_type": defn["score_type"],
+        "description": defn["description"],
+        "categories": dict(zip(defn["inputs"], weights)),
+    }
+
+
+def _project_score_patch_body(defn: dict) -> dict:
+    """`PATCH /v1/project_score/{id}`'s shape, confirmed live 2026-09-08 and DIFFERENT from POST's:
+    the body must never carry `project_id` ("Extraneous key") and `categories` is validated by a
+    discriminated union keyed on `score_type` -- for `minimum`/`maximum` it must be a plain array of
+    score names (`["obj/x", "obj/y"]`, weights are implicitly 1 and rejected as `{name: weight}`
+    objects), while for `weighted` it stays the `{name: weight}` object POST accepts. Sending the
+    POST shape's `{name: weight}` dict under a `minimum`/`maximum` score_type is rejected with a
+    Zod `invalid_type: expected array, received object` on `categories`."""
+    weights = defn.get("weights") or [1.0] * len(defn["inputs"])
+    categories = defn["inputs"] if defn["score_type"] in ("minimum", "maximum") else dict(zip(defn["inputs"], weights))
+    return {
+        "name": defn["name"],
+        "score_type": defn["score_type"],
+        "description": defn["description"],
+        "categories": categories,
+    }
+
+
+def step_aggscores(api: Api, live: bool, manifest: dict) -> None:
+    """D19: three project scores, created/updated idempotently by name. Never touches the project's
+    existing four human-slider scores or the online rule's score -- those names are never matched."""
+    defs = aggregate_score_defs()
+    print(f"aggscores: {len(defs)} project scores")
+    for d in defs:
+        print(_score_def_line(d))
+    print(NOT_EXPRESSIBLE_LINE)
+    manifest["aggregate_scores"] = [{"name": d["name"], "score_type": d["score_type"]} for d in defs]
+    if not live:
+        return
+    existing = {s["name"]: s for s in api.get("project_score", {"project_id": PROJECT_ID, "limit": 200}).get("objects", [])}
+    results = []
+    for d in defs:
+        body = _project_score_body(d)
+        cur = existing.get(d["name"])
+        if cur is None:
+            created = api.post("project_score", body)
+            results.append({"name": d["name"], "score_type": d["score_type"], "id": created["id"], "created": True})
+            _ledger("project", f"score:{d['name']}", 0)
+        else:
+            api.patch(f"project_score/{cur['id']}", _project_score_patch_body(d))
+            results.append({"name": d["name"], "score_type": d["score_type"], "id": cur["id"], "created": False})
+    manifest["aggregate_scores"] = results
+    manifest["aggregate_scores_config_shape"] = {
+        "categories": "{score_name: weight} at the top level (NOT under config); config is null. Confirmed live 2026-09-08."
+    }
+    print(f"  {sum(1 for r in results if r['created'])} created, {sum(1 for r in results if not r['created'])} already present")
+
+
+_CANONICAL_AXES = ("system", "model", "judge")
+
+
+def trust_triple_plan() -> list[dict]:
+    """D19 opt-in: one entry per (experiment, case_id, variant_id) on every canonical (system/model/
+    judge axis) experiment this repo can enumerate offline, values read straight off the metadata
+    mirror. Pure and offline over `stored_row_index()`/`_agent_experiment_plans()`/the judged subset."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _variant_results
+    from dealpoint.eval.braintrust_sync import _agent_experiment_plans
+
+    ctx = _mirror_context()
+    out: list[dict] = []
+    for plan in _agent_experiment_plans():
+        name = plan["name"]
+        if classify_experiment(name).get("axis") not in _CANONICAL_AXES:
+            continue
+        arm, model = plan["metadata"]["arm"], plan["metadata"]["model"]
+        variant_id = f"{arm}@{model}"
+        for row in plan["rows"]:
+            case_id = row.get("case_id")
+            if not case_id:
+                continue
+            m = mirror_for(case_id, variant_id, row, ctx, category="agent")
+            out.append({"experiment": name, "case_id": case_id, "variant_id": variant_id,
+                       "trust/safe": m["safe"], "trust/net": m["net_accuracy"], "trust/correct_outcome": m["correct_all"]})
+    subset = _judged_subset()
+    for v in subset.get("variants", []):
+        name = f"judge-{v['variant_id']}"
+        rows = _variant_results(subset, v["variant_id"])
+        for case_id in subset.get("case_ids", []):
+            row = rows.get(case_id)
+            if not row:
+                continue
+            m = mirror_for(case_id, v["variant_id"], row, ctx, category="judged")
+            out.append({"experiment": name, "case_id": case_id, "variant_id": v["variant_id"],
+                       "trust/safe": m["safe"], "trust/net": m["net_accuracy"], "trust/correct_outcome": m["correct_all"]})
+    return out
+
+
+def step_score_trust_triple(api: Api, live: bool, manifest: dict) -> None:
+    """The one step that could write scores: opt-in, refused without BOTH `--live` and
+    `--score-trust-triple`, and never a member of `STEPS`."""
+    plan = trust_triple_plan()
+    n = len(plan)
+    n_exp = len({p["experiment"] for p in plan})
+    print(f"trust triple: would write 3 x {n} = {3 * n} scores on {n_exp} canonical experiments; "
+          "refusing without --live --score-trust-triple")
+    if not live:
+        return
+    by_exp: dict[str, list[dict]] = {}
+    for p in plan:
+        by_exp.setdefault(p["experiment"], []).append(p)
+    exps = {e["name"]: e["id"] for e in api.experiments()}
+    written = 0
+    for name, entries in by_exp.items():
+        eid = exps.get(name)
+        if eid is None:
+            continue
+        rows = {r.get("input"): r["id"] for r in api.fetch_rows(eid) if _is_root(r)}
+        events = []
+        for p in entries:
+            rid = rows.get(p["case_id"])
+            if rid is None:
+                continue
+            events.append({"id": rid, "scores": {"trust/safe": p["trust/safe"], "trust/net": p["trust/net"],
+                                                 "trust/correct_outcome": p["trust/correct_outcome"]},
+                          "_is_merge": True, "_merge_paths": [["scores"]]})
+        for i in range(0, len(events), 100):
+            api.post(f"experiment/{eid}/insert", {"events": events[i:i + 100]})
+        written += len(events) * 3
+        if events:
+            _ledger(name, "trust-triple", len(events) * 3)
+    manifest["trust_triple"] = {"rows": n, "scores": 3 * n, "written": written}
+    print(f"  wrote {written} scores")
+
+
+# --- D20: the regressions dataset -------------------------------------------------
+
+def first_seen_experiment(case_id: str, variant_id: str) -> str:
+    """D20: the experiment where (case_id, variant_id) first appears -- `judge-<variant_id>` for a
+    judged-pool pair, else the arm/model experiment name from the four-arm/Pareto manifests."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset
+    from dealpoint.eval.braintrust_sync import _agent_experiment_plans
+
+    subset = _judged_subset()
+    if case_id in subset.get("case_ids", []) and any(v["variant_id"] == variant_id for v in subset.get("variants", [])):
+        return f"judge-{variant_id}"
+    arm, _, model = variant_id.partition("@")
+    for plan in _agent_experiment_plans():
+        pm = plan["metadata"]
+        if pm.get("arm") == arm and _short(pm.get("model")) == model and any(r.get("case_id") == case_id for r in plan["rows"]):
+            return plan["name"]
+    return f"{arm}@{model}"
+
+
+def regression_rows() -> list[dict]:
+    """D20: the rows for `maud-dealpoint-regressions`, built by rule, not by hand, keyed on
+    (case_id, variant_id) with reasons merged (comma-joined, rule order) and the FIRST matching
+    rule kept as `metadata.rule`. Pure, deterministic, offline. Expected total: 33."""
+    from dealpoint.eval.braintrust_cockpit import _judged_subset, _variant_results
+    from dealpoint.eval.cases import find_case
+
+    subset = _judged_subset()
+    case_ids = subset.get("case_ids", [])
+    order: list[tuple[str, str]] = []
+    by_key: dict[tuple[str, str], dict] = {}
+
+    def add(case_id: str, variant_id: str, rule: str, reason: str, row: dict | None = None, extra_meta: dict | None = None) -> None:
+        key = (case_id, variant_id)
+        if key not in by_key:
+            order.append(key)
+            try:
+                case = find_case(case_id)
+            except KeyError:
+                case = {}
+            by_key[key] = {
+                "id": f"{case_id}|{variant_id}",
+                "input": case_id,
+                "expected": {"answer": case.get("gold_answer", "ABSTAIN"), "gold_spans": case.get("gold_spans", [])},
+                "metadata": {
+                    "reason": reason,
+                    "source_variant": variant_id,
+                    "source_log_id": None,
+                    "first_seen_experiment": first_seen_experiment(case_id, variant_id),
+                    "rule": rule,
+                    "case_set": (row or {}).get("case_set") or case.get("case_set"),
+                    "question_id": (row or {}).get("question_id") or case.get("question_id"),
+                    "status": (row or {}).get("record", {}).get("status") if row else None,
+                    **(extra_meta or {}),
+                },
+            }
+        else:
+            m = by_key[key]["metadata"]
+            m["reason"] = f"{m['reason']}, {reason}"
+            for k, v in (extra_meta or {}).items():
+                m.setdefault(k, v)
+
+    for v in subset.get("variants", []):
+        rows = _variant_results(subset, v["variant_id"])
+        for case_id in case_ids:
+            row = rows.get(case_id)
+            if row and row.get("case_set") == "counterfactual" and (row.get("record") or {}).get("status") == "CAP_HIT":
+                add(case_id, v["variant_id"], "cap_hit_counterfactual",
+                    "cap-hit on a counterfactual case: the definition-absent loop", row=row)
+
+    variant_key = json.loads(Path("data/eval/calibration/variant_key.json").read_text(encoding="utf-8"))
+    for pid in LAWYER_BEATS_JUDGES_PACKETS:
+        info = variant_key.get(pid)
+        if info:
+            add(info["case_id"], info["variant_id"], "lawyer_beats_judges",
+                f"all three judges were wrong and the lawyer right (packet {pid})", extra_meta={"packet_id": pid})
+
+    rows_a = _variant_results(subset, "A@haiku")
+    for case_id in case_ids:
+        row = rows_a.get(case_id)
+        if not row:
+            continue
+        status = (row.get("record") or {}).get("status")
+        scores = row.get("scores") or {}
+        correct_all = bool(scores.get("grounded_accuracy")) or (row.get("case_set") == "counterfactual" and bool(scores.get("abstain_correct")))
+        if status == "ANSWERED" and not correct_all:
+            add(case_id, "A@haiku", "misleading_single_shot_baseline", "the single-shot baseline answered and misled", row=row)
+
+    hero_reasons = {
+        ("contract_144__q05", "A@haiku"): "hero case: arm A abstained with the passages in hand",
+        ("contract_39__redacted_q05", "D@glm"): "the redacted twin: every arm-D model hit the cap",
+    }
+    for case_id, variant_id in HERO_PAIR:
+        add(case_id, variant_id, "hero_pair", hero_reasons[(case_id, variant_id)])
+
+    return [by_key[k] for k in order]
+
+
+def resolve_source_log_ids(api: Api, rows: list[dict]) -> int:
+    """D20, live only: fill `metadata.source_log_id` on every row in place by matching
+    `metadata.case_id` + `metadata.variant_id` on the existing root Logs, preferring `judged`/`agent`
+    categories over representative/replay ones. Returns the number resolved."""
+    logs = _all_root_logs(api)
+    priority = {"judged": 0, "agent": 1}
+    by_key: dict[tuple[str, str], tuple[int, str]] = {}
+    for e in logs:
+        m = e.get("metadata") or {}
+        cid, vid = m.get("case_id"), m.get("variant_id")
+        if not cid or not vid:
+            continue
+        rank = priority.get(m.get("category") or "", 2)
+        cur = by_key.get((cid, vid))
+        if cur is None or rank < cur[0]:
+            by_key[(cid, vid)] = (rank, e["id"])
+    resolved = 0
+    for row in rows:
+        hit = by_key.get((row["input"], row["metadata"]["source_variant"]))
+        if hit:
+            row["metadata"]["source_log_id"] = hit[1]
+            resolved += 1
+    return resolved
+
+
+REGRESSIONS_DESCRIPTION = (
+    "Failures found by rule, not by hand: every cap-hit on a counterfactual case in the judged pool, the two "
+    "packets where all three judges were wrong and the lawyer right, every misleading answer by the single-shot "
+    "baseline, and the hero pair. `input` is the case id so a row joins every experiment; `metadata.source_log_id` "
+    "links back to the trace it came from."
+)
+
+
+def step_regressions(api: Api, live: bool, manifest: dict) -> None:
+    """D20: `maud-dealpoint-regressions`, rule-built from rows already in the org. Explicit `id`s make
+    a second run a no-op update, not 33 new rows."""
+    rows = regression_rows()
+    by_rule: dict[str, int] = {}
+    for r in rows:
+        by_rule[r["metadata"]["rule"]] = by_rule.get(r["metadata"]["rule"], 0) + 1
+    print(f"regressions: {len(rows)} rows for dataset {REGRESSIONS_DATASET} (by rule: {by_rule})")
+    for r in rows:
+        m = r["metadata"]
+        print(f"  {r['input']} | {m['source_variant']} \u2014 {m['reason']} [{m['rule']}]")
+    manifest["regressions"] = {"dataset": REGRESSIONS_DATASET, "rows": len(rows), "by_rule": by_rule,
+                               "log_ids_resolved": 0, "unresolved": []}
+    if not live:
+        return
+    n_resolved = resolve_source_log_ids(api, rows)
+    unresolved = [r["id"] for r in rows if r["metadata"]["source_log_id"] is None]
+    if unresolved:
+        print(f"  {len(unresolved)} rows unresolved to a log id: {unresolved}")
+    import braintrust
+    ds = braintrust.init_dataset(project=PROJECT, name=REGRESSIONS_DATASET, description=REGRESSIONS_DESCRIPTION)
+    for r in rows:
+        ds.insert(id=r["id"], input=r["input"], expected=r["expected"], metadata=r["metadata"])
+    ds.flush()
+    manifest["regressions"].update({"log_ids_resolved": n_resolved, "unresolved": unresolved})
+    if ("dataset", "regressions") not in _ledger_keys():
+        _ledger("dataset", "regressions", 0)
+
+
 def step_raglogs(api: Api, live: bool, manifest: dict) -> None:
     rows = retrieval_log_rows()
     seen = _ledger_keys()
@@ -1113,6 +1692,7 @@ def main(argv: list[str] | None = None) -> int:
         if a == "--replay" and i + 1 < len(argv):
             replay = argv[i + 1]
     run_pg = "--run-playground" in argv
+    score_trust_triple = "--score-trust-triple" in argv
     variants = None
     for i, a in enumerate(argv):
         if a == "--variants" and i + 1 < len(argv):
@@ -1137,6 +1717,9 @@ def main(argv: list[str] | None = None) -> int:
             print("playground run needs --live (it writes scores and spends OpenRouter cents)")
             return 2
         run_playground(api, manifest, variants=variants)
+        return 0
+    if score_trust_triple:
+        step_score_trust_triple(api, live, manifest)
         return 0
     for name in STEPS:
         if only and name not in only:

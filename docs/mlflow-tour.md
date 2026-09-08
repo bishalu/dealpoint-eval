@@ -182,6 +182,51 @@ verdict paragraph attached to the dashboard object, and online scoring -- MLflow
 run-level, rebuilt from `data/reports/mlflow_decision_views.json` by hand because OSS 3.16 has no
 chart/view API.
 
+## Stop 10. Every tab filled, and the eight dashboards (M9c)
+
+`just mlflow-tabs --live` (dry run by default, `dealpoint/eval/mlflow_tabs.py`) fills the six tabs M9/M9b
+left empty; `just braintrust-dashboard-snapshot` and `just mlflow-dashboards --live`
+(`dealpoint/eval/mlflow_dashboards.py`) port the eight Braintrust dashboards word for word. No model
+calls except the opt-in `--gateway-smoke` (five cents, ledgered `milestone_tag: m9c`).
+
+| Sidebar tab | Filled from (Braintrust object) | What MLflow does with it that Braintrust cannot |
+| --- | --- | --- |
+| Overview | The experiment description | The dashboard runs, decision tree, registry and review queues are one click away, not a separate app. |
+| Observability > Traces | The same 738 traces M9 mirrors | Real span timestamps and in-process deterministic scorers (see "What MLflow adds" below). |
+| Observability > Sessions | `mlflow.trace.session`/`mlflow.trace.user` on every trace (`session_plan`, D11) | One contract question (`contract_144__q05`) reads as ONE session across every configuration that answered it, its redacted twin beside it -- Braintrust logs carry no session grouping at all. |
+| Evaluation > Judges | The six `@scorer` functions + four `make_judge` judges, registered (`judge_registration_plan`, D12) | The deterministic six actually RUN, server-side, inside `mlflow.genai.evaluate`; Braintrust can only declare a scorer. |
+| Evaluation > Review | Two review queues, five label schemas (`review_queue_plan`, D13): the 12 open review-set traces and the 24 already-scored lawyer packets | An assignment/status workflow (PENDING/DONE) around the same 96 lawyer assessments, not just plain feedback rows. |
+| Evaluation > Datasets | The 9 evaluation datasets (M9) | Unchanged from M9. |
+| Evaluation > Evaluation runs | `mlflow.genai.evaluate` row comparisons (M9b) | Zero-model-call row-level comparison, the MLflow form of the Braintrust Grid. |
+| Prompts & versions > Playground | The 8 registered prompts, each with a `model_config` naming its gateway endpoint (`prompt_endpoint_plan`, D15) | `arm-a-prompt-cite-first` loads pre-wired to `dealpoint-glm`, `judge-panel-rubric` to `judge-mistral`, sampling parameters filled in -- one click to run, not a separate Braintrust Playground tab. |
+| Prompts & versions > Prompts | The 8 registered prompts (M9) | Unchanged from M9. |
+| Agent versions | 14 `LoggedModel`s: the ten M9b decision-tree configurations plus the four `playground-arm-A-*` prompt variants (`logged_model_plan`, D14), every comparable trace linked | `champion`/`baseline`/`cost-floor`/`safest` resolve to a version with its traces attached, not a dashboard someone has to remember to open. |
+| AI Gateway | One `openrouter` connection, five role-named endpoints (`gateway_plan`, D15) | One place for every model key the demo uses, instead of a `base_url` baked into each call site. |
+
+**Databricks-only, tried anyway.** D12's online-scoring rule (`judge-professional.start(sampling_config=...)`)
+and D13's review-queue workflow (`mlflow.genai.labeling.create_labeling_session`, which routes through
+`get_review_app`) both require a Databricks tracking URI on this install's MLflow 3.16 -- verified live
+against `sqlite:///data/mlflow/mlflow.db`. `mlflow_tabs.py` tries the real call, catches exactly that
+failure, and records `databricks_only` in the manifest; the judges are still registered and the queue/
+schema definitions still exist as data, so the tab is filled even when the workflow around it is not
+runnable. This corrects "What only Braintrust has here" below, which had read labeling sessions as
+absent from OSS entirely before this milestone's directive to try the OSS review-queue functions
+named in `specs/milestones/m9c.md` (`create_label_schema`, `create_labeling_session`).
+
+**The eight dashboards.** `braintrust_dashboard_values.json` holds, per dashboard and chart, every row
+[label -> value] Braintrust's own BTQL would return; the local evaluator (`chart_values`,
+`eval_filter`, `eval_measure`) recomputes the same numbers from the stored mirror rows with no network
+call, and the eight `dashboard/<name>` runs each carry a self-contained HTML render (ranked bar list,
+exact titles, exact order) plus one metric per chart row. **Gap named, not resolved silently:** three
+charts (`prompt_professional`, `prompt_evidence`, `prompt_reasoning`) cannot be reproduced by the local
+evaluator -- `prompt_variant_trace_plan`'s own docstring (M9) records that the 67 prompt-variant traces'
+Playground judge scores were never mirrored to disk, so those three charts have no rows locally
+(`locally_evaluable: false` in the snapshot) until they are read from Braintrust directly. **Also named:**
+this build environment has no live Braintrust network access, so `data/reports/braintrust_dashboard_
+values.json` was produced by the local evaluator itself (`write_local_snapshot`), not by the real,
+read-only BTQL path (`snapshot_dashboards`, exercised by `just braintrust-dashboard-snapshot --live`);
+it is self-consistent today, not yet checked against Braintrust.
+
 ## What MLflow adds
 
 - **In-process deterministic scorers.** The six `dealpoint.eval.scorers` functions run as real MLflow
@@ -198,17 +243,24 @@ chart/view API.
 
 ## What only Braintrust has here
 
-- **Monitor dashboards over logs** and the eight ranked-comparison dashboards with a verdict paragraph
-  each; MLflow's run comparisons are the closest equivalent, at the run level, not a saved dashboard
-  object.
+- **Monitor dashboards over logs**, the live objects with a verdict paragraph each; M9c
+  (Stop 10) ports their numbers word for word as a rendered HTML artifact plus metrics per run, since
+  OSS 3.16 has no chart/dashboard API to hold a live equivalent.
 - **Online scoring**, continuous, over live logs; MLflow OSS's nearest equivalent is the batch
-  `just mlflow-score-new`.
-- **Topics, Patterns, Loop, the Debugger and the Playground UI** are Databricks-only or absent from OSS
-  MLflow 3.16; the SQLite store is queryable directly and `search_traces`/`search_runs` filter syntax
-  covers the same six saved investigations, by hand rather than as saved objects.
-- **Labeling sessions and the review app** (human review with assignment/status workflow) are
-  Databricks-only; MLflow's HUMAN assessments hold the same 96 lawyer scores as plain feedback rows, with
-  no review-queue UI around them.
+  `just mlflow-score-new`, plus M9c's `judge-professional.start(sampling_config=...)` attempt (Stop 10:
+  Databricks-only on this install, tried and recorded, not assumed).
+- **Topics, Patterns and the Debugger** are Databricks-only or absent from OSS MLflow 3.16; the SQLite
+  store is queryable directly and `search_traces`/`search_runs` filter syntax covers the same
+  investigations, by hand rather than as saved objects.
+- **Labeling sessions and the review app's assignment/status workflow** are Databricks-only on this
+  install (Stop 10: `mlflow.genai.labeling.create_labeling_session` requires a Databricks tracking URI,
+  verified live) -- corrected from this tour's earlier reading of them as absent from OSS entirely: the
+  label-schema and review-queue *definitions* (`create_label_schema`, the five schemas, the two queues)
+  are OSS and are created; only the review-app UI around them needs Databricks. MLflow's HUMAN
+  assessments still hold the same 96 lawyer scores as plain feedback rows either way.
+- **The Playground UI** is Databricks-only/absent from OSS MLflow 3.16; M9c still gives every registered
+  prompt a `model_config` naming its gateway endpoint (Stop 10), so the wiring the Playground would use
+  exists even though the page does not.
 - **No chart/view/dashboard API** exists in OSS MLflow 3.16 (verified against the installed 3.16.0):
   the `views` step exports `data/reports/mlflow_views.json` (one entry per Braintrust chart: question,
   tag filter, metric) instead of creating a saved chart object; a run comparison is built by hand from

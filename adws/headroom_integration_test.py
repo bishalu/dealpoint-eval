@@ -44,9 +44,9 @@ ADW_PROMPT = REPO / "adws" / "adw_prompt.py"
 DATA_DIR = REPO / "adws" / "adw_data"
 DB = DATA_DIR / "sssf.db"
 
-HEADROOM_TOOLS = ("mcp_headroom_headroom_compress",
-                  "mcp_headroom_headroom_retrieve",
-                  "mcp_headroom_headroom_stats")
+COMPRESS, RETRIEVE, STATS = ("mcp_headroom_headroom_compress",
+                             "mcp_headroom_headroom_retrieve",
+                             "mcp_headroom_headroom_stats")
 ANSWER_RE = re.compile(r"error_count\s*=\s*(\d+)\s*;\s*host_(\d+)\s*=\s*([\w.-]+)")
 
 SYSTEM_MD = """# Probe Agent
@@ -165,10 +165,11 @@ def make_prompt(fixture: Path, expected: dict, headroom: bool) -> str:
             "\nYou have Headroom context tools: `mcp_headroom_headroom_compress`, "
             "`mcp_headroom_headroom_retrieve`, `mcp_headroom_headroom_stats`. "
             "After reading the file, call `mcp_headroom_headroom_compress` on its full "
-            "contents and continue from the compressed form. If the compressed form "
-            "does not let you answer a question exactly, call `mcp_headroom_headroom_retrieve` "
-            "with the hash it returned. Call `mcp_headroom_headroom_stats` once at the end. "
-            "List every tool call in `notes_for_next_agent`.\n"
+            "contents and continue from the compressed form. Then, before answering, call "
+            "`mcp_headroom_headroom_retrieve` with the hash it returned and confirm the "
+            f"record with id == {expected['needle_id']} against the original. Call "
+            "`mcp_headroom_headroom_stats` once at the end. List every tool call in "
+            "`notes_for_next_agent`.\n"
         )
     return prompt
 
@@ -199,15 +200,7 @@ def run_arm(name: str, model: str, records: int, timeout: int) -> dict:
            "--adw-id", adw_id, prompt]
     print(f"\n=== arm {name}: adw_id={adw_id} SSSF_HEADROOM={env['SSSF_HEADROOM']}", flush=True)
     started = time.monotonic()
-    try:
-        proc = subprocess.run(cmd, cwd=REPO, env=env, capture_output=True, text=True,
-                              timeout=timeout, check=False)
-        returncode, stdout, stderr = proc.returncode, proc.stdout, proc.stderr
-    except subprocess.TimeoutExpired as e:
-        returncode = -1
-        stdout = (e.stdout or b"").decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
-        stderr = f"TIMEOUT after {timeout}s\n" + (
-            (e.stderr or b"").decode() if isinstance(e.stderr, bytes) else (e.stderr or ""))
+    returncode, stdout, stderr, mcp_seen = run_and_watch(cmd, env, timeout)
     wall_s = time.monotonic() - started
     (inputs / "adw_stdout.txt").write_text(stdout)
     (inputs / "adw_stderr.txt").write_text(stderr)
@@ -222,11 +215,36 @@ def run_arm(name: str, model: str, records: int, timeout: int) -> dict:
         "phase_failure": failed[-1][:300] if failed else None,
         "expected": expected, "fixture_bytes": len(fixture_text),
         "session_dir": str(session_dir),
-        "mcp_json_present": (REPO / ".pi" / "mcp.json").exists(),
+        # seen while the ADW was alive: a flag-on run writes the entry at start
+        # and removes it again at exit, so an after-the-fact check proves nothing
+        "mcp_json_headroom_seen_during_run": mcp_seen,
+        "mcp_json_present_after_run": (REPO / ".pi" / "mcp.json").exists(),
     }
     result.update(analyze(session_dir / "probe", expected))
     result.update(db_row(adw_id))
     return result
+
+
+def run_and_watch(cmd: list[str], env: dict, timeout: int) -> tuple[int, str, str, bool]:
+    """Run the ADW; meanwhile poll whether <repo>/.pi/mcp.json names the headroom server."""
+    mcp_json = REPO / ".pi" / "mcp.json"
+    seen = False
+    proc = subprocess.Popen(cmd, cwd=REPO, env=env, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, text=True)
+    deadline = time.monotonic() + timeout
+    while proc.poll() is None and time.monotonic() < deadline:
+        if not seen and mcp_json.exists():
+            try:
+                seen = "headroom" in (json.loads(mcp_json.read_text()).get("mcpServers") or {})
+            except (OSError, ValueError):
+                pass
+        time.sleep(0.25)
+    if proc.poll() is None:
+        proc.kill()
+        stdout, stderr = proc.communicate()
+        return -1, stdout, f"TIMEOUT after {timeout}s\n" + stderr, seen
+    stdout, stderr = proc.communicate()
+    return proc.returncode, stdout, stderr, seen
 
 
 # ── measurement ──────────────────────────────────────────────────────────────
@@ -262,7 +280,7 @@ def analyze(agent_dir: Path, expected: dict) -> dict:
                            if isinstance(p, dict))
             call = {"tool": tool, "ok": not event.get("isError", False),
                     "result_chars": len(text)}
-            if tool.startswith("mcp_headroom_"):
+            if tool in (COMPRESS, RETRIEVE, STATS):
                 call["result_head"] = text[:400]
                 try:
                     payload = json.loads(text)
@@ -374,12 +392,15 @@ def verdict(arms: dict[str, dict]) -> dict:
         checks["baseline_ran"] = base["returncode"] == 0
         checks["baseline_saw_no_headroom_tools"] = not any(
             t.startswith("mcp_headroom_") for t in base.get("tools_seen", []))
-        checks["baseline_flag_left_no_mcp_json"] = not base["mcp_json_present"]
+        checks["baseline_never_had_mcp_json"] = (not base["mcp_json_headroom_seen_during_run"]
+                                                 and not base["mcp_json_present_after_run"])
     if hr is not None:
         checks["headroom_ran"] = hr["returncode"] == 0
-        checks["headroom_mcp_json_materialized"] = hr["mcp_json_present"]
-        checks["worker_invoked_headroom_compress"] = (
-            "mcp_headroom_headroom_compress" in hr.get("headroom_tools_invoked", []))
+        checks["headroom_mcp_json_materialized_during_run"] = hr["mcp_json_headroom_seen_during_run"]
+        checks["headroom_mcp_json_removed_at_exit"] = not hr["mcp_json_present_after_run"]
+        invoked = hr.get("headroom_tools_invoked", [])
+        checks["worker_invoked_headroom_compress"] = COMPRESS in invoked
+        checks["worker_invoked_headroom_retrieve"] = RETRIEVE in invoked
         checks["worker_invoked_any_headroom_tool"] = hr.get("headroom_invoked", False)
         checks["headroom_calls_all_ok"] = bool(hr.get("headroom_calls")) and all(
             c["ok"] for c in hr["headroom_calls"])
@@ -387,7 +408,8 @@ def verdict(arms: dict[str, dict]) -> dict:
     if base is not None:
         checks["baseline_answer_correct"] = bool(base.get("correct"))
     proof = all(checks.get(k, False) for k in (
-        "headroom_ran", "headroom_mcp_json_materialized", "worker_invoked_any_headroom_tool",
+        "headroom_ran", "headroom_mcp_json_materialized_during_run",
+        "worker_invoked_headroom_compress", "worker_invoked_headroom_retrieve",
         "headroom_calls_all_ok")) if hr is not None else False
     return {"checks": checks, "headroom_reachable_from_claude_worker": proof,
             "all_checks_pass": all(checks.values())}

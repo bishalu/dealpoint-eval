@@ -50,6 +50,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from .data_types import SSSFConfig
+from .utils import ensure_dir
 
 ENV_FLAG = "SSSF_HEADROOM"
 SERVER_NAME = "headroom"
@@ -157,7 +158,7 @@ def materialize(cfg: SSSFConfig, repo_root: Path, on: bool) -> Path | None:
             return None
         servers[SERVER_NAME] = wanted
         data["mcpServers"] = servers
-        path.parent.mkdir(parents=True, exist_ok=True)
+        ensure_dir(path.parent)
         path.write_text(json.dumps(data, indent=2) + "\n")
         return path
 

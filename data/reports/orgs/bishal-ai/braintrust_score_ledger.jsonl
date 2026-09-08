@@ -818,3 +818,11 @@
 {"experiment": "logs", "key": "retrieval:contract_5__q12:li_native_bm25", "n_scores": 0, "ts": "2026-09-07T16:47:01.908823+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "mirror:672", "n_scores": 0, "ts": "2026-09-07T16:54:53.140373+00:00", "source": "showroom"}
 {"experiment": "logs", "key": "mirror:672", "n_scores": 0, "ts": "2026-09-07T17:04:52.647473+00:00", "source": "showroom"}
+{"experiment": "project", "key": "baseline", "n_scores": 0, "ts": "2026-09-08T14:47:29.827111+00:00", "source": "showroom"}
+{"experiment": "project", "key": "comparison-key", "n_scores": 0, "ts": "2026-09-08T14:47:29.827345+00:00", "source": "showroom"}
+{"experiment": "logs", "key": "tags", "n_scores": 0, "ts": "2026-09-08T14:49:27.843074+00:00", "source": "showroom"}
+{"experiment": "views", "key": "logtag-views", "n_scores": 0, "ts": "2026-09-08T14:49:28.523932+00:00", "source": "showroom"}
+{"experiment": "project", "key": "score:grounded and verbatim", "n_scores": 0, "ts": "2026-09-08T14:49:28.768580+00:00", "source": "showroom"}
+{"experiment": "project", "key": "score:citation quality", "n_scores": 0, "ts": "2026-09-08T14:49:28.910161+00:00", "source": "showroom"}
+{"experiment": "project", "key": "score:headline composite", "n_scores": 0, "ts": "2026-09-08T14:49:29.049822+00:00", "source": "showroom"}
+{"experiment": "dataset", "key": "regressions", "n_scores": 0, "ts": "2026-09-08T14:50:32.453790+00:00", "source": "showroom"}
