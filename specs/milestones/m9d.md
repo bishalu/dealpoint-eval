@@ -134,3 +134,13 @@ anything in MLflow (M9c owns that), any change to scoring definitions or frozen 
 `adws/adw_modules/milestones.py`: `m9d`, `spec_path="specs/milestones/m9d.md"`, `gate_marker="gate_m9d"`,
 `needs_model=False`. Launch alongside M9c; the two write to different systems and different files
 (`braintrust_showroom.py` and docs for M9d; `mlflow_*.py` for M9c).
+
+## 7. Operator go-ahead (2026-09-08, engineer, recorded by the orchestrator)
+
+The live writes this milestone makes to the Braintrust org `bishal.ai`, project `dealpoint-eval` (the key in
+`.env.braintrust` resolves to it) are **authorized**: the baseline and comparison-key settings, the three
+aggregate project scores, the `maud-dealpoint-regressions` dataset, the tags merged onto the root logs, and the
+two saved Logs views. All are additive and idempotent and write 0 scores and make 0 model calls (§4). The
+builder may run `just braintrust-showroom --live --only baseline,logtags,aggscores,regressions` and the REST
+read-backs of §3 without asking again. The opt-in `--score-trust-triple` remains **not** authorized. Report the
+three live-vs-spec numbers (root logs tagged, trust-triple plan count, regressions rows) as measured.
