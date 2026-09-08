@@ -124,6 +124,18 @@ def always_writable(cfg: SSSFConfig) -> list[str]:
     return [cfg.defaults.data_dir.rstrip("/") + "/"]
 
 
+# Files the FACTORY itself writes while an agent phase is open: the orchestration checkpoint
+# (`milestones.save_state`) and the milestone ledger of an ADW running in parallel in the same
+# checkout. A change to one of these during a phase is never the agent's doing, so it is neither a
+# breach nor "touched". (M9c's planner was rolled back and failed because the parallel M9d run
+# saved specs/mvp/state.json mid-phase.)
+FACTORY_OWNED: tuple[str, ...] = ("specs/mvp/state.json",)
+
+
+def factory_owned(path: str) -> bool:
+    return path in FACTORY_OWNED
+
+
 def permitted(path: str, agent: AgentConfig, cfg: SSSFConfig) -> bool:
     """Session runtime first, then the agent's own list, then what is protected."""
     if any(_matches(path, p) for p in always_writable(cfg)):
@@ -171,7 +183,7 @@ def enforce(run, phase, agent: AgentConfig, before: dict[str, str]) -> list[str]
     is rolled back before the phase dies. What it cannot undo, it names.
     """
     after = snapshot(run)
-    touched = changed_paths(before, after)
+    touched = [p for p in changed_paths(before, after) if not factory_owned(p)]
     breaches = [p for p in touched if not permitted(p, agent, run.cfg)]
     if not breaches:
         return touched

@@ -66,6 +66,25 @@ def _as_text(stream) -> str:
 
 
 def _run(spec: QualityCheckSpec, run) -> QualityCheckResult:
+    """Run one check. A quality check NEVER raises: any failure inside the runner itself (a stream that
+    came back as bytes, a broken artifact path, an unexpected exception) becomes a failed result whose
+    output_tail carries the traceback, so the phase reports it to the builder instead of dying."""
+    try:
+        return _run_unguarded(spec, run)
+    except Exception as error:  # noqa: BLE001 - the whole point is to never let a check crash the phase
+        import traceback
+        detail = f"quality runner error in check {spec.name!r}: {error!r}\n{traceback.format_exc()}"
+        try:
+            run.console.note(detail.splitlines()[0])
+        except Exception:  # noqa: BLE001
+            pass
+        return QualityCheckResult(
+            name=spec.name, area=spec.area, operation=spec.operation, command=shlex.join(spec.argv),
+            returncode=1, passed=False, duration_seconds=0.0, output_artifact="", output_tail=detail[-TAIL_CHARS:],
+        )
+
+
+def _run_unguarded(spec: QualityCheckSpec, run) -> QualityCheckResult:
     phase = run.phases[-1]
     output_dir = _check_dir(run, spec.name)
     output_artifact = output_dir / "command.log"
