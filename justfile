@@ -60,6 +60,14 @@ sdlc *ARGS:
 simple-sdlc *ARGS:
     uv run adws/adw_simple_sdlc.py --config {{config}} "$@"
 
+# ── headroom (MCP-only context tools, feature-flagged) ──────────────────────
+# `SSSF_HEADROOM=1 just sdlc "..."` turns the flag on for one launch; the roster
+# default is `defaults.headroom.enabled` in sssf.config.yaml. docs/headroom.md.
+
+# prove a Claude worker can see and call Headroom, and measure baseline vs flag on
+headroom-probe *ARGS:
+    python3 adws/headroom_integration_test.py "$@"
+
 # ── watch it ────────────────────────────────────────────────────────────────
 # Reads never block a running workflow, the db is WAL. Poll as hard as you like.
 

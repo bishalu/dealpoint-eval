@@ -16,7 +16,7 @@ from typing import Optional
 import braintrust
 import yaml
 
-from . import agent_pi, permissions, prompts
+from . import agent_pi, git_helper, headroom, permissions, prompts
 from .data_types import (AgentCall, AgentConfig, EnvelopeBase, EventRecord,
                          GateCheck, GateReport, Phase, PiRequest, SSSFConfig,
                          UsageBreakdown)
@@ -39,7 +39,11 @@ def load_config(path: str = "adws/adw_sssf_config/sssf.config.yaml") -> SSSFConf
             if key in defaults:
                 agent.setdefault(key, defaults[key])
         agent.setdefault("harness_engineering", defaults.get("harness_engineering", []))
-    return SSSFConfig(**raw)
+    cfg = SSSFConfig(**raw)
+    # Headroom is a pi MCP server, so its tools are extension tools and must
+    # be named in each agent's allowlist to be offered at all. Flag off: no-op.
+    headroom.apply(cfg, tool_prefix=headroom.tool_prefix(git_helper.repo_root()))
+    return cfg
 
 
 def resolve(cfg: SSSFConfig, name: str) -> AgentConfig:
@@ -70,6 +74,7 @@ def validate(cfg: SSSFConfig, required: list[str]) -> None:
             agent_pi.resolve_model(agent.model)
         except ValueError as e:
             problems.append(f"agent {name!r}: {e}")
+    problems.extend(headroom.preflight(cfg))     # only speaks when the flag is on
     if problems:
         raise SystemExit("config validation failed:\n- " + "\n- ".join(problems))
 

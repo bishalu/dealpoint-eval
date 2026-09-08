@@ -69,4 +69,5 @@ extend-exclude = ["adws", ".claude"]
 
 [tool.pyright]
 include = ["dealpoint", "tests"]
+extraPaths = ["adws"]        # tests/test_headroom_flag.py imports adw_modules.headroom
 typeCheckingMode = "basic"

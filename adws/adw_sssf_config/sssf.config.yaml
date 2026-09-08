@@ -42,6 +42,16 @@ defaults:
     - specs/milestones/
     - specs/mvp/
   data_dir: adws/adw_data          # runtime home: {data_dir}/sessions/{adw_id}/{agent_name}/
+  # Headroom context tools (headroom-ai), MCP-only, behind one flag. Off means
+  # absent: no MCP server entry, no tool names, no change to any run. On, the
+  # ADW writes the `headroom` server into <repo>/.pi/mcp.json (gitignored) for
+  # pi-mcp-extension, and appends mcp_headroom_headroom_{compress,retrieve,stats}
+  # to every agent's `tools` list; pi-claude-bridge carries those into the
+  # Claude workers like any other pi tool. `SSSF_HEADROOM=1|0` overrides
+  # `enabled` for one launch. Not a proxy: worker model traffic is untouched.
+  # Mechanism, measurements and removal: docs/headroom.md.
+  headroom:
+    enabled: false
 
 observability:
   db: adws/adw_data/sssf.db        # tracer writes here directly; the UI polls it

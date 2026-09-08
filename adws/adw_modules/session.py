@@ -7,11 +7,13 @@ minted and printed so the next ADW can pick it up.
 
 from __future__ import annotations
 
+import atexit
 import os
 import signal
 import sys
 from pathlib import Path
 
+from . import headroom
 from .data_types import SSSFConfig
 from .runner import Run
 from .tracer import Tracer
@@ -40,6 +42,13 @@ def ensure(cfg: SSSFConfig, adw_id: str | None = None) -> Run:
     tracer = Tracer(cfg.observability.db,
                     f"{cfg.defaults.data_dir}/sessions/{adw_id}/events.jsonl")
     run = Run(cfg=cfg, adw_id=adw_id, tracer=tracer, engineer=engineer_name())
+    # pi is spawned with cwd = repo_root and reads <cwd>/.pi/mcp.json there;
+    # make that file agree with the Headroom flag before the first agent runs.
+    if headroom.prepare(cfg, run.repo_root):
+        # Normal exit, SystemExit, and the SIGTERM/SIGINT handler below (which
+        # raises SystemExit) all reach atexit; a SIGKILL leaves the entry, and
+        # the next launch with the flag off removes it.
+        atexit.register(headroom.release, cfg, run.repo_root)
     tracer.session_start(adw_id, run.engineer, adw_name=Path(sys.argv[0]).stem)
     # This process is the run. Record it before any phase opens, so a run that
     # hangs in its first agent call is still killable by adw_id.

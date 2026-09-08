@@ -341,6 +341,27 @@ class AgentConfig(BaseModel):
     writes: Optional[list[str]] = None
 
 
+class HeadroomConfig(BaseModel):
+    """Headroom (headroom-ai) context tools, MCP-only, behind a feature flag.
+
+    Off by default, and off means absent: no server entry is written for pi's
+    MCP client, no tool name is added to any agent, nothing about a run changes.
+    `SSSF_HEADROOM=1|0` in the environment overrides `enabled` for one launch.
+    See adw_modules/headroom.py and docs/headroom.md.
+    """
+    enabled: bool = False
+    command: str = "headroom"                  # the CLI pi-mcp-extension spawns over stdio
+    args: list[str] = Field(default_factory=lambda: ["mcp", "serve"])
+    env: dict[str, str] = Field(default_factory=dict)   # extra env for that subprocess
+    # Headroom's MCP tool names. Each becomes the pi tool
+    # <toolPrefix>_headroom_<name> and is appended to every agent that carries
+    # a `tools` allowlist (an agent with no list already sees every tool).
+    tools: list[str] = Field(default_factory=lambda: [
+        "headroom_compress", "headroom_retrieve", "headroom_stats",
+    ])
+    request_timeout_ms: int = 120_000          # compress on a big payload is not instant
+
+
 class ConfigDefaults(BaseModel):
     coding_agent: Literal["pi", "claude_code"] = "pi"
     model: str = "google/gemini-3.6-flash"
@@ -355,6 +376,7 @@ class ConfigDefaults(BaseModel):
         "adws/adw_modules/", "adws/adw_sssf_config/", "adws/adw_*.py",
     ])
     data_dir: str = "adws/adw_data"
+    headroom: HeadroomConfig = Field(default_factory=HeadroomConfig)
 
 
 class ObservabilityConfig(BaseModel):

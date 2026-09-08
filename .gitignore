@@ -93,3 +93,7 @@ __pycache__/
 .claude/skills/sssf/apps/visualizer/dist/
 .bt/
 adws/adw_data/logs/
+
+# sssf Headroom flag (adws/adw_modules/headroom.py): pi's project-level MCP
+# config is materialized per run from sssf.config.yaml / SSSF_HEADROOM, not tracked
+.pi/mcp.json
