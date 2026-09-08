@@ -75,6 +75,10 @@ SEQUENCE: list[MilestoneSpec] = [
     # artifacts, metric search, registry). No model calls by contract.
     MilestoneSpec(id="m9b", title="The config decision on MLflow's own strengths: quality, dollars and latency across A-D and the models",
                   spec_path="specs/milestones/m9b.md", gate_marker="gate_m9b"),
+    # M9c: every MLflow sidebar tab filled from the Braintrust objects (sessions, judges, review queues,
+    # agent versions, gateway + playground) and the eight dashboards ported word for word. No model calls.
+    MilestoneSpec(id="m9c", title="Every MLflow tab filled, and the eight dashboards ported word for word",
+                  spec_path="specs/milestones/m9c.md", gate_marker="gate_m9c"),
     # M8 is registered but its spec is a DRAFT (engineer's retrieval/benchmark directive of
     # 2026-09-06); `adw_mvp.py` must not launch it until the deliverables, budget and gate are set.
     # Run with `--only m8` after the spec is finalised.
