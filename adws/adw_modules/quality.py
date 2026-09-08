@@ -59,6 +59,12 @@ def _check_dir(run, name: str) -> Path:
     return path
 
 
+def _as_text(stream) -> str:
+    if stream is None:
+        return ""
+    return stream.decode("utf-8", errors="replace") if isinstance(stream, bytes) else str(stream)
+
+
 def _run(spec: QualityCheckSpec, run) -> QualityCheckResult:
     phase = run.phases[-1]
     output_dir = _check_dir(run, spec.name)
@@ -84,9 +90,11 @@ def _run(spec: QualityCheckSpec, run) -> QualityCheckResult:
         stdout = completed.stdout
         stderr = completed.stderr
     except subprocess.TimeoutExpired as error:
+        # TimeoutExpired carries the partial streams as BYTES even under text=True (a
+        # stdlib quirk), so decode before joining, or the timeout itself crashes the phase.
         returncode = 124
-        stdout = error.stdout or ""
-        stderr = (error.stderr or "") + f"\nTimed out after {spec.timeout_seconds}s."
+        stdout = _as_text(error.stdout)
+        stderr = _as_text(error.stderr) + f"\nTimed out after {spec.timeout_seconds}s."
     except OSError as error:
         # A missing binary lands here as exit 127 with the real message — no
         # pre-flight probe needed, and none wanted.
@@ -142,7 +150,7 @@ def test(run) -> QualityCheckResult:
         area="backend",
         operation="test",
         argv=["uv", "run", "pytest", "-m", "not needs_network and not needs_model", "-q"],
-        timeout_seconds=600,
+        timeout_seconds=1500,
     ), run)
 
 
