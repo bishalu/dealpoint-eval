@@ -79,6 +79,10 @@ SEQUENCE: list[MilestoneSpec] = [
     # agent versions, gateway + playground) and the eight dashboards ported word for word. No model calls.
     MilestoneSpec(id="m9c", title="Every MLflow tab filled, and the eight dashboards ported word for word",
                   spec_path="specs/milestones/m9c.md", gate_marker="gate_m9c"),
+    # M9d: the free Braintrust features never used (baseline, aggregate scores, regressions dataset, log
+    # tags) plus the live-app plug-in design note. Braintrust only; runs in parallel with M9c. No scores.
+    MilestoneSpec(id="m9d", title="Braintrust: baseline, aggregate scores, regressions dataset, log tags, and the live-app plug-in design",
+                  spec_path="specs/milestones/m9d.md", gate_marker="gate_m9d"),
     # M8 is registered but its spec is a DRAFT (engineer's retrieval/benchmark directive of
     # 2026-09-06); `adw_mvp.py` must not launch it until the deliverables, budget and gate are set.
     # Run with `--only m8` after the spec is finalised.
