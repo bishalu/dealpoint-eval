@@ -191,41 +191,86 @@ calls except the opt-in `--gateway-smoke` (five cents, ledgered `milestone_tag: 
 
 | Sidebar tab | Filled from (Braintrust object) | What MLflow does with it that Braintrust cannot |
 | --- | --- | --- |
-| Overview | The experiment description | The dashboard runs, decision tree, registry and review queues are one click away, not a separate app. |
+| Overview | The experiment description | The dashboard runs, decision tree, registry and review queues are one click away, not a separate app (`step_overview`). |
 | Observability > Traces | The same 738 traces M9 mirrors | Real span timestamps and in-process deterministic scorers (see "What MLflow adds" below). |
-| Observability > Sessions | `mlflow.trace.session`/`mlflow.trace.user` on every trace (`session_plan`, D11) | One contract question (`contract_144__q05`) reads as ONE session across every configuration that answered it, its redacted twin beside it -- Braintrust logs carry no session grouping at all. |
-| Evaluation > Judges | The six `@scorer` functions + four `make_judge` judges, registered (`judge_registration_plan`, D12) | The deterministic six actually RUN, server-side, inside `mlflow.genai.evaluate`; Braintrust can only declare a scorer. |
-| Evaluation > Review | Two review queues, five label schemas (`review_queue_plan`, D13): the 12 open review-set traces and the 24 already-scored lawyer packets | An assignment/status workflow (PENDING/DONE) around the same 96 lawyer assessments, not just plain feedback rows. |
+| Observability > Sessions | `mlflow.trace.session`/`mlflow.trace.user`, set on every trace at re-log time (`session_plan`/`step_sessions`, D11) | One contract question (`contract_144__q05`) reads as ONE session across every configuration that answered it, its redacted twin beside it -- Braintrust logs carry no session grouping at all. |
+| Evaluation > Judges | The four `make_judge` dimension judges, registered (`judge_registration_plan`/`step_judges`, D12) | The registered judges are startable as a continuous online-scoring rule server-side; Braintrust can only declare a scorer. |
+| Evaluation > Review | Two review queues, five label schemas, fully populated (`review_queue_plan`/`step_review`, D13): the 12 open review-set traces and the 24 already-scored lawyer packets | A real assignment/status workflow (pending/complete) around the same 96 lawyer assessments, not just plain feedback rows -- OSS 3.16, no Databricks needed. |
 | Evaluation > Datasets | The 9 evaluation datasets (M9) | Unchanged from M9. |
 | Evaluation > Evaluation runs | `mlflow.genai.evaluate` row comparisons (M9b) | Zero-model-call row-level comparison, the MLflow form of the Braintrust Grid. |
-| Prompts & versions > Playground | The 8 registered prompts, each with a `model_config` naming its gateway endpoint (`prompt_endpoint_plan`, D15) | `arm-a-prompt-cite-first` loads pre-wired to `dealpoint-glm`, `judge-panel-rubric` to `judge-mistral`, sampling parameters filled in -- one click to run, not a separate Braintrust Playground tab. |
+| Prompts & versions > Playground | The 8 registered prompts, each with a `model_config` naming its gateway endpoint (`prompt_endpoint_plan`/`step_playground`, D15) | `arm-a-prompt-cite-first` loads pre-wired to `dealpoint-glm`, `judge-panel-rubric` to `judge-mistral`, sampling parameters filled in -- one click to run, not a separate Braintrust Playground tab. |
 | Prompts & versions > Prompts | The 8 registered prompts (M9) | Unchanged from M9. |
-| Agent versions | 14 `LoggedModel`s: the ten M9b decision-tree configurations plus the four `playground-arm-A-*` prompt variants (`logged_model_plan`, D14), every comparable trace linked | `champion`/`baseline`/`cost-floor`/`safest` resolve to a version with its traces attached, not a dashboard someone has to remember to open. |
-| AI Gateway | One `openrouter` connection, five role-named endpoints (`gateway_plan`, D15) | One place for every model key the demo uses, instead of a `base_url` baked into each call site. |
+| Agent versions | 14 `LoggedModel`s: the ten M9b decision-tree configurations plus the four `playground-arm-A-*` prompt variants (`logged_model_plan`/`step_models`, D14), comparable traces linked via `mlflow.modelId` at re-log time | `champion`/`baseline`/`cost-floor`/`safest` resolve to a version with traces attached, not a dashboard someone has to remember to open. |
+| AI Gateway | One `openrouter` connection, five role-named endpoints, created through the store's gateway methods (`gateway_plan`/`step_gateway`, D15) | One place for every model key the demo uses, instead of a `base_url` baked into each call site. |
 
-**Databricks-only, tried anyway.** D12's online-scoring rule (`judge-professional.start(sampling_config=...)`)
-and D13's review-queue workflow (`mlflow.genai.labeling.create_labeling_session`, which routes through
-`get_review_app`) both require a Databricks tracking URI on this install's MLflow 3.16 -- verified live
-against `sqlite:///data/mlflow/mlflow.db`. `mlflow_tabs.py` tries the real call, catches exactly that
-failure, and records `databricks_only` in the manifest; the judges are still registered and the queue/
-schema definitions still exist as data, so the tab is filled even when the workflow around it is not
-runnable. This corrects "What only Braintrust has here" below, which had read labeling sessions as
-absent from OSS entirely before this milestone's directive to try the OSS review-queue functions
-named in `specs/milestones/m9c.md` (`create_label_schema`, `create_labeling_session`).
+**Probed and corrected, not assumed.** Three of the spec's assumed API shapes/outcomes turned out
+different on this install's MLflow 3.16.0, verified live and recorded in `mlflow_tabs_manifest.json`'s
+`spec_differences`-shaped fields rather than silently forced to match:
 
-**The eight dashboards.** `braintrust_dashboard_values.json` holds, per dashboard and chart, every row
-[label -> value] Braintrust's own BTQL would return; the local evaluator (`chart_values`,
-`eval_filter`, `eval_measure`) recomputes the same numbers from the stored mirror rows with no network
-call, and the eight `dashboard/<name>` runs each carry a self-contained HTML render (ranked bar list,
-exact titles, exact order) plus one metric per chart row. **Gap named, not resolved silently:** three
-charts (`prompt_professional`, `prompt_evidence`, `prompt_reasoning`) cannot be reproduced by the local
-evaluator -- `prompt_variant_trace_plan`'s own docstring (M9) records that the 67 prompt-variant traces'
-Playground judge scores were never mirrored to disk, so those three charts have no rows locally
-(`locally_evaluable: false` in the snapshot) until they are read from Braintrust directly. **Also named:**
-this build environment has no live Braintrust network access, so `data/reports/braintrust_dashboard_
-values.json` was produced by the local evaluator itself (`write_local_snapshot`), not by the real,
-read-only BTQL path (`snapshot_dashboards`, exercised by `just braintrust-dashboard-snapshot --live`);
-it is self-consistent today, not yet checked against Braintrust.
+- **The six deterministic `@scorer` functions cannot be registered off Databricks.**
+  `Scorer._check_can_be_registered` raises `DECORATOR_SCORER_REGISTRATION_NOT_SUPPORTED_ERROR`
+  ("Custom (@scorer) scorers use exec() during deserialization, which poses a code execution risk"),
+  verified live. `step_judges` attempts every one, catches exactly that exception, and records the
+  verbatim message per scorer under `judges.deterministic_registration`; the measured
+  `mlflow.genai.scorers.list_scorers()` count is **4**, never assumed to be 10.
+- **D13's review-queue workflow is OSS, not Databricks-only.** `mlflow.genai.review_queues`
+  (`create_review_queue`, `add_items_to_review_queue`, `set_review_queue_item_status`) and
+  `mlflow.genai.label_schemas.create_label_schema` (not `mlflow.genai.labeling`, which IS
+  Databricks-only) all work against a plain SQLite tracking URI -- verified live. Both queues, all
+  five schemas, and every resolvable item are created and set to their target status. This corrects
+  an earlier draft of this tour that (wrongly) called review queues Databricks-only.
+- **D12's online-scoring rule fails for a different, more specific reason than "Databricks-only":**
+  `judge-professional.start(sampling_config=...)` raises "Scorer 'judge-professional' requires
+  expectations, but scorers with expectations are not currently supported for automatic evaluation"
+  -- an MLflow 3.16 limitation on judges built from expectation-bearing instructions, not a
+  Databricks gate. `step_judges` records the verbatim message under `judges.online_rule_error`; the
+  four judges are still registered either way, so the tab is filled even when the rule cannot start.
+- **The AI Gateway is fully scriptable via the tracking store**, not Settings-UI-only:
+  `MlflowClient()._tracking_client.store` exposes `create_gateway_secret`/
+  `create_gateway_model_definition`/`create_gateway_endpoint`/`list_gateway_endpoints` directly
+  (`mlflow.gateway.client` does not exist on this install). `step_gateway` uses them; the
+  Settings-UI print plus `--gateway-ready` is a fallback for when the store call itself raises, not
+  the default path.
+
+**The eight dashboards.** `data/reports/braintrust_dashboard_values.json` was written by
+`snapshot_dashboards` against the live Braintrust project (`just braintrust-dashboard-snapshot
+--live`, run 2026-09-08) -- real, read-only BTQL, not the local evaluator checked against itself. The
+local evaluator (`chart_values`, `eval_filter`, `eval_measure`) recomputes the same numbers from the
+stored mirror rows with no network call, and the eight `dashboard/<name>` runs each carry a
+self-contained HTML render (ranked bar list, exact titles, exact order) plus one metric per chart row.
+
+| MLflow run | Braintrust dashboard | Link |
+| --- | --- | --- |
+| `dashboard/dealpoint-eval-overview` | DealPoint eval overview | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/58a7278a-71c8-4a71-9a5b-40ab019ee0c2 |
+| `dashboard/which-system` | Which system? | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/8e0003f4-5840-45b3-bc9a-86fcb686ec1a |
+| `dashboard/which-model` | Which model? | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/7c13d289-97cb-4db6-8340-6494e85608a3 |
+| `dashboard/which-retriever` | Which retriever? | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/32c5a4be-7898-4630-af11-ca40e743e9e4 |
+| `dashboard/judges-and-the-lawyer` | Judges and the lawyer | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/54eae7f9-0815-4497-8166-725929ddd416 |
+| `dashboard/deepeval` | DeepEval | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards (DeepEval) |
+| `dashboard/llamaindex` | LlamaIndex | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards (LlamaIndex) |
+| `dashboard/which-prompt` | Which prompt? | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
+
+Every chart row on these eight runs was checked against `data/reports/braintrust_dashboard_values.json`
+to 1e-9 by `tests/test_mlflow_dashboards.py`, with the two named exceptions below.
+
+**Two gaps named, not resolved silently:**
+- Three charts (`prompt_professional`, `prompt_evidence`, `prompt_reasoning`) cannot be reproduced by
+  the local evaluator -- `prompt_variant_trace_plan`'s own docstring (M9) records that the 67
+  prompt-variant traces' Playground judge scores were never mirrored to disk, so those three charts
+  have no rows locally (`locally_evaluable: false` in the snapshot) and are ported from the Braintrust
+  snapshot values directly.
+- One chart, `mod_p90` (`percentile(metadata.wall_s, 0.9)`), has rows locally but they do not match
+  Braintrust's value to 1e-9: pulling the identical 18 raw values behind its `haiku` group and
+  computing both by hand gives 63.2187 (the local evaluator's exact linear-interpolation quantile) vs
+  63.43960425028111 (Braintrust's own `percentile(...)`, verified live) -- Braintrust's percentile
+  aggregator is evidently an approximate, sketch-based quantile. `PERCENTILE_APPROXIMATE` in
+  `mlflow_dashboards.py` names this chart so the value gap is checked (labels and order still must
+  match), not silently forced to agree, and its rendered value on the port is also read straight from
+  the snapshot -- like the three prompt charts above, so "Which model?" shows Braintrust's number
+  (63.4396) rather than the local exact quantile.
+
+Both gaps are visible on the rendered page itself, not just in this document: `render_dashboard_html`
+prints one provenance line under the title of every snapshot-sourced chart.
 
 ## What MLflow adds
 
@@ -248,16 +293,17 @@ it is self-consistent today, not yet checked against Braintrust.
   OSS 3.16 has no chart/dashboard API to hold a live equivalent.
 - **Online scoring**, continuous, over live logs; MLflow OSS's nearest equivalent is the batch
   `just mlflow-score-new`, plus M9c's `judge-professional.start(sampling_config=...)` attempt (Stop 10:
-  Databricks-only on this install, tried and recorded, not assumed).
+  not Databricks-gated on this install -- it fails because expectation-bearing judges are not yet
+  supported for automatic evaluation, verified live and recorded, not assumed).
 - **Topics, Patterns and the Debugger** are Databricks-only or absent from OSS MLflow 3.16; the SQLite
   store is queryable directly and `search_traces`/`search_runs` filter syntax covers the same
   investigations, by hand rather than as saved objects.
-- **Labeling sessions and the review app's assignment/status workflow** are Databricks-only on this
-  install (Stop 10: `mlflow.genai.labeling.create_labeling_session` requires a Databricks tracking URI,
-  verified live) -- corrected from this tour's earlier reading of them as absent from OSS entirely: the
-  label-schema and review-queue *definitions* (`create_label_schema`, the five schemas, the two queues)
-  are OSS and are created; only the review-app UI around them needs Databricks. MLflow's HUMAN
-  assessments still hold the same 96 lawyer scores as plain feedback rows either way.
+- **The review app's assignment/status workflow's Databricks-hosted UI** may still be Databricks-only,
+  but the OSS review-queue functions themselves are not (Stop 10: `mlflow.genai.review_queues.*` and
+  `mlflow.genai.label_schemas.create_label_schema` work against a plain SQLite tracking URI, verified
+  live) -- corrected from this tour's earlier reading of them as Databricks-only entirely: both queues,
+  all five schemas and every resolvable item are created and set to their target status by M9c.
+  MLflow's HUMAN assessments still hold the same 96 lawyer scores as plain feedback rows either way.
 - **The Playground UI** is Databricks-only/absent from OSS MLflow 3.16; M9c still gives every registered
   prompt a `model_config` naming its gateway endpoint (Stop 10), so the wiring the Playground would use
   exists even though the page does not.

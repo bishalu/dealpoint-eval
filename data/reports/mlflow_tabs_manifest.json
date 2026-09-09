@@ -1,0 +1,179 @@
+{
+  "mode": "live",
+  "started_at": "2026-09-08T23:59:13.912671+00:00",
+  "experiment": "dealpoint-eval",
+  "models": {
+    "planned": 14,
+    "names": [
+      "A@glm (test-32)",
+      "A@haiku (judged-18)",
+      "B@glm (test-32)",
+      "C@glm (test-32)",
+      "D@deepseek-v4-flash (judged-18)",
+      "D@gemini-3_1-flash-lite (judged-18)",
+      "D@glm (judged-18)",
+      "D@glm (test-32)",
+      "D@haiku (judged-18)",
+      "D@qwen3_7-flash (judged-18)",
+      "playground-arm-A-abstain-first",
+      "playground-arm-A-base",
+      "playground-arm-A-cite-first",
+      "playground-arm-A-terse"
+    ],
+    "expected_linked_trace_counts": {
+      "A@haiku (judged-18)": 18,
+      "D@haiku (judged-18)": 18,
+      "D@glm (judged-18)": 18,
+      "D@deepseek-v4-flash (judged-18)": 18,
+      "D@qwen3_7-flash (judged-18)": 18,
+      "D@gemini-3_1-flash-lite (judged-18)": 18,
+      "D@glm (test-32)": 14,
+      "A@glm (test-32)": 32,
+      "B@glm (test-32)": 32,
+      "C@glm (test-32)": 32,
+      "playground-arm-A-abstain-first": 18,
+      "playground-arm-A-base": 13,
+      "playground-arm-A-cite-first": 18,
+      "playground-arm-A-terse": 18
+    },
+    "spec_difference_d_glm_overlap": "D@glm appears in both pools; mlflow.modelId is single-valued, so its 18 judged-18 rows are excluded from test-32's count -- measured 18 (judged-18) + 14 (test-32, raw-agent-only), not the spec's assumed 18/32 for both.",
+    "model_id_by_name": {
+      "A@haiku (judged-18)": "m-c557a9f5ab3548e8b3fc8d671fd8b494",
+      "D@deepseek-v4-flash (judged-18)": "m-44d0f3e16a194ccdab0a1c7b15a9be05",
+      "D@gemini-3_1-flash-lite (judged-18)": "m-9ab944c4e5694235b030bcbcb3320a46",
+      "D@glm (judged-18)": "m-ed02be234c15434ca58bf1e6ab89de60",
+      "D@haiku (judged-18)": "m-a56ed1270f1048b4bcdddac23df0cb8b",
+      "D@qwen3_7-flash (judged-18)": "m-2b2ad935f26a497eae8ea25704186d88",
+      "A@glm (test-32)": "m-68217be6b8254e79bd99b943f7ae7e9d",
+      "B@glm (test-32)": "m-0180214eebce403b9dd9d325b82689bf",
+      "C@glm (test-32)": "m-7378610f71854aa496cc6e689b09ba88",
+      "D@glm (test-32)": "m-71b6a6cff16a43ba9d019e9fdd633c27",
+      "playground-arm-A-abstain-first": "m-fafeac348e0d4128b282ec9f80193ea5",
+      "playground-arm-A-base": "m-cf5e61336e8c40f5843621e0a84f52bd",
+      "playground-arm-A-cite-first": "m-a0773117a5a14a31a280521903695016",
+      "playground-arm-A-terse": "m-9acc6795117c43e7b115f3d2a169986b"
+    }
+  },
+  "gateway": {
+    "connection": "openrouter",
+    "endpoints": [
+      "dealpoint-glm",
+      "dealpoint-gemini",
+      "dealpoint-haiku",
+      "judge-mistral",
+      "judge-bytedance"
+    ],
+    "created_via": "store",
+    "endpoints_created": [
+      "dealpoint-gemini",
+      "dealpoint-glm",
+      "dealpoint-haiku",
+      "judge-bytedance",
+      "judge-mistral"
+    ]
+  },
+  "playground": {
+    "prompts": {
+      "agent-base-system-prompt": "dealpoint-glm",
+      "agent-arm-d-skill-injection": "dealpoint-glm",
+      "judge-calibrated-rubric": "dealpoint-glm",
+      "arm-a-prompt-base": "dealpoint-glm",
+      "arm-a-prompt-terse": "dealpoint-glm",
+      "arm-a-prompt-cite-first": "dealpoint-glm",
+      "arm-a-prompt-abstain-first": "dealpoint-glm",
+      "judge-panel-rubric": "judge-mistral"
+    },
+    "new_versions": {}
+  },
+  "judges": {
+    "planned": 10,
+    "names": [
+      "grounded_accuracy",
+      "answer_correct",
+      "citation_gold_overlap",
+      "citation_verbatim",
+      "abstain_correct",
+      "skill_adherence",
+      "judge-reasoning",
+      "judge-evidence",
+      "judge-trajectory",
+      "judge-professional"
+    ],
+    "online_rule": {
+      "name": "judge-professional",
+      "sampling_filter": "tags.category = 'live-replay'",
+      "mirrors": "the Braintrust online-scoring rule of the same name, restricted to the same tag"
+    },
+    "registered": 4,
+    "registered_names": [
+      "judge-evidence",
+      "judge-professional",
+      "judge-reasoning",
+      "judge-trajectory"
+    ],
+    "deterministic_registration": {
+      "grounded_accuracy": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead.",
+      "answer_correct": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead.",
+      "citation_gold_overlap": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead.",
+      "citation_verbatim": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead.",
+      "abstain_correct": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead.",
+      "skill_adherence": "Custom scorer registration (using @scorer decorator) is not supported outside of Databricks tracking environments due to security concerns. Custom scorers require arbitrary code execution during deserialization.\n\nTo use custom scorers:\n1. Configure MLflow to use a Databricks tracking URI, or\n2. Manage your custom scorer code in a source code repository (e.g., GitHub) and import it directly, or\n3. Use built-in scorers or make_judge() scorers instead."
+    },
+    "online_rule_started": false,
+    "online_rule_error": "INVALID_PARAMETER_VALUE: Scorer 'judge-professional' requires expectations, but scorers with expectations are not currently supported for automatic evaluation."
+  },
+  "review": {
+    "schemas": [
+      "reasoning",
+      "evidence",
+      "trajectory",
+      "professional",
+      "gold_answer"
+    ],
+    "queues": {
+      "Lawyer calibration review": 12,
+      "Lawyer-scored packets (24)": 24
+    },
+    "operator": "exedev",
+    "schema_ids": [
+      "ls-9adf8350813c43ea93e04c8f7b264338",
+      "ls-52b4c04373304b86a7460fd662292975",
+      "ls-c9a55095676647059c00542bb656465e",
+      "ls-8eb09d89d18a4de6a62e67335a7d10cb",
+      "ls-9170d31735324062ac5f85514f352afc"
+    ],
+    "queue_ids": {
+      "Lawyer calibration review": "rq-a5ecf971a5a4441a87c4a548da35d21b",
+      "Lawyer-scored packets (24)": "rq-5def6c1de32a4844ac2e1a15b4ae280d"
+    }
+  },
+  "sessions": {
+    "traces": 738,
+    "distinct_sessions": 90,
+    "tagged_this_run": 0,
+    "linked_to_model_this_run": 0
+  },
+  "overview": {
+    "dashboard_runs": [
+      "dashboard/dealpoint-eval-overview",
+      "dashboard/which-system",
+      "dashboard/which-model",
+      "dashboard/which-retriever",
+      "dashboard/judges-and-the-lawyer",
+      "dashboard/deepeval",
+      "dashboard/llamaindex",
+      "dashboard/which-prompt"
+    ],
+    "registry_aliases": [
+      "baseline",
+      "champion",
+      "cost-floor",
+      "safest"
+    ],
+    "review_queues": [
+      "Lawyer calibration review",
+      "Lawyer-scored packets (24)"
+    ]
+  },
+  "finished_at": "2026-09-09T00:01:02.736898+00:00"
+}

@@ -271,7 +271,11 @@ def load_snapshot(path: Path = SNAPSHOT_PATH) -> list[dict]:
 
 def snapshot_matches(a: list[dict], b: list[dict], *, tol: float = 1e-9) -> list[str]:
     """Every mismatch between two snapshots (empty list = identical within `tol`); compares only
-    `locally_evaluable` charts, since the other three have no rows to compare by construction."""
+    `locally_evaluable` charts, since the three named in `NOT_LOCALLY_EVALUABLE` have no rows to
+    compare by construction. `PERCENTILE_APPROXIMATE` (`mod_p90`) still compares row order/labels
+    but not the value itself: Braintrust's percentile aggregator is an approximate (sketch-based)
+    quantile that does not reproduce the local evaluator's exact linear-interpolation quantile
+    bit-for-bit, verified against the live API (see `snapshot_dashboards`'s docstring)."""
     mismatches: list[str] = []
     by_key_a = {(e["dashboard"], e["chart_key"]): e for e in a}
     by_key_b = {(e["dashboard"], e["chart_key"]): e for e in b}
@@ -286,6 +290,8 @@ def snapshot_matches(a: list[dict], b: list[dict], *, tol: float = 1e-9) -> list
         if [r["label"] for r in ra] != [r["label"] for r in rb]:
             mismatches.append(f"{key}: row order/labels differ: {[r['label'] for r in ra]} vs {[r['label'] for r in rb]}")
             continue
+        if key[1] in PERCENTILE_APPROXIMATE:
+            continue
         for row_a, row_b in zip(ra, rb, strict=True):
             va, vb = row_a["value"], row_b["value"]
             if va is None and vb is None:
@@ -298,38 +304,94 @@ def snapshot_matches(a: list[dict], b: list[dict], *, tol: float = 1e-9) -> list
 # --- REST BTQL snapshot (live, read-only) ---------------------------------------------------------
 
 
-def snapshot_dashboards(rest_client) -> list[dict]:
-    """The real thing (spec D16 item 1): run every `chart_catalogue()` chart's measure/group/filters
-    as BTQL against the Braintrust logs and return the same shape `build_dashboard_snapshot` does, so
-    the two can be diffed by `snapshot_matches`. Read-only: no score, no view, no dashboard is written.
-    Respects the 20-queries-per-minute limit with backoff, matching `braintrust_cockpit`'s own REST
-    call pattern."""
+def _btql_query_for(project_id: str, chart: dict, measure_btql: str, group_field: str | None) -> str:
+    """One `chart_catalogue()` chart -> a real BTQL query string, in the same grammar the local
+    evaluator already parses (`measure`/`filters` are already BTQL fragments, verified live against
+    the API 2026-09-08: identical filtered rows produce identical `avg`/`sum-over-sum` numbers to the
+    local evaluator; only `percentile` diverges, see `PERCENTILE_APPROXIMATE` below)."""
+    parts = [f"from: project_logs('{project_id}')"]
+    filters = chart.get("filters") or []
+    if filters:
+        parts.append("filter: " + " and ".join(f"({f})" for f in filters))
+    if group_field:
+        parts.append(f"dimensions: {group_field}")
+    parts.append(f"measures: {measure_btql} as value")
+    return " | ".join(parts)
+
+
+def _run_btql_with_backoff(query: str, *, api_key: str, calls: list[int], window_start: list[float]) -> dict:
+    """Respect the 20-queries-per-minute limit with backoff (spec D16 item 1): a token-bucket sleep
+    between windows, plus up to three retries with exponential backoff on HTTP 429."""
     import time
 
-    from dealpoint.eval.braintrust_cockpit import (
-        DASHBOARDS,
-        _chart_rest_definition,
-        _resolve_project_id,
-        chart_catalogue,
-    )
+    from dealpoint.eval.btql import run_btql
+
+    if calls[0] and calls[0] % 20 == 0:
+        elapsed = time.monotonic() - window_start[0]
+        if elapsed < 60:
+            time.sleep(60 - elapsed)
+        window_start[0] = time.monotonic()
+    calls[0] += 1
+    delay = 2.0
+    for attempt in range(4):
+        try:
+            return run_btql(query, api_key=api_key)
+        except Exception as exc:
+            if "429" not in str(exc) or attempt == 3:
+                raise
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError("unreachable")  # pragma: no cover
+
+
+PERCENTILE_APPROXIMATE = ("mod_p90",)
+
+
+def snapshot_dashboards(rest_client, *, api_key: str) -> list[dict]:
+    """The real thing (spec D16 item 1): run every `chart_catalogue()` chart's measure/group/filters
+    as an actual BTQL query (`POST /btql`, `dealpoint.eval.btql.run_btql`) against the Braintrust
+    logs and return the same shape `build_dashboard_snapshot` does, so the two can be diffed by
+    `snapshot_matches`. Read-only: no score, no view, no dashboard is written.
+
+    Verified live 2026-09-08 against the real project: for every `avg`/`sum(...)/sum(...)` chart,
+    this reproduces the local evaluator's number exactly (e.g. `sys_safe`, `sys_precision`,
+    `ret_hit5`). One chart, `mod_p90` (`percentile(metadata.wall_s, 0.9)`), does NOT match:
+    Braintrust's percentile aggregator is evidently an approximate (sketch-based) quantile, not the
+    local evaluator's exact linear-interpolation quantile -- confirmed by pulling the raw 18 values
+    behind `mod_p90`'s `haiku` group and computing both by hand (linear interpolation: 63.2187;
+    Braintrust's own `measures: percentile(...)` on the identical 18 values: 63.43960425028111).
+    `PERCENTILE_APPROXIMATE` names this one chart so the gap is checked, not silently forced to match.
+    """
+    from dealpoint.eval.braintrust_cockpit import DASHBOARDS, _resolve_project_id, chart_catalogue
+    from dealpoint.eval.btql import parse_btql_result
 
     project_id = _resolve_project_id(rest_client)
     catalogue = chart_catalogue()
     out: list[dict] = []
-    calls = 0
-    window_start = time.monotonic()
+    calls = [0]
+    window_start = [__import__("time").monotonic()]
     for name, _verdict, chart_ids in DASHBOARDS:
         for cid in chart_ids:
             chart = catalogue[cid]
-            if calls and calls % 20 == 0:
-                elapsed = time.monotonic() - window_start
-                if elapsed < 60:
-                    time.sleep(60 - elapsed)
-                window_start = time.monotonic()
-            definition = _chart_rest_definition(chart)
-            result = rest_client.post(f"project/{project_id}/btql", {"query": definition})
-            calls += 1
-            rows = [{"label": str(r.get("group") or r.get("label")), "value": r.get("value")} for r in result.get("data", [])]
+            group_by = chart.get("group_by") or []
+            group_field = group_by[0].split(".", 1)[1] if group_by and group_by[0].startswith("metadata.") else (group_by[0] if group_by else None)
+            group_key = group_field if group_field else None
+            measure = chart["measure"]
+            rows: list[dict] = []
+            measures = measure if isinstance(measure, list) else [{"btql": measure, "name": None}]
+            for m in measures:
+                query = _btql_query_for(project_id, chart, m["btql"], f"metadata.{group_key}" if group_key else None)
+                payload = _run_btql_with_backoff(query, api_key=api_key, calls=calls, window_start=window_start)
+                result_rows, _n = parse_btql_result(payload)
+                if m["name"] is not None:
+                    # multi-measure, ungrouped chart: one query per measure, its own row label
+                    value = result_rows[0]["value"] if result_rows else None
+                    rows.append({"label": m["name"], "value": value})
+                else:
+                    for r in result_rows:
+                        label = str(r.get(group_key)) if group_key else "value"
+                        rows.append({"label": label, "value": r.get("value")})
+            rows = _ordered_rows({r["label"]: r["value"] for r in rows})
             out.append({"dashboard": name, "chart_key": cid, "title": chart["title"], "unit": _unit_for(chart),
                        "locally_evaluable": cid not in NOT_LOCALLY_EVALUABLE, "rows": rows})
     return out
@@ -350,15 +412,30 @@ def _format_value(value: float | None, unit: str) -> str:
     return f"{value:.2f}" if value != int(value) else str(int(value))
 
 
+def _provenance_line(entry: dict) -> str | None:
+    """D16's 'result for result' requirement means a chart the local evaluator cannot reproduce
+    (`NOT_LOCALLY_EVALUABLE`) or cannot reproduce exactly (`PERCENTILE_APPROXIMATE`) must say so on
+    the page, not silently show Braintrust's number as if it were locally derived."""
+    cid = entry["chart_key"]
+    if cid in NOT_LOCALLY_EVALUABLE:
+        n = len(entry["rows"])
+        return (f"values read from Braintrust; the judges' scores on these {n} prompt-variant rows "
+                "were never mirrored to disk")
+    if cid in PERCENTILE_APPROXIMATE:
+        return "value read from Braintrust; its percentile aggregator is an approximate sketch quantile"
+    return None
+
+
 def render_dashboard_html(name: str, verdict: str, chart_entries: list[dict]) -> str:
     """One self-contained HTML page (no external assets): the dashboard's name, its verdict verbatim,
     and each chart as a ranked horizontal bar list, same title, same row labels, same order (spec D16
-    item 3)."""
+    item 3). Snapshot-sourced charts (`_provenance_line`) carry one visible line under their title."""
     parts = [
         "<!doctype html><html><head><meta charset='utf-8'>",
         f"<title>{escape(name)}</title>",
         ("<style>body{font-family:sans-serif;max-width:960px;margin:2rem auto}"
-         "li{margin:.25rem 0}.bar{display:inline-block;height:.8em;background:#4a7;vertical-align:middle;margin-right:.5em}</style>"),
+         "li{margin:.25rem 0}.bar{display:inline-block;height:.8em;background:#4a7;vertical-align:middle;margin-right:.5em}"
+         ".provenance{font-style:italic;color:#666}</style>"),
         "</head><body>",
         f"<h1>{escape(name)}</h1>",
         f"<p class='verdict'>{escape(verdict)}</p>",
@@ -366,7 +443,11 @@ def render_dashboard_html(name: str, verdict: str, chart_entries: list[dict]) ->
     for entry in chart_entries:
         rows = entry["rows"]
         max_val = max((r["value"] for r in rows if r["value"] is not None), default=0.0) or 1.0
-        parts.append(f"<h2>{escape(entry['title'])}</h2><ol>")
+        parts.append(f"<h2>{escape(entry['title'])}</h2>")
+        provenance = _provenance_line(entry)
+        if provenance:
+            parts.append(f"<p class='provenance'>{escape(provenance)}</p>")
+        parts.append("<ol>")
         for row in rows:
             width = 0 if row["value"] is None else round(100 * abs(row["value"]) / max_val)
             bar = f"<span class='bar' style='width:{width}px'></span>"
@@ -380,23 +461,50 @@ def _slug(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
+_METRIC_KEY_BAD_RE = re.compile(r"[^a-zA-Z0-9_\-. :/]")
+_METRIC_KEY_MAX_LEN = 250
+
+
+def _metric_key(chart_key: str, row_label: str) -> str:
+    """MLflow metric names accept only alphanumerics, `_-. :/` (probed live: `@` is rejected, e.g.
+    `pareto_safe.D@deepseek-v4-flash`); row labels are long, human strings, so this sanitizes and
+    truncates to MLflow's limit. The unsanitized `<chart_key>.<row_label>` is still recoverable from
+    the run's `dashboard.html` artifact and the manifest."""
+    raw = f"{chart_key}.{row_label}"
+    key = _METRIC_KEY_BAD_RE.sub("_", raw)
+    return key[:_METRIC_KEY_MAX_LEN]
+
+
 def dashboard_run_plan(rows: list[dict] | None = None) -> list[dict]:
     """One entry per of the eight dashboards: its run key (`dashboard/<name>`), its metrics
-    (`<chart_key>.<row label>` -> value, spec D16 item 3), and its rendered HTML."""
+    (`<chart_key>.<row label>` -> value, spec D16 item 3), and its rendered HTML. A chart the local
+    evaluator cannot reproduce at all (`NOT_LOCALLY_EVALUABLE`) or cannot reproduce exactly
+    (`PERCENTILE_APPROXIMATE`) is rendered from the committed Braintrust snapshot instead, so the port
+    stays 'result for result' rather than showing '(no data)' or the wrong number."""
     from dealpoint.eval.braintrust_cockpit import DASHBOARDS, chart_catalogue
 
     catalogue = chart_catalogue()
     rows_ = rows if rows is not None else all_rows()
+    snapshot_by_key = {(e["dashboard"], e["chart_key"]): e for e in load_snapshot()}
     plans = []
     for name, verdict, chart_ids in DASHBOARDS:
         entries, metrics = [], {}
         for cid in chart_ids:
             chart = catalogue[cid]
-            ordered = _ordered_rows(chart_values(chart, rows_))
-            entries.append({"chart_key": cid, "title": chart["title"], "unit": _unit_for(chart), "rows": ordered})
+            if cid in NOT_LOCALLY_EVALUABLE or cid in PERCENTILE_APPROXIMATE:
+                snap_entry = snapshot_by_key[(name, cid)]
+                ordered = snap_entry["rows"]
+                source = "snapshot"
+            else:
+                ordered = _ordered_rows(chart_values(chart, rows_))
+                source = "local"
+            entries.append({
+                "chart_key": cid, "title": chart["title"], "unit": _unit_for(chart), "rows": ordered,
+                "source": source,
+            })
             for row in ordered:
                 if row["value"] is not None:
-                    metrics[f"{cid}.{row['label']}"] = row["value"]
+                    metrics[_metric_key(cid, str(row["label"]))] = row["value"]
         plans.append({
             "name": name, "verdict": verdict, "run_key": f"dashboard/{_slug(name)}",
             "charts": entries, "metrics": metrics, "html": render_dashboard_html(name, verdict, entries),
@@ -459,7 +567,7 @@ def main(argv: list[str] | None = None) -> int:
             if not api_key:
                 print("braintrust-dashboard-snapshot --live requested but no API key resolved -- aborting", file=sys.stderr)
                 return 1
-            snapshot = snapshot_dashboards(RestClient(api_key))
+            snapshot = snapshot_dashboards(RestClient(api_key), api_key=api_key)
         else:
             snapshot = build_dashboard_snapshot()
         SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)

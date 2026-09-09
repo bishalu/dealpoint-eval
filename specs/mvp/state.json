@@ -1,7 +1,7 @@
 {
   "brief_path": "specs/grilled-product-brief.md",
   "brief_sha": "a622d596d6b7",
-  "current_milestone": "m9d",
+  "current_milestone": "m9c",
   "milestones": {
     "m0_1": {
       "adw_ids": [
@@ -1662,20 +1662,236 @@
       "adw_ids": [
         "560b5aad"
       ],
-      "attempts": 2,
+      "attempts": 4,
       "blocker": "",
       "commits": [],
-      "ended_at": "",
+      "ended_at": "2026-09-09T00:31:41.776+00:00",
       "exclusions": [],
       "id": "m9c",
       "infra_retries": 0,
-      "last_failure": "",
-      "last_failure_class": "",
-      "metrics": {},
-      "models": {},
+      "last_failure": "Reviewer disposition REVISE:\n- D16.3 \u2014 each chart rendered with the same row labels and the same values as Braintrust, in the same order ('word for word, result for result'): dealpoint/eval/mlflow_dashboards.py:457 builds every chart from the local evaluator alone (`_ordered_rows(chart_values(chart, rows_))`), never from the committed snapshot. Measured: dashboard/which-prompt renders all 12 rows as value None \u2192 '(no data)' and carries 0 metrics, though the committed Braintrust snapshot now holds those 12 values; mod_p90 renders the local quantile, not Braintrust's 63.4396. docs/mlflow-tour.md:245-246 claims those three charts 'are ported from the Braintrust snapshot values directly' \u2014 the code does not do that. Plan \u00a74.1 prescribed rendering them from the snapshot with a visible provenance line.\n- D16.3 \u2014 logged as artifacts on eight runs `dashboard/<name>` (tag axis=dashboard) whose metrics are every chart row; the tour links each run: step_runs exists (dealpoint/eval/mlflow_dashboards.py:492-507) but was never run against the server: data/mlflow/mlflow.db has 0 runs named 'dashboard*', 0 tags with value 'dashboard/%', and the axis tag holds only crosscheck, judge, model, prompt, retrieval, system \u2014 no 'dashboard'. Every other step was verified live; consequently the experiment description written by step_overview and the tour both point at eight runs that do not exist.\nBlocking:\n- dashboard_run_plan (dealpoint/eval/mlflow_dashboards.py:457) renders only local-evaluator values, so the 'Which prompt?' dashboard shows '(no data)' for all 12 rows and logs 0 metrics while the committed Braintrust snapshot holds those values, and mod_p90 shows the local quantile instead of Braintrust's \u2014 contradicting the milestone's 'result for result' and the tour's claim at docs/mlflow-tour.md:245-246 that those charts are ported from the snapshot.\n- The eight `dashboard/<name>` runs do not exist in the live MLflow store (0 runs named dashboard*, 0 axis=dashboard tags), so D16.3's artifact-plus-metrics deliverable is unpublished and the experiment description and tour point at runs that are not there.\nCorrective task:\nIn /home/exedev/repos/dealpoint-eval, finish D16's render-and-publish half of M9c (specs/milestones/m9c.md). (1) In dealpoint/eval/mlflow_dashboards.py, change `dashboard_run_plan` (currently line 457, `_ordered_rows(chart_values(chart, rows_))`) so each chart's rows come from the local evaluator when it can produce them and otherwise fall back to the committed Braintrust snapshot (`load_snapshot()`, matched on (dashboard, chart_key)): for the three keys in NOT_LOCALLY_EVALUABLE use the snapshot rows outright, and for the keys in PERCENTILE_APPROXIMATE (`mod_p90`) use the snapshot value so the port shows Braintrust's number rather than the local exact quantile. Mark each such chart's provenance in the returned entry and have `render_dashboard_html` print one visible provenance line under that chart's title, e.g. 'values read from Braintrust; the judges' scores on these 67 prompt-variant rows were never mirrored to disk' and, for mod_p90, that Braintrust's percentile is an approximate sketch quantile. Every snapshot-sourced row must also appear in the run's `metrics` dict, so `dashboard/which-prompt` stops logging zero metrics. Do not change the local evaluator, the snapshot file, or `snapshot_matches`'s existing 1e-9 comparison and its two named exclusions. (2) Add a gate_m9c test in tests/test_mlflow_dashboards.py asserting that no chart in `dashboard_run_plan()` has an all-None row set, that `dashboard/which-prompt` has 12 rows with non-None values equal to the committed snapshot's, that mod_p90's rendered value equals the snapshot's, and that each snapshot-sourced chart's HTML carries its provenance line. (3) Publish the runs: run `uv run python -m dealpoint.eval.mlflow_dashboards runs --live` against the running server (MLFLOW_TRACKING_URI=http://127.0.0.1:5000, store data/mlflow/mlflow.db) so the eight `dashboard/<slug>` runs exist with tag `axis=dashboard`, the `dashboard.html` artifact and one metric per chart row; run it a second time and confirm it creates nothing new. (4) Reconcile the prose: docs/mlflow-tour.md:245-246 already claims the three prompt charts are ported from the snapshot \u2014 leave that claim only if step (1) makes it true, and add the same statement for mod_p90. Verified by: `uv run pytest -m 'gate_m9c and not needs_network' -q`, `uv run pytest -m 'not needs_network and not needs_model' -q`, `uv run ruff check .` and `uv run pyright` all green; plus a query against data/mlflow/mlflow.db showing 8 tags with value like 'dashboard/%', 8 tags axis=dashboard, and a non-zero metric count on the dashboard/which-prompt run.",
+      "last_failure_class": "product",
+      "metrics": {
+        "braintrust_sync": {
+          "n_experiments": 29,
+          "replayed_traces": 6,
+          "review_set_n": 12,
+          "synced_at": "2026-09-07T13:56:41.828827+00:00"
+        },
+        "caching_probe": {
+          "cost_per_call_usd_after": 0.003092,
+          "cost_per_call_usd_before": 0.001914,
+          "decision": "Not padded. The spec explicitly forbids padding a prompt to reach a cacheable minimum.",
+          "finding": "The static prefix (system prompt + question spec + tool schemas) measures ~511-609 tokens across the 12 questions, well below Anthropic's 2048-token minimum cacheable prefix for the Haiku class. cached_tokens was 0 on every call in this probe (and on all 96 pre-existing ledger rows), consistent with the prefix being below the provider's minimum -- not a request-shape bug. The request shape is already correct (dealpoint.llm.client.build_system_message sends the system message as a content-block list with cache_control: {'type': 'ephemeral'}), so no block-placement fix was needed or applied.",
+          "measured_static_prefix_tokens_range": "511-609 (approx, chars/4.8 across the 12 questions)",
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls_in_probe": 13,
+          "provider_minimum_cacheable_tokens": 2048
+        },
+        "caching_probe_raw": {
+          "model": "anthropic/claude-haiku-4.5",
+          "n_calls": 13
+        },
+        "case_counts": {
+          "counterfactual": 40,
+          "dev": 58,
+          "judge_scores": 324,
+          "synthetic_dev_queries": 106,
+          "test": 167
+        },
+        "chunk_report": {
+          "chars_per_token_ratio_mean": 4.845026404213299,
+          "n_sampled_chunks": 500,
+          "n_total_chunks": 12312
+        },
+        "deepeval_crosscheck": {
+          "classification": "KEEP_OPTIONAL_ANALYSIS",
+          "classification_rationale": "DeepEval task_completion correlates weakly with grounded_accuracy (rho=0.211, n=45), which would otherwise support KEEP_CORE_DIAGNOSTIC -- but the resolved evaluator shares a model with the M5 judge trio it is compared against (see decisions), so any apparent independence from vs_judge agreement is not trustworthy. Downgraded to KEEP_OPTIONAL_ANALYSIS pending a genuinely independent evaluator model.",
+          "schema_version": 1
+        },
+        "demo_manifest": {
+          "git_sha7": "16345a8",
+          "live_score_cap": 600,
+          "n_human_scores_planned": 96,
+          "n_human_scores_pushed": 96,
+          "n_live_scores_planned": 104,
+          "project_id": "447b6db8-7f2b-4007-bc6e-1a52894c05fe",
+          "rubric_version": "cfda9f8cc401",
+          "subset_hash": "5918ef10a7e6",
+          "synced_at": "2026-09-07T14:28:44.331871+00:00"
+        },
+        "dev_smoke_m4": {
+          "n_legs": 2
+        },
+        "four_arm": {
+          "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark.",
+          "version": "v2 after harness repair"
+        },
+        "four_arm_v1_execution_defects": {
+          "budget_scaled_note": "Every headline number in this report is from a 32-case frozen subset (18 cases at Haiku), not the brief's full 167-case test set -- budget-scaled per the engineer's 2026-09-04 instruction, never the full benchmark."
+        },
+        "framework_versions": {
+          "bm25s": "0.3.11",
+          "braintrust": "0.37.0",
+          "deepeval": "4.2.1",
+          "fastembed": "0.8.0",
+          "git_sha7": "526f26c",
+          "llama-index-core": "0.14.24",
+          "llama-index-retrievers-bm25": "0.8.0",
+          "openai": "3.8.0",
+          "pi": "0.84.4",
+          "pi-mcp-extension": "1.5.0",
+          "pydantic": "2.13.5",
+          "python": "3.12.3",
+          "qdrant-client": "1.19.0"
+        },
+        "judge_alignment": {
+          "est_usd": 0.2112,
+          "milestone_tag": "m9",
+          "n_calls_estimated": 528,
+          "n_traces_rescored": 108,
+          "purpose": "judge_alignment",
+          "ran_at": "2026-09-07T22:50:25.304517+00:00",
+          "trajectory_note": "trajectory closeness moved from 0.785 to 0.760"
+        },
+        "judge_slate": {
+          "price_basis": "live",
+          "verified_at": "2026-09-05T20:46:25.244679+00:00"
+        },
+        "judges": {
+          "generated_at": "2026-09-06T17:40:37.751397+00:00",
+          "git_sha7": "20e71ca",
+          "n_judge_rows": 324,
+          "n_judge_rows_failed": 0,
+          "n_judge_rows_ok": 324,
+          "rubric_version": "cfda9f8cc401"
+        },
+        "li_rag_eval": {
+          "cause_rule": "Deterministic disagreement-cause rule, applied in this priority order to a disagreeing (case, config, direction): 'partial_overlap' when the top-ranked retrieved chunk overlaps a gold span by 0 < overlap < MIN_GOLD_OVERLAP_CHARS (50) chars; 'duplicate_relevant_chunks' when >= 2 chunks in the case's full chunk list each overlap a gold span by >= 50 chars (expected_ids has >= 2 entries), so which one a retriever happens to surface first is underdetermined; 'section_boundary' when a single gold span is covered (any overlap > 0) by chunks carrying more than one distinct section_ref; 'chunk_identity' otherwise (the default: the two metrics disagree for a reason not captured by the other three labels -- typically the retrieved list and expected_ids simply differ). A 'reranking' label was considered (spec section 3.2) but is not emitted: the pipeline never computes the pre-rerank ranking needed to detect it, so including it would describe a rule this code cannot actually apply.",
+          "schema_version": 1
+        },
+        "m0_1_oos_collisions": {
+          "collision_window": 400
+        },
+        "m0_1_parser_report": {
+          "corpus_gold_span_hits": 2970,
+          "corpus_gold_span_section_rate": 0.8549222797927462,
+          "corpus_gold_span_total": 3474,
+          "eligible_count": 139,
+          "giant_section_fraction_threshold": 0.4,
+          "gold_span_section_rate_ceiling": 0.8926309729418538,
+          "min_structural_coverage_threshold": 0.8,
+          "n_agreements": 152,
+          "parser_version": "29cc01eda19b"
+        },
+        "m4_1_estimate_before_v2": {
+          "basis": "ledger:measured(arm,model)",
+          "calls": 656,
+          "cases": 164,
+          "est_usd": 0.907372,
+          "per_call_usd": 0.001383,
+          "per_case_usd": 0.005533,
+          "sweep": "four_arm"
+        },
+        "m4_1_probes": {
+          "case_selection_rule": "For each probed (model, arm), take the first 2 case_ids, in frozen-subset order (data/eval/test_subset_v1.json's case_ids list), whose v1 result row for that (model, arm) has record.status == 'EXECUTION_FAILED'. Resolved in code from the v1 result JSONL named in data/reports/four_arm_manifest_v1.json (falling back to the live four_arm_manifest.json before v1 preservation), never hard-coded. This is a diagnostic selection on a FROZEN subset -- it selects nothing that is reported as a headline result, and the v2 sweep (dealpoint.eval.four_arm_sweep) runs the whole subset regardless of what the probes found.",
+          "notes": "'before' numbers are read from the v1 result JSONLs, not re-spent: v1's ExecutionRecord carried no failure_detail/raw_final_text field (that is the defect this milestone's deliverable 1 fixes), so every 'before' failure_detail_classes entry is synthesized from the coarser failure_reason and is labelled as such. 'after' rounds run the same 2 case_ids for real through the repaired harness and read the new failure_detail/finish_reasons fields directly off the written result rows."
+        },
+        "m7a_disk_guard": {
+          "floor_bytes": 500000000,
+          "measured_at": "2026-09-06T17:29:05.377693+00:00"
+        },
+        "mlflow_decision_manifest": {
+          "experiment": "dealpoint-eval",
+          "finished_at": "2026-09-08T00:29:53.126823+00:00",
+          "mlflow_version": "3.16.0",
+          "mode": "live",
+          "started_at": "2026-09-08T00:29:47.853593+00:00",
+          "tracking_uri": "sqlite:///data/mlflow/mlflow.db"
+        },
+        "mlflow_manifest": {
+          "experiment": "dealpoint-eval",
+          "finished_at": "2026-09-08T02:49:58.888777+00:00",
+          "mlflow_version": "3.16.0",
+          "mode": "live",
+          "prompt_variant_outputs": "absent",
+          "started_at": "2026-09-08T02:49:53.693063+00:00",
+          "tracking_uri": "sqlite:////tmp/pytest-of-exedev/pytest-415/mlflow_tabs0/m.db"
+        },
+        "mlflow_tabs_manifest": {
+          "experiment": "dealpoint-eval",
+          "finished_at": "2026-09-09T00:01:02.736898+00:00",
+          "mode": "live",
+          "started_at": "2026-09-08T23:59:13.912671+00:00"
+        },
+        "pareto": {
+          "budget_scaled_note": "32-case frozen subset per model (18 at Haiku); not the brief's full-scale design.",
+          "generated_at": "2026-09-06T19:49:01.134164+00:00",
+          "git_sha7": "199ddba",
+          "version": "v1"
+        },
+        "pareto_slate": {
+          "git_sha7": "3fcdae7",
+          "price_basis": "live",
+          "probe_n_cases": 2,
+          "probe_spend_usd": 0.033902,
+          "verified_at": "2026-09-05T19:56:47.172737+00:00"
+        },
+        "representative_cases": {
+          "rule": "Six categories, each a deterministic predicate over a stored canonical result row: 'successful_direct' = grounded_accuracy is True and reasoning_type == 'direct' and tool_calls <= 2; 'retrieval_rescue' = grounded_accuracy is True and (gold_first_rank is None or gold_first_rank > 1) and >= 2 search_agreement steps; 'defined_term_cross_ref' = required_evidence is not None and a lookup_defined_term or get_section step exists; 'inefficient_trajectory' = cap_hit is True, or tool_calls >= 6 with grounded_accuracy is not True; 'wrong_answer' = answer_correct is False; 'abstention_counterfactual' = case_set == 'counterfactual' and record.status == 'ABSTAINED'. Ties broken by ascending sha256(f'{SEED}:{case_id}:{variant_id}') (dealpoint.eval.subset._seeded_key's convention)."
+        },
+        "synthetic_generation_run": {
+          "file_sha256": "75b9a6d647383ec1d80b0d555f30c51513bc0d844663d9710eb5038b2dd44d19",
+          "generated_at": "2026-09-06T00:18:42.275463+00:00",
+          "generator": "llama_index.core.evaluation.dataset_generation.DatasetGenerator",
+          "generator_version": "num_questions_per_chunk=2",
+          "model": "z-ai/glm-5.3-flash",
+          "n_chunks": 113,
+          "n_queries": 106,
+          "out_path": "/home/exedev/repos/dealpoint-eval/data/eval/synthetic_dev_queries.jsonl",
+          "prompt_hash": "93801419e0abfb5b",
+          "total_usd": 0.015215
+        },
+        "tournament": {
+          "fetch_k": 20,
+          "k": 10,
+          "rerank_model": "Xenova/ms-marco-MiniLM-L-6-v2",
+          "rrf_k": 60,
+          "schema_version": 1,
+          "total_wall_seconds": 774.955
+        },
+        "versions": {
+          "arm_c_index_version": "8ae2fc1e24e9",
+          "chunk_version": "8e5e8ba56765",
+          "dataset_version": "81ed82cd7552",
+          "embedding_model": "BAAI/bge-small-en-v1.5",
+          "index_version": "e2b4a2b97561",
+          "n_chunks": 12312,
+          "n_documents": 50,
+          "parser_version": "29cc01eda19b",
+          "rubric_version": "cfda9f8cc401",
+          "skill_version": "f8d255cc169b"
+        }
+      },
+      "models": {
+        "builder": "claude-bridge/claude-sonnet-5",
+        "reviewer": "claude-bridge/claude-opus-5"
+      },
       "started_at": "2026-09-08T02:00:11.955+00:00",
       "status": "running",
-      "versions": {}
+      "versions": {
+        "arm_c_index_version": "8ae2fc1e24e9",
+        "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
+        "chunk_version": "8e5e8ba56765",
+        "dataset_version": "81ed82cd7552",
+        "embedding_model": "BAAI/bge-small-en-v1.5",
+        "index_version": "e2b4a2b97561",
+        "n_chunks": "12312",
+        "n_documents": "50",
+        "parser_version": "29cc01eda19b",
+        "rubric_version": "cfda9f8cc401",
+        "skill_version": "f8d255cc169b"
+      }
     },
     "m9d": {
       "adw_ids": [
@@ -1912,7 +2128,7 @@
       }
     }
   },
-  "next_action": "run m9c",
+  "next_action": "m9c running in session 560b5aad (attempt 4)",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -2033,5 +2249,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-08T22:25:33.891+00:00"
+  "updated_at": "2026-09-09T00:43:34.001+00:00"
 }

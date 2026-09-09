@@ -1,0 +1,1678 @@
+[
+  {
+    "chart_key": "pareto_safe",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.8888888888888888
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "D@glm",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "A@haiku",
+        "value": 0.6666666666666666
+      }
+    ],
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent), every system@model on the same 18 cases",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "pareto_precision",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.7142857142857143
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.6666666666666666
+      },
+      {
+        "label": "D@glm",
+        "value": 0.625
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.625
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.5714285714285714
+      },
+      {
+        "label": "A@haiku",
+        "value": 0.45454545454545453
+      }
+    ],
+    "title": "PRECISION WHEN IT ANSWERS across every system@model on the same 18 cases: right when it speaks",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "pareto_net",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "A@haiku",
+        "value": 0.2222222222222222
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "D@glm",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.1111111111111111
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.05555555555555555
+      }
+    ],
+    "title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_safe",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.78125
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.78125
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.75
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.71875
+      }
+    ],
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_correct",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.5
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.46875
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.375
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.3125
+      }
+    ],
+    "title": "Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash; a correct abstention counts)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_safe",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.8888888888888888
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "glm",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "haiku",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.8333333333333334
+      }
+    ],
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer, correct or silent (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_correct",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.5
+      },
+      {
+        "label": "glm",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.2777777777777778
+      },
+      {
+        "label": "haiku",
+        "value": 0.2777777777777778
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.2222222222222222
+      }
+    ],
+    "title": "Correct outcome over every case (arm D on the same 18 cases, five models; a correct abstention counts)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "ret_hit5",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.8793103448275862
+      },
+      {
+        "label": "bm25",
+        "value": 0.8620689655172413
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.8275862068965517
+      },
+      {
+        "label": "dense",
+        "value": 0.8103448275862069
+      },
+      {
+        "label": "li_native_bm25",
+        "value": null
+      }
+    ],
+    "title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_vs_lawyer",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "evidence",
+        "value": 0.9444444444444445
+      },
+      {
+        "label": "reasoning",
+        "value": 0.9375
+      },
+      {
+        "label": "professional",
+        "value": 0.9166666666666666
+      },
+      {
+        "label": "trajectory",
+        "value": 0.7847222222222222
+      }
+    ],
+    "title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_evidence_pick",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "Mistral Small",
+        "value": 0.96875
+      },
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.9375
+      },
+      {
+        "label": "ByteDance Seed",
+        "value": 0.90625
+      }
+    ],
+    "title": "Which judge? Closeness of each judge to the lawyer on evidence, the dimension that decides (100% = identical; tallest bar wins)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "prompt_evidence",
+    "dashboard": "DealPoint eval overview",
+    "locally_evaluable": false,
+    "rows": [
+      {
+        "label": "cite-first",
+        "value": 0.7083333333333334
+      },
+      {
+        "label": "base",
+        "value": 0.6944444444444444
+      },
+      {
+        "label": "terse",
+        "value": 0.6111111111111112
+      },
+      {
+        "label": "abstain-first",
+        "value": 0.5972222222222222
+      }
+    ],
+    "title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_safe",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.78125
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.78125
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.75
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.71875
+      }
+    ],
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer (correct, or silent). A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_precision",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.6666666666666666
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.65
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.5555555555555556
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.55
+      }
+    ],
+    "title": "PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right; the check on safe rate, since silence cannot inflate this (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_verbatim",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 1
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.8888888888888888
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.8095238095238095
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.65
+      }
+    ],
+    "title": "VERBATIM QUOTES: of the answers given, how many cited a span that appears word for word in the agreement (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_net",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.28125
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.25
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.09375
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.0625
+      }
+    ],
+    "title": "NET ACCURACY, the headline: correct minus misleading over every case. A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_correct",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.5
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.46875
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.375
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.3125
+      }
+    ],
+    "title": "Correct outcome over every case: A pipeline+dense, B agent+dense, C agent+hybrid, D agent+hybrid+skill (the four systems on the same 32 cases, GLM 5.3 flash; a correct abstention counts)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_misleading",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.28125
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.25
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.21875
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.21875
+      }
+    ],
+    "title": "Misleading answers: answered and wrong, or answered when the agreement does not address it (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_silent",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "B: agent + dense",
+        "value": 0.4375
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.34375
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.3125
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.28125
+      }
+    ],
+    "title": "Silent failures: abstained wrongly, hit the tool cap, or failed to produce a finding (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_cap",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "B: agent + dense",
+        "value": 0.4375
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.3125
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.15625
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0
+      }
+    ],
+    "title": "Cap-hit rate, the loop never stops (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_fab",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.35
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.19047619047619047
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.1111111111111111
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0
+      }
+    ],
+    "title": "Fabrication rate, invented clauses (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_abstain",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.5714285714285714
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.125
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.10526315789473684
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0
+      }
+    ],
+    "title": "Correct abstention when the definition is not there (counterfactual cases, all comparable traces)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "loop_x_model",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A@haiku",
+        "value": 0.5555555555555556
+      },
+      {
+        "label": "D@glm",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.2777777777777778
+      }
+    ],
+    "title": "Does the loop pay off more on the stronger model? A vs D on GLM and Haiku, the same 18 cases, correct outcome",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "sys_usd",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 0.002775360859375
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 0.00242948859375
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 0.002404935
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0.0009901984374999998
+      }
+    ],
+    "title": "Dollars per case, realized from the local ledger (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "cost"
+  },
+  {
+    "chart_key": "sys_sec",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 33.11771875
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 27.41646875
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 24.01515625
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 12.85834375
+      }
+    ],
+    "title": "Seconds per case (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "duration"
+  },
+  {
+    "chart_key": "sys_calls",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "B: agent + dense",
+        "value": 5.375
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 5.03125
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 4.8125
+      },
+      {
+        "label": "A: pipeline + dense",
+        "value": 0
+      }
+    ],
+    "title": "Tool calls per case (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "count"
+  },
+  {
+    "chart_key": "sys_per_dollar",
+    "dashboard": "Which system?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A: pipeline + dense",
+        "value": 504.949292045313
+      },
+      {
+        "label": "C: agent + hybrid",
+        "value": 194.91171279057437
+      },
+      {
+        "label": "D: agent + hybrid + skill",
+        "value": 135.11756452616706
+      },
+      {
+        "label": "B: agent + dense",
+        "value": 128.62789346034566
+      }
+    ],
+    "title": "Correct outcomes per dollar (the four systems on the same 32 cases, GLM 5.3 flash)",
+    "unit": "count"
+  },
+  {
+    "chart_key": "mod_safe",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.8888888888888888
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "glm",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "haiku",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.8333333333333334
+      }
+    ],
+    "title": "SAFE ACCURACY, the accuracy point: share of cases with no wrong answer, correct or silent (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_precision",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.7142857142857143
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.6666666666666666
+      },
+      {
+        "label": "glm",
+        "value": 0.625
+      },
+      {
+        "label": "haiku",
+        "value": 0.625
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.5714285714285714
+      }
+    ],
+    "title": "PRECISION WHEN IT ANSWERS: of the cases it answered, how many were right (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_verbatim",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 1
+      },
+      {
+        "label": "haiku",
+        "value": 0.875
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.7142857142857143
+      },
+      {
+        "label": "glm",
+        "value": 0.625
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.42857142857142855
+      }
+    ],
+    "title": "VERBATIM QUOTES: of the answers given, how many cited a word-for-word span of the agreement (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_net",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "glm",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "haiku",
+        "value": 0.1111111111111111
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.05555555555555555
+      }
+    ],
+    "title": "NET ACCURACY, the headline: correct minus misleading over every case (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_correct",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.5
+      },
+      {
+        "label": "glm",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.2777777777777778
+      },
+      {
+        "label": "haiku",
+        "value": 0.2777777777777778
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.2222222222222222
+      }
+    ],
+    "title": "Correct outcome over every case (arm D on the same 18 cases, five models; a correct abstention counts)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_misleading",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "glm",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "haiku",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.1111111111111111
+      }
+    ],
+    "title": "Misleading answers: answered and wrong, or answered on a counterfactual (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_usd",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "haiku",
+        "value": 0.045795999999999996
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.005133833333333334
+      },
+      {
+        "label": "glm",
+        "value": 0.0028113123611111113
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.002358019380888889
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.0011167933888888888
+      }
+    ],
+    "title": "Dollars per case, realized from the local ledger (arm D on the same 18 cases, five models)",
+    "unit": "cost"
+  },
+  {
+    "chart_key": "mod_sec",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "glm",
+        "value": 30.052055555555555
+      },
+      {
+        "label": "haiku",
+        "value": 25.830499999999997
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 18.782277777777775
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 13.847388888888888
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 12.6905
+      }
+    ],
+    "title": "Seconds per case (arm D on the same 18 cases, five models)",
+    "unit": "duration"
+  },
+  {
+    "chart_key": "mod_p90",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "haiku",
+        "value": 63.43960425028111
+      },
+      {
+        "label": "glm",
+        "value": 52.98889370058623
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 25.791844500743544
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 18.357661417777987
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 16.94621214351123
+      }
+    ],
+    "title": "Tail latency, p90 seconds per case (arm D on the same 18 cases, five models)",
+    "unit": "duration"
+  },
+  {
+    "chart_key": "mod_cap",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.5
+      },
+      {
+        "label": "haiku",
+        "value": 0.5
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.5
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.2777777777777778
+      },
+      {
+        "label": "glm",
+        "value": 0.2777777777777778
+      }
+    ],
+    "title": "Cap-hit rate (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_fail",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "glm",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.1111111111111111
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.05555555555555555
+      },
+      {
+        "label": "haiku",
+        "value": 0.05555555555555555
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0
+      }
+    ],
+    "title": "Execution-failure rate, no finding produced (arm D on the same 18 cases, five models)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "mod_per_dollar",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "qwen3.7-flash",
+        "value": 198.98239408751675
+      },
+      {
+        "label": "glm",
+        "value": 118.56858666590519
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 117.80131241884258
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 97.39311106061098
+      },
+      {
+        "label": "haiku",
+        "value": 6.065546724119526
+      }
+    ],
+    "title": "Correct outcomes per dollar (arm D on the same 18 cases, five models)",
+    "unit": "count"
+  },
+  {
+    "chart_key": "mod_usd_per_correct",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "haiku",
+        "value": 0.1648656
+      },
+      {
+        "label": "gemini-3.1-flash-lite",
+        "value": 0.010267666666666668
+      },
+      {
+        "label": "deepseek-v4-flash",
+        "value": 0.0084888697712
+      },
+      {
+        "label": "glm",
+        "value": 0.008433937083333334
+      },
+      {
+        "label": "qwen3.7-flash",
+        "value": 0.00502557025
+      }
+    ],
+    "title": "Dollars per correct outcome (arm D on the same 18 cases, five models)",
+    "unit": "cost"
+  },
+  {
+    "chart_key": "pareto_net",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.3333333333333333
+      },
+      {
+        "label": "A@haiku",
+        "value": 0.2222222222222222
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "D@glm",
+        "value": 0.16666666666666666
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.1111111111111111
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.05555555555555555
+      }
+    ],
+    "title": "NET ACCURACY across every system@model on the same 18 cases (correct minus misleading; the deployment ranking)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "pareto",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 198.98239408751675
+      },
+      {
+        "label": "A@haiku",
+        "value": 165.55195020197337
+      },
+      {
+        "label": "D@glm",
+        "value": 118.56858666590519
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 117.80131241884258
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 97.39311106061098
+      },
+      {
+        "label": "D@haiku",
+        "value": 6.065546724119526
+      }
+    ],
+    "title": "Correct outcomes per dollar across every system@model on the same 18 cases (the Pareto question in one list)",
+    "unit": "count"
+  },
+  {
+    "chart_key": "panel_professional",
+    "dashboard": "Which model?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "A@haiku",
+        "value": 0.7268518518518519
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.5694444444444444
+      },
+      {
+        "label": "D@glm",
+        "value": 0.40740740740740744
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.4027777777777778
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.3981481481481482
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.35185185185185186
+      }
+    ],
+    "title": "Judge panel: professional quality by system@model, 108 judged traces (the judges' view of the model race)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "ret_hit5",
+    "dashboard": "Which retriever?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.8793103448275862
+      },
+      {
+        "label": "bm25",
+        "value": 0.8620689655172413
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.8275862068965517
+      },
+      {
+        "label": "dense",
+        "value": 0.8103448275862069
+      },
+      {
+        "label": "li_native_bm25",
+        "value": null
+      }
+    ],
+    "title": "Gold-span hit@5 on the 58 dev queries (our deterministic scorer; the tournament's ranking rule)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "ret_hit10",
+    "dashboard": "Which retriever?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.9655172413793104
+      },
+      {
+        "label": "bm25",
+        "value": 0.9482758620689655
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.9482758620689655
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "dense",
+        "value": 0.8448275862068966
+      },
+      {
+        "label": "li_native_bm25",
+        "value": null
+      }
+    ],
+    "title": "Gold-span hit@10 on the 58 dev queries",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "ret_mrr",
+    "dashboard": "Which retriever?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.731896551724138
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.7270799124247399
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.7179802955665024
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.6900109469074986
+      },
+      {
+        "label": "bm25",
+        "value": 0.672749042145594
+      },
+      {
+        "label": "dense",
+        "value": 0.6260262725779967
+      },
+      {
+        "label": "li_native_bm25",
+        "value": null
+      }
+    ],
+    "title": "Mean reciprocal rank of the gold span, 58 dev queries",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "li_hit_rate",
+    "dashboard": "Which retriever?",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.8793103448275862
+      },
+      {
+        "label": "bm25",
+        "value": 0.8620689655172413
+      },
+      {
+        "label": "li_native_bm25",
+        "value": 0.8448275862068966
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.8275862068965517
+      },
+      {
+        "label": "dense",
+        "value": 0.8103448275862069
+      }
+    ],
+    "title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_vs_lawyer",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "evidence",
+        "value": 0.9444444444444445
+      },
+      {
+        "label": "reasoning",
+        "value": 0.9375
+      },
+      {
+        "label": "professional",
+        "value": 0.9166666666666666
+      },
+      {
+        "label": "trajectory",
+        "value": 0.7847222222222222
+      }
+    ],
+    "title": "Can the panel be trusted? Closeness of the three-judge mean to the lawyer per dimension, 24 blinded packets (100% = identical score)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_bias_reasoning",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "Mistral Small",
+        "value": 0.9375
+      },
+      {
+        "label": "ByteDance Seed",
+        "value": 0.9270833333333334
+      },
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.90625
+      }
+    ],
+    "title": "Which judge for reasoning? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_bias_evidence",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "Mistral Small",
+        "value": 0.96875
+      },
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.9375
+      },
+      {
+        "label": "ByteDance Seed",
+        "value": 0.90625
+      }
+    ],
+    "title": "Which judge for evidence? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_bias_trajectory",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.8229166666666666
+      },
+      {
+        "label": "ByteDance Seed",
+        "value": 0.8020833333333334
+      },
+      {
+        "label": "Mistral Small",
+        "value": 0.7083333333333334
+      }
+    ],
+    "title": "Which judge for trajectory? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_bias_professional",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "Mistral Small",
+        "value": 0.9270833333333334
+      },
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.9166666666666666
+      },
+      {
+        "label": "ByteDance Seed",
+        "value": 0.8645833333333334
+      }
+    ],
+    "title": "Which judge for professional? Closeness of each judge to the lawyer (100% = identical score; the tallest bar is the pick, 24 packets)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "judge_family_usd",
+    "dashboard": "Judges and the lawyer",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "ByteDance Seed",
+        "value": 0.0004933731481481481
+      },
+      {
+        "label": "NVIDIA Nemotron",
+        "value": 0.0004655172222222222
+      },
+      {
+        "label": "Mistral Small",
+        "value": 0.0003538635648148148
+      }
+    ],
+    "title": "What does a judge call cost? Realized dollars per judged trace per family (108 traces; all three within a hundredth of a cent)",
+    "unit": "cost"
+  },
+  {
+    "chart_key": "deepeval_tools",
+    "dashboard": "DeepEval",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@haiku",
+        "value": 0.7352941176470589
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.7083333333333334
+      },
+      {
+        "label": "D@glm",
+        "value": 0.7083333333333334
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.6666666666666666
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.6527777777777778
+      }
+    ],
+    "title": "DeepEval tool correctness by system@model: were the right tools called and selected (DeepEval's metric; our closest check is required-evidence-met, and they agree 89% of the time)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "deepeval_args",
+    "dashboard": "DeepEval",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@glm",
+        "value": 0.8611111111111112
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.8160714285714286
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.8132936507936508
+      },
+      {
+        "label": "D@haiku",
+        "value": 0.7171428571428572
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.6626984126984127
+      }
+    ],
+    "title": "DeepEval argument correctness by system@model: were the tool calls made with the right arguments (DeepEval's metric; nothing of ours measures this)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "deepeval_steps",
+    "dashboard": "DeepEval",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "D@haiku",
+        "value": 0.8705882352941177
+      },
+      {
+        "label": "D@gemini-3.1-flash-lite",
+        "value": 0.8555555555555556
+      },
+      {
+        "label": "D@qwen3.7-flash",
+        "value": 0.838888888888889
+      },
+      {
+        "label": "D@deepseek-v4-flash",
+        "value": 0.8333333333333335
+      },
+      {
+        "label": "D@glm",
+        "value": 0.8222222222222223
+      }
+    ],
+    "title": "DeepEval step efficiency by system@model: redundant or wasted tool calls (DeepEval's GEval; the trajectory dimension graded from outside our rubric)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "li_hit_rate",
+    "dashboard": "LlamaIndex",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.9137931034482759
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.8793103448275862
+      },
+      {
+        "label": "bm25",
+        "value": 0.8620689655172413
+      },
+      {
+        "label": "li_native_bm25",
+        "value": 0.8448275862068966
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.8275862068965517
+      },
+      {
+        "label": "dense",
+        "value": 0.8103448275862069
+      }
+    ],
+    "title": "LlamaIndex's own hit rate by retriever, 58 dev queries (its RetrieverEvaluator, including its native bm25)",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "li_mrr",
+    "dashboard": "LlamaIndex",
+    "locally_evaluable": true,
+    "rows": [
+      {
+        "label": "hybrid_rrf",
+        "value": 0.7244252873563218
+      },
+      {
+        "label": "hybrid_rrf_rerank",
+        "value": 0.7227011494252873
+      },
+      {
+        "label": "multi_query_fusion_rerank",
+        "value": 0.7126436781609194
+      },
+      {
+        "label": "multi_query_fusion",
+        "value": 0.6784482758620689
+      },
+      {
+        "label": "bm25",
+        "value": 0.6635057471264368
+      },
+      {
+        "label": "li_native_bm25",
+        "value": 0.6505747126436782
+      },
+      {
+        "label": "dense",
+        "value": 0.6206896551724138
+      }
+    ],
+    "title": "LlamaIndex's own MRR by retriever, 58 dev queries",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "prompt_professional",
+    "dashboard": "Which prompt?",
+    "locally_evaluable": false,
+    "rows": [
+      {
+        "label": "base",
+        "value": 0.8055555555555556
+      },
+      {
+        "label": "abstain-first",
+        "value": 0.7916666666666666
+      },
+      {
+        "label": "cite-first",
+        "value": 0.7777777777777778
+      },
+      {
+        "label": "terse",
+        "value": 0.7222222222222222
+      }
+    ],
+    "title": "Judge: professional by arm-A prompt variant, 18 packets, GLM",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "prompt_evidence",
+    "dashboard": "Which prompt?",
+    "locally_evaluable": false,
+    "rows": [
+      {
+        "label": "cite-first",
+        "value": 0.7083333333333334
+      },
+      {
+        "label": "base",
+        "value": 0.6944444444444444
+      },
+      {
+        "label": "terse",
+        "value": 0.6111111111111112
+      },
+      {
+        "label": "abstain-first",
+        "value": 0.5972222222222222
+      }
+    ],
+    "title": "Judge: evidence by arm-A prompt variant, 18 packets, GLM",
+    "unit": "percent"
+  },
+  {
+    "chart_key": "prompt_reasoning",
+    "dashboard": "Which prompt?",
+    "locally_evaluable": false,
+    "rows": [
+      {
+        "label": "base",
+        "value": 0.8333333333333334
+      },
+      {
+        "label": "abstain-first",
+        "value": 0.8194444444444444
+      },
+      {
+        "label": "cite-first",
+        "value": 0.8055555555555556
+      },
+      {
+        "label": "terse",
+        "value": 0.7777777777777778
+      }
+    ],
+    "title": "Judge: reasoning by arm-A prompt variant, 18 packets, GLM",
+    "unit": "percent"
+  }
+]
