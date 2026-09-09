@@ -1664,12 +1664,15 @@
       ],
       "attempts": 4,
       "blocker": "",
-      "commits": [],
-      "ended_at": "2026-09-09T00:31:41.776+00:00",
+      "commits": [
+        "3fe6bde",
+        "486554e"
+      ],
+      "ended_at": "2026-09-09T01:31:35.730+00:00",
       "exclusions": [],
       "id": "m9c",
       "infra_retries": 0,
-      "last_failure": "Reviewer disposition REVISE:\n- D16.3 \u2014 each chart rendered with the same row labels and the same values as Braintrust, in the same order ('word for word, result for result'): dealpoint/eval/mlflow_dashboards.py:457 builds every chart from the local evaluator alone (`_ordered_rows(chart_values(chart, rows_))`), never from the committed snapshot. Measured: dashboard/which-prompt renders all 12 rows as value None \u2192 '(no data)' and carries 0 metrics, though the committed Braintrust snapshot now holds those 12 values; mod_p90 renders the local quantile, not Braintrust's 63.4396. docs/mlflow-tour.md:245-246 claims those three charts 'are ported from the Braintrust snapshot values directly' \u2014 the code does not do that. Plan \u00a74.1 prescribed rendering them from the snapshot with a visible provenance line.\n- D16.3 \u2014 logged as artifacts on eight runs `dashboard/<name>` (tag axis=dashboard) whose metrics are every chart row; the tour links each run: step_runs exists (dealpoint/eval/mlflow_dashboards.py:492-507) but was never run against the server: data/mlflow/mlflow.db has 0 runs named 'dashboard*', 0 tags with value 'dashboard/%', and the axis tag holds only crosscheck, judge, model, prompt, retrieval, system \u2014 no 'dashboard'. Every other step was verified live; consequently the experiment description written by step_overview and the tour both point at eight runs that do not exist.\nBlocking:\n- dashboard_run_plan (dealpoint/eval/mlflow_dashboards.py:457) renders only local-evaluator values, so the 'Which prompt?' dashboard shows '(no data)' for all 12 rows and logs 0 metrics while the committed Braintrust snapshot holds those values, and mod_p90 shows the local quantile instead of Braintrust's \u2014 contradicting the milestone's 'result for result' and the tour's claim at docs/mlflow-tour.md:245-246 that those charts are ported from the snapshot.\n- The eight `dashboard/<name>` runs do not exist in the live MLflow store (0 runs named dashboard*, 0 axis=dashboard tags), so D16.3's artifact-plus-metrics deliverable is unpublished and the experiment description and tour point at runs that are not there.\nCorrective task:\nIn /home/exedev/repos/dealpoint-eval, finish D16's render-and-publish half of M9c (specs/milestones/m9c.md). (1) In dealpoint/eval/mlflow_dashboards.py, change `dashboard_run_plan` (currently line 457, `_ordered_rows(chart_values(chart, rows_))`) so each chart's rows come from the local evaluator when it can produce them and otherwise fall back to the committed Braintrust snapshot (`load_snapshot()`, matched on (dashboard, chart_key)): for the three keys in NOT_LOCALLY_EVALUABLE use the snapshot rows outright, and for the keys in PERCENTILE_APPROXIMATE (`mod_p90`) use the snapshot value so the port shows Braintrust's number rather than the local exact quantile. Mark each such chart's provenance in the returned entry and have `render_dashboard_html` print one visible provenance line under that chart's title, e.g. 'values read from Braintrust; the judges' scores on these 67 prompt-variant rows were never mirrored to disk' and, for mod_p90, that Braintrust's percentile is an approximate sketch quantile. Every snapshot-sourced row must also appear in the run's `metrics` dict, so `dashboard/which-prompt` stops logging zero metrics. Do not change the local evaluator, the snapshot file, or `snapshot_matches`'s existing 1e-9 comparison and its two named exclusions. (2) Add a gate_m9c test in tests/test_mlflow_dashboards.py asserting that no chart in `dashboard_run_plan()` has an all-None row set, that `dashboard/which-prompt` has 12 rows with non-None values equal to the committed snapshot's, that mod_p90's rendered value equals the snapshot's, and that each snapshot-sourced chart's HTML carries its provenance line. (3) Publish the runs: run `uv run python -m dealpoint.eval.mlflow_dashboards runs --live` against the running server (MLFLOW_TRACKING_URI=http://127.0.0.1:5000, store data/mlflow/mlflow.db) so the eight `dashboard/<slug>` runs exist with tag `axis=dashboard`, the `dashboard.html` artifact and one metric per chart row; run it a second time and confirm it creates nothing new. (4) Reconcile the prose: docs/mlflow-tour.md:245-246 already claims the three prompt charts are ported from the snapshot \u2014 leave that claim only if step (1) makes it true, and add the same statement for mod_p90. Verified by: `uv run pytest -m 'gate_m9c and not needs_network' -q`, `uv run pytest -m 'not needs_network and not needs_model' -q`, `uv run ruff check .` and `uv run pyright` all green; plus a query against data/mlflow/mlflow.db showing 8 tags with value like 'dashboard/%', 8 tags axis=dashboard, and a non-zero metric count on the dashboard/which-prompt run.",
+      "last_failure": "",
       "last_failure_class": "product",
       "metrics": {
         "braintrust_sync": {
@@ -1875,10 +1878,11 @@
       },
       "models": {
         "builder": "claude-bridge/claude-sonnet-5",
+        "documenter": "claude-bridge/claude-haiku-4-5",
         "reviewer": "claude-bridge/claude-opus-5"
       },
       "started_at": "2026-09-08T02:00:11.955+00:00",
-      "status": "running",
+      "status": "passed",
       "versions": {
         "arm_c_index_version": "8ae2fc1e24e9",
         "arm_c_retriever": "{'fetch_k': 20, 'kind': 'hybrid_rrf', 'multi_query': False, 'name': 'hybrid_rrf', 'rerank_model': None, 'rrf_k': 60}",
@@ -2128,7 +2132,7 @@
       }
     }
   },
-  "next_action": "m9c running in session 560b5aad (attempt 4)",
+  "next_action": "core eval MVP complete",
   "parent_run_id": "b2e38d8b",
   "pending_human_input": [],
   "spend": {
@@ -2249,5 +2253,5 @@
     ],
     "realized_usd": 3.7133
   },
-  "updated_at": "2026-09-09T00:43:34.001+00:00"
+  "updated_at": "2026-09-09T01:31:35.730+00:00"
 }
