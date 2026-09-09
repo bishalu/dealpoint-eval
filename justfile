@@ -332,6 +332,11 @@ braintrust-dashboard-snapshot *ARGS:
 mlflow-dashboards *ARGS:
     uv run python -m dealpoint.eval.mlflow_dashboards runs "$@"
 
+# The eight Braintrust dashboards as native MLflow saved chart views (one run per bar, one metric per chart,
+# one view per dashboard section); dry run by default, `--live` writes, `--refresh` re-logs metrics
+mlflow-views *ARGS:
+    uv run python -m dealpoint.eval.mlflow_views "$@"
+
 # milestone 9c acceptance gates only, offline
 gate-m9c:
     uv run pytest -m "gate_m9c and not needs_network and not needs_model" -q

@@ -250,6 +250,44 @@ self-contained HTML render (ranked bar list, exact titles, exact order) plus one
 | `dashboard/llamaindex` | LlamaIndex | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards (LlamaIndex) |
 | `dashboard/which-prompt` | Which prompt? | https://www.braintrust.dev/app/bishal.ai/p/dealpoint-eval/dashboards/9c9b9fa9-4a54-47d9-9c6a-57e60dd009c5 |
 
+### The same charts as native MLflow chart views
+
+The HTML pages above are pictures of the charts. The experiment **`dealpoint-dashboards`**
+(https://balpad.exe.xyz:5000/#/experiments/2) holds them as real MLflow bar charts: `just mlflow-views --live`,
+zero model calls, values from the same committed Braintrust snapshot.
+
+How the two products disagree about data, and what that forced. A Braintrust chart is a query over one
+log table with its own `group_by`, so a dashboard mixes row sets freely (systems, models, system@model,
+retrievers, judges, prompts). An MLflow bar chart is one metric across the runs in the runs table, so
+every chart in a view shares one run set, and a run without the metric is an empty row. Hence: a
+Braintrust **group is a run** (run name = row label, 41 runs in 9 row sets), a chart's **measure is a
+metric** on those runs (metric key = chart key; the card's display name is the Braintrust title, percent
+charts logged 0 to 100 and titled "(%)"), and a **dashboard is one saved view per row set it uses**
+(12 views for 8 dashboards). A saved view is an experiment tag `mlflow.sharedViewState.<id>` holding the
+runs filter, the sort and the chart cards; the UI lists it in the views dropdown and opens it from
+`?viewStateShareKey=<id>`. One fidelity gap: Braintrust sorts every chart by its own value, an MLflow view
+has one sort for its table, so each view sorts by its first chart and later charts keep the values but not
+Braintrust's bar order. The overview keeps the accuracy-point view (every system@model, same 18 cases) and
+its one overview-only chart; its other charts are the first charts of the question views on the same runs,
+and the experiment's Overview says which.
+
+| view | charts | link |
+|---|---|---|
+| 1. DealPoint eval overview · by system@model (6 rows) | 3 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=1-dealpoint-eval-overview-by-system-model-1&compareRunsMode=CHART |
+| 1. DealPoint eval overview · by judge (3 rows) | 1 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=1-dealpoint-eval-overview-by-judge-2&compareRunsMode=CHART |
+| 2. Which system? · by system (4 rows) | 14 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=2-which-system-by-system-1&compareRunsMode=CHART |
+| 2. Which system? · by system@model (3 rows) | 1 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=2-which-system-by-system-model-2&compareRunsMode=CHART |
+| 3. Which model? · by model (5 rows) | 13 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=3-which-model-by-model-1&compareRunsMode=CHART |
+| 3. Which model? · by system@model (6 rows) | 3 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=3-which-model-by-system-model-2&compareRunsMode=CHART |
+| 4. Which retriever? · by retriever (7 rows) | 4 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=4-which-retriever-by-retriever-1&compareRunsMode=CHART |
+| 5. Judges and the lawyer · by dimension (4 rows) | 1 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=5-judges-and-the-lawyer-by-dimension-1&compareRunsMode=CHART |
+| 5. Judges and the lawyer · by judge (3 rows) | 5 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=5-judges-and-the-lawyer-by-judge-2&compareRunsMode=CHART |
+| 6. DeepEval · by system@model (5 rows) | 3 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=6-deepeval-by-system-model-1&compareRunsMode=CHART |
+| 7. LlamaIndex · by retriever (7 rows) | 2 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=7-llamaindex-by-retriever-1&compareRunsMode=CHART |
+| 8. Which prompt? · by prompt variant (4 rows) | 3 | https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=8-which-prompt-by-prompt-variant-1&compareRunsMode=CHART |
+
+The Overview tab of that experiment carries every dashboard's VERDICT verbatim and links each view.
+
 Every chart row on these eight runs was checked against `data/reports/braintrust_dashboard_values.json`
 to 1e-9 by `tests/test_mlflow_dashboards.py`, with the two named exceptions below.
 

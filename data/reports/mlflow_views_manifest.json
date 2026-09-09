@@ -1,0 +1,199 @@
+{
+  "base_url": "https://balpad.exe.xyz:5000",
+  "experiment": "dealpoint-dashboards",
+  "experiment_id": "2",
+  "runs": {
+    "dashboard-row/dimension/evidence": "7eff1b4035704a23a45719f9a9839355",
+    "dashboard-row/dimension/professional": "6a4052c2625a4c3fbef26800d3a7687e",
+    "dashboard-row/dimension/reasoning": "2a0dcef617454f27884069a9d4b6b5b8",
+    "dashboard-row/dimension/trajectory": "bce4ac9c85664a96b56b1e0708d46a69",
+    "dashboard-row/judge/ByteDance Seed": "0efc2fa50c904f6c9c551bb4ce514542",
+    "dashboard-row/judge/Mistral Small": "3e416b8dc4eb4ade898bcfe8426507bf",
+    "dashboard-row/judge/NVIDIA Nemotron": "547aaf34ec2e4474bc9443bab293543f",
+    "dashboard-row/model/deepseek-v4-flash": "6d2125d9ebd24a8991a63c8750fc2923",
+    "dashboard-row/model/gemini-3.1-flash-lite": "fc92a02e882a4ab1a0fcfedb0947c9b5",
+    "dashboard-row/model/glm": "15d910c58baa4ba59e309ab93be3a4cb",
+    "dashboard-row/model/haiku": "49c0278594b84b128f11803758d5084f",
+    "dashboard-row/model/qwen3.7-flash": "9fb7c4342b9049699a48b6cbe4a0b347",
+    "dashboard-row/prompt-variant/abstain-first": "eb3947ad4aa941b28df797335c39951b",
+    "dashboard-row/prompt-variant/base": "5a2c77534cca4726b428081c5448546c",
+    "dashboard-row/prompt-variant/cite-first": "d3f32e50e34e4acbbb7a51c9d300127d",
+    "dashboard-row/prompt-variant/terse": "2cbb91d8c4c4479e9bf5a0e3afa8f7b3",
+    "dashboard-row/retriever/bm25": "7158be8eac0f4a6d91db2f5f3c94ffeb",
+    "dashboard-row/retriever/dense": "f45d702041234db18380762065897ffb",
+    "dashboard-row/retriever/hybrid_rrf": "1f2cefcd5f0840be83a5491f42745f87",
+    "dashboard-row/retriever/hybrid_rrf_rerank": "3fe24002e76a4d28af465709125ca40f",
+    "dashboard-row/retriever/li_native_bm25": "d67133a50a5c4edcbe9e9f7aff8309bd",
+    "dashboard-row/retriever/multi_query_fusion": "9ca2b13757b64e5bafda34daf6f421e5",
+    "dashboard-row/retriever/multi_query_fusion_rerank": "ca9ac12818004368b196740537a4a5cb",
+    "dashboard-row/system-model-2/A@haiku": "0fbdc227a9d74a1d9e889e7738b4a5c5",
+    "dashboard-row/system-model-2/D@glm": "dff7ebeb88e74d76a94869d61ead9900",
+    "dashboard-row/system-model-2/D@haiku": "f5247621f3a942848a21fc97e12e17e3",
+    "dashboard-row/system-model-3/D@deepseek-v4-flash": "392ee6fce2bd4ee5bb7f9038710abbb8",
+    "dashboard-row/system-model-3/D@gemini-3.1-flash-lite": "2249f0ee04514f5b94cb41cbedbe7599",
+    "dashboard-row/system-model-3/D@glm": "44a2eacfad8e488b993e93015b7582ef",
+    "dashboard-row/system-model-3/D@haiku": "845930f7b0124917b85cc49b343130ae",
+    "dashboard-row/system-model-3/D@qwen3.7-flash": "1b4c20b23f24439595a98c5df1f03001",
+    "dashboard-row/system-model/A@haiku": "02f70df077e04ddbbe363110f914cbbf",
+    "dashboard-row/system-model/D@deepseek-v4-flash": "844de43315454a4a9ccfdec83b5a27e5",
+    "dashboard-row/system-model/D@gemini-3.1-flash-lite": "fd6504a116844d8e81a2aa9bde7c3c79",
+    "dashboard-row/system-model/D@glm": "309cef99fb654c9e94b9c5bfb5e2711a",
+    "dashboard-row/system-model/D@haiku": "e27d1b37b7cf4522b5647f75ca3dc9b8",
+    "dashboard-row/system-model/D@qwen3.7-flash": "3fe121f45efc439da1be4029b5bbf3e0",
+    "dashboard-row/system/A: pipeline + dense": "bf8cd75998b349d88060b52321d5d3cc",
+    "dashboard-row/system/B: agent + dense": "554d6c5019e547d18af0c8d32868290a",
+    "dashboard-row/system/C: agent + hybrid": "dfad95288b3f47daa5136c0400a48cac",
+    "dashboard-row/system/D: agent + hybrid + skill": "b8e0d6aeef714c709fad2b0a1260f94b"
+  },
+  "views": [
+    {
+      "charts": [
+        "pareto_safe",
+        "pareto_precision",
+        "pareto_net"
+      ],
+      "dashboard": "DealPoint eval overview",
+      "slug": "1-dealpoint-eval-overview-by-system-model-1",
+      "title": "1. DealPoint eval overview \u00b7 by system@model (6 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=1-dealpoint-eval-overview-by-system-model-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "judge_evidence_pick"
+      ],
+      "dashboard": "DealPoint eval overview",
+      "slug": "1-dealpoint-eval-overview-by-judge-2",
+      "title": "1. DealPoint eval overview \u00b7 by judge (3 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=1-dealpoint-eval-overview-by-judge-2&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "sys_safe",
+        "sys_precision",
+        "sys_verbatim",
+        "sys_net",
+        "sys_correct",
+        "sys_misleading",
+        "sys_silent",
+        "sys_cap",
+        "sys_fab",
+        "sys_abstain",
+        "sys_usd",
+        "sys_sec",
+        "sys_calls",
+        "sys_per_dollar"
+      ],
+      "dashboard": "Which system?",
+      "slug": "2-which-system-by-system-1",
+      "title": "2. Which system? \u00b7 by system (4 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=2-which-system-by-system-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "loop_x_model"
+      ],
+      "dashboard": "Which system?",
+      "slug": "2-which-system-by-system-model-2",
+      "title": "2. Which system? \u00b7 by system@model (3 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=2-which-system-by-system-model-2&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "mod_safe",
+        "mod_precision",
+        "mod_verbatim",
+        "mod_net",
+        "mod_correct",
+        "mod_misleading",
+        "mod_usd",
+        "mod_sec",
+        "mod_p90",
+        "mod_cap",
+        "mod_fail",
+        "mod_per_dollar",
+        "mod_usd_per_correct"
+      ],
+      "dashboard": "Which model?",
+      "slug": "3-which-model-by-model-1",
+      "title": "3. Which model? \u00b7 by model (5 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=3-which-model-by-model-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "pareto_net",
+        "pareto",
+        "panel_professional"
+      ],
+      "dashboard": "Which model?",
+      "slug": "3-which-model-by-system-model-2",
+      "title": "3. Which model? \u00b7 by system@model (6 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=3-which-model-by-system-model-2&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "ret_hit5",
+        "ret_hit10",
+        "ret_mrr",
+        "li_hit_rate"
+      ],
+      "dashboard": "Which retriever?",
+      "slug": "4-which-retriever-by-retriever-1",
+      "title": "4. Which retriever? \u00b7 by retriever (7 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=4-which-retriever-by-retriever-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "judge_vs_lawyer"
+      ],
+      "dashboard": "Judges and the lawyer",
+      "slug": "5-judges-and-the-lawyer-by-dimension-1",
+      "title": "5. Judges and the lawyer \u00b7 by dimension (4 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=5-judges-and-the-lawyer-by-dimension-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "judge_bias_reasoning",
+        "judge_bias_evidence",
+        "judge_bias_trajectory",
+        "judge_bias_professional",
+        "judge_family_usd"
+      ],
+      "dashboard": "Judges and the lawyer",
+      "slug": "5-judges-and-the-lawyer-by-judge-2",
+      "title": "5. Judges and the lawyer \u00b7 by judge (3 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=5-judges-and-the-lawyer-by-judge-2&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "deepeval_tools",
+        "deepeval_args",
+        "deepeval_steps"
+      ],
+      "dashboard": "DeepEval",
+      "slug": "6-deepeval-by-system-model-1",
+      "title": "6. DeepEval \u00b7 by system@model (5 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=6-deepeval-by-system-model-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "li_hit_rate",
+        "li_mrr"
+      ],
+      "dashboard": "LlamaIndex",
+      "slug": "7-llamaindex-by-retriever-1",
+      "title": "7. LlamaIndex \u00b7 by retriever (7 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=7-llamaindex-by-retriever-1&compareRunsMode=CHART"
+    },
+    {
+      "charts": [
+        "prompt_professional",
+        "prompt_evidence",
+        "prompt_reasoning"
+      ],
+      "dashboard": "Which prompt?",
+      "slug": "8-which-prompt-by-prompt-variant-1",
+      "title": "8. Which prompt? \u00b7 by prompt variant (4 rows)",
+      "url": "https://balpad.exe.xyz:5000/#/experiments/2?viewStateShareKey=8-which-prompt-by-prompt-variant-1&compareRunsMode=CHART"
+    }
+  ]
+}

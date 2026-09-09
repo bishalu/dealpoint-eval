@@ -89,6 +89,7 @@ data/mlflow/
 !data/reports/judge_alignment.json
 !data/reports/braintrust_dashboard_values.json
 !data/reports/mlflow_tabs_manifest.json
+!data/reports/mlflow_views_manifest.json
 __pycache__/
 .pytest_cache/
 .ruff_cache/
