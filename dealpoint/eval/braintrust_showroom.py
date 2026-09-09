@@ -358,9 +358,8 @@ def step_baseline(api: Api, live: bool, manifest: dict) -> None:
     improvement/regression colouring and the Summary's deltas only exist relative to a baseline;
     without one, none is set."""
     print(f"baseline: {BASELINE_EXPERIMENT} (arm A on GLM, the control of the SYSTEM ladder and the cheapest configuration)")
-    print("baseline: comparison_key is [input, metadata.case_id] (the four playground-arm-A-* experiments do not use "
-          "the case id as input, so the key was widened; retrieval experiments use the query and are compared only "
-          "among themselves)")
+    print("baseline: comparison_key stays 'input' (every agent, judge and retrieval experiment keys its rows on it; "
+          "the four playground-arm-A-* experiments key on packet text and are only ever compared with each other)")
     manifest["baseline"] = {"experiment": BASELINE_EXPERIMENT, "experiment_id": None, "comparison_key": COMPARISON_KEY,
                             "comparison_key_offenders": []}
     if not live:
@@ -374,9 +373,13 @@ def step_baseline(api: Api, live: bool, manifest: dict) -> None:
     rows_by_experiment = {name: [r for r in api.fetch_rows(eid) if _is_root(r)]
                           for name, eid in exps.items() if classify_experiment(name).get("axis") != "retrieval"}
     ok, offenders = comparison_key_is_safe(rows_by_experiment)
-    key: str | list[str] = COMPARISON_KEY if ok else ["input", "metadata.case_id"]
+    # Never widen the key to an array expression. The server accepts "[input, metadata.case_id]", but the
+    # Logs page then fails to parse it ("array items must be literals", seen live 2026-09-09) and every
+    # Logs view breaks. Experiments that do not key on the case id (the playground-arm-A-* ones) are only
+    # compared among themselves, so 'input' is the right key for the project; offenders are reported.
+    key = COMPARISON_KEY
     if not ok:
-        print(f"  comparison_key widened to {key}: forced by {offenders}")
+        print(f"  comparison_key kept at {key!r}; experiments that do not key on the case id: {offenders}")
     manifest["baseline"] = {"experiment": BASELINE_EXPERIMENT, "experiment_id": exp_id, "comparison_key": key,
                             "comparison_key_offenders": offenders}
     current = api.get("project", {"project_name": PROJECT, "limit": 5}).get("objects", [])
@@ -387,12 +390,9 @@ def step_baseline(api: Api, live: bool, manifest: dict) -> None:
         return
     # 2026-09-08, confirmed live: PATCH /v1/project replaces `settings` wholesale rather than
     # merging it (a PATCH carrying only baseline_experiment_id + comparison_key dropped the
-    # existing settings.default_preprocessor), and settings.comparison_key rejects a JSON array
-    # (400 invalid_type, expected string) -- the server wants the SQL-expression string the UI's
-    # "Comparison key" field accepts, e.g. "[input, metadata.case_id]", not a JSON list of paths.
-    # So this PATCH must read-modify-write the whole settings object.
-    key_expr = key if isinstance(key, str) else f"[{', '.join(key)}]"
-    new_settings = {**existing_settings, "baseline_experiment_id": exp_id, "comparison_key": key_expr}
+    # existing settings.default_preprocessor), so this PATCH must read-modify-write the whole
+    # settings object. comparison_key is a single field path string.
+    new_settings = {**existing_settings, "baseline_experiment_id": exp_id, "comparison_key": key}
     api.patch(f"project/{PROJECT_ID}", {"settings": new_settings})
     _ledger("project", "baseline", 0)
     _ledger("project", "comparison-key", 0)

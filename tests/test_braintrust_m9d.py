@@ -538,3 +538,35 @@ def test_tour_stops_3_and_4_carry_the_new_actions():
     stop4 = text.split("### Stop 4.", 1)[1].split("### Stop 5.", 1)[0]
     assert showroom.BASELINE_EXPERIMENT in stop3
     assert showroom.REGRESSIONS_DATASET in stop4
+
+
+def test_baseline_step_never_writes_an_array_comparison_key(monkeypatch):
+    """The Logs page cannot parse "[input, metadata.case_id]" (array items must be literals), so the step
+    keeps 'input' even when some experiments key on something else, and reports them instead."""
+    import dealpoint.eval.braintrust_showroom as showroom
+
+    patched: dict = {}
+
+    class _Api:
+        def experiments(self):
+            return [{"name": "A-z-ai_glm-5.3-flash-e2b4a2b97561-e3ee9cc", "id": "e1"}, {"name": "playground-arm-A-terse", "id": "e2"}]
+
+        def fetch_rows(self, eid):
+            return [{"input": "contract_1__q01", "is_root": True, "metadata": {"case_id": "contract_1__q01"}}] if eid == "e1" \
+                else [{"input": "Question (q05): a packet", "is_root": True, "metadata": {"case_id": "contract_1__q05"}}]
+
+        def get(self, path, params=None):
+            return {"objects": [{"id": "p", "settings": {"default_preprocessor": {"type": "function", "id": "f"}}}]}
+
+        def patch(self, path, body):
+            patched.update(body)
+            return body
+
+    monkeypatch.setattr(showroom, "resolve_experiment_id", lambda api, name: "e1")
+    monkeypatch.setattr(showroom, "_ledger_keys", lambda: set())
+    monkeypatch.setattr(showroom, "_ledger", lambda *a, **k: None)
+    manifest: dict = {}
+    showroom.step_baseline(_Api(), True, manifest)
+    assert patched["settings"]["comparison_key"] == "input"
+    assert patched["settings"]["default_preprocessor"] == {"type": "function", "id": "f"}, "settings are read-modify-written"
+    assert manifest["baseline"]["comparison_key"] == "input" and manifest["baseline"]["comparison_key_offenders"]
