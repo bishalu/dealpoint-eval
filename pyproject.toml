@@ -21,6 +21,7 @@ rag-lab = ["llama-index-core", "llama-index-retrievers-bm25"]
 deepeval = ["deepeval"]
 mlflow = [
     "mlflow>=3.16",
+    "mlflow[mcp]>=3.16",   # the `mlflow mcp run` server (fastmcp), registered as the Claude Code MCP `mlflow`
 ]
 mlflow-optimize = [
     "dspy>=3.3",
