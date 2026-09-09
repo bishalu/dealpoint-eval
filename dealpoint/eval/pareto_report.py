@@ -676,10 +676,10 @@ def _readme_pareto_block(report: dict) -> str:
     who do not know the project; the reports are the record.
     """
     disclosure = (
-        "This report is **budget-scaled** (32-case frozen subset per model, 18 at Haiku) -- "
-        "grounded_accuracy is **objective** (deterministic Python over expert labels); judged "
-        "quality is **secondary and model-judged, never objective truth**; scores are **not "
-        "comparable** to the MAUD leaderboard."
+        "These numbers are budget-scaled: a frozen 32-case subset per model, 18 at Haiku. "
+        "grounded_accuracy is objective, computed by deterministic Python over the expert "
+        "labels. Judged quality is secondary, comes from model judges, and is never treated "
+        "as truth. Scores are not comparable to the MAUD leaderboard."
     )
     lines: list[str] = [disclosure, ""]
     hf = report.get("held_fixed") or {}
@@ -700,14 +700,18 @@ def _readme_pareto_block(report: dict) -> str:
     lines.append("")
 
     frontier = report.get("frontier") or {}
-    lines.append(f"**Frontier** ({frontier.get('rule', '')}): {frontier.get('models')}")
+    frontier_models = ", ".join(f"`{m}`" for m in (frontier.get("models") or [])) or "none"
+    lines.append(
+        f"**Frontier:** {frontier_models}. One of those two beats every other model in the "
+        "table on both price and accuracy. The exact dominance rule is in the full report."
+    )
     lines.append("")
 
     lines.append(
-        "Full diagnostics -- not-run/partially-run models, the comparability note, spend, "
-        "recorded decisions, brief-vs-spec differences, caveats -- are in "
-        "[`data/reports/pareto.md`](data/reports/pareto.md) and "
-        "[`data/reports/pareto.json`](data/reports/pareto.json)."
+        "Full diagnostics are in [`data/reports/pareto.md`](data/reports/pareto.md) and "
+        "[`data/reports/pareto.json`](data/reports/pareto.json): models not run or only "
+        "partly run, the comparability note, spend, recorded decisions, brief-vs-spec "
+        "differences, and caveats."
     )
     return "\n".join(lines).strip()
 

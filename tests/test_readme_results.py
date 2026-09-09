@@ -20,6 +20,7 @@ import re
 import pytest
 
 from dealpoint.config import ARM_ORDER, FOUR_ARM_JSON_PATH, README_PATH
+from dealpoint.eval.report import readme_baseline_note
 
 pytestmark = [pytest.mark.gate_m4, pytest.mark.gate_m7]
 
@@ -51,12 +52,17 @@ def test_readme_results_block_matches_four_arm_json():
     assert "not comparable" in first_sentence
     assert "objective" in first_sentence
 
-    majority = report.get("majority_baseline") or {}
-    assert _pct(majority.get("overall")) in block
-
+    # The README quotes the majority baseline on the FULL test set, not the
+    # near-zero subset figure, which is an artefact of the subset selection
+    # rule and reads as a result when shown bare in an introduction. Both
+    # figures stay in data/reports/four_arm.md, and the README says in words
+    # that the subset has no baseline of its own.
     majority_note = report.get("majority_baseline_note")
-    if majority_note and majority_note.get("sentence"):
-        assert majority_note["sentence"] in block
+    if majority_note:
+        assert readme_baseline_note(majority_note.get("full_test_overall")) in block
+        assert majority_note["sentence"] not in block
+        subset_pct = _pct(majority_note.get("subset_overall"))
+        assert f"Majority-baseline overall accuracy: {subset_pct}" not in block
 
     for model, model_arms in report.get("arms", {}).items():
         for arm in ARM_ORDER:

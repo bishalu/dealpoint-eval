@@ -449,6 +449,27 @@ def majority_baseline_note(subset_overall: float | None, full_test_overall: floa
     )
 
 
+def readme_baseline_note(full_test_overall: float | None) -> str:
+    """README wording for the majority baseline.
+
+    `majority_baseline_note` (used by data/reports/four_arm.md, the record)
+    states the subset figure and explains that it is an artefact of the
+    subset selection rule. The README is an introduction, and a bare
+    near-zero percentage there reads as a result rather than as the
+    definition it actually is, so the README quotes the meaningful number --
+    the majority baseline on the FULL test set -- and says in words why the
+    subset has no baseline of its own. Same fact, no misleading headline
+    figure; the full report keeps both numbers.
+    """
+    return (
+        "For reference, always giving the most common answer scores "
+        f"{_pct(full_test_overall)} on the full 167-case test set. The subset selection rule "
+        "prefers cases where that common answer is wrong, so the subset has no meaningful "
+        "baseline of its own. Compare the arms against each other instead. Both baseline "
+        "figures are in the full report."
+    )
+
+
 def _finalized_after_truncated_tool_turn(finish_reasons: list[str]) -> bool:
     """True when the call immediately following this row's LAST 'tool_calls'
     finish_reason itself ended on 'length' -- i.e. MAX_TOKENS_TOOL_TURN (300)
@@ -1106,28 +1127,27 @@ def render_markdown(report: dict) -> str:
 
 
 def _readme_results_block(report: dict) -> str:
-    majority = report.get("majority_baseline") or {}
     version = report.get("version")
     first_sentence = (
-        "Results below are from a **budget-scaled** 32-case frozen discriminative subset "
-        "of MAUD's test set (18 cases at `anthropic/claude-haiku-4.5`), not the brief's "
-        "full 167-case design; the task here is document -> (answer, citation) while "
-        "MAUD's published task is span -> answer, so scores are **not comparable** to "
-        "MAUD leaderboard numbers, and every metric below is **objective** (deterministic "
-        "Python over expert labels) -- M4 has no model judging."
+        "These numbers are budget-scaled. Each model ran a frozen 32-case slice of MAUD's "
+        "test set (18 cases for `anthropic/claude-haiku-4.5`), not the full 167-case design "
+        "in the brief. Every score is objective. Deterministic Python checks each answer "
+        "against the lawyers' own labels, and no model does any judging. The scores are not "
+        "comparable to MAUD leaderboard numbers, because MAUD hands the model the passage to "
+        "read and this task makes the agent find it."
     )
     if version:
         first_sentence = f"**{version}.** " + first_sentence
-    lines = [first_sentence, "", f"Majority-baseline overall accuracy: {_pct(majority.get('overall'))}.", ""]
+    lines = [first_sentence, ""]
 
     majority_note = report.get("majority_baseline_note")
     if majority_note:
-        lines.append(majority_note["sentence"])
+        lines.append(readme_baseline_note(majority_note.get("full_test_overall")))
         lines.append("")
 
     # README results block (engineer's instruction, 2026-09-05): per model, a
     # table of arms with grounded_accuracy shown as "x% (k of n scored)", plus
-    # the majority-baseline note above -- and NOTHING else. No
+    # the one-line baseline note above -- and NOTHING else. No
     # execution-failure/cap-hit line, no v1-vs-v2 table, no residual-failure
     # bullets, no per-arm verdict sentences: those diagnostics stay, complete
     # and honest, in data/reports/four_arm.md and four_arm.json, which the
@@ -1153,10 +1173,10 @@ def _readme_results_block(report: dict) -> str:
         lines.append("")
 
     lines.append(
-        "Full diagnostics -- execution-failure/cap-hit rates, the v1-vs-v2 comparison, "
-        "residual-failure attribution, per-arm verdicts -- are in "
-        "[`data/reports/four_arm.md`](data/reports/four_arm.md) and "
-        "[`data/reports/four_arm.json`](data/reports/four_arm.json)."
+        "Full diagnostics are in [`data/reports/four_arm.md`](data/reports/four_arm.md) and "
+        "[`data/reports/four_arm.json`](data/reports/four_arm.json): execution-failure and "
+        "cap-hit rates, the v1-vs-v2 comparison, residual-failure attribution, and the "
+        "per-arm verdicts."
     )
     return "\n".join(lines)
 
