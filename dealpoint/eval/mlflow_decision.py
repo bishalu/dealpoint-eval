@@ -41,6 +41,12 @@ from xml.sax.saxutils import escape
 # import time, ahead of any `_client()` call), never after.
 os.environ.setdefault("MLFLOW_SQLALCHEMYSTORE_POOL_SIZE", "20")
 os.environ.setdefault("MLFLOW_SQLALCHEMYSTORE_MAX_OVERFLOW", "40")
+# `mlflow.genai.evaluate` scores rows on a thread pool (default 10 workers) and every worker probes
+# `import litellm` per row (`_is_litellm_available`, uncached). With litellm absent, the concurrent
+# failing imports deadlock on the import lock under MLflow's import hooks (observed on 3.16: every
+# worker parked in `_get_module_lock`, the run never finishes). The scorers here are pure Python on
+# precomputed outputs, so one worker loses nothing.
+os.environ.setdefault("MLFLOW_GENAI_EVAL_MAX_WORKERS", "1")
 
 MLFLOW_EXPERIMENT = "dealpoint-eval"
 DEFAULT_TRACKING_URI = "http://127.0.0.1:5000"
